@@ -1,0 +1,27 @@
+{
+  "name": "Lý Số App — Node 22 + Java 21 + Android SDK 36",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm",
+  "features": {
+    "ghcr.io/devcontainers/features/java:1": { "version": "21", "jdkDistro": "ms" },
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "hostRequirements": { "cpus": 4, "memory": "8gb", "storage": "32gb" },
+  "containerEnv": {
+    "ANDROID_HOME": "/opt/android-sdk",
+    "ANDROID_SDK_ROOT": "/opt/android-sdk"
+  },
+  "remoteEnv": {
+    "PATH": "${containerEnv:PATH}:/opt/android-sdk/cmdline-tools/latest/bin:/opt/android-sdk/platform-tools"
+  },
+  "postCreateCommand": "bash .devcontainer/setup-android.sh && npm ci && npm install -g @anthropic-ai/claude-code",
+  "forwardPorts": [5173, 4173],
+  "portsAttributes": {
+    "5173": { "label": "Vite dev (xem app trên trình duyệt)", "onAutoForward": "openPreview" },
+    "4173": { "label": "Vite preview (bản build)" }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": ["anthropic.claude-code", "vitest.explorer", "dbaeumer.vscode-eslint", "esbenp.prettier-vscode"]
+    }
+  }
+}

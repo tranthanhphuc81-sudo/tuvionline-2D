@@ -1,0 +1,33 @@
+{
+  "name": "lyso-app",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "App Lý Số Trọn Bộ (Tử Vi, Bát Tự, Lục Hào, Bát Trạch, Nạp Âm, Tổng Hợp, La bàn) — React + Vite + Capacitor (Android)",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "cap:sync": "npm run build && npx cap sync android",
+    "android:debug": "npm run cap:sync && cd android && ./gradlew assembleDebug && echo '\n✓ APK: android/app/build/outputs/apk/debug/app-debug.apk'",
+    "android:release": "npm run cap:sync && cd android && ./gradlew bundleRelease && echo '\n✓ AAB: android/app/build/outputs/bundle/release/app-release.aab'"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.6.0",
+    "@capacitor/core": "^8.6.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.6.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^6.2.1",
+    "typescript": "^5.9.0",
+    "vite": "^8.3.5",
+    "vitest": "^5.1.0"
+  }
+}

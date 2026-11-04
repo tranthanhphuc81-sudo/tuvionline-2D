@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Lý Số Trọn Bộ</string>
+    <string name="title_activity_main">Lý Số Trọn Bộ</string>
+    <string name="package_name">vn.lyso.app</string>
+    <string name="custom_url_scheme">vn.lyso.app</string>
+</resources>

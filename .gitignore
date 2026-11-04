@@ -1,0 +1,19 @@
+node_modules/
+dist/
+coverage/
+.vite/
+*.log
+.env
+.env.*
+.DS_Store
+
+# Android build output
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+
+# KHÔNG BAO GIỜ commit khoá ký app (xem PROMPT-KIT Phase 8)
+*.jks
+*.keystore
+keystore.properties
