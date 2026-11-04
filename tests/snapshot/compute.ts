@@ -76,7 +76,7 @@ export function computeBatTrach(out: Out, starDesc: (star: string) => string) {
   for (const d of [...spreadDates(31), ...lapXuanDates()]) {
     out.set(`lySoYear:${key(d)}`, [PhongThuyEngine.lySoYear(d.dd, d.mm, d.yy, 7), PhongThuyEngine.lySoYear(d.dd, d.mm, d.yy, 8)]);
   }
-  for (const q of ['Càn', 'Khảm', 'Cấn', 'Chấn', 'Tốn', 'Ly', 'Khôn', 'Đoài']) {
+  for (const q of ['Càn', 'Khảm', 'Cấn', 'Chấn', 'Tốn', 'Ly', 'Khôn', 'Đoài'] as const) {
     out.set(`duNien:${q}`, PhongThuyEngine.duNien(q).map((s: { star: string; good: boolean; quai: string; hanh: string }) => ({
       star: s.star, good: s.good, desc: starDesc(s.star), quai: s.quai, hanh: s.hanh,
     })));

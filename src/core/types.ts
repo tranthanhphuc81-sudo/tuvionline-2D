@@ -5,3 +5,6 @@ export type CanIdx = number;
 export type ChiIdx = number;
 /** Chỉ số giờ (Chi của giờ) 0…11 (0 = Tý). */
 export type HourIdx = number;
+
+/** Giới tính: 'M' = nam, 'F' = nữ. */
+export type Gender = 'M' | 'F';

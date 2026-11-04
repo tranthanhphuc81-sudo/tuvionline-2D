@@ -116,7 +116,7 @@ describe('Bát Trạch', () => {
     expect(PhongThuyEngine.menhQuai(2000, 'F')).toBe('Càn');
   });
   it('Du Niên của Tốn: Sinh Khí ở Khảm (Bắc)', () => {
-    const sk = PhongThuyEngine.duNien('Tốn').find((s: { star: string }) => s.star === 'Sinh Khí');
+    const sk = PhongThuyEngine.duNien('Tốn').find((s: { star: string }) => s.star === 'Sinh Khí')!;
     expect(sk.quai).toBe('Khảm');
     expect(PhongThuyEngine.QUAI_TO_HUONG[sk.quai]).toBe('Bắc');
   });

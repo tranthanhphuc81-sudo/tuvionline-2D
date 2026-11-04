@@ -4,7 +4,7 @@ import { pad2, validSolar, validLunar, shiftSolar, lunarTzForSolarYear, lunarTzF
 import { TuViEngine as _TuVi } from './tuvi.js';
 import { BatTuEngine as _BatTu } from './battu.js';
 import { LucHaoEngine as _LucHao } from './luchao.js';
-import { PhongThuyEngine as _BatTrach } from './battrach.js';
+import { PhongThuyEngine } from './battrach/engine';
 import { NapAmEngine } from './napam/engine';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -13,12 +13,14 @@ export const LySoUtil = { pad2, validSolar, validLunar, shiftSolar, lunarTzForSo
 export const TuViEngine: any = _TuVi;
 export const BatTuEngine: any = _BatTu;
 export const LucHaoEngine: any = _LucHao;
-export const PhongThuyEngine: any = _BatTrach;
+export { PhongThuyEngine };
+export type { Quai, Huong, StarName, Nhom, DuNienStar, LySoYear } from './battrach/types';
 export { NapAmEngine };
 export type { NapAmYear, NapAmRelation, NapAmRelationKind, NapAmNeedsId } from './napam/types';
 export type { Hanh } from './canchi/hanh';
 
-export type Gender = 'M' | 'F';
+import type { Gender } from './types';
+export type { Gender };
 
 export interface BirthInput {
   gender: Gender;
