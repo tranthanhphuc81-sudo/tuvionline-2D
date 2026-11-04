@@ -2,13 +2,10 @@
 /* Trích nguyên văn từ legacy/lyso-toolkit.html (bản web đã kiểm chứng).
    Phase 1 của PROMPT-KIT sẽ chuyển sang TypeScript chặt chẽ — giữ cho tests/golden.test.ts luôn xanh. */
 
-import { jdFromDate, monthChiFromDate } from './calendar';
-function mod(n,m){ return ((n%m)+m)%m; }
-function dayCanChiIndex(dd,mm,yy){ const jd=jdFromDate(dd,mm,yy); const idx=mod(jd+49,60); return {can:idx%10, chi:idx%12}; }
+import { monthChiFromDate } from './calendar';
+import { CAN, CHI, mod, dayCanChiIndex } from './canchi';
 
 /* ===== Luc Hao core ===== */
-const CAN = ["Giáp","Ất","Bính","Đinh","Mậu","Kỷ","Canh","Tân","Nhâm","Quý"];
-const CHI = ["Tý","Sửu","Dần","Mão","Thìn","Tỵ","Ngọ","Mùi","Thân","Dậu","Tuất","Hợi"];
 const HANH5 = ["Kim","Thuỷ","Mộc","Hoả","Thổ"];
 const CHI_HANH_IDX = [1,4,2,2,4,3,3,4,0,0,4,1];
 const TRI = ["Càn","Khảm","Cấn","Chấn","Tốn","Ly","Khôn","Đoài"];

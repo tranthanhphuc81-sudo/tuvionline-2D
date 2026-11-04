@@ -5,36 +5,10 @@
    (Astronomical Algorithms, Jean Meeus 1998) https://www.informatik.uni-leipzig.de/~duc/amlich/ ===== */
 import { jdFromDate, convertSolar2Lunar, convertLunar2Solar, lunarTzForSolarYear } from './calendar';
 const window = { LySoUtil: { lunarTzForSolarYear } };
+import { CAN, CHI, HOUR_RANGES, DAN, mod, dayCanChiIndex, yearCanChiIndex, ngHoDonDanCan, nguThuDonTyCan, napAmLookup } from './canchi';
 
-const CAN=["Giáp","Ất","Bính","Đinh","Mậu","Kỷ","Canh","Tân","Nhâm","Quý"];
-const CHI=["Tý","Sửu","Dần","Mão","Thìn","Tỵ","Ngọ","Mùi","Thân","Dậu","Tuất","Hợi"];
 const CUNG_NAME=["Mệnh","Phụ Mẫu","Phúc Đức","Điền Trạch","Quan Lộc","Nô Bộc","Thiên Di","Tật Ách","Tài Bạch","Tử Tức","Phu Thê","Huynh Đệ"];
-const HOUR_RANGES=["23:00–00:59","01:00–02:59","03:00–04:59","05:00–06:59","07:00–08:59","09:00–10:59","11:00–12:59","13:00–14:59","15:00–16:59","17:00–18:59","19:00–20:59","21:00–22:59"];
-const DAN=2;
-function mod(n,m){ return ((n%m)+m)%m; }
-function dayCanChiIndex(dd,mm,yy){ const jd=jdFromDate(dd,mm,yy); const idx=mod(jd+49,60); return {can:idx%10, chi:idx%12}; }
-function yearCanChiIndex(lunarYear){ return {can:mod(lunarYear-4,10), chi:mod(lunarYear-4,12)}; }
-function ngHoDonDanCan(yearCanIdx){ const t={0:2,5:2,1:4,6:4,2:6,7:6,3:8,8:8,4:0,9:0}; return t[yearCanIdx]; }
-function nguThuDonTyCan(dayCanIdx){ const t={0:0,5:0,1:2,6:2,2:4,7:4,3:6,8:6,4:8,9:8}; return t[dayCanIdx]; }
 function canOfPalaceFromDan(yearCanIdx,steps){ return mod(ngHoDonDanCan(yearCanIdx)+steps,10); }
-const NAPAM=[
- [0,0,"Kim","Hải Trung Kim"],[2,2,"Hoả","Lư Trung Hoả"],[4,4,"Mộc","Đại Lâm Mộc"],
- [6,6,"Thổ","Lộ Bàng Thổ"],[8,8,"Kim","Kiếm Phong Kim"],[0,10,"Hoả","Sơn Đầu Hoả"],
- [2,0,"Thuỷ","Giản Hạ Thuỷ"],[4,2,"Thổ","Thành Đầu Thổ"],[6,4,"Kim","Bạch Lạp Kim"],
- [8,6,"Mộc","Dương Liễu Mộc"],[0,8,"Thuỷ","Tuyền Trung Thuỷ"],[2,10,"Thổ","Ốc Thượng Thổ"],
- [4,0,"Hoả","Tích Lịch Hoả"],[6,2,"Mộc","Tùng Bách Mộc"],[8,4,"Thuỷ","Trường Lưu Thuỷ"],
- [0,6,"Kim","Sa Trung Kim"],[2,8,"Hoả","Sơn Hạ Hoả"],[4,10,"Mộc","Bình Địa Mộc"],
- [6,0,"Thổ","Bích Thượng Thổ"],[8,2,"Kim","Kim Bạc Kim"],[0,4,"Hoả","Phú Đăng Hoả"],
- [2,6,"Thuỷ","Thiên Hà Thuỷ"],[4,8,"Thổ","Đại Trạch Thổ"],[6,10,"Kim","Thoa Xuyến Kim"],
- [8,0,"Mộc","Tang Đố Mộc"],[0,2,"Thuỷ","Đại Khê Thuỷ"],[2,4,"Thổ","Sa Trung Thổ"],
- [4,6,"Hoả","Thiên Thượng Hoả"],[6,8,"Mộc","Thạch Lựu Mộc"],[8,10,"Thuỷ","Đại Hải Thuỷ"]
-];
-function napAmLookup(canIdx,chiIdx){
-  for(const row of NAPAM){ const [c0,h0]=row;
-    if(c0===canIdx && h0===chiIdx) return row;
-    if(mod(c0+1,10)===canIdx && mod(h0+1,12)===chiIdx) return row; }
-  return null;
-}
 const CUC_SO={"Thuỷ":2,"Mộc":3,"Kim":4,"Thổ":5,"Hoả":6};
 const CUC_TEN={"Thuỷ":"Thuỷ Nhị Cục","Mộc":"Mộc Tam Cục","Kim":"Kim Tứ Cục","Thổ":"Thổ Ngũ Cục","Hoả":"Hoả Lục Cục"};
 

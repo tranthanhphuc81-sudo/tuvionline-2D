@@ -4,24 +4,14 @@
 
 import { jdFromDate, convertSolar2Lunar, convertLunar2Solar, findSolarTerm, TIET, tietBoundariesForYear, lunarTzForSolarYear } from './calendar';
 const window = { LySoUtil: { lunarTzForSolarYear } };
+import { CAN, CHI, HOUR_RANGES, mod, dayCanChiIndex, yearCanChiIndex, canOfChiFromDan, canOfHourFromTy, cycleIdx, fromCycle } from './canchi';
 /* ===== Bat Tu core ===== */
-const CAN=["Giáp","Ất","Bính","Đinh","Mậu","Kỷ","Canh","Tân","Nhâm","Quý"];
-const CHI=["Tý","Sửu","Dần","Mão","Thìn","Tỵ","Ngọ","Mùi","Thân","Dậu","Tuất","Hợi"];
 const HANH5=["Mộc","Hoả","Thổ","Kim","Thuỷ"];
 const CAN_HANH=[0,0,1,1,2,2,3,3,4,4];
 const CHI_HANH=[4,2,0,0,2,1,1,2,3,3,2,4]; // Ty=Thuy,Suu=Tho,Dan=Moc,Mao=Moc,Thin=Tho,Ty=Hoa,Ngo=Hoa,Mui=Tho,Than=Kim,Dau=Kim,Tuat=Tho,Hoi=Thuy
-const HOUR_RANGES=["23:00–00:59","01:00–02:59","03:00–04:59","05:00–06:59","07:00–08:59","09:00–10:59","11:00–12:59","13:00–14:59","15:00–16:59","17:00–18:59","19:00–20:59","21:00–22:59"];
 // Representative clock hour for each 2-hour gio, expressed as an OFFSET FROM NOON in hours
 // (jdFromDate's integer JDN corresponds to local noon in this codebase's convention — see findSolarTerm/getSunLongitude usage)
 const HOUR_OFFSET_FROM_NOON=[-12,-10,-8,-6,-4,-2,0,2,4,6,8,10];
-const DAN=2;
-function mod(n,m){ return ((n%m)+m)%m; }
-function dayCanChiIndex(dd,mm,yy){ const jd=jdFromDate(dd,mm,yy); const idx=mod(jd+49,60); return {can:idx%10, chi:idx%12}; }
-function yearCanChiIndex(y){ return {can:mod(y-4,10), chi:mod(y-4,12)}; }
-function ngHoDonDanCan(yearCanIdx){ const t={0:2,5:2,1:4,6:4,2:6,7:6,3:8,8:8,4:0,9:0}; return t[yearCanIdx]; }
-function nguThuDonTyCan(dayCanIdx){ const t={0:0,5:0,1:2,6:2,2:4,7:4,3:6,8:6,4:8,9:8}; return t[dayCanIdx]; }
-function canOfChiFromDan(yearCanIdx, chiIdx){ return mod(ngHoDonDanCan(yearCanIdx)+mod(chiIdx-DAN,12),10); }
-function canOfHourFromTy(dayCanIdx, hourChiIdx){ return mod(nguThuDonTyCan(dayCanIdx)+hourChiIdx,10); }
 
 const TANG_CAN = {
  0:[[9,'Bản khí']], 1:[[5,'Bản khí'],[9,'Trung khí'],[7,'Dư khí']],
@@ -86,8 +76,6 @@ function calcChart(input){
   const thuanDaiVan = (gender==='M') === isDuongCan; // Duong Nam or Am Nu -> thuan
 
   // Dai Van list
-  function cycleIdx(c,ch){ for(let i=0;i<60;i++){ if(i%10===c && i%12===ch) return i; } return -1; }
-  function fromCycle(i){ i=mod(i,60); return {can:i%10, chi:i%12}; }
   const startCycle = cycleIdx(monthCanIdx, monthChiIdx);
   const daiVan = [];
   for(let i=0;i<9;i++){ const idx = thuanDaiVan? startCycle+i : startCycle-i; daiVan.push(fromCycle(idx)); }
