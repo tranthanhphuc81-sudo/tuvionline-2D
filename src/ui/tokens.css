@@ -1,0 +1,43 @@
+/* Design tokens — bảng màu lấy NGUYÊN từ legacy (public/legacy/lyso-toolkit.html), bổ sung khoảng cách, cỡ chữ,
+   vùng chạm và safe-area (ARCHITECTURE.md mục 4.1). Chủ đề: data-theme="light|dark" trên <html>; không có thì theo hệ thống. */
+:root {
+  --bg: #0b0f1a; --surface: #121a2c; --surface2: #1a2338; --surface3: #212c46;
+  --ink: #ece6d6; --ink-dim: #c9c3ae; --muted: #8b93af;
+  --gold: #d7b571; --vermillion: #c9603f; --jade: #5fab8a; --blue: #8fb3d9;
+  --line: rgba(215, 181, 113, 0.22); --line-strong: rgba(215, 181, 113, 0.4);
+  --shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+  --radius: 14px;
+  --on-gold: #241a06;
+
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 24px; --space-6: 32px;
+  --fs-sm: 13px; --fs-md: 15px; --fs-lg: 17px; --fs-xl: 22px;
+  --tap: 44px;
+  --font-sans: 'Be Vietnam Pro', system-ui, sans-serif;
+  --font-serif: 'Noto Serif', Georgia, serif;
+
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --topbar-h: 56px;
+  --tabbar-h: 64px;
+}
+:root:not([data-theme="light"]) { color-scheme: dark; }
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #efe9d8; --surface: #fffdf6; --surface2: #f7f0dd; --surface3: #efe4c8;
+    --ink: #221c10; --ink-dim: #4a4230; --muted: #786f57;
+    --gold: #a1732c; --vermillion: #a8402a; --jade: #2c7a58; --blue: #3a689c;
+    --line: rgba(90, 64, 20, 0.18); --line-strong: rgba(90, 64, 20, 0.32);
+    --shadow: 0 10px 26px rgba(90, 70, 30, 0.14);
+    color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg: #efe9d8; --surface: #fffdf6; --surface2: #f7f0dd; --surface3: #efe4c8;
+  --ink: #221c10; --ink-dim: #4a4230; --muted: #786f57;
+  --gold: #a1732c; --vermillion: #a8402a; --jade: #2c7a58; --blue: #3a689c;
+  --line: rgba(90, 64, 20, 0.18); --line-strong: rgba(90, 64, 20, 0.32);
+  --shadow: 0 10px 26px rgba(90, 70, 30, 0.14);
+  color-scheme: light;
+}
