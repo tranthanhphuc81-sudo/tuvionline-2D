@@ -356,6 +356,10 @@ Chỉ cài khi phase cần, không cài sẵn. Phiên bản lấy từ npm ngày
 trong `src/platform`, nhờ vậy test được bằng giả lập và chạy được `npm run dev`. Lớp `speak(text, { rate, pitch }): Promise<void>`
 (Phase 5) nằm ở `src/platform/tts.ts`.
 
+**Giọng đọc chỉ chạy trên máy (Phase 5):** app chỉ dùng giọng `…-local`, không lùi sang giọng mạng. Lý do: cam kết "không gửi dữ liệu đi đâu".
+Giọng mặc định `vi-VN-language` báo `localService = true` nhưng log máy ảo cho thấy nó trỏ tới `vi-vn-x-vic-server`, tức có thể đọc qua máy chủ Google,
+mà văn bản đọc có ngày sinh và luận giải. Không có giọng trên máy thì hướng dẫn cài. Đánh đổi: máy chưa tải gói tiếng Việt sẽ không đọc được cho tới khi cài.
+
 **Phương án bị loại:**
 - *Cài sẵn mọi plugin ngay từ đầu:* thêm quyền và mã native khi chưa dùng, mỗi lần nâng cấp phải rà thêm.
 - *`@capacitor/motion` cho la bàn:* chỉ bọc `deviceorientation` thường, không bảo đảm hướng tuyệt đối. Để Phase 4.1 cân nhắc

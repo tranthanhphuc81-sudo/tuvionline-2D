@@ -10,6 +10,8 @@ import { selectActiveProfile } from '../../state/actions';
 import { useApp, useNav } from '../../app/context';
 import { Segmented } from '../../ui/components/Segmented';
 import { SectionView } from '../../ui/components/SectionView';
+import { SpeakButton } from '../../ui/components/SpeakButton';
+import { cellsSpeech, sectionsSpeech, speechOf } from '../../content/speech';
 import ui from '../../ui/components/ui.module.css';
 import { ChartGrid, HOA_LABEL } from './ChartGrid';
 import { PalaceDetail, PalaceList } from './PalaceDetail';
@@ -66,6 +68,7 @@ export function TuViScreen() {
       <dl className={s.summary}>
         {summary.map(([k, v]) => <div key={k} className={s.cell}><dt>{k}</dt><dd>{v}</dd></div>)}
       </dl>
+      <SpeakButton id="tuvi" getText={() => speechOf(cellsSpeech(summary), sectionsSpeech(tuViTongKet(ch, thisYear())))} />
 
       <h2 className={ui.sectionTitle}>Lá số 12 cung</h2>
       <Segmented<"chart" | "list"> label="Cách xem lá số" hideLabel value={mode} onChange={setMode} options={[{ value: 'chart', label: 'Lá số' }, { value: 'list', label: 'Danh sách' }]} />

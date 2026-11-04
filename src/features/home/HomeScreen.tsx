@@ -7,6 +7,8 @@ import { selectActiveProfile } from '../../state/actions';
 import { useApp, useAppCtx, useNav } from '../../app/context';
 import type { Route, TabId } from '../../app/routes';
 import { SectionView } from '../../ui/components/SectionView';
+import { SpeakButton } from '../../ui/components/SpeakButton';
+import { sectionsSpeech, speechOf } from '../../content/speech';
 import ui from '../../ui/components/ui.module.css';
 import { birthLine } from '../profiles/format';
 import s from './home.module.css';
@@ -111,6 +113,7 @@ export function HomeScreen() {
         </div>
       </section>
 
+      {parts.length > 0 && <SpeakButton id="tonghop" getText={() => speechOf(...parts.map((part) => part.title + '. ' + sectionsSpeech(part.sections)))} />}
       {parts.map((part) => (
         <section key={part.id} className={ui.stack} aria-labelledby={`home-${part.id}`}>
           <h2 id={`home-${part.id}`} className={ui.sectionTitle}>{part.title}</h2>

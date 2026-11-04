@@ -17,7 +17,8 @@
 | 3.5b — Tổng Hợp đầy đủ | XONG — 386 test xanh, build OK |
 | 4.1 — Chọn cách đọc cảm biến | XONG — plugin nội bộ đọc `TYPE_ROTATION_VECTOR`, xem ARCHITECTURE mục 11; chưa đo trên máy thật |
 | 4.2 — Dựng la bàn | XONG phần code — 418 test xanh, build OK, APK chạy trên máy ảo. CHƯA ĐẠT điều kiện nghiệm thu: còn 9 phép thử trên máy thật (ARCHITECTURE mục 11) |
-| 5 — Đọc thành lời | CHƯA LÀM — chờ chủ dự án đồng ý |
+| 5.1 — Đọc thành lời | XONG phần code — 447 test xanh, build OK. CHƯA nghe được tiếng thật: cần thử trên máy thật đã tải gói tiếng Việt |
+| 6 — Đạo quán & Thầy đọc | CHƯA LÀM — chờ chủ dự án đồng ý |
 
 ## Phase 3.5b — Tổng Hợp đầy đủ — XONG
 
@@ -36,6 +37,21 @@
 - Bỏ có chủ ý các phần chỉ có nghĩa với form riêng từng tab của legacy: dải "Đồng bộ / Chưa đồng bộ", hộp "Chưa có dữ liệu", câu nhắc đồng bộ
   thay cho đối chiếu chéo, nút "Cập nhật Tổng Hợp". App luôn tính từ một hồ sơ. Nút "Đọc toàn bộ tổng hợp" chờ Phase 5 (`src/platform/tts.ts`).
 
+## Phase 5.1 — Đọc thành lời — XONG PHẦN CODE, CHỜ THỬ MÁY THẬT
+
+### Đã xong
+- `@capacitor-community/text-to-speech` ~8.0.2. `src/platform/tts.ts`: `speak(text, { rate, pitch })` resolve khi đọc xong một đoạn (Phase 6 dùng),
+  `readAloud` đọc nối tiếp, mỗi lúc một nơi, `stopReading`, `vietnameseVoice`, `openVoiceInstall`. Trình duyệt do plugin dùng `speechSynthesis`.
+- `src/content/speech.ts`: chuẩn hoá chuyển từ legacy, thêm "độ", "phần trăm", bỏ dòng cách chấm, đoạn luôn ≤ 180 ký tự. `tests/speech.test.ts`.
+- `src/ui/components/SpeakButton.tsx`: nút Đọc/Dừng ở Tử Vi, Bát Tự, Lục Hào, Bát Trạch, La Bàn, Nạp Âm, Tổng hợp. `App.tsx` tự dừng khi đổi màn hình, đổi người đang xem, app vào nền.
+- Cài đặt: tốc độ đọc và cao độ giọng.
+- Chỉ dùng giọng `…-local`, xem ARCHITECTURE mục 6.
+- Kiểm trên máy ảo: nút đổi trạng thái, tự dừng khi đổi tab, không crash; không còn tải giọng server mà gọi bộ tổng hợp trên máy.
+
+### Chưa kiểm được
+- Máy ảo chưa có gói giọng trên máy nên KHÔNG có tiếng thật. Ở đó nút giữ "Dừng đọc" ít nhất 5 giây rồi mới báo lỗi: cần xem trên máy thật có bị im lặng lâu không.
+- Chất lượng đọc tiếng Việt, tốc độ, đọc hết bài dài, tắt mạng vẫn đọc được.
+
 ## Phase 4.2 — La bàn — XONG PHẦN CODE, CHỜ THỬ MÁY THẬT
 
 ### Đã xong
@@ -51,7 +67,7 @@
 
 ### Việc tiếp theo
 - Chạy 9 phép thử trên ít nhất 2 máy thật (ARCHITECTURE mục 11), chốt ngưỡng cảnh báo 15°.
-- Phase 5 (đọc thành lời) — hỏi chủ dự án trước khi bắt đầu.
+- ~~Phase 5~~ XONG phần code.
 
 ## Phase 3.5 — Bát Trạch, Nạp Âm — XONG
 

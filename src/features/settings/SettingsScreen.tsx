@@ -8,6 +8,8 @@ import ui from '../../ui/components/ui.module.css';
 export function SettingsScreen() {
   const { store } = useAppCtx();
   const theme = useApp((x) => x.settings.theme);
+  const rate = useApp((x) => x.settings.ttsRate);
+  const pitch = useApp((x) => x.settings.ttsPitch);
   return (
     <div className={ui.stack}>
       <section className={ui.card}>
@@ -17,6 +19,21 @@ export function SettingsScreen() {
           value={theme}
           onChange={(v) => setSetting(store, 'theme', v)}
           options={[{ value: 'system', label: 'Theo máy' }, { value: 'light', label: 'Sáng' }, { value: 'dark', label: 'Tối' }]}
+        />
+      </section>
+      <section className={ui.card}>
+        <h2>Đọc thành lời</h2>
+        <Segmented
+          label="Tốc độ đọc"
+          value={String(rate)}
+          onChange={(v) => setSetting(store, 'ttsRate', Number(v))}
+          options={[{ value: '0.85', label: 'Chậm' }, { value: '1', label: 'Vừa' }, { value: '1.15', label: 'Nhanh' }]}
+        />
+        <Segmented
+          label="Cao độ giọng"
+          value={String(pitch)}
+          onChange={(v) => setSetting(store, 'ttsPitch', Number(v))}
+          options={[{ value: '0.9', label: 'Trầm' }, { value: '1', label: 'Vừa' }, { value: '1.1', label: 'Cao' }]}
         />
       </section>
       <section className={ui.card}>

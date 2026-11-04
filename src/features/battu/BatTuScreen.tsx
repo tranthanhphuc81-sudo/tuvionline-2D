@@ -10,6 +10,8 @@ import { selectActiveProfile } from '../../state/actions';
 import { useApp, useNav } from '../../app/context';
 import { RichText } from '../../ui/components/RichText';
 import { SectionView } from '../../ui/components/SectionView';
+import { SpeakButton } from '../../ui/components/SpeakButton';
+import { cellsSpeech, sectionsSpeech, speechOf } from '../../content/speech';
 import ui from '../../ui/components/ui.module.css';
 import { Pillars, hanhAmDuong } from './Pillars';
 import s from './battu.module.css';
@@ -58,6 +60,7 @@ export function BatTuScreen() {
       <dl className={s.summary}>
         {summary.map(([k, v]) => <div key={k} className={s.cell} data-wide={k === 'Bát Tự' || k === 'Âm/Dương Nam Nữ'}><dt>{k}</dt><dd>{v}</dd></div>)}
       </dl>
+      <SpeakButton id="battu" getText={() => speechOf(cellsSpeech(summary), sectionsSpeech(batTuTongKet(ch, thisYear())))} />
       {lx && <p className={ui.info} role="note"><RichText nodes={parseRich(lx)} /></p>}
 
       <h2 className={ui.sectionTitle}>Tứ Trụ hoàn chỉnh</h2>

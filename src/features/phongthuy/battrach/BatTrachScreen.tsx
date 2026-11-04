@@ -13,6 +13,8 @@ import { selectActiveProfile, setBatTrachHuongCua } from '../../../state/actions
 import { useApp, useAppCtx, useNav } from '../../../app/context';
 import { RichText } from '../../../ui/components/RichText';
 import { SectionView } from '../../../ui/components/SectionView';
+import { SpeakButton } from '../../../ui/components/SpeakButton';
+import { cellsSpeech, richSpeech, sectionsSpeech, speechOf } from '../../../content/speech';
 import ui from '../../../ui/components/ui.module.css';
 import { Banner } from '../Banner';
 import s from '../phongthuy.module.css';
@@ -47,6 +49,7 @@ export function BatTrachScreen() {
       <dl className={s.summary}>
         {batTrachSummary(r).map(([k, v]) => <div key={k} className={s.cell}><dt>{k}</dt><dd>{v}</dd></div>)}
       </dl>
+      <SpeakButton id="battrach" getText={() => speechOf(cellsSpeech(batTrachSummary(r)), r.house ? richSpeech(batTrachHouseBanner(r.house)) : '', sectionsSpeech([batTrachHanhCard(r)]), sectionsSpeech(batTrachTongKet(r)))} />
 
       <section className={ui.card} aria-labelledby="pt-house-title">
         <h2 id="pt-house-title" className={ui.sectionTitle}>Căn nhà đang xét</h2>

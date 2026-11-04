@@ -12,6 +12,8 @@ import { useApp, useAppCtx } from '../../app/context';
 import { RichText } from '../../ui/components/RichText';
 import { Segmented } from '../../ui/components/Segmented';
 import { SectionView } from '../../ui/components/SectionView';
+import { SpeakButton } from '../../ui/components/SpeakButton';
+import { cellsSpeech, sectionsSpeech, speechOf } from '../../content/speech';
 import ui from '../../ui/components/ui.module.css';
 import { BienCard, HaoList, HexagramDiagram } from './Hexagram';
 import s from './luchao.module.css';
@@ -38,6 +40,14 @@ export function LucHaoScreen() {
   const date = dateIn.map((x) => parseInt(x, 10)) as [number, number, number];
   const dateOk = LySoUtil.validSolar(...date);
   const result = useMemo(() => (cast && dateOk ? { r: castHexagram(cast.tosses), ctx: castContext(...date) } : null), [cast, dateOk, date[0], date[1], date[2]]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const summary: [string, string][] = result ? [
+    ['Quẻ chủ', result.r.name],
+    ['Cung / Bước', result.r.cung + ' — ' + result.r.step],
+    ['Thế / Ứng', 'Hào ' + result.r.theHao + ' / Hào ' + result.r.ungHao],
+    ['Nhật thần (ngày xem)', CAN[result.ctx.nhat.can] + ' ' + CHI[result.ctx.nhat.chi]],
+    ['Nguyệt lệnh (tháng xem)', CHI[result.ctx.thangChi] + ' — mùa ' + SEASON_NAME[result.ctx.season]],
+  ] : [];
 
   const setDatePart = (i: number, v: string) => {
     const next = [...dateIn] as [string, string, string];
@@ -95,14 +105,9 @@ export function LucHaoScreen() {
       {cast && result && (
         <div className={ui.stack} aria-live="polite">
           <dl className={s.summary}>
-            {([
-              ['Quẻ chủ', result.r.name],
-              ['Cung / Bước', result.r.cung + ' — ' + result.r.step],
-              ['Thế / Ứng', 'Hào ' + result.r.theHao + ' / Hào ' + result.r.ungHao],
-              ['Nhật thần (ngày xem)', CAN[result.ctx.nhat.can] + ' ' + CHI[result.ctx.nhat.chi]],
-              ['Nguyệt lệnh (tháng xem)', CHI[result.ctx.thangChi] + ' — mùa ' + SEASON_NAME[result.ctx.season]],
-            ] as [string, string][]).map(([k, v]) => <div key={k} className={s.cell} data-wide={k === 'Nguyệt lệnh (tháng xem)'}><dt>{k}</dt><dd>{v}</dd></div>)}
+            {summary.map(([k, v]) => <div key={k} className={s.cell} data-wide={k === 'Nguyệt lệnh (tháng xem)'}><dt>{k}</dt><dd>{v}</dd></div>)}
           </dl>
+          {result && <SpeakButton id="luchao" getText={() => speechOf(cellsSpeech(summary), sectionsSpeech([lucHaoVerdict(result.r, result.ctx, key)]), sectionsSpeech(lucHaoTongKet(result.r, result.ctx, key)))} />}
           {cast.method === 'random' && <p className={ui.info}><RichText nodes={parseRich(lucHaoTossBanner(cast.tosses))} /></p>}
 
           <h2 className={ui.sectionTitle}>Quẻ chủ</h2>

@@ -92,12 +92,12 @@ export const list = (id: string, items: readonly string[]): ListBlock => ({ id, 
 export const note = (id: string, html: string): NoteBlock => ({ id, kind: 'note', rich: parseRich(html) });
 
 /** Chữ thuần của cả một Section (tiêu đề + các khối theo thứ tự) — dùng cho đọc thành lời và test đối chiếu legacy. */
-export function sectionPlainText(s: Section, withTitle = true): string {
+export function sectionPlainText(s: Section, withTitle = true, { how = true }: { how?: boolean } = {}): string {
   const parts: string[] = withTitle && s.title ? [s.title] : [];
   for (const b of s.blocks) {
     switch (b.kind) {
       case 'p': case 'note': parts.push(toPlainText(b.rich)); break;
-      case 'verdict': parts.push(toPlainText(b.rich) + (b.how ? '\n' + b.how : '')); break;
+      case 'verdict': parts.push(toPlainText(b.rich) + (how && b.how ? '\n' + b.how : '')); break;
       case 'list': parts.push(b.items.map((i) => toPlainText(i)).join('\n')); break;
       case 'item': parts.push(toPlainText(b.title) + (b.label ? ' ' + b.label : '') + '\n' + toPlainText(b.rich)); break;
       case 'chips': parts.push(b.chips.map((c) => c.text).join('\n') + (b.after ? ' ' + toPlainText(b.after) : '')); break;

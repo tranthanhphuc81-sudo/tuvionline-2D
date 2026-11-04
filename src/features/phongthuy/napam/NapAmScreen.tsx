@@ -13,6 +13,8 @@ import type { Profile } from '../../../state/schema';
 import { useApp, useAppCtx } from '../../../app/context';
 import { RichText } from '../../../ui/components/RichText';
 import { SectionView } from '../../../ui/components/SectionView';
+import { SpeakButton } from '../../../ui/components/SpeakButton';
+import { cellsSpeech, richSpeech, sectionsSpeech, speechOf } from '../../../content/speech';
 import ui from '../../../ui/components/ui.module.css';
 import { Banner } from '../Banner';
 import s from '../phongthuy.module.css';
@@ -129,6 +131,14 @@ export function NapAmScreen() {
 
       {x1 && (
         <div className={ui.stack} aria-live="polite">
+          <SpeakButton
+            id="napam"
+            getText={() => speechOf(
+              'Người 1.', cellsSpeech(napAmPersonCells(x1)),
+              x2 && compat ? 'Người 2. ' + cellsSpeech(napAmPersonCells(x2)) + ' ' + richSpeech(napAmRelationText(compat.rel, x1.res, x2.res)) : '',
+              sectionsSpeech(napAmTongKet(x1.res, x2 && compat ? { r2: x2.res, compat } : null)),
+            )}
+          />
           <PersonSummary title={nameOf('Người 1', prof1)} person={x1} />
           {x2 && <PersonSummary title={nameOf('Người 2', p2)} person={x2} />}
 

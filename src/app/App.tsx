@@ -1,5 +1,5 @@
 /* Khung app: thanh trên (tiêu đề, chip người đang xem, ⚙) + 5 tab giữ nguyên khi ẩn + thanh tab dưới. */
-import { useLayoutEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { useAppCtx, useApp, useNav } from './context';
 import { TABS, type Route, type TabId } from './routes';
 import { useStore } from '../state/store';
@@ -14,6 +14,8 @@ import { TuViScreen } from '../features/tuvi/TuViScreen';
 import { BatTuScreen } from '../features/battu/BatTuScreen';
 import { LucHaoScreen } from '../features/luchao/LucHaoScreen';
 import { initials } from '../features/profiles/format';
+import { onPause } from '../platform/lifecycle';
+import { stopReading } from '../platform/tts';
 import s from './App.module.css';
 
 function routeTitle(r: Route): string {
@@ -122,6 +124,11 @@ function TabBar() {
 
 export function App() {
   const nav = useNav();
+  const activeId = useApp((x) => x.activeProfileId);
+  // Đọc thành lời tự dừng khi rời màn hình, đổi người đang xem hoặc app vào nền
+  const routeKey = nav.tab + JSON.stringify(nav.route);
+  useEffect(() => stopReading, [routeKey, activeId]);
+  useEffect(() => onPause(stopReading), []);
   return (
     <div className={s.shell}>
       <TopBar />

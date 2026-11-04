@@ -16,6 +16,7 @@
     "android:release": "npm run cap:sync && cd android && ./gradlew bundleRelease && echo '\n✓ AAB: android/app/build/outputs/bundle/release/app-release.aab'"
   },
   "dependencies": {
+    "@capacitor-community/text-to-speech": "~8.0.2",
     "@capacitor/android": "^8.6.0",
     "@capacitor/app": "~8.1.2",
     "@capacitor/core": "^8.6.0",

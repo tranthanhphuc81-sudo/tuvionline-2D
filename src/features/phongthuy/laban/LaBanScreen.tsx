@@ -13,6 +13,8 @@ import { selectActiveProfile, setLaBanCalib } from '../../../state/actions';
 import { useApp, useAppCtx } from '../../../app/context';
 import { SectionView } from '../../../ui/components/SectionView';
 import { Segmented } from '../../../ui/components/Segmented';
+import { SpeakButton } from '../../../ui/components/SpeakButton';
+import { cellsSpeech, richSpeech, speechOf } from '../../../content/speech';
 import ui from '../../../ui/components/ui.module.css';
 import { Banner } from '../Banner';
 import s from '../phongthuy.module.css';
@@ -128,6 +130,8 @@ export function LaBanScreen({ active }: { active: boolean }) {
       {cur.star
         ? <Banner id="laban.verdict" tone={cur.star.good ? 'ok' : 'warn'} html={laBanVerdict(cur)} />
         : !(birth && !birth.ok) && <p className={ui.info}>{LABAN_NO_PROFILE}</p>}
+
+      <SpeakButton id="laban" getText={() => speechOf(cellsSpeech(laBanCells(cur, reading?.quai ?? null)), cur.star ? richSpeech(laBanVerdict(cur)) : '')} />
 
       <details className={s.fold}>
         <summary><h2 className={ui.sectionTitle}>Cách đọc la bàn này</h2><span className={ui.muted}>4 bài học nhỏ</span></summary>
