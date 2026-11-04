@@ -1,4 +1,4 @@
-/* Chạy trang legacy (public/legacy/lyso-toolkit.html) trong jsdom để so câu chữ với src/content (ARCHITECTURE.md mục 7.1).
+/* Chạy trang legacy (docs/legacy/lyso-toolkit.html) trong jsdom để so câu chữ với src/content (ARCHITECTURE.md mục 7.1).
    Ngày "hôm nay" của trang được cố định để phần "Giai đoạn hiện tại" và lưu niên năm nay so được. */
 import { JSDOM, VirtualConsole } from 'jsdom';
 import { readFileSync } from 'node:fs';
@@ -6,7 +6,7 @@ import { readFileSync } from 'node:fs';
 export const FIXED_NOW = new Date('2026-06-15T09:00:00+07:00');
 
 export function loadLegacy(now = FIXED_NOW): { doc: Document; errors: string[] } {
-  const html = readFileSync('public/legacy/lyso-toolkit.html', 'utf8');
+  const html = readFileSync('docs/legacy/lyso-toolkit.html', 'utf8');
   const errors: string[] = [];
   const vc = new VirtualConsole();
   vc.on('jsdomError', (e) => errors.push(String(e.message)));
@@ -99,4 +99,22 @@ export function submitLucHao(doc: Document, date: [number, number, number], toss
   ($('#kd-dungThanSel') as HTMLSelectElement).value = key;
   const ev = new (doc.defaultView as unknown as typeof globalThis).Event('submit', { cancelable: true });
   $('#kd-form').dispatchEvent(ev);
+}
+
+/** Điền form Bát Trạch của legacy (ngày DƯƠNG) và bấm tính. */
+export function submitBatTrach(doc: Document, solar: { dd: number; mm: number; yy: number }, gender: 'M' | 'F', huongCua: string): void {
+  const $ = (s: string) => doc.querySelector(s) as HTMLElement;
+  ($('#pt-dd') as HTMLInputElement).value = String(solar.dd);
+  ($('#pt-mm') as HTMLInputElement).value = String(solar.mm);
+  ($('#pt-year') as HTMLInputElement).value = String(solar.yy);
+  ($(`#pt-genderSeg button[data-val="${gender}"]`)).click();
+  ($('#pt-huongCua') as HTMLSelectElement).value = huongCua;
+  $('#pt-form').dispatchEvent(new (doc.defaultView as unknown as typeof globalThis).Event('submit', { cancelable: true }));
+}
+
+/** Điền form Nạp Âm của legacy: mỗi người [ngày, tháng, năm] dạng chuỗi (trống = bỏ ô). */
+export function submitNapAm(doc: Document, p1: readonly [string, string, string], p2: readonly [string, string, string]): void {
+  const $ = (s: string) => doc.querySelector(s) as HTMLInputElement;
+  (['d', 'm', 'y'] as const).forEach((k, i) => { $(`#na-${k}1`).value = p1[i]; $(`#na-${k}2`).value = p2[i]; });
+  $('#na-form').dispatchEvent(new (doc.defaultView as unknown as typeof globalThis).Event('submit', { cancelable: true }));
 }

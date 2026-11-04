@@ -57,7 +57,7 @@ describe('Mốc Lập Xuân (mục 5.3 điểm 3 & 4)', () => {
       }
     }
     expect(bad.slice(0, 10)).toEqual([]);
-  });
+  }, 30_000);
   it('Bát Trạch so ngày sinh theo JD giữa trưa, không có giờ', () => {
     for (let yy = 1900; yy <= 2100; yy += 7) {
       for (const tz of [7, 8]) {

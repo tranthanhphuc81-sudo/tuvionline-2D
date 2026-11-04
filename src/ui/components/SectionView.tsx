@@ -43,6 +43,12 @@ function BlockView({ b }: { b: Block }) {
           ))}
         </div>
       );
+    case 'swatches':
+      return (
+        <ul className={s.swatches}>
+          {b.items.map((i) => <li key={i.label}><span className={s.dot} style={{ background: i.hex }} aria-hidden="true" />{i.label}</li>)}
+        </ul>
+      );
     case 'chips':
       return (
         <p className={s.p}>

@@ -1,4 +1,4 @@
-/* Bảng câu chữ Bát Tự — CHÉP NGUYÊN VĂN từ legacy (public/legacy/lyso-toolkit.html, module LySoInterp).
+/* Bảng câu chữ Bát Tự — CHÉP NGUYÊN VĂN từ legacy (docs/legacy/lyso-toolkit.html, module LySoInterp).
    Sinh bằng script cắt thẳng từ file legacy; chỉ đổi `var` thành `export const` và thêm kiểu. Đừng sửa câu chữ ở đây
    (test đối chiếu tests/parity/* sẽ báo). */
 import type { ThapThanFamily } from '../../core';

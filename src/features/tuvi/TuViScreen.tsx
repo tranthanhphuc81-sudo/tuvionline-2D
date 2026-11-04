@@ -7,14 +7,12 @@ import { tuViExplain, tuViNotes } from '../../content/tuvi/explain';
 import { tuViTongKet } from '../../content/tuvi/tongket';
 import { tuViYearSections } from '../../content/tuvi/year';
 import { selectActiveProfile } from '../../state/actions';
-import { openLegacy } from '../../platform/legacy';
 import { useApp, useNav } from '../../app/context';
 import { Segmented } from '../../ui/components/Segmented';
 import { SectionView } from '../../ui/components/SectionView';
 import ui from '../../ui/components/ui.module.css';
 import { ChartGrid, HOA_LABEL } from './ChartGrid';
 import { PalaceDetail, PalaceList } from './PalaceDetail';
-import { LEGACY } from '../legacy/legacyLinks';
 import s from './tuvi.module.css';
 
 const { CHI, CAN } = TuViEngine;
@@ -130,7 +128,6 @@ export function TuViScreen() {
 
       <section className={s.notes}><SectionView sections={[tuViNotes()]} /></section>
 
-      <button type="button" className={`${ui.btn} ${ui.ghost}`} onClick={() => openLegacy(LEGACY.tuvi, profile)}>Mở bản web cũ (để đối chiếu)</button>
       <p className={ui.muted}>{CULTURAL_NOTE}</p>
     </div>
   );

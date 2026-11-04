@@ -1,0 +1,35 @@
+/* Bảng hình ảnh 30 Nạp Âm — CHÉP NGUYÊN VĂN từ legacy (module LySoInterp). Sinh bằng script cắt thẳng từ file legacy;
+   chỉ đổi `var` thành `export const` và thêm kiểu. Đừng sửa câu chữ ở đây (test đối chiếu tests/parity/* sẽ báo). */
+
+export const NAPAM_IMG: Record<string, string> = {
+    'Hải Trung Kim':'vàng dưới đáy biển — giá trị tiềm ẩn, cần thời gian và cơ hội mới lộ ra; kín đáo, sâu sắc',
+    'Lư Trung Hoả':'lửa trong lò — năng lượng bền bỉ, biết "nung" việc đến khi thành; cần môi trường phù hợp mới phát huy',
+    'Đại Lâm Mộc':'cây trong rừng lớn — hào sảng, bao quát, hay che chở người khác; phát triển tốt khi có không gian rộng',
+    'Lộ Bàng Thổ':'đất ven đường — chịu khó, thực tế, gần gũi; là nền tảng âm thầm cho người khác bước đi',
+    'Kiếm Phong Kim':'mũi kiếm — sắc bén, quyết đoán; càng được tôi luyện qua thử thách càng thành tài',
+    'Sơn Đầu Hoả':'lửa trên đỉnh núi — nổi bật, nhiệt huyết, dễ được chú ý; nên giữ lửa đều thay vì bùng rồi tắt',
+    'Giản Hạ Thuỷ':'nước dưới khe — trong trẻo, khéo léo, len lỏi; thành công nhờ bền bỉ từng chút',
+    'Thành Đầu Thổ':'đất đắp thành — vững vàng, có trách nhiệm, hay đứng ra bảo vệ người khác',
+    'Bạch Lạp Kim':'vàng trong nến (kim loại còn non) — tinh tế, cần môi trường ấm áp, được nâng đỡ để hoàn thiện',
+    'Dương Liễu Mộc':'cây dương liễu — mềm mại, uyển chuyển, giỏi thích nghi; cần chỗ dựa vững',
+    'Tuyền Trung Thuỷ':'nước giữa suối — trong lành, dồi dào ý tưởng, sống tình cảm',
+    'Ốc Thượng Thổ':'đất trên mái nhà — che chở gia đình, thực tế, trọng nề nếp',
+    'Tích Lịch Hoả':'lửa sấm sét — mạnh mẽ, bất ngờ, hành động nhanh; cần tiết chế sự nóng vội',
+    'Tùng Bách Mộc':'cây tùng bách — kiên cường, bền bỉ, giữ khí tiết trước khó khăn',
+    'Trường Lưu Thuỷ':'dòng nước chảy dài — bền bỉ, nhìn xa, giỏi kết nối; thành công đến chậm mà chắc',
+    'Sa Trung Kim':'vàng lẫn trong cát — giá trị cần được "sàng lọc", toả sáng khi gặp đúng người, đúng việc',
+    'Sơn Hạ Hoả':'lửa dưới chân núi — ấm áp, khiêm nhường, toả sáng trong phạm vi gần',
+    'Bình Địa Mộc':'cây ở đồng bằng — giản dị, gần gũi, phát triển đều đặn',
+    'Bích Thượng Thổ':'đất trên vách tường — chắc chắn, đáng tin, làm nền cho tổ ấm',
+    'Kim Bạc Kim':'vàng lá mỏng — tinh xảo, khéo tay, có gu thẩm mỹ',
+    'Phú Đăng Hoả':'lửa ngọn đèn — soi sáng cho người khác, tận tuỵ; hợp nghề dạy học, tư vấn',
+    'Thiên Hà Thuỷ':'nước mưa từ trời — rộng lượng, giàu lý tưởng, nuôi dưỡng mọi thứ xung quanh',
+    'Đại Trạch Thổ':'đất đầm lớn — bao dung, rộng rãi, dung chứa được nhiều người',
+    'Thoa Xuyến Kim':'vàng làm trang sức — duyên dáng, tinh tế, coi trọng cái đẹp',
+    'Tang Đố Mộc':'gỗ cây dâu (nuôi tằm) — hữu ích, chăm chỉ, cống hiến thầm lặng',
+    'Đại Khê Thuỷ':'nước khe lớn — năng động, mạnh mẽ, vượt qua trở ngại',
+    'Sa Trung Thổ':'đất pha cát — linh hoạt, dễ thích nghi, cần nền tảng chắc để bền',
+    'Thiên Thượng Hoả':'lửa trên trời (ánh mặt trời) — rực rỡ, rộng lượng, có sức lan toả',
+    'Thạch Lựu Mộc':'cây thạch lựu — sức sống mạnh, kiên trì, "ra hoa kết trái" sau thời gian chăm chút',
+    'Đại Hải Thuỷ':'nước biển lớn — bao dung, tầm nhìn rộng, chứa được nhiều thứ'
+  };

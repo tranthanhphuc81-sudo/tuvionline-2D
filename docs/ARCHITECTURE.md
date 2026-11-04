@@ -170,6 +170,9 @@ interface Profile {
 interface Settings { theme: 'system' | 'light' | 'dark'; ttsRate: number; ttsPitch: number }
 ```
 
+Phase 3.5: `batTrachHuongCua` bỏ khỏi `tools` khi chọn "Chưa xét căn nhà cụ thể"; `napAmPair` chỉ lưu khi cả hai người đều là hồ sơ
+(nhập tay thì không lưu, vì dữ liệu nhập tay không phải hồ sơ).
+
 - **Nâng cấp lược đồ:** `src/state/migrations.ts` chứa mảng `migrations[v]: (old) => new`. Khi khởi động, app đọc khoá
   `lyso.state` rồi chạy tuần tự từ `version` cũ lên bản mới nhất, kiểm tra hình dạng dữ liệu (hàm `parsePersisted` viết tay,
   trả lỗi rõ ràng), rồi mới render. Dữ liệu hỏng thì giữ một bản sao ở khoá `lyso.state.corrupt-<thời điểm>`, khởi động với
@@ -319,7 +322,7 @@ src/features/  màn hình React: trình bày Section[] và kết quả engine
 - `window.LySoInterp` chuyển sang `src/content/interp/` (bảng `STAR`, `PAIRS`, `FAMILY`…) cùng `src/content/<công cụ>/`.
   **Phần nào là tính toán** (độ sáng sao, `tuViYear`, `thapThanProfile`, chấm Vượng Suy, luận đoán Lục Hào, đánh giá nhà)
   thì chuyển vào `src/core/<công cụ>/` và viết test. Phần câu văn ở lại `src/content`.
-- **Kiểm "nguyên văn" tự động** (mục 7.1, test đối chiếu): với mỗi hồ sơ mẫu, nạp `lyso-toolkit.html` trong jsdom, điền form,
+- **Kiểm "nguyên văn" tự động** (mục 7.1, test đối chiếu): với mỗi hồ sơ mẫu, nạp `docs/legacy/lyso-toolkit.html` trong jsdom, điền form,
   lấy `textContent` của các khối `#tv-explain`, `#tv-tongket`… rồi so với `toPlainText()` của `src/content`. Đây là lưới an
   toàn cho yêu cầu "chuyển nguyên văn, không viết lại".
 

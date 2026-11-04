@@ -1,4 +1,4 @@
-/* Bảng câu chữ Tử Vi — CHÉP NGUYÊN VĂN từ legacy (public/legacy/lyso-toolkit.html, module LySoInterp).
+/* Bảng câu chữ Tử Vi — CHÉP NGUYÊN VĂN từ legacy (docs/legacy/lyso-toolkit.html, module LySoInterp).
    Sinh bằng script cắt thẳng từ file legacy; chỉ đổi `var` thành `export const` và thêm kiểu. KHÔNG sửa câu chữ ở đây
    mà không sửa legacy tương ứng (test đối chiếu tests/parity/tuvi.test.ts sẽ báo). */
 import type { AreaKey, CungName } from '../../core';

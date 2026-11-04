@@ -77,7 +77,9 @@ export interface NoteBlock extends BlockBase { kind: 'note'; rich: RichNode[] }
 export interface KvBlock extends BlockBase { kind: 'kv'; rows: { k: string; v: string }[] }
 /** Thanh tỷ lệ phần trăm (ví dụ 5 nhóm Thập Thần) */
 export interface BarsBlock extends BlockBase { kind: 'bars'; rows: { label: string; pct: number }[] }
-export type Block = PBlock | ListBlock | VerdictBlock | ItemBlock | ChipsBlock | NoteBlock | KvBlock | BarsBlock;
+/** Dãy mẫu màu kèm tên (ví dụ màu Ngũ hành của Bát Trạch) */
+export interface SwatchesBlock extends BlockBase { kind: 'swatches'; items: { label: string; hex: string }[] }
+export type Block = PBlock | ListBlock | VerdictBlock | ItemBlock | ChipsBlock | NoteBlock | KvBlock | BarsBlock | SwatchesBlock;
 
 export interface Section { id: string; title: string; icon?: string; tone?: Tone; blocks: Block[] }
 
@@ -97,6 +99,7 @@ export function sectionPlainText(s: Section, withTitle = true): string {
       case 'chips': parts.push(b.chips.map((c) => c.text).join('\n') + (b.after ? ' ' + toPlainText(b.after) : '')); break;
       case 'kv': parts.push(b.rows.map((r) => r.k + ' ' + r.v).join('\n')); break;
       case 'bars': parts.push(b.rows.map((r) => r.label + ' ' + r.pct + '%').join('\n')); break;
+      case 'swatches': parts.push(b.items.map((i) => i.label).join('\n')); break;
     }
   }
   return parts.join('\n');

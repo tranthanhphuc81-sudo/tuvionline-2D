@@ -71,12 +71,22 @@ export function setLucHaoDate(store: AppStore, date: [number, number, number]): 
   store.setState((s) => (s.tools.lucHaoLastCast ? { ...s, tools: { ...s.tools, lucHaoLastCast: { ...s.tools.lucHaoLastCast, date } } } : s));
 }
 
-export function setBatTrachHuongCua(store: AppStore, huong: Huong): void {
-  store.setState((s) => ({ ...s, tools: { ...s.tools, batTrachHuongCua: huong } }));
+/** Lưu hướng cửa; `undefined` = chưa xét căn nhà cụ thể. */
+export function setBatTrachHuongCua(store: AppStore, huong: Huong | undefined): void {
+  store.setState((s) => {
+    const tools = { ...s.tools };
+    if (huong) tools.batTrachHuongCua = huong; else delete tools.batTrachHuongCua;
+    return { ...s, tools };
+  });
 }
 
-export function setNapAmPair(store: AppStore, pair: [string, string]): void {
-  store.setState((s) => ({ ...s, tools: { ...s.tools, napAmPair: pair } }));
+/** Lưu cặp hồ sơ hợp hôn; `undefined` = không còn đủ hai hồ sơ để lưu. */
+export function setNapAmPair(store: AppStore, pair: [string, string] | undefined): void {
+  store.setState((s) => {
+    const tools = { ...s.tools };
+    if (pair) tools.napAmPair = pair; else delete tools.napAmPair;
+    return { ...s, tools };
+  });
 }
 
 export function selectActiveProfile(s: PersistedState): Profile | null {

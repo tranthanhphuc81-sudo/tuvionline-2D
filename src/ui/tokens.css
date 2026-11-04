@@ -1,4 +1,4 @@
-/* Design tokens — bảng màu lấy NGUYÊN từ legacy (public/legacy/lyso-toolkit.html), bổ sung khoảng cách, cỡ chữ,
+/* Design tokens — bảng màu lấy NGUYÊN từ legacy (docs/legacy/lyso-toolkit.html), bổ sung khoảng cách, cỡ chữ,
    vùng chạm và safe-area (ARCHITECTURE.md mục 4.1). Chủ đề: data-theme="light|dark" trên <html>; không có thì theo hệ thống. */
 :root {
   --bg: #0b0f1a; --surface: #121a2c; --surface2: #1a2338; --surface3: #212c46;

@@ -7,12 +7,10 @@ import { parseRich } from '../../content/rich';
 import { batTuDungThan, batTuExplain, batTuKhoiVanNote, batTuLapXuanNote, batTuNotes, batTuVuongSuy } from '../../content/battu/explain';
 import { batTuTongKet } from '../../content/battu/tongket';
 import { selectActiveProfile } from '../../state/actions';
-import { openLegacy } from '../../platform/legacy';
 import { useApp, useNav } from '../../app/context';
 import { RichText } from '../../ui/components/RichText';
 import { SectionView } from '../../ui/components/SectionView';
 import ui from '../../ui/components/ui.module.css';
-import { LEGACY } from '../legacy/legacyLinks';
 import { Pillars, hanhAmDuong } from './Pillars';
 import s from './battu.module.css';
 
@@ -112,7 +110,6 @@ export function BatTuScreen() {
 
       <section className={s.notes}><SectionView sections={[batTuNotes()]} /></section>
 
-      <button type="button" className={`${ui.btn} ${ui.ghost}`} onClick={() => openLegacy(LEGACY.battu, profile)}>Mở bản web cũ (để đối chiếu)</button>
       <p className={ui.muted}>{CULTURAL_NOTE}</p>
     </div>
   );

@@ -13,7 +13,36 @@
 | 3.2 — Tử Vi | XONG — 191 test xanh, build OK |
 | 3.3 — Bát Tự | XONG — 257 test xanh, build OK |
 | 3.4 — Lục Hào | XONG — 302 test xanh, build OK |
-| 3.5 — Bát Trạch, Nạp Âm | CHƯA LÀM — chờ chủ dự án đồng ý |
+| 3.5 — Bát Trạch, Nạp Âm | XONG — 380 test xanh, build OK |
+| 4 — La bàn | CHƯA LÀM — chờ chủ dự án đồng ý |
+
+## Phase 3.5 — Bát Trạch, Nạp Âm — XONG
+
+### Đã xong
+- **Tính toán:** `src/core/battrach/reading.ts` (`batTrachReading`: năm lý số, ngày Lập Xuân, 4 hướng tốt/xấu theo thứ tự legacy,
+  đánh giá nhà, ba hành ứng dụng; `trachQuaiOf`, `HUONG_LIST`), `src/core/napam/reading.ts` (`napAmForBirth` chuyển từ `index.ts`,
+  `resolveNapAmInput` = legacy `resolvePerson`, `napAmCompat`: điểm mạng + tuổi, mức hợp, vai sinh/khắc). Không đổi công thức.
+- **Câu chữ (nguyên văn):** `src/content/battrach/{explain,tongket}.ts`, `src/content/napam/{explain,tongket}.ts`,
+  `src/content/interp/napam.ts` (NAPAM_IMG cắt thẳng từ legacy), `src/content/common/tongket.ts` (thứ tự và giới hạn của `block()`).
+  `rich.ts` thêm khối `swatches` (mẫu màu Ngũ hành).
+- **Đối chiếu legacy:** `tests/parity/battrach.test.ts` (50 hồ sơ × chưa xét nhà + 2 hướng cửa × 9 khối; 8 hướng × 9 năm × 2 giới),
+  `tests/parity/napam.test.ts` (hồ sơ mẫu một người và ghép đôi, chỉ nhập năm, 60 × 12 năm, 4 ngoại lệ hai chiều, thông báo lỗi): khớp 100%.
+  Đã chạy một lần đủ 60 × 60 cặp năm: khớp 100%, nhưng quá nặng nên bản giữ lại là 60 × 12. Đã thử sửa một chữ → test báo đúng chỗ.
+  `tests/phongthuy-reading.test.ts` cho quy tắc nhỏ. 302 → 380 test.
+- **Màn hình:** `src/features/phongthuy/` — `PhongThuyScreen` (3 tab con giữ mount), `battrach/{BatTrachScreen,StarGrid}` (prop `focus`
+  cho Phase 6), `napam/NapAmScreen` (chọn hồ sơ hoặc nhập tay, chỉ nhập năm cũng được; Người 1 đổi theo người đang xem).
+  Test: `src/features/phongthuy/PhongThuyScreen.test.tsx`.
+- **Gỡ legacy:** `lyso-toolkit.html` chuyển sang `docs/legacy/`, parity test đọc từ đó. Bỏ nút "Mở bản web cũ" ở Tử Vi, Bát Tự,
+  Lục Hào. `src/features/legacy` chỉ còn phục vụ La Bàn.
+- `tests/locks.test.ts`: tăng thời gian chờ của test Lập Xuân Bát Tự lên 30 giây (chạy riêng 2,5 giây, quá 5 giây khi chạy song song; không đổi kỳ vọng).
+- Kiểm 360px sáng/tối: không cuộn ngang, không lỗi console. Chưa kiểm cỡ chữ 130% và chưa chạy trên máy Android.
+
+### Lưu ý
+- **Tab "Tổng Hợp" của bản web đã rời khỏi app** cùng `lyso-toolkit.html`, theo đúng PROMPT-KIT 3.5. Màn hình Tổng hợp mới chỉ tóm tắt 4 hệ thống;
+  các phần "Tóm lại về bạn", bảng so sánh 4 hệ thống, "Đọc tổng hợp thế nào?" CHƯA được dựng lại. Chủ dự án cần quyết định có dựng lại không.
+
+### Việc tiếp theo
+- Phase 4 (La bàn) — hỏi chủ dự án trước khi bắt đầu.
 
 ## Phase 3.4 — Lục Hào — XONG
 
@@ -37,8 +66,7 @@
   lỗi nguyên văn legacy. Kiểm 360px sáng/tối/130%. Test: `src/features/luchao/LucHaoScreen.test.tsx`, thêm test lược đồ.
 
 ### Việc tiếp theo
-- Phase 3.5 (Bát Trạch, Nạp Âm, tab con Phong thủy, chọn cặp hợp hôn) rồi gỡ `lyso-toolkit.html` khỏi app — hỏi chủ dự án
-  trước khi bắt đầu.
+- ~~Phase 3.5~~ XONG.
 
 ## Phase 3.3 — Bát Tự — XONG
 

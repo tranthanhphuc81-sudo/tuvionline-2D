@@ -1,4 +1,4 @@
-/* Mở trang legacy (bản web đầy đủ đã kiểm chứng) trong lúc chưa dựng xong màn hình mới (Phase 2–3).
+/* Mở trang legacy còn lại (La Bàn, Phase 4 thay thế).
    Trước khi mở, ghi hồ sơ đang xem vào `lyso-shared-v1` để trang legacy tự điền và tính luôn.
    Back trên Android: trang legacy là tài liệu khác nên Capacitor dùng history.back() → quay về app. */
 export interface LegacySharedInput {

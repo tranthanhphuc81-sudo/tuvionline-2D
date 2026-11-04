@@ -8,13 +8,11 @@ import { lucHaoExplain, lucHaoNotes, lucHaoTossBanner, lucHaoVerdict } from '../
 import { lucHaoTongKet } from '../../content/luchao/tongket';
 import { setLucHaoCast, setLucHaoDate } from '../../state/actions';
 import { tapLight } from '../../platform/haptics';
-import { openLegacy } from '../../platform/legacy';
 import { useApp, useAppCtx } from '../../app/context';
 import { RichText } from '../../ui/components/RichText';
 import { Segmented } from '../../ui/components/Segmented';
 import { SectionView } from '../../ui/components/SectionView';
 import ui from '../../ui/components/ui.module.css';
-import { LEGACY } from '../legacy/legacyLinks';
 import { BienCard, HaoList, HexagramDiagram } from './Hexagram';
 import s from './luchao.module.css';
 
@@ -130,7 +128,6 @@ export function LucHaoScreen() {
         </div>
       )}
 
-      <button type="button" className={`${ui.btn} ${ui.ghost}`} onClick={() => openLegacy(LEGACY.luchao, null)}>Mở bản web cũ (để đối chiếu)</button>
       <p className={ui.muted}>{CULTURAL_NOTE}</p>
     </div>
   );

@@ -1,13 +1,14 @@
 // Điểm vào DUY NHẤT cho phần tính toán (core). UI và src/content chỉ import từ đây.
-// Công thức trích nguyên văn từ bản web đã kiểm chứng (public/legacy/lyso-toolkit.html); đầu ra được khoá bởi
+// Công thức trích nguyên văn từ bản web đã kiểm chứng (docs/legacy/lyso-toolkit.html); đầu ra được khoá bởi
 // tests/golden.test.ts và tests/core-snapshot.test.ts.
-import { pad2, validSolar, validLunar, shiftSolar, lunarTzForSolarYear, lunarTzForLunarYear, convertSolar2Lunar } from './calendar';
+import { pad2, validSolar, validLunar, shiftSolar, lunarTzForSolarYear, lunarTzForLunarYear } from './calendar';
 import { CAN, CHI } from './canchi';
 import { TuViEngine } from './tuvi/engine';
 import { BatTuEngine } from './battu/engine';
 import { LucHaoEngine } from './luchao/engine';
 import { PhongThuyEngine } from './battrach/engine';
 import { NapAmEngine } from './napam/engine';
+import { napAmForBirth, type NapAmBirth } from './napam/reading';
 import { resolveBirth, type BirthCalcInput, type BirthError, type BirthProfile, type ResolvedBirth, type SolarDate } from './birth';
 import type { Gender, HourIdx } from './types';
 import type { Hanh } from './canchi/hanh';
@@ -43,7 +44,11 @@ export {
 } from './luchao/reading';
 export type { DungThanKey, CastContext, HaoView, NhatRel, VerdictHao, LucHaoReading, LhTone } from './luchao/reading';
 export type { Huong, StarName, Nhom, DuNienStar, LySoYear } from './battrach/types';
+export { HUONG_LIST, batTrachReading, trachQuaiOf } from './battrach/reading';
+export type { BatTrachReading, BtTone, HouseReading, HuongSao } from './battrach/reading';
 export type { NapAmYear, NapAmRelation, NapAmRelationKind, NapAmNeedsId } from './napam/types';
+export { napAmCompat, napAmForBirth, napAmPersonOfDate, resolveNapAmInput } from './napam/reading';
+export type { HanhFlow, HopLevel, NapAmBirth, NapAmCompat, NapAmInputError, NapAmPerson, NapAmTone } from './napam/reading';
 
 /* ===== Hàm gọn (ARCHITECTURE.md mục 5.2) ===== */
 
@@ -64,18 +69,6 @@ export function menhQuai(year: number, gender: Gender): Quai {
   return PhongThuyEngine.menhQuai(year, gender);
 }
 
-export interface NapAmBirth extends NapAmYear {
-  lunar: { day: number; month: number; year: number; leap: number };
-  /** sinh trước Tết nên năm âm khác năm dương */
-  beforeTet: boolean;
-}
-
-/** Nạp Âm theo năm ÂM LỊCH (đổi năm vào Tết), không theo năm dương lịch. */
-export function napAmForBirth(dd: number, mm: number, yy: number): NapAmBirth {
-  const lunar = convertSolar2Lunar(dd, mm, yy, lunarTzForSolarYear(yy));
-  const res = NapAmEngine.napAmOfYear(lunar[2]);
-  return { ...res, lunar: { day: lunar[0], month: lunar[1], year: lunar[2], leap: lunar[3] }, beforeTet: lunar[2] !== yy };
-}
 export const napAmOfBirth = napAmForBirth;
 
 /* ===== Tóm tắt nhanh (màn hình Tổng Hợp) ===== */
