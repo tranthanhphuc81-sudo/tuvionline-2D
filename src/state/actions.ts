@@ -58,9 +58,17 @@ export function setSetting<K extends keyof Settings>(store: AppStore, key: K, va
   store.setState((s) => (s.settings[key] === value ? s : { ...s, settings: { ...s.settings, [key]: value } }));
 }
 
-export function setLucHaoCast(store: AppStore, tosses: number[], now = nowIso()): void {
+export function setLucHaoCast(
+  store: AppStore, tosses: number[], now = nowIso(),
+  extra: { method?: 'random' | 'manual'; date?: [number, number, number] } = {},
+): void {
   if (tosses.length !== 6 || !tosses.every((t) => Number.isInteger(t) && t >= 6 && t <= 9)) throw new Error('Quẻ không hợp lệ');
-  store.setState((s) => ({ ...s, tools: { ...s.tools, lucHaoLastCast: { tosses: [...tosses], castAt: now } } }));
+  store.setState((s) => ({ ...s, tools: { ...s.tools, lucHaoLastCast: { tosses: [...tosses], castAt: now, ...extra } } }));
+}
+
+/** Đổi ngày xem của quẻ đang giữ (không gieo lại). */
+export function setLucHaoDate(store: AppStore, date: [number, number, number]): void {
+  store.setState((s) => (s.tools.lucHaoLastCast ? { ...s, tools: { ...s.tools, lucHaoLastCast: { ...s.tools.lucHaoLastCast, date } } } : s));
 }
 
 export function setBatTrachHuongCua(store: AppStore, huong: Huong): void {

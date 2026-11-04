@@ -31,7 +31,14 @@ export interface Profile {
 export type Theme = 'system' | 'light' | 'dark';
 export interface Settings { theme: Theme; ttsRate: number; ttsPitch: number }
 
-export interface LucHaoCast { tosses: number[]; castAt: string }
+export interface LucHaoCast {
+  tosses: number[];
+  castAt: string;
+  /** cách gieo (thêm ở Phase 3.4, tuỳ chọn — dữ liệu cũ không có vẫn hợp lệ) */
+  method?: 'random' | 'manual';
+  /** ngày xem quẻ [ngày, tháng, năm] dương lịch (Phase 3.4, tuỳ chọn) */
+  date?: [number, number, number];
+}
 
 export interface Tools {
   lucHaoLastCast?: LucHaoCast;
@@ -104,6 +111,10 @@ export function parsePersisted(raw: unknown): ParseResult {
     const c = t.lucHaoLastCast;
     if (!isObj(c) || !Array.isArray(c.tosses) || c.tosses.length !== 6 || !c.tosses.every((x) => isInt(x, 6, 9)) || !isStr(c.castAt)) {
       return { ok: false, error: 'tools.lucHaoLastCast không hợp lệ' };
+    }
+    if (c.method !== undefined && c.method !== 'random' && c.method !== 'manual') return { ok: false, error: 'tools.lucHaoLastCast.method không hợp lệ' };
+    if (c.date !== undefined && !(Array.isArray(c.date) && c.date.length === 3 && isInt(c.date[0], 1, 31) && isInt(c.date[1], 1, 12) && isInt(c.date[2], 1900, 2100))) {
+      return { ok: false, error: 'tools.lucHaoLastCast.date không hợp lệ' };
     }
   }
   if (t.batTrachHuongCua !== undefined && !HUONG.includes(t.batTrachHuongCua as string)) return { ok: false, error: 'tools.batTrachHuongCua không hợp lệ' };

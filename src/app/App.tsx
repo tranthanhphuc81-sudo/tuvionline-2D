@@ -13,6 +13,7 @@ import { LegacyToolScreen } from '../features/legacy/LegacyToolScreen';
 import { PhongThuyScreen } from '../features/legacy/PhongThuyScreen';
 import { TuViScreen } from '../features/tuvi/TuViScreen';
 import { BatTuScreen } from '../features/battu/BatTuScreen';
+import { LucHaoScreen } from '../features/luchao/LucHaoScreen';
 import { initials } from '../features/profiles/format';
 import s from './App.module.css';
 
@@ -34,7 +35,7 @@ function renderRoute(r: Route): ReactNode {
     case 'home': return <HomeScreen />;
     case 'tuvi': return <TuViScreen />;
     case 'battu': return <BatTuScreen />;
-    case 'luchao': return <LegacyToolScreen tool="luchao" />;
+    case 'luchao': return <LucHaoScreen />;
     case 'phongthuy': return <PhongThuyScreen sub={r.sub} />;
     case 'profiles': return <ProfilesScreen />;
     case 'profiles.edit': return <ProfileEditScreen id={r.id} />;

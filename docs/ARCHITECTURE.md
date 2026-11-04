@@ -151,6 +151,9 @@ interface PersistedState {
   tools: { lucHaoLastCast?: LucHaoCast; batTrachHuongCua?: Huong; napAmPair?: [string, string] };
 }
 
+// Phase 3.4: LucHaoCast = { tosses: number[6]; castAt: string; method?: 'random' | 'manual'; date?: [d, m, y] }
+// (hai trường tuỳ chọn thêm sau, không tăng version vì dữ liệu cũ vẫn hợp lệ)
+
 interface Profile {
   id: string;                       // crypto.randomUUID(), có hàm dự phòng
   name: string;

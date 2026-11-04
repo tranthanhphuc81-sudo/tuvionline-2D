@@ -12,9 +12,10 @@
 | 3.1 — Bố cục lá số Tử Vi | XONG — chọn phương án C (lưới gọn + thẻ chi tiết), xem ARCHITECTURE mục 10 |
 | 3.2 — Tử Vi | XONG — 191 test xanh, build OK |
 | 3.3 — Bát Tự | XONG — 257 test xanh, build OK |
-| 3.4 — Lục Hào | ĐANG LÀM (xem dưới) |
+| 3.4 — Lục Hào | XONG — 302 test xanh, build OK |
+| 3.5 — Bát Trạch, Nạp Âm | CHƯA LÀM — chờ chủ dự án đồng ý |
 
-## Phase 3.4 — Lục Hào — đang làm
+## Phase 3.4 — Lục Hào — XONG
 
 ### Đã xong
 - **Bước 1 — tính toán + câu chữ + đối chiếu legacy** (257 → 296 test):
@@ -27,9 +28,17 @@
   - `tests/parity/luchao.test.ts`: 31 tổ hợp gieo × 6 ngày xem × 7 loại "Hỏi về việc gì" × 4 khối: khớp 100%.
     `tests/luchao-reading.test.ts` cho quy tắc nhỏ.
 
+- **Bước 2 — màn hình Lục Hào + rung** (296 → 302 test): cài `@capacitor/haptics` ~8.0, `src/platform/haptics.ts`
+  (`tapLight()`, chỉ chạy trên Android), `npx cap sync android` đã đăng ký plugin. `src/features/luchao/` — `Hexagram`
+  (sơ đồ quẻ, danh sách 6 hào có Can Chi, hành, Lục Thân, THẾ/ỨNG/ĐỘNG/DỤNG THẦN, vượng suy, Nhật xung/hợp, `aria-label`
+  từng hào, prop `focus` cho Phase 6; thẻ quẻ biến), `LucHaoScreen` (ngày xem + "Hôm nay", gieo ngẫu nhiên / nhập tay,
+  "Hỏi về việc gì", tóm tắt, luận đoán, giải thích gập/mở, tổng kết, ghi chú). Quẻ gần nhất lưu ở `tools.lucHaoLastCast`
+  (thêm `method`, `date` tuỳ chọn — ARCHITECTURE mục 3), **giữ nguyên khi đổi việc hỏi hoặc ngày xem**; ngày xem sai thì báo
+  lỗi nguyên văn legacy. Kiểm 360px sáng/tối/130%. Test: `src/features/luchao/LucHaoScreen.test.tsx`, thêm test lược đồ.
+
 ### Việc tiếp theo
-2. Màn hình Lục Hào + rung nhẹ khi gieo xong (`@capacitor/haptics`); lưu quẻ gần nhất (`tools.lucHaoLastCast`),
-   giữ quẻ khi đổi việc hỏi.
+- Phase 3.5 (Bát Trạch, Nạp Âm, tab con Phong thủy, chọn cặp hợp hôn) rồi gỡ `lyso-toolkit.html` khỏi app — hỏi chủ dự án
+  trước khi bắt đầu.
 
 ## Phase 3.3 — Bát Tự — XONG
 

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { createStore } from './store';
-import { addProfile, removeProfile, setActiveProfile, setLucHaoCast, setNapAmPair, setSetting, updateProfile, validateProfile, selectActiveProfile, type ProfileInput } from './actions';
+import { addProfile, removeProfile, setActiveProfile, setLucHaoCast, setLucHaoDate, setNapAmPair, setSetting, updateProfile, validateProfile, selectActiveProfile, type ProfileInput } from './actions';
 import { emptyState, parsePersisted, STATE_KEY, type PersistedState } from './schema';
 import { loadState, profileFromLegacyShared } from './migrations';
 import { startPersistence } from './persist';
@@ -140,5 +140,18 @@ describe('persist', () => {
     await Promise.resolve();
     expect(JSON.parse(kv.data.get(STATE_KEY)!).settings.theme).toBe('light');
     p.stop();
+  });
+});
+
+describe('Lục Hào: lưu quẻ gần nhất', () => {
+  it('lưu cách gieo và ngày xem; đổi ngày không gieo lại; dữ liệu hợp lệ khi đọc lại', () => {
+    const s = mk();
+    setLucHaoCast(s, [7, 7, 9, 8, 6, 8], 't', { method: 'random', date: [6, 2, 2021] });
+    setLucHaoDate(s, [7, 2, 2021]);
+    expect(s.getState().tools.lucHaoLastCast).toEqual({ tosses: [7, 7, 9, 8, 6, 8], castAt: 't', method: 'random', date: [7, 2, 2021] });
+    expect(parsePersisted(JSON.parse(JSON.stringify(s.getState()))).ok).toBe(true);
+    const bad = JSON.parse(JSON.stringify(s.getState()));
+    bad.tools.lucHaoLastCast.date = [32, 1, 2021];
+    expect(parsePersisted(bad)).toMatchObject({ ok: false, error: 'tools.lucHaoLastCast.date không hợp lệ' });
   });
 });
