@@ -1,7 +1,7 @@
 // Điểm vào duy nhất cho phần tính toán (core). UI chỉ import từ đây.
 // Các engine bên dưới được trích nguyên văn từ bản web đã kiểm chứng (legacy/lyso-toolkit.html).
 import { pad2, validSolar, validLunar, shiftSolar, lunarTzForSolarYear, lunarTzForLunarYear } from './calendar';
-import { TuViEngine as _TuVi } from './tuvi.js';
+import { TuViEngine } from './tuvi/engine';
 import { BatTuEngine } from './battu/engine';
 import { LucHaoEngine } from './luchao/engine';
 import { PhongThuyEngine } from './battrach/engine';
@@ -10,7 +10,8 @@ import { NapAmEngine } from './napam/engine';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // Tạm thời để kiểu `any` vì engine còn là JS trích nguyên văn — Phase 1 (PROMPT-KIT) sẽ viết lại bằng TypeScript có kiểu đầy đủ.
 export const LySoUtil = { pad2, validSolar, validLunar, shiftSolar, lunarTzForSolarYear, lunarTzForLunarYear };
-export const TuViEngine: any = _TuVi;
+export { TuViEngine };
+export type { TuViChart, TuViInput, DaiHan, TuHoa, CungName } from './tuvi/types';
 export { BatTuEngine };
 export type { BatTuChart, BatTuInput, Pillar, ThapThan, TangCanRole } from './battu/types';
 export { LucHaoEngine };

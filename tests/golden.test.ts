@@ -71,7 +71,7 @@ describe('Tử Vi — tên 12 cung và Trường Sinh theo Cục', () => {
   it('Mệnh tại Hợi: Huynh Đệ ở Tuất, Phụ Mẫu ở Tý, Quan Lộc ở Mão, Tài Bạch ở Mùi', () => {
     const c = TuViEngine.calcChart({ gender: 'M', dd: 15, mm: 6, yy: 1996, hourBranchIdx: 6 });
     expect(CHI[c.menhChi]).toBe('Hợi');
-    const name = (chi: string) => c.daiHan.find((x: { chi: number }) => x.chi === at(chi)).cungTen;
+    const name = (chi: string) => c.daiHan.find((x: { chi: number }) => x.chi === at(chi))!.cungTen;
     expect([name('Tuất'), name('Tý'), name('Mão'), name('Mùi'), name('Tỵ')]).toEqual(['Huynh Đệ', 'Phụ Mẫu', 'Quan Lộc', 'Tài Bạch', 'Thiên Di']);
   });
   it('Kim Tứ Cục khởi Trường Sinh tại Tỵ, Hoả Lục Cục tại Dần', () => {

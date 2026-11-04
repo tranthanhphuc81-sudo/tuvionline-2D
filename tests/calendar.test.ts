@@ -45,7 +45,7 @@ describe('Tết Nguyên Đán 2000–2030 (lịch chính thức Việt Nam, UTC+
 });
 
 describe('Tử Vi: tham số tz tuỳ chọn của calcChart (mục 5.3 điểm 5)', () => {
-  const base = { gender: 'M', dd: 21, mm: 1, yy: 1985, hourBranchIdx: 3 };
+  const base = { gender: 'M' as const, dd: 21, mm: 1, yy: 1985, hourBranchIdx: 3 };
   it('mặc định dùng lunarTzForSolarYear: 21/1/1985 là mùng 1 Tết Ất Sửu (UTC+7)', () => {
     expect(TuViEngine.calcChart(base).lunar).toEqual({ day: 1, month: 1, year: 1985, leap: 0 });
   });
@@ -56,7 +56,7 @@ describe('Tử Vi: tham số tz tuỳ chọn của calcChart (mục 5.3 điểm 
     expect(TuViEngine.calcChart({ ...base, tz: 0 }).lunar).toEqual(TuViEngine.calcChart(base).lunar);
   });
   it('trước 1968 mặc định UTC+8', () => {
-    const d = { gender: 'F', dd: 2, mm: 2, yy: 1965, hourBranchIdx: 0 };
+    const d = { gender: 'F' as const, dd: 2, mm: 2, yy: 1965, hourBranchIdx: 0 };
     expect(TuViEngine.calcChart(d).lunar).toEqual(TuViEngine.calcChart({ ...d, tz: 8 }).lunar);
   });
 });
