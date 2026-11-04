@@ -89,6 +89,11 @@ export function setNapAmPair(store: AppStore, pair: [string, string] | undefined
   });
 }
 
+/** Ghi nhận đã qua lối vào. Bấm "Bỏ qua" cũng tính, để lần sau không bắt xem lại bản đầy đủ. */
+export function markJourney(store: AppStore, today: string, full: boolean): void {
+  store.setState((s) => ({ ...s, tools: { ...s.tools, journey: { firstDone: true, lastFullDate: full ? today : s.tools.journey?.lastFullDate } } }));
+}
+
 /** Lưu độ lệch hiệu chỉnh của La Bàn (−45…45). */
 export function setLaBanCalib(store: AppStore, deg: number): void {
   store.setState((s) => ({ ...s, tools: { ...s.tools, laBanCalib: deg } }));

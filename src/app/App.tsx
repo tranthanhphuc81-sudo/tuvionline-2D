@@ -14,6 +14,8 @@ import { TuViScreen } from '../features/tuvi/TuViScreen';
 import { BatTuScreen } from '../features/battu/BatTuScreen';
 import { LucHaoScreen } from '../features/luchao/LucHaoScreen';
 import { initials } from '../features/profiles/format';
+import { Journey } from '../features/journey/Journey';
+import { recordEntry, todayEntry, type TodayEntry } from '../features/journey/gate';
 import { onPause } from '../platform/lifecycle';
 import { stopReading } from '../platform/tts';
 import s from './App.module.css';
@@ -122,8 +124,12 @@ function TabBar() {
   );
 }
 
-export function App() {
+/** `journey` chỉ bật ở main.tsx; test khung app không chạy hành trình. */
+export function App({ journey = false }: { journey?: boolean }) {
   const nav = useNav();
+  const { store } = useAppCtx();
+  const [entry, setEntry] = useState<TodayEntry>(() => (journey ? todayEntry(store) : { plan: 'none', today: '' }));
+  useEffect(() => recordEntry(store, entry), [store, entry]);
   const activeId = useApp((x) => x.activeProfileId);
   // Đọc thành lời tự dừng khi rời màn hình, đổi người đang xem hoặc app vào nền
   const routeKey = nav.tab + JSON.stringify(nav.route);
@@ -136,6 +142,7 @@ export function App() {
         {TABS.map((t) => <TabPanel key={t.id} tab={t.id} active={nav.tab === t.id} />)}
       </main>
       <TabBar />
+      {entry.plan !== 'none' && <Journey plan={entry.plan} onDone={() => setEntry({ plan: 'none', today: '' })} />}
     </div>
   );
 }

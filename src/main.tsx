@@ -13,7 +13,7 @@ boot().then(
     root.render(
       <StrictMode>
         <AppProvider store={store} nav={nav} notice={notice}>
-          <App />
+          <App journey />
         </AppProvider>
       </StrictMode>,
     );

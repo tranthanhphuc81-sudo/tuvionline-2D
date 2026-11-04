@@ -1,6 +1,6 @@
 import { CULTURAL_NOTE } from '../../content/common/notes';
 import { setSetting } from '../../state/actions';
-import type { Theme } from '../../state/schema';
+import type { EntryMode, Theme } from '../../state/schema';
 import { useApp, useAppCtx } from '../../app/context';
 import { Segmented } from '../../ui/components/Segmented';
 import ui from '../../ui/components/ui.module.css';
@@ -8,6 +8,7 @@ import ui from '../../ui/components/ui.module.css';
 export function SettingsScreen() {
   const { store } = useAppCtx();
   const theme = useApp((x) => x.settings.theme);
+  const entryMode = useApp((x) => x.settings.entryMode);
   const rate = useApp((x) => x.settings.ttsRate);
   const pitch = useApp((x) => x.settings.ttsPitch);
   return (
@@ -20,6 +21,16 @@ export function SettingsScreen() {
           onChange={(v) => setSetting(store, 'theme', v)}
           options={[{ value: 'system', label: 'Theo máy' }, { value: 'light', label: 'Sáng' }, { value: 'dark', label: 'Tối' }]}
         />
+      </section>
+      <section className={ui.card}>
+        <h2>Lối vào đạo quán</h2>
+        <Segmented<EntryMode>
+          label="Khi mở app"
+          value={entryMode}
+          onChange={(v) => setSetting(store, 'entryMode', v)}
+          options={[{ value: 'auto', label: 'Tự động' }, { value: 'full', label: 'Đầy đủ' }, { value: 'short', label: 'Rút gọn' }, { value: 'none', label: 'Không có' }]}
+        />
+        <p className={ui.muted}>Tự động: lần đầu và các ngày rằm, mùng 1, Tết đi đầy đủ, những lần khác rút gọn.</p>
       </section>
       <section className={ui.card}>
         <h2>Đọc thành lời</h2>

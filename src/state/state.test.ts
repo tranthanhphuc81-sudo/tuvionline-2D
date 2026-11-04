@@ -69,7 +69,7 @@ describe('parsePersisted', () => {
     const s = mk();
     addProfile(s, me);
     const st = JSON.parse(JSON.stringify(s.getState()));
-    expect(parsePersisted({ ...st, version: 2 })).toEqual({ ok: false, error: 'version 2 không phải 1' });
+    expect(parsePersisted({ ...st, version: 99 })).toEqual({ ok: false, error: 'version 99 không phải 2' });
     expect(parsePersisted({ ...st, activeProfileId: 'x' })).toMatchObject({ ok: false, error: 'activeProfileId không trỏ tới hồ sơ nào' });
     st.profiles[0].hourIdx = 12;
     expect(parsePersisted(st)).toMatchObject({ ok: false, error: 'profiles[0].hourIdx ngoài miền 0…11' });

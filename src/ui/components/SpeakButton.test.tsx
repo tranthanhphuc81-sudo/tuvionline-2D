@@ -12,7 +12,7 @@ import { SpeakButton } from './SpeakButton';
 import { stopReading } from '../../platform/tts';
 
 function setup() {
-  const store = createStore<PersistedState>({ ...emptyState(), settings: { theme: 'system', ttsRate: 0.85, ttsPitch: 1.1 } });
+  const store = createStore<PersistedState>({ ...emptyState(), settings: { ...emptyState().settings, ttsRate: 0.85, ttsPitch: 1.1 } });
   render(<AppProvider store={store}><SpeakButton id="x" getText={() => 'Một câu. Hai câu.'} /></AppProvider>);
 }
 beforeEach(() => { plugin.speak.mockReset(); plugin.getSupportedVoices.mockReset(); plugin.getSupportedVoices.mockResolvedValue({ voices: [{ voiceURI: 'vi-vn-x-vic-local', lang: 'vi-VN', localService: true }] }); });

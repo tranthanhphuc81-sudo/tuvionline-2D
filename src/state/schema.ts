@@ -2,7 +2,7 @@
    Đổi lược đồ thì tăng SCHEMA_VERSION và thêm migration trong migrations.ts. */
 import type { Gender, Huong } from '../core';
 
-export const SCHEMA_VERSION = 1 as const;
+export const SCHEMA_VERSION = 2 as const;
 export const STATE_KEY = 'lyso.state';
 
 export type Relation = 'self' | 'spouse' | 'child' | 'parent' | 'sibling' | 'other';
@@ -29,7 +29,10 @@ export interface Profile {
 }
 
 export type Theme = 'system' | 'light' | 'dark';
-export interface Settings { theme: Theme; ttsRate: number; ttsPitch: number }
+/** Lối vào đạo quán (ARCHITECTURE.md mục 12.2). `auto` = lần đầu và ngày rằm, mùng 1, Tết thì đầy đủ, còn lại rút gọn. */
+export type EntryMode = 'auto' | 'full' | 'short' | 'none';
+export type XungHoSetting = 'tu-dong' | 'con' | 'anh' | 'chi' | 'co' | 'chu' | 'ban';
+export interface Settings { theme: Theme; ttsRate: number; ttsPitch: number; entryMode: EntryMode; journeySound: boolean; xungHo: XungHoSetting }
 
 export interface LucHaoCast {
   tosses: number[];
@@ -40,12 +43,22 @@ export interface LucHaoCast {
   date?: [number, number, number];
 }
 
+export interface JourneyHistory {
+  firstDone: boolean;
+  /** ngày dương gần nhất đã chạy bản đầy đủ, dạng YYYY-MM-DD */
+  lastFullDate?: string;
+}
+
 export interface Tools {
   lucHaoLastCast?: LucHaoCast;
   batTrachHuongCua?: Huong;
   napAmPair?: [string, string];
   /** ô hiệu chỉnh của La Bàn, −45…45 độ (Phase 4.2, tuỳ chọn) */
   laBanCalib?: number;
+  /** lịch sử lối vào (Phase 6.2) */
+  journey?: JourneyHistory;
+  /** lúc thắp hương, ISO (Phase 6.6) */
+  incenseLitAt?: string;
 }
 
 export interface PersistedState {
@@ -56,7 +69,7 @@ export interface PersistedState {
   tools: Tools;
 }
 
-export const DEFAULT_SETTINGS: Settings = { theme: 'system', ttsRate: 1, ttsPitch: 1 };
+export const DEFAULT_SETTINGS: Settings = { theme: 'system', ttsRate: 1, ttsPitch: 1, entryMode: 'auto', journeySound: true, xungHo: 'tu-dong' };
 
 export function emptyState(): PersistedState {
   return { version: SCHEMA_VERSION, profiles: [], activeProfileId: null, settings: { ...DEFAULT_SETTINGS }, tools: {} };
@@ -107,6 +120,9 @@ export function parsePersisted(raw: unknown): ParseResult {
   if (!isObj(s)) return { ok: false, error: 'settings không phải object' };
   if (s.theme !== 'system' && s.theme !== 'light' && s.theme !== 'dark') return { ok: false, error: 'settings.theme không hợp lệ' };
   if (typeof s.ttsRate !== 'number' || typeof s.ttsPitch !== 'number') return { ok: false, error: 'settings.ttsRate/ttsPitch không phải số' };
+  if (!['auto', 'full', 'short', 'none'].includes(s.entryMode as string)) return { ok: false, error: 'settings.entryMode không hợp lệ' };
+  if (typeof s.journeySound !== 'boolean') return { ok: false, error: 'settings.journeySound không phải boolean' };
+  if (!['tu-dong', 'con', 'anh', 'chi', 'co', 'chu', 'ban'].includes(s.xungHo as string)) return { ok: false, error: 'settings.xungHo không hợp lệ' };
   const t = raw.tools;
   if (!isObj(t)) return { ok: false, error: 'tools không phải object' };
   if (t.lucHaoLastCast !== undefined) {
@@ -123,6 +139,11 @@ export function parsePersisted(raw: unknown): ParseResult {
   if (t.napAmPair !== undefined && !(Array.isArray(t.napAmPair) && t.napAmPair.length === 2 && t.napAmPair.every(isStr))) {
     return { ok: false, error: 'tools.napAmPair không hợp lệ' };
   }
+  if (t.journey !== undefined) {
+    const j = t.journey;
+    if (!isObj(j) || typeof j.firstDone !== 'boolean' || (j.lastFullDate !== undefined && !isStr(j.lastFullDate))) return { ok: false, error: 'tools.journey không hợp lệ' };
+  }
+  if (t.incenseLitAt !== undefined && !isStr(t.incenseLitAt)) return { ok: false, error: 'tools.incenseLitAt không hợp lệ' };
   if (t.laBanCalib !== undefined && !isInt(t.laBanCalib, -45, 45)) return { ok: false, error: 'tools.laBanCalib không hợp lệ' };
   return { ok: true, state: raw as unknown as PersistedState };
 }

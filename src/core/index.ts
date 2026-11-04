@@ -1,7 +1,7 @@
 // Điểm vào DUY NHẤT cho phần tính toán (core). UI và src/content chỉ import từ đây.
 // Công thức trích nguyên văn từ bản web đã kiểm chứng (docs/legacy/lyso-toolkit.html); đầu ra được khoá bởi
 // tests/golden.test.ts và tests/core-snapshot.test.ts.
-import { pad2, validSolar, validLunar, shiftSolar, lunarTzForSolarYear, lunarTzForLunarYear } from './calendar';
+import { convertSolar2Lunar, pad2, validSolar, validLunar, shiftSolar, lunarTzForSolarYear, lunarTzForLunarYear } from './calendar';
 import { CAN, CHI } from './canchi';
 import { TuViEngine } from './tuvi/engine';
 import { BatTuEngine } from './battu/engine';
@@ -19,6 +19,12 @@ import type { BatTuChart } from './battu/types';
 import type { LucHaoResult, Toss } from './luchao/types';
 import type { DuNienStar, Nhom, Quai } from './battrach/types';
 import type { NapAmYear } from './napam/types';
+
+/** Ngày âm của một ngày dương, theo múi giờ lịch của năm đó. */
+export function lunarOfSolar(dd: number, mm: number, yy: number): { day: number; month: number; year: number; leap: boolean } {
+  const l = convertSolar2Lunar(dd, mm, yy, lunarTzForSolarYear(yy));
+  return { day: l[0], month: l[1], year: l[2], leap: l[3] === 1 };
+}
 
 export const LySoUtil = { pad2, validSolar, validLunar, shiftSolar, lunarTzForSolarYear, lunarTzForLunarYear };
 export { TuViEngine, BatTuEngine, LucHaoEngine, PhongThuyEngine, NapAmEngine, resolveBirth };

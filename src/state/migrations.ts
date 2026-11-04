@@ -1,5 +1,5 @@
 /* Nạp và nâng cấp dữ liệu khi khởi động (ARCHITECTURE.md mục 3).
-   - migrations[v]: chuyển tài liệu version v → v + 1. Hiện SCHEMA_VERSION = 1 nên chưa có bước nào.
+   - migrations[v]: chuyển tài liệu version v → v + 1. Bước 1 → 2 (Phase 6.2) thêm cài đặt lối vào, âm thanh, xưng hô.
    - Migration 0 → 1: chưa có `lyso.state` mà localStorage còn `lyso-shared-v1` (bản 0.1, trang legacy) → tạo hồ sơ đầu tiên.
    - Dữ liệu hỏng: giữ bản sao ở `lyso.state.corrupt-<thời điểm>`, khởi động rỗng và báo người dùng. Không âm thầm xoá. */
 import { resolveBirth } from '../core';
@@ -10,7 +10,12 @@ import { newId } from './ids';
 export const LEGACY_SHARED_KEY = 'lyso-shared-v1';
 export const LEGACY_THEME_KEY = 'lyso-theme';
 
-export const migrations: Record<number, (old: Record<string, unknown>) => Record<string, unknown>> = {};
+export const migrations: Record<number, (old: Record<string, unknown>) => Record<string, unknown>> = {
+  1: (old) => {
+    const s = (typeof old.settings === 'object' && old.settings !== null ? old.settings : {}) as Record<string, unknown>;
+    return { ...old, version: 2, settings: { entryMode: 'auto', journeySound: true, xungHo: 'tu-dong', ...s } };
+  },
+};
 
 export type BootNotice =
   | { kind: 'corrupt'; backupKey: string; error: string }

@@ -18,7 +18,9 @@
 | 4.1 — Chọn cách đọc cảm biến | XONG — plugin nội bộ đọc `TYPE_ROTATION_VECTOR`, xem ARCHITECTURE mục 11; chưa đo trên máy thật |
 | 4.2 — Dựng la bàn | XONG phần code — 418 test xanh, build OK, APK chạy trên máy ảo. CHƯA ĐẠT điều kiện nghiệm thu: còn 9 phép thử trên máy thật (ARCHITECTURE mục 11) |
 | 5.1 — Đọc thành lời | XONG phần code — 447 test xanh, build OK. CHƯA nghe được tiếng thật: cần thử trên máy thật đã tải gói tiếng Việt |
-| 6 — Đạo quán & Thầy đọc | CHƯA LÀM — chờ chủ dự án đồng ý |
+| 6.1 — Quyết định Đạo quán & Thầy đọc | XONG — ARCHITECTURE mục 12, còn 3 điểm chờ chủ dự án duyệt (cuối 12.11) |
+| 6.2 — Engine cảnh | XONG phần code — 467 test xanh, build OK, chạy trên máy ảo. CHƯA đo được 60 fps: cần máy thật |
+| 6.3 đến 6.8 | CHƯA LÀM — chờ chủ dự án đồng ý; 6.5 cần nghe giọng trên máy thật, 6.6 cần máy tầm thấp |
 
 ## Phase 3.5b — Tổng Hợp đầy đủ — XONG
 
@@ -36,6 +38,29 @@
 ### Lưu ý
 - Bỏ có chủ ý các phần chỉ có nghĩa với form riêng từng tab của legacy: dải "Đồng bộ / Chưa đồng bộ", hộp "Chưa có dữ liệu", câu nhắc đồng bộ
   thay cho đối chiếu chéo, nút "Cập nhật Tổng Hợp". App luôn tính từ một hồ sơ. Nút "Đọc toàn bộ tổng hợp" chờ Phase 5 (`src/platform/tts.ts`).
+
+## Phase 6.2 — Engine cảnh — XONG PHẦN CODE, CHƯA ĐO ĐƯỢC FPS THẬT
+
+### Đã xong
+- `src/features/journey/`: `plan.ts` (quy tắc lối vào, máy trạng thái), `scenes.ts` (cấu hình 5 trạm), `SceneEngine.tsx`, `particles.ts` + `ParticleLayer.tsx`, `Journey.tsx` (phủ lên app, Bỏ qua, Back), `gate.ts`.
+- 20 ảnh SVG giữ chỗ ở `src/assets/journey/placeholder/`, tổng 24 KB trên đĩa. `tests/assets-budget.test.ts` chặn vượt 3 MB.
+- Lược đồ lên version 2 (migration 1 → 2): `settings.entryMode`, `journeySound`, `xungHo`; `tools.journey`, `incenseLitAt`.
+- Đổi so với 6.1: thêm chế độ `auto` làm mặc định. Nếu mặc định là `full` như đã ghi thì quy tắc rút gọn không bao giờ chạy (ARCHITECTURE 12.2, 12.11).
+- Cài đặt có mục "Lối vào đạo quán". `App` chỉ chạy hành trình khi có prop `journey` (bật ở `main.tsx`).
+
+### Kết quả đo
+| Môi trường | Trung vị | p95 | Khung ≤ 17 ms |
+|---|---|---|---|
+| Máy ảo, app đứng yên | 16,7 ms | 33 ms | 92,5% |
+| Máy ảo, một div toàn màn hình di chuyển | 50 ms | 117 ms | 18% |
+| Máy ảo, hành trình đầy đủ | 117 ms | 367 ms | 5,4% |
+
+Máy ảo chạy không GPU nên chỉ một lớp di chuyển đã rớt còn khoảng 20 fps; số trên KHÔNG đại diện máy thật. Chưa đo được: CPU throttle 4× (lần chạy không bắt kịp hành trình),
+trình duyệt (khung xem bị ẩn nên `requestAnimationFrame` dừng), và máy Android thật. Hành trình nặng gấp khoảng 2,3 lần một lớp, nên vẫn là rủi ro cần đo.
+
+### Chưa làm
+- Âm thanh, biến thể theo giờ/mùa/ngày âm (6.3); tĩnh thất thật (6.4); thắp hương, nhân vật (6.6); lời đạo đồng (6.7).
+- Chữ đồng hồ trên thanh trạng thái Android khó đọc khi hành trình phủ nền tối.
 
 ## Phase 5.1 — Đọc thành lời — XONG PHẦN CODE, CHỜ THỬ MÁY THẬT
 

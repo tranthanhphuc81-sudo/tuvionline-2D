@@ -583,3 +583,240 @@ KHÔNG cho biết độ tin cậy, nên không thể báo "cần hiệu chỉnh"
 **Đã kiểm trên máy ảo sau khi dựng (Phase 4.2):** plugin đăng ký và chạy; 4 hướng giả lập ra 360,0° · 89,6° · 178,6° · 268,7°, `accuracy` = 3, `tilted` = false;
 khoảng 10 lần/giây; vào nền dừng hẳn, quay lại chạy tiếp. Chưa kiểm được: `headingErrorDeg` thật (máy ảo trả 0), cảnh báo nhiễu, xoay ngang, và cả 9 phép thử trên.
 Trên web, trạng thái "bị chặn quyền" gộp chung vào "không có dữ liệu"; trong app Android không có quyền cảm biến nên không có trường hợp này.
+
+---
+
+## 12. Đạo quán & Thầy đọc (Phase 6.1, 05/11/2026)
+
+> Quyết định chưa viết code. Mỗi mục nêu **Lựa chọn**, **Lý do**, **Phương án bị loại**. Ba điểm cần chủ dự án duyệt nằm ở cuối mục 12.11.
+
+### 12.1 Hành trình 5 trạm
+
+**Lựa chọn:** 5 trạm theo thứ tự, mỗi trạm tối đa 4 lớp ảnh. Vuốt lên hoặc chạm để bước tới; nút "Bỏ qua" luôn hiện.
+
+| Trạm | Lớp (xa → gần) | Hạt | Tương tác |
+|---|---|---|---|
+| `gate` cổng nguyệt môn | trời · tường và cổng tròn · cây hai bên · khung lá gần | lá rơi | Bước tới; đạo đồng chào một câu |
+| `garden` sân vườn | trời · mái xa · hồ · bờ đá và cây | gợn nước, đom đóm tối | Bước tới |
+| `hall` điện Tam Thanh | nền tối · ban thờ ở xa · cột và ánh nến · ngưỡng cửa | khói hương | Thắp hương TUỲ CHỌN, nút "Đi tiếp" luôn nằm cạnh |
+| `corridor` hành lang | tường · cửa bức bàn · cột · đèn lồng gần | khói nhẹ | Đạo đồng mời vào, chạm để vào |
+| `study` tĩnh thất | tường và giá sách · cửa sổ · án thư · đèn dầu | khói nhẹ | Trạm cuối, là màn hình chính |
+
+**Lý do:** 4 lớp là đủ để có chiều sâu mà vẫn giữ ngân sách 12.4. Không trạm nào bắt buộc tương tác, để người chỉ muốn xem kết quả không bị chặn.
+
+**Phương án bị loại:** *Bắt buộc thắp hương mới được đi tiếp:* biến nghi thức thành cửa chặn, và dễ bị hiểu là điều kiện để được xem. *Thế giới 3D:* vượt ngân sách và sai yêu cầu 2D parallax.
+
+### 12.2 Quy tắc rút gọn
+
+**Lựa chọn:** hàm thuần `entryPlan(settings, history, lunarToday, reducedMotion)` trả `full | short | none | fade`, xét theo thứ tự:
+
+1. Cài đặt "Không có" → `none`.
+2. `prefers-reduced-motion` → `fade` (chỉ mờ dần vào tĩnh thất), không phụ thuộc các mục sau.
+3. Cài đặt "Đầy đủ" hoặc "Rút gọn" → đúng như vậy.
+4. Cài đặt "Tự động" (mặc định): lần mở đầu tiên, hoặc hôm nay là rằm (15 âm), mùng 1, hoặc Tết (mùng 1–3 tháng Giêng) và hôm nay chưa chạy bản đầy đủ → `full`, 20–30 giây.
+5. Còn lại → `short`, 2–3 giây.
+
+Nút "Bỏ qua" luôn hiện. Back trong hành trình vào thẳng tĩnh thất. Khi đang có đường dẫn trực tiếp tới công cụ thì không chạy hành trình.
+
+**Âm thanh và chế độ im lặng:** Web Audio phát trên kênh media nên KHÔNG tự tắt theo chế độ im lặng của máy, và WebView không đọc được chế độ này. Vì vậy thêm hàm `ringerMode()` vào plugin nội bộ
+(đổi tên thành `LySoDevice`, gọi `AudioManager.getRingerMode()`). Máy đang im lặng hoặc rung thì không phát nhạc nền. Thầy đọc vẫn đọc vì đó là hành động người dùng tự bấm.
+
+**Phương án bị loại:** *Luôn đầy đủ:* người mở app mỗi ngày sẽ khó chịu. *Đầy đủ theo số lần mở:* không gắn với lịch nên mất ý nghĩa nghi lễ.
+
+### 12.3 Biến thể theo lịch
+
+**Lựa chọn:** `getAmbience(now)` trả `{ timeOfDay, season, lunarEvent }`, lấy từ `src/core`. Giờ theo đồng hồ máy; lịch âm dùng UTC+7.
+
+| Trục | Giá trị | Mốc | Hiển thị |
+|---|---|---|---|
+| `timeOfDay` | `dawn` 05–10h · `noon` 10–16h · `dusk` 16–19h · `night` 19–05h | giờ máy | Lớp phủ màu; `night` thêm đom đóm và đèn sáng hơn |
+| `season` | `xuan` · `ha` · `thu` · `dong` | Chi tháng theo tiết (`monthChiFromDate`): Dần–Thìn, Tỵ–Mùi, Thân–Tuất, Hợi–Sửu; đổi đúng ở Lập Xuân, Lập Hạ, Lập Thu, Lập Đông | Xuân hoa đào, Hạ sen trên hồ, Thu lá vàng, Đông cành khô và sương |
+| `lunarEvent` | `ram` · `mung1` · `tet` · `null` | ngày âm: 15 · 1 · 1–3 tháng Giêng; `tet` ưu tiên hơn `mung1` | `ram` trăng tròn · `mung1` thêm khói hương · `tet` câu đối đỏ, đèn lồng đỏ |
+
+Lưu ý: `seasonOfMonthChi` của Lục Hào trả cả `tuquy` nên KHÔNG dùng lại ở đây; bốn mùa của cảnh là một bảng riêng.
+
+**Lý do:** dùng lớp phủ và vài lớp phụ thay vì vẽ lại 5 trạm × 4 giờ × 4 mùa, tức 80 bộ ảnh, không thể vừa 3 MB.
+
+### 12.4 Kỹ thuật và ngân sách
+
+**Lựa chọn:**
+- Parallax bằng CSS `transform` chạy qua `requestAnimationFrame`, chỉ đổi `transform` và `opacity`.
+- Hạt (khói, lá, đom đóm, gợn nước) bằng canvas 2D, tự giảm số hạt khi fps < 50.
+- Nhân vật dùng **Lottie**, gói `lottie_light`.
+
+| Tiêu chí | Lottie (`lottie_light` 5.13) | Rive (`@rive-app/canvas-lite` 2.49) |
+|---|---|---|
+| Runtime đo được | 365 KB, gzip **72 KB** | JS 539 KB + wasm 849 KB, wasm gzip riêng **350 KB** |
+| State machine | Không có, tự chuyển bằng `playSegments` | Có sẵn |
+| Trong WebView | JS thuần, không wasm, không `eval` ở bản light | Cần nạp wasm cục bộ |
+| Người vẽ | Xuất từ After Effects, dễ tìm người làm | Cần công cụ riêng của Rive |
+
+**Lý do:** nhân vật chỉ có 5 trạng thái rời (idle, talk, point, turnPage, nod) và không cần lip-sync, nên state machine của Rive chưa đáng so với runtime lớn gấp nhiều lần. Điểm yếu của `lottie_light` là vẽ SVG: file nhiều nét sẽ nặng trên máy yếu. Vì vậy giới hạn 400 nét mỗi nhân vật, và 6.6 phải đo trên máy thật; không đạt thì đổi sang Rive mà không đổi `Cue`.
+
+**Ngân sách tối đa 3 MB (ảnh + âm thanh):**
+
+| Hạng mục | Tính toán | Dung lượng |
+|---|---|---|
+| Ảnh 5 trạm, WebP rộng 720px | nền 120 KB + 3 lớp × 60 KB = 300 KB mỗi trạm | 1.500 KB |
+| Lớp phụ theo mùa, rằm, Tết | 8 lớp × 25 KB | 200 KB |
+| Âm thanh mono 96 kbps | 4 vòng lặp 10 giây + 2 tiếng ngắn | 600 KB |
+| Thầy và đạo đồng | 2 file JSON | 150 KB |
+| **Tổng** | còn dư 550 KB | **2.450 KB** |
+
+**Cách đo:** Chrome Performance ở 360px, CPU throttle 4×, rồi `adb shell dumpsys gfxinfo vn.lyso.app` trên một máy Android tầm thấp thật. Đạt khi 95% khung hình ≤ 16,7 ms. Có test CI cộng dung lượng `src/assets/journey`, vượt 3 MB thì đỏ.
+
+**Phương án bị loại:** *WebGL hoặc game engine:* quá tay với 2D parallax. *Video nền:* không đổi được theo giờ, mùa và quá nặng. *Rive:* như trên, giữ làm phương án dự phòng.
+
+### 12.5 Cấu hình cảnh
+
+**Lựa chọn:** cảnh là dữ liệu, ở `src/features/journey/scenes.ts`:
+
+```ts
+interface SceneLayer { src: string; depth: number; variants?: Partial<Record<VariantKey, string>>; overlay?: boolean }
+type VariantKey = TimeOfDay | Season | Exclude<LunarEvent, null>;
+interface Scene {
+  id: 'gate' | 'garden' | 'hall' | 'corridor' | 'study' | (string & {});
+  layers: SceneLayer[];            // depth 0 = xa nhất, 1 = gần nhất
+  particles?: ParticleSpec[];
+  ambience: AmbienceTrack[];
+  interaction?: 'step' | 'incense' | 'invite';
+  durationMs: { full: number; short: number };
+}
+```
+
+**Lý do:** thêm trạm hoặc thay tranh thật chỉ sửa dữ liệu, và test được máy trạng thái không cần ảnh. **Phương án bị loại:** *Mỗi trạm một component:* thay tranh là phải sửa code.
+
+### 12.6 Persona thầy
+
+**Lựa chọn:**
+- **Tên gọi:** chỉ là "Thầy" và "đạo đồng", không họ tên, không đạo hiệu. Đạo quán cũng không có tên riêng. Cách này tránh trùng người hay nơi có thật.
+- **Giọng văn:** mộc, từ tốn, câu ngắn. Giảng như người thầy chỉ cho học trò: "con xem ở đây…". Không hù doạ, không hứa hẹn, không phán quyết.
+- **Xưng hô:** thầy luôn tự xưng "thầy". `xungHo(profile, settings)`:
+
+| Tuổi của người được gọi | Nam | Nữ |
+|---|---|---|
+| Dưới 40, hoặc chưa sinh | con | con |
+| 40–54 | anh | chị |
+| Từ 55 | chú | cô |
+
+`settings.xungHo` ghi đè được: `tu-dong`, `con`, `anh`, `chi`, `co`, `chu`, `ban`.
+
+**Điểm cần xử lý:** người cầm máy có thể đang xem hồ sơ của người khác. Khi `relation` khác `self` và không để trống, thầy nói ở ngôi thứ ba ("lá số của {tên}"), không gọi hồ sơ đó là "con". Mẫu câu luôn có hai biến thể.
+
+**Lý do:** ngôi xưng sai với người lớn tuổi rất dễ gây khó chịu ở tiếng Việt, nên phải sửa được. **Phương án bị loại:** *Đặt tên riêng cho thầy:* dễ trùng người thật, lại không thêm giá trị. *Luôn gọi "con":* thiếu lễ với người lớn tuổi.
+
+### 12.7 Kịch bản đọc
+
+**Lựa chọn:**
+
+```ts
+interface Cue {
+  id: string;
+  text: string;          // ≤180 ký tự, đã chuẩn hoá cho TTS; rỗng = cue im lặng
+  caption?: string;      // chữ gốc NGUYÊN VĂN để hiện phụ đề
+  focus?: { palace?: number; hao?: number; pillar?: number; huong?: Huong; lines?: [number, number][] };
+  gesture?: 'idle' | 'point' | 'turnPage' | 'nod';
+  pauseAfterMs?: number;
+}
+```
+
+Bổ sung so với brief: `focus` có thêm `hao`, `pillar`, `huong` vì Lục Hào, Bát Tự, Bát Trạch không có cung.
+
+`buildScript(tool, ctx)` là hàm thuần, không gọi engine lần hai, ghép theo thứ tự: câu mở → lời dẫn + kết quả chính → lời dẫn + Tổng kết → câu kết.
+
+| Công cụ | Nguồn dựng cue | `focus` |
+|---|---|---|
+| Tử Vi | ô tóm tắt, `tuViTongKet` | cung Mệnh, tam phương tứ chính |
+| Bát Tự | ô tóm tắt, `batTuVuongSuy`, `batTuTongKet` | trụ ngày, trụ tháng |
+| Lục Hào | `lucHaoVerdict`, `lucHaoTongKet` | hào Thế, Dụng Thần |
+| Bát Trạch | `batTrachSummary`, `batTrachTongKet` | 4 hướng tốt |
+| Nạp Âm | `napAmPersonCells`, `napAmTongKet` | không |
+
+KHÔNG đọc phần "Giải thích chỉ số": quá dài cho lời nói, vẫn xem được trên màn hình. Lời dẫn là bộ mẫu câu có biến, KHÔNG sinh tự do. Câu luận giải dùng lại nguyên `Section[]`, chia bằng `chunkSpeech`.
+
+**Trình phát `CuePlayer`:** chuyển cue khi `speak()` resolve. Đọc/Dừng, ⏮/⏭ đổi cue ngay. "Nói chậm lại" nhân tốc độ với 0,85 từ cue kế tiếp. Cue im lặng dừng theo độ dài chữ (khoảng 15 ký tự/giây, tối thiểu 3 giây) và ⏭ qua được. Dừng khi rời màn hình hoặc app vào nền, dùng chung `stopReading`.
+
+**Lưu ý:** bản giữ chỗ dùng được ngay, nhưng phải thử trên máy thật: nếu `speak()` im lặng lâu khi thiếu gói giọng (PROGRESS, Phase 5.1) thì `CuePlayer` phải có thời gian chờ, không được treo.
+
+**Phương án bị loại:** *AI sinh lời dẫn:* cần mạng, và không kiểm soát được câu chữ. *Viết lại luận giải cho hợp giọng thầy:* phá nguyên tắc nguyên văn, và test đối chiếu mất tác dụng.
+
+### 12.8 Nội dung không đọc thành lời
+
+**Lựa chọn:** lọc theo **từng câu, bằng từ điển**, tại `src/content/noSpeech.ts`, chạy khi dựng cue:
+
+```ts
+export const NO_SPEECH_TERMS = ['tai nạn', 'bệnh', 'ốm', 'tuổi thọ', 'trường thọ', 'chết', 'tử vong', 'qua đời', 'kiện tụng', 'kiện cáo',
+  'ly hôn', 'ly dị', 'ly thân', 'tai hoạ', 'tai ương', 'hoả hoạn', 'tổn hại', 'mổ', 'phẫu thuật', 'tang lễ'];
+```
+
+Câu dính từ cấm: `text` rỗng, `caption` là chữ gốc kèm lời "(Phần này con xem chữ trên màn hình)". Thêm thẻ `no-speech` ở block cho trường hợp từ điển không bắt được. Từ so khớp nguyên từ, không phân biệt hoa thường.
+
+**Đã quét `src/content`:** "kiện tụng" 5 lần, "tai hoạ" 3, "bệnh" 3, "tai nạn" 2, "hoả hoạn" 1, "ốm" 1, "trường thọ" 1, "đổ vỡ" 1; không có "chết", "ly hôn", "tuổi thọ". Tập trung ở mô tả sao Du Niên (Tuyệt Mệnh, Lục Sát, Ngũ Quỷ, Diên Niên), Lục Hào, sao Kình Dương.
+- **Không cấm "sức khoẻ":** xuất hiện 17 lần, phần lớn mang nghĩa tốt ("tốt cho giấc ngủ, sức khoẻ"). Câu xấu về sức khoẻ của Tuyệt Mệnh bị bắt qua "tổn hại".
+- **Không cấm "tang", "tù", "tử":** là tên Tang Đố Mộc, trạng thái Tù và Tử của Vượng Suy, Tử Tôn. Cấm sẽ làm hỏng cả bảng.
+
+**Thầy không bao giờ** gợi ý cúng giải hạn, mua vật phẩm, hay nói "phải làm thế này mới tránh được". Test 6.5 quét mẫu câu tìm các từ này. Câu mở và câu kết luôn có lời nhắc văn hoá, câu chuẩn: **"Số là tham khảo, đức năng thắng số."**
+
+**Áp dụng cho cả nút "Đọc kết quả" của Phase 5:** nút đó hiện đang đọc cả các câu này. 6.5 cho `sectionsSpeech` dùng chung bộ lọc, để một quy tắc áp dụng ở mọi nơi.
+
+**Lý do chọn từ điển:** phần lớn câu là mẫu có điều kiện với rất nhiều tổ hợp, gắn thẻ tay từng chuỗi sẽ sót, và phải sửa file câu chữ nguyên văn. Từ điển giữ nguyên chuỗi và test được cả danh sách. **Phương án bị loại:** *Chỉ gắn thẻ tay:* như trên, và `ListBlock` chỉ gắn được cả danh sách, không gắn được từng mục. *Bỏ hẳn các câu đó:* mất nội dung, và phá nguyên tắc nguyên văn.
+
+**Liên quan chính sách Google Play** (đọc ngày 05/11/2026): Inappropriate Content cấm kích động thù ghét theo tôn giáo và trục lợi từ sự kiện nhạy cảm; Health Content and Services cấm tuyên bố sức khoẻ sai lệch. Không tìm thấy điều riêng về tử vi hay chiêm tinh. Bài báo về Co-Star cho thấy rủi ro có thể đến từ quy định metadata, nên mô tả trên Play phải tránh lời hứa dự đoán. Phase 8.1 cần đọc lại toàn văn: Google đổi chính sách thường xuyên, và đây không phải tư vấn pháp lý.
+
+### 12.9 Giọng đọc
+
+**Lựa chọn:** TTS trên máy, chỉ giọng `…-local` (mục 6). Thầy đọc bằng cao độ 0,85 và tốc độ 0,9 nhân với cài đặt của người dùng. Chọn giọng trầm trong các giọng `-local` sau khi nghe trên máy thật.
+
+**Lý do:** giữ cam kết Data safety. **Phương án bị loại:** *Giọng đám mây:* gửi dữ liệu ra ngoài. *Thu âm sẵn:* không thể với nội dung động, và vượt ngân sách.
+
+### 12.10 Thể hiện Tam Thanh
+
+**Lựa chọn:**
+- Tượng cách điệu, ở xa, ánh nến mờ, không rõ nét mặt. Không chạm vào tượng được và không phóng to.
+- Thắp hương chỉ là tưởng niệm. Không gắn với "tăng vận", không tính điểm, không huy hiệu, không vật phẩm trả phí.
+- Đạo quán hư cấu, không vẽ lại nơi có thật, không dùng kinh văn hay phù chú thật làm hoạ tiết.
+- Không có câu nào ngụ ý thắp hương làm kết quả tốt hơn; kết quả đọc giống hệt dù có thắp hay không.
+
+**Phương án bị loại:** *Bán hương hoặc vật phẩm:* đúng thứ brief cấm, và rủi ro chính sách. *Không có điện thờ:* mất tinh thần đạo quán mà chủ dự án muốn.
+
+### 12.11 Lưu trữ, bố cục và thứ tự triển khai
+
+**Lưu trữ:** tăng `SCHEMA_VERSION` lên 2, migration thêm `settings.entryMode` (`auto | full | short | none`, mặc định `auto`; thêm `auto` ở Phase 6.2 vì nếu mặc định là `full` thì quy tắc rút gọn không bao giờ chạy), `settings.journeySound` (mặc định bật), `settings.xungHo` (mặc định `tu-dong`), `tools.incenseLitAt?`, `tools.journey?: { firstDone: boolean; lastFullDate?: string }`.
+
+**Tĩnh thất ở 360px:**
+
+```
+┌──────────────────────────────┐
+│ 16/9 Bính Ngọ · hồ sơ · ⚙    │  thanh trên
+├──────────────────────────────┤
+│   giá sách        cửa sổ     │
+│        [ Thầy ]              │
+│ ────────── án thư ────────── │
+│ lá số · thẻ tre · xu · la bàn│  đồ vật chạm được, vùng ≥ 44px
+│ sách cổ · sổ tổng hợp        │
+├──────────────────────────────┤
+│ phụ đề (tối đa 3 dòng)       │
+│ ⏮  ⏯ Thầy đọc  ⏭  🐢         │
+├──────────────────────────────┤
+│ thanh tab dưới               │
+└──────────────────────────────┘
+```
+
+**Bổ sung so với brief 6.4:** brief thay màn hình Tổng Hợp bằng Tĩnh thất nhưng không có đồ vật nào cho phần Tổng Hợp đầy đủ vừa dựng (Phase 3.5b). Vì vậy thêm "sổ tổng hợp" trên án thư, mở route `{ name: 'tonghop' }` là nội dung `HomeScreen` hiện tại.
+
+| Bước | Nội dung | Tiêu chí xong |
+|---|---|---|
+| 6.2 | SceneEngine, hạt, ảnh giữ chỗ, `entryPlan`, Back, cài đặt Lối vào, migration v2 | Test máy trạng thái và rút gọn xanh; báo fps với throttle 4× và tổng dung lượng |
+| 6.3 | `getAmbience`, biến thể, âm thanh theo lớp, `ringerMode` | Test các ngày rằm, mùng 1, Tết, Lập Xuân, 23h59/00h00; im lặng thì không có tiếng |
+| 6.4 | Tĩnh thất, đồ vật, form hồ sơ thoại hoá | Mọi đồ vật có nhãn aria; không cuộn ngang ở 360px; vẫn dùng được thanh tab |
+| 6.5 | `noSpeech`, `xungHo`, `buildScript`, `CuePlayer`, nối `focus` | 5 test của brief xanh; thêm test không có câu cúng giải hạn, mua vật phẩm |
+| 6.6 | Nhân vật Lottie, an sao, gieo xu, thắp hương | Đo fps trên máy thật; quay lại sau 20 phút thấy hương tàn; kết quả không đổi khi thắp hương |
+| 6.7 | Viết đủ mẫu câu | Chủ dự án đọc duyệt; test 6.5 vẫn xanh |
+| 6.8 | `docs/ART-BRIEF.md` | Chủ dự án gửi được cho hoạ sĩ, tên file khớp cấu hình Scene |
+
+**Điều kiện chặn:** 6.5 cần kết quả nghe giọng đọc trên máy thật; 6.6 cần một máy Android tầm thấp để đo. 6.2–6.4 có thể làm trước.
+
+**Cần chủ dự án duyệt:**
+1. Danh sách từ cấm ở 12.8, gồm việc KHÔNG cấm "sức khoẻ", và áp dụng cả cho nút "Đọc kết quả".
+2. Bảng xưng hô ở 12.6, nhất là các mốc 40 và 55 tuổi.
+3. Dùng Lottie, và bỏ tên riêng của thầy cùng đạo quán.
