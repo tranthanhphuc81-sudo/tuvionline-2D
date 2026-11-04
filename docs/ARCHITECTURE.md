@@ -242,7 +242,9 @@ src/core/
     index.ts         CAN, CHI, mod, yearCanChi, dayCanChi, ngũ hổ độn, ngũ thử độn, HOUR_RANGES
     napamTable.ts    bảng 30 Nạp Âm + napAmLookup (Tử Vi tính Cục và tab Nạp Âm dùng chung)
     hanh.ts          type Hanh = 'Kim' | 'Thuỷ' | 'Mộc' | 'Hoả' | 'Thổ', sinh/khắc
-  birth.ts           resolveBirth(profile) → { solar, lunar, calcDate (sau khi xử lý Tý muộn), errors }
+  types.ts           alias chỉ số (CanIdx, ChiIdx, HourIdx), Gender, Quai — không phụ thuộc gì, mọi module dùng chung
+  birth.ts           resolveBirth(profile) → { ok: true, solar, lunar, calcDate (sau Tý muộn), input, notes }
+                     | { ok: false, errors } — trả MÃ lỗi/ghi chú, câu chữ ở src/content/common/birth.ts
   tuvi/   engine.ts, types.ts
   battu/  engine.ts, types.ts
   luchao/ engine.ts, types.ts, hexagrams.ts (bảng 64 quẻ, Nạp Giáp)
@@ -251,7 +253,7 @@ src/core/
   index.ts           ĐIỂM VÀO DUY NHẤT: xuất hàm và kiểu, không xuất các thứ nội bộ
 ```
 
-Quy tắc phụ thuộc: `calendar` ← `canchi` ← các hệ thống. Các hệ thống không import lẫn nhau. Riêng Tử Vi dùng `napamTable`
+Quy tắc phụ thuộc: `types` ← `calendar` ← `canchi` ← các hệ thống. Các hệ thống không import lẫn nhau. Riêng Tử Vi dùng `napamTable`
 trong `canchi`, không dùng `napam/`. `src/core` không được đụng tới DOM, `window`, React hay Capacitor.
 
 ### 5.2 Kiểu dữ liệu
