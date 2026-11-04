@@ -5,8 +5,8 @@ import { readFileSync } from 'node:fs';
 
 export const FIXED_NOW = new Date('2026-06-15T09:00:00+07:00');
 
-export function loadLegacy(now = FIXED_NOW): { doc: Document; errors: string[] } {
-  const html = readFileSync('docs/legacy/lyso-toolkit.html', 'utf8');
+export function loadLegacy(now = FIXED_NOW, file = 'docs/legacy/lyso-toolkit.html'): { doc: Document; errors: string[] } {
+  const html = readFileSync(file, 'utf8');
   const errors: string[] = [];
   const vc = new VirtualConsole();
   vc.on('jsdomError', (e) => errors.push(String(e.message)));

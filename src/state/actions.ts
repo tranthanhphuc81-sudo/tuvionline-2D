@@ -89,6 +89,11 @@ export function setNapAmPair(store: AppStore, pair: [string, string] | undefined
   });
 }
 
+/** Lưu độ lệch hiệu chỉnh của La Bàn (−45…45). */
+export function setLaBanCalib(store: AppStore, deg: number): void {
+  store.setState((s) => ({ ...s, tools: { ...s.tools, laBanCalib: deg } }));
+}
+
 export function selectActiveProfile(s: PersistedState): Profile | null {
   return s.profiles.find((p) => p.id === s.activeProfileId) ?? null;
 }

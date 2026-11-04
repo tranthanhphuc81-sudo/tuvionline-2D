@@ -24,7 +24,7 @@ export function createMemoryKV(init: Record<string, string> = {}): KV & { data: 
   };
 }
 
-/** Đọc thẳng localStorage của WebView (trang legacy cùng origin lưu `lyso-shared-v1`, `lyso-theme` ở đây). */
+/** Đọc thẳng localStorage của WebView (bản cũ của app lưu `lyso-shared-v1`, `lyso-theme` ở đây). */
 export function readLocalStorage(key: string): string | null {
   try {
     return typeof localStorage === 'undefined' ? null : localStorage.getItem(key);

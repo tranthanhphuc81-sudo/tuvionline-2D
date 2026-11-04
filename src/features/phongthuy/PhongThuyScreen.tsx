@@ -2,8 +2,8 @@ import { useNav } from '../../app/context';
 import type { PhongThuySub } from '../../app/routes';
 import { Segmented } from '../../ui/components/Segmented';
 import ui from '../../ui/components/ui.module.css';
-import { LegacyToolScreen } from '../legacy/LegacyToolScreen';
 import { BatTrachScreen } from './battrach/BatTrachScreen';
+import { LaBanScreen } from './laban/LaBanScreen';
 import { NapAmScreen } from './napam/NapAmScreen';
 
 /** Tab Phong thủy: nút chuyển Bát Trạch · La Bàn · Nạp Âm ở đầu màn hình (ARCHITECTURE.md mục 1.1).
@@ -20,7 +20,7 @@ export function PhongThuyScreen({ sub = 'battrach' }: { sub?: PhongThuySub }) {
         options={[{ value: 'battrach', label: 'Bát Trạch' }, { value: 'laban', label: 'La Bàn' }, { value: 'napam', label: 'Nạp Âm' }]}
       />
       <div hidden={sub !== 'battrach'}><BatTrachScreen /></div>
-      <div hidden={sub !== 'laban'}><LegacyToolScreen /></div>
+      <div hidden={sub !== 'laban'}><LaBanScreen active={nav.tab === 'phongthuy' && nav.route.name === 'phongthuy' && sub === 'laban'} /></div>
       <div hidden={sub !== 'napam'}><NapAmScreen /></div>
     </div>
   );

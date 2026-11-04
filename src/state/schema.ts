@@ -44,6 +44,8 @@ export interface Tools {
   lucHaoLastCast?: LucHaoCast;
   batTrachHuongCua?: Huong;
   napAmPair?: [string, string];
+  /** ô hiệu chỉnh của La Bàn, −45…45 độ (Phase 4.2, tuỳ chọn) */
+  laBanCalib?: number;
 }
 
 export interface PersistedState {
@@ -121,5 +123,6 @@ export function parsePersisted(raw: unknown): ParseResult {
   if (t.napAmPair !== undefined && !(Array.isArray(t.napAmPair) && t.napAmPair.length === 2 && t.napAmPair.every(isStr))) {
     return { ok: false, error: 'tools.napAmPair không hợp lệ' };
   }
+  if (t.laBanCalib !== undefined && !isInt(t.laBanCalib, -45, 45)) return { ok: false, error: 'tools.laBanCalib không hợp lệ' };
   return { ok: true, state: raw as unknown as PersistedState };
 }

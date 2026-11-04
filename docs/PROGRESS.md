@@ -15,7 +15,9 @@
 | 3.4 — Lục Hào | XONG — 302 test xanh, build OK |
 | 3.5 — Bát Trạch, Nạp Âm | XONG — 380 test xanh, build OK |
 | 3.5b — Tổng Hợp đầy đủ | XONG — 386 test xanh, build OK |
-| 4 — La bàn | CHƯA LÀM — chờ chủ dự án đồng ý |
+| 4.1 — Chọn cách đọc cảm biến | XONG — plugin nội bộ đọc `TYPE_ROTATION_VECTOR`, xem ARCHITECTURE mục 11; chưa đo trên máy thật |
+| 4.2 — Dựng la bàn | XONG phần code — 418 test xanh, build OK, APK chạy trên máy ảo. CHƯA ĐẠT điều kiện nghiệm thu: còn 9 phép thử trên máy thật (ARCHITECTURE mục 11) |
+| 5 — Đọc thành lời | CHƯA LÀM — chờ chủ dự án đồng ý |
 
 ## Phase 3.5b — Tổng Hợp đầy đủ — XONG
 
@@ -33,6 +35,23 @@
 ### Lưu ý
 - Bỏ có chủ ý các phần chỉ có nghĩa với form riêng từng tab của legacy: dải "Đồng bộ / Chưa đồng bộ", hộp "Chưa có dữ liệu", câu nhắc đồng bộ
   thay cho đối chiếu chéo, nút "Cập nhật Tổng Hợp". App luôn tính từ một hồ sơ. Nút "Đọc toàn bộ tổng hợp" chờ Phase 5 (`src/platform/tts.ts`).
+
+## Phase 4.2 — La bàn — XONG PHẦN CODE, CHỜ THỬ MÁY THẬT
+
+### Đã xong
+- **Tính toán:** `src/core/laban/reading.ts` (8 cung, cung gần nhất, góc chạm, lọc nhiễu trên vòng tròn, `compassTrust`). Không đổi công thức Mệnh Quái, Du Niên.
+- **Câu chữ:** `src/content/laban/explain.ts` nguyên văn legacy. Riêng bài học 3 và thông báo cảm biến viết lại vì app không qua trình duyệt, không hỏi quyền.
+  `tests/parity/laban.test.ts`: 12 hồ sơ × 16 hướng, khớp 100%.
+- **Plugin:** `android/app/src/main/java/vn/lyso/app/LySoCompassPlugin.java` (`TYPE_ROTATION_VECTOR`, dự phòng `TYPE_GEOMAGNETIC_ROTATION_VECTOR`), đăng ký trong `MainActivity`;
+  lớp bọc `src/platform/compass.ts` (kèm `keepScreenOn` dùng `navigator.wakeLock`).
+- **Màn hình:** `src/features/phongthuy/laban/{Dial,LaBanScreen}.tsx`, tự dùng cảm biến, 3 giây không có dữ liệu thì chuyển xoay tay. Ô hiệu chỉnh lưu ở `tools.laBanCalib`
+  (thêm ở Phase 4.2, tuỳ chọn, không tăng version). `Dial` có prop `focus` cho Phase 6.
+- **Gỡ legacy:** `la-ban-phong-thuy.html` chuyển sang `docs/legacy/`; xoá `public/`, `src/features/legacy`, `src/platform/legacy.ts`. App không còn trang web cũ nào.
+- Kiểm trên máy ảo: xem ARCHITECTURE cuối mục 11.
+
+### Việc tiếp theo
+- Chạy 9 phép thử trên ít nhất 2 máy thật (ARCHITECTURE mục 11), chốt ngưỡng cảnh báo 15°.
+- Phase 5 (đọc thành lời) — hỏi chủ dự án trước khi bắt đầu.
 
 ## Phase 3.5 — Bát Trạch, Nạp Âm — XONG
 

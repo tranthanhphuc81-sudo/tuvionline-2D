@@ -348,7 +348,7 @@ Chỉ cài khi phase cần, không cài sẵn. Phiên bản lấy từ npm ngày
 | Rung nhẹ | `@capacitor/haptics` | 8.0.x | 3.4 | `impact({ style: Light })` khi gieo xong. Trên web không làm gì. |
 | Chia sẻ ảnh kết quả | `@capacitor/share` + `@capacitor/filesystem` | 8.0.x + 8.1.x | 7.1 | Ghi PNG vào thư mục `Cache` rồi chia sẻ URI. Ảnh tạo bằng `html-to-image` (1.11.x, thư viện JS). Phase 7.1 chốt lại sau khi thử font offline. |
 | Giữ màn hình sáng khi đo la bàn | `@capacitor-community/keep-awake` | 8.0.x | 4.2 | |
-| Cảm biến la bàn | **Chốt ở Phase 4.1.** Hai ứng viên: `deviceorientationabsolute` của WebView, hoặc `@capgo/capacitor-compass` (8.1.x, đọc cảm biến native) | | 4.1 | |
+| Cảm biến la bàn | Plugin nội bộ `LySoCompass` trong `android/`, không thêm gói npm | | 4.2 | Quyết định ở mục 11. |
 | Biểu tượng và màn hình chờ | `@capacitor/assets` (dev) | 4.0.x | 8.2 | |
 
 **Lớp bọc nền tảng:** mỗi plugin chỉ được gọi trong `src/platform/<việc>.ts`, ví dụ `tts.ts`, `storage.ts`, `haptics.ts`,
@@ -516,3 +516,66 @@ src/
               (Phase 6 thêm journey/, reader/)
 tests/        golden.test.ts, calendar.test.ts, parity/ (đối chiếu legacy)
 ```
+
+---
+
+## 11. La bàn (Phase 4.1, 04/11/2026)
+
+**Lựa chọn:** viết một plugin native nhỏ NGAY TRONG `android/` (`LySoCompass`, khoảng 150 dòng Java, đăng ký trong `MainActivity`),
+đọc **`TYPE_ROTATION_VECTOR`**. Lớp bọc `src/platform/compass.ts` chọn nguồn theo thứ tự:
+
+1. Android: plugin, `TYPE_ROTATION_VECTOR`.
+2. Máy không có con quay: plugin, `TYPE_GEOMAGNETIC_ROTATION_VECTOR`.
+3. Trình duyệt (`npm run dev`): sự kiện `deviceorientationabsolute`.
+4. Không có nguồn nào, hoặc 3 giây không có dữ liệu: chuyển chế độ xoay tay, kèm thông báo chẩn đoán.
+
+Plugin trả `{ heading, accuracy, headingErrorDeg }`: `accuracy` từ `onAccuracyChanged` của từ kế, `headingErrorDeg` từ `values[4]`
+của rotation vector (không có thì `null`).
+
+**Lý do:** rủi ro lớn nhất của la bàn là chỉ sai mà người dùng không biết. Đọc hướng thì WebView làm được, nhưng sự kiện web
+KHÔNG cho biết độ tin cậy, nên không thể báo "cần hiệu chỉnh" dựa trên số liệu thật. Chỉ API native có tín hiệu này.
+
+**Đã đo trên máy ảo** (`Medium_Phone`, WebView 149, app chạy ở `https://localhost`):
+- `deviceorientationabsolute` có chạy trong WebView của Capacitor, `absolute=true`, khoảng 60 lần/giây, không cần xin quyền.
+  `deviceorientation` thường trả `absolute=false` và không phải hướng Bắc, nên không được dùng thay thế (bản legacy có đường lùi này).
+- Đo khi đã ổn định ở hai hướng giả lập: Bắc 0,0° và Đông 90,0°. Nam và Tây chỉ đo sau 2,5 giây, chưa kịp ổn định (166,5° và 256,9°).
+  Sau khi đổi từ trường đột ngột cần khoảng 8 giây để hội tụ
+  (+1s 48°, +2s 73°, +4s 87,5°, +8s 90°). Khi đó con quay đứng yên nên chỉ từ kế kéo dần về; trên máy thật xoay máy có con quay, phải đo lại.
+- `navigator.wakeLock` có sẵn, nên giữ màn hình sáng không cần thêm plugin.
+- Máy ảo chỉ chứng minh luồng dữ liệu và phép tính, KHÔNG nói được độ chính xác trên máy thật.
+
+**Các điểm xét:**
+- **Bắc từ hay Bắc thật:** dùng **Bắc từ**, không cộng độ từ thiên. Rotation vector vốn trả Bắc từ, la kinh phong thủy cũng đo theo kim
+  từ, độ từ thiên ở Việt Nam chỉ khoảng −1° đến 0°, và tính độ từ thiên cần vị trí, tức phải thêm quyền. Ô hiệu chỉnh độ lệch vẫn giữ (±45°).
+- **Máy không có từ kế:** `getDefaultSensor` trả `null` thì báo rõ và chuyển xoay tay. Không dùng `GAME_ROTATION_VECTOR` vì không có Bắc.
+- **Hiệu chỉnh hình số 8:** `accuracy` thấp hoặc không tin cậy, hoặc `headingErrorDeg > 15`, thì hiện hướng dẫn và làm mờ số độ, nhưng không tắt la bàn.
+  Ngưỡng 15° là tạm, chốt sau khi đo trên máy thật.
+- **Xoay màn hình:** app không khoá chiều dọc. Plugin dùng `remapCoordinateSystem` theo `Display.getRotation()`. Máy dựng đứng thì azimuth
+  mất ổn định, nên có nhắc đặt máy nằm ngang.
+- **Pin:** `SENSOR_DELAY_UI`, gửi lên JS tối đa 15 lần/giây, chỉ đăng ký khi đang ở tab La Bàn và chế độ cảm biến; huỷ khi rời tab hoặc `pause`.
+- **Lọc nhiễu:** bộ lọc hàm mũ trên vòng tròn (trung bình sin/cos để qua được mốc 359° → 0°), viết thành hàm thuần ở `src/core` kèm test.
+- **Quyền và dữ liệu:** không thêm quyền Android, không cần vị trí. Cam kết "không gửi dữ liệu đi đâu" giữ nguyên.
+
+**Phương án bị loại:**
+- *Chỉ dùng `deviceorientationabsolute`:* ít code nhất và đọc hướng đúng, nhưng không có độ tin cậy. Đây là phương án dự phòng nếu plugin gặp vấn đề.
+- *`@capgo/capacitor-compass` (8.1.x):* đã đọc mã nguồn: tự tính từ gia tốc kế và từ kế thô, không qua hợp nhất cảm biến nên không có con quay giữ
+  ổn định, và không có sai số hướng. Thêm một gói ngoài mà chất lượng kém hơn cả sự kiện web.
+- *`@capacitor/motion`:* không bảo đảm hướng tuyệt đối (mục 6).
+
+**Kế hoạch kiểm thử trên máy thật (điều kiện để coi 4.2 là xong).** Tối thiểu 2 máy: một máy tầm trung Android cũ, một máy mới.
+
+| # | Kiểm | Đạt khi |
+|---|---|---|
+| 1 | So với la bàn vật lý hoặc Google Maps ở 8 hướng, máy nằm ngang, ngoài trời, xa kim loại | Lệch ≤ 5° |
+| 2 | Xoay máy nhanh 90° | Kim theo kịp trong 1 giây, không vọt lố quá 5° |
+| 3 | Đặt yên 30 giây | Dao động ≤ 2° |
+| 4 | Đặt cạnh loa hoặc vật kim loại lớn | Hiện cảnh báo, không im lặng chỉ sai |
+| 5 | Vẽ hình số 8 sau khi bị nhiễu | Cảnh báo tự mất |
+| 6 | Xoay ngang máy | Hướng vẫn đúng |
+| 7 | Vào nền rồi quay lại | Cảm biến dừng khi ở nền, chạy lại khi về |
+| 8 | Để đo liên tục 10 phút | Màn hình sáng, máy không nóng bất thường, pin tụt hợp lý |
+| 9 | Máy không có từ kế, nếu kiếm được | Báo rõ, tự chuyển xoay tay |
+
+**Đã kiểm trên máy ảo sau khi dựng (Phase 4.2):** plugin đăng ký và chạy; 4 hướng giả lập ra 360,0° · 89,6° · 178,6° · 268,7°, `accuracy` = 3, `tilted` = false;
+khoảng 10 lần/giây; vào nền dừng hẳn, quay lại chạy tiếp. Chưa kiểm được: `headingErrorDeg` thật (máy ảo trả 0), cảnh báo nhiễu, xoay ngang, và cả 9 phép thử trên.
+Trên web, trạng thái "bị chặn quyền" gộp chung vào "không có dữ liệu"; trong app Android không có quyền cảm biến nên không có trường hợp này.

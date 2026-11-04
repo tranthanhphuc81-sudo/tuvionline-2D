@@ -30,3 +30,27 @@
 .fold[open] > summary::after { transform: rotate(180deg); }
 .fold[open] > summary { margin-bottom: var(--space-2); }
 .fold > summary h2 { flex: 1; }
+.dial { display: block; width: 100%; max-width: 340px; margin-inline: auto; user-select: none; touch-action: pan-y; }
+.dial[data-drag='true'] { touch-action: none; cursor: grab; }
+.tick { stroke: var(--line-strong); }
+.ringLine { fill: none; stroke: var(--line-strong); stroke-width: 1.5; }
+.sector { fill: var(--surface2); stroke: var(--line); stroke-width: 1; }
+.sector[data-good='true'] { fill: color-mix(in srgb, var(--jade) 30%, var(--surface2)); }
+.sector[data-good='false'] { fill: color-mix(in srgb, var(--vermillion) 30%, var(--surface2)); }
+.sector[data-focus='true'] { stroke: var(--gold); stroke-width: 3; }
+.secName { font-family: var(--font-serif); font-weight: 700; font-size: 16px; fill: var(--ink); }
+.secQuai { font-weight: 600; font-size: 11px; fill: var(--ink-dim); }
+.secStar { font-weight: 700; font-size: 10.5px; fill: var(--ink-dim); }
+.secDeg { font-size: 10px; fill: var(--muted); }
+.hub { fill: var(--surface3); stroke: var(--line-strong); stroke-width: 1.5; }
+.hubInk { fill: var(--ink); }
+.needle { fill: var(--vermillion); }
+.needleLine { stroke: var(--vermillion); stroke-width: 1.5; opacity: .55; }
+.readout { text-align: center; }
+.readout[data-dim='true'] { opacity: .5; }
+.deg { font-family: var(--font-serif); font-size: 40px; font-weight: 700; color: var(--gold); line-height: 1.1; font-variant-numeric: tabular-nums; }
+.huong { font-weight: 600; }
+.status { text-align: center; font-size: var(--fs-sm); color: var(--muted); }
+.status[data-on='true'] { color: var(--jade); }
+.stepRow { display: grid; grid-template-columns: var(--tap) var(--tap) minmax(0, 1fr) var(--tap) var(--tap); gap: 6px; }
+.stepRow > button { padding-inline: 0; }
