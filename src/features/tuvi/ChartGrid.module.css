@@ -1,0 +1,40 @@
+.grid {
+  position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: auto; gap: 3px;
+  background: var(--line); border: 1px solid var(--line); border-radius: 12px; padding: 3px;
+}
+.cell {
+  position: relative; z-index: 2; min-height: 84px; min-width: 0; padding: 5px 4px 4px; border: 0; border-radius: 7px;
+  background: var(--surface); color: var(--ink); text-align: left; display: flex; flex-direction: column; gap: 2px;
+}
+.cell:active { filter: brightness(1.08); }
+.menh { background: var(--surface3); box-shadow: inset 0 0 0 1.5px var(--gold); }
+.tp { box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--jade) 70%, transparent); }
+.sel { box-shadow: inset 0 0 0 2.5px var(--gold); background: var(--surface3); }
+.hd { display: flex; flex-direction: column; line-height: 1.15; }
+.hd b { font-family: var(--font-serif); font-size: 0.82rem; }
+.cg { font-size: 0.66rem; color: var(--gold); font-weight: 700; }
+.stars { display: flex; flex-direction: column; font-size: 0.7rem; font-weight: 700; line-height: 1.25; }
+.stars .star { overflow-wrap: anywhere; }
+.vcd { color: var(--muted); font-weight: 500; font-size: 0.66rem; }
+.age { margin-top: auto; font-size: 0.62rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.than {
+  align-self: flex-start; font-size: 0.56rem; line-height: 1.5; background: var(--vermillion); color: #fff;
+  padding: 0 5px; border-radius: 99px; font-weight: 700; margin-bottom: 1px;
+}
+.center {
+  grid-column: 2 / span 2; grid-row: 2 / span 2; z-index: 0; background: var(--surface2); border-radius: 7px;
+  display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 2px;
+  font-size: 0.7rem; padding: 6px; color: var(--ink-dim);
+}
+.cname { font-family: var(--font-serif); font-size: 0.85rem; color: var(--ink); overflow-wrap: anywhere; }
+.cuc { color: var(--gold); font-weight: 700; font-size: 0.8rem; margin-top: 4px; }
+.muted { color: var(--muted); }
+.lines { position: absolute; z-index: 1; inset: 3px; width: calc(100% - 6px); height: calc(100% - 6px); pointer-events: none; }
+.lines line { stroke: var(--gold); stroke-width: 1.5; stroke-dasharray: 4 3; opacity: .8; vector-effect: non-scaling-stroke; }
+.star { white-space: normal; }
+.dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-left: 2px; vertical-align: middle; }
+.dot[data-hoa='loc'] { background: var(--jade); }
+.dot[data-hoa='quyen'] { background: var(--gold); }
+.dot[data-hoa='khoa'] { background: var(--blue); }
+.dot[data-hoa='ky'] { background: var(--vermillion); }
+.nowrap { white-space: nowrap; }

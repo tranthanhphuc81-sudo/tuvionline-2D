@@ -11,6 +11,7 @@ import { ProfileSheet } from '../features/profiles/ProfileSheet';
 import { SettingsScreen } from '../features/settings/SettingsScreen';
 import { LegacyToolScreen } from '../features/legacy/LegacyToolScreen';
 import { PhongThuyScreen } from '../features/legacy/PhongThuyScreen';
+import { TuViScreen } from '../features/tuvi/TuViScreen';
 import { initials } from '../features/profiles/format';
 import s from './App.module.css';
 
@@ -30,7 +31,7 @@ function routeTitle(r: Route): string {
 function renderRoute(r: Route): ReactNode {
   switch (r.name) {
     case 'home': return <HomeScreen />;
-    case 'tuvi': return <LegacyToolScreen tool="tuvi" />;
+    case 'tuvi': return <TuViScreen />;
     case 'battu': return <LegacyToolScreen tool="battu" />;
     case 'luchao': return <LegacyToolScreen tool="luchao" />;
     case 'phongthuy': return <PhongThuyScreen sub={r.sub} />;

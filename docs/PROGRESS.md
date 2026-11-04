@@ -10,9 +10,10 @@
 | 1.2 — Engine TypeScript | XONG — `npm test` 30 → 92 test xanh, `npm run build` OK |
 | 2.1 — Khung app | XONG (trừ `android:debug`, cần Codespace) — 121 test xanh, build OK |
 | 3.1 — Bố cục lá số Tử Vi | XONG — chọn phương án C (lưới gọn + thẻ chi tiết), xem ARCHITECTURE mục 10 |
-| 3.2 — Tử Vi | ĐANG LÀM (xem dưới) |
+| 3.2 — Tử Vi | XONG — 191 test xanh, build OK |
+| 3.3 — Bát Tự | CHƯA LÀM — chờ chủ dự án đồng ý |
 
-## Phase 3.2 — Tử Vi — đang làm
+## Phase 3.2 — Tử Vi — XONG
 
 ### Đã xong
 - **Bước 1 — tính toán + câu chữ + đối chiếu legacy** (121 → 185 test):
@@ -28,9 +29,16 @@
     (tháng nhuận, trước 1968, trước Tết, Tý muộn, sinh sau năm nay…) + tra 3 năm mỗi hồ sơ: chữ khớp 100%
     (so bỏ khoảng trắng). Đã thử sửa một chữ → test báo đúng chỗ. `tests/tuvi-reading.test.ts` cho các quy tắc nhỏ.
 
+- **Bước 2 — màn hình Tử Vi** (185 → 191 test): `src/features/tuvi/` — `ChartGrid` (bố cục C: lưới 4×4 gọn, chấm Tứ Hoá
+  dính chữ cuối, nhãn Thân, tam phương tứ chính + đường nối, `aria-label` đầy đủ từng ô, prop `focus` cho Phase 6),
+  `PalaceDetail` (‹ ›, ý nghĩa cung, chính tinh + sáng/tối + nét chính, phụ tinh, vòng, tam phương), `PalaceList`
+  (chế độ Danh sách), `TuViScreen` (tóm tắt 8 ô, Tứ Hoá, dải Đại Hạn tự cuộn tới chặng hiện tại, tra năm + đọc nhanh,
+  "Giải thích chỉ số" gập/mở, Tổng kết, ghi chú, nút "Mở bản web cũ (để đối chiếu)"). Component dùng chung
+  `src/ui/components/{RichText,SectionView}.tsx`. Kiểm ở 360px sáng/tối/cỡ chữ 130%: không cuộn ngang, không lỗi console.
+  Test: `src/features/tuvi/TuViScreen.test.tsx`.
+
 ### Việc tiếp theo
-2. Màn hình Tử Vi theo bố cục C (ARCHITECTURE mục 10, Phase 3.1): lưới gọn + thẻ chi tiết + Danh sách, tóm tắt, Tứ Hoá,
-   Đại Hạn, tra năm, Giải thích chỉ số, Tổng kết, ghi chú; component `RichText`/`SectionView`; vẫn có link bản web cũ.
+- Phase 3.3 (Bát Tự) — hỏi chủ dự án trước khi bắt đầu.
 
 ## Phase 2.1 — XONG
 
