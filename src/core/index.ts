@@ -9,6 +9,8 @@ import { LucHaoEngine } from './luchao/engine';
 import { PhongThuyEngine } from './battrach/engine';
 import { NapAmEngine } from './napam/engine';
 import { napAmForBirth, type NapAmBirth } from './napam/reading';
+import { batTrachReading } from './battrach/reading';
+import { tongHopReading, type TongHopReading } from './tonghop/reading';
 import { resolveBirth, type BirthCalcInput, type BirthError, type BirthProfile, type ResolvedBirth, type SolarDate } from './birth';
 import type { Gender, HourIdx } from './types';
 import type { Hanh } from './canchi/hanh';
@@ -49,6 +51,8 @@ export type { BatTrachReading, BtTone, HouseReading, HuongSao } from './battrach
 export type { NapAmYear, NapAmRelation, NapAmRelationKind, NapAmNeedsId } from './napam/types';
 export { napAmCompat, napAmForBirth, napAmPersonOfDate, resolveNapAmInput } from './napam/reading';
 export type { HanhFlow, HopLevel, NapAmBirth, NapAmCompat, NapAmInputError, NapAmPerson, NapAmTone } from './napam/reading';
+export { hanhRel, huongOfHanh, tongHopReading } from './tonghop/reading';
+export type { HanhRel, HanhRelKind, TongHopReading } from './tonghop/reading';
 
 /* ===== Hàm gọn (ARCHITECTURE.md mục 5.2) ===== */
 
@@ -114,6 +118,12 @@ export function profileSummary(p: BirthProfile): { ok: true; summary: QuickProfi
   const r = resolveBirth(p);
   if (!r.ok) return r;
   return { ok: true, summary: summarize(r.solar, r.input), birth: r };
+}
+
+/** Tổng Hợp 4 hệ thống từ ngày sinh đã kiểm tra. */
+export function tongHopOf(birth: Extract<ResolvedBirth, { ok: true }>): TongHopReading {
+  const { solar, input } = birth;
+  return tongHopReading(tuViChart(input), batTuChart(input), batTrachReading(solar, input.gender), napAmForBirth(solar.dd, solar.mm, solar.yy));
 }
 
 function summarize(solar: SolarDate, input: BirthCalcInput): QuickProfile {

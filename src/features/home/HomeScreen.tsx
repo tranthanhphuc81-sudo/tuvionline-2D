@@ -1,10 +1,12 @@
 import { useMemo } from 'react';
-import { profileSummary } from '../../core';
+import { profileSummary, tongHopOf } from '../../core';
 import { birthErrorText, birthNotesText } from '../../content/common/birth';
 import { CULTURAL_NOTE, RELATION_LABEL } from '../../content/common/notes';
+import { tongHopParts } from '../../content/tonghop/explain';
 import { selectActiveProfile } from '../../state/actions';
 import { useApp, useAppCtx, useNav } from '../../app/context';
 import type { Route, TabId } from '../../app/routes';
+import { SectionView } from '../../ui/components/SectionView';
 import ui from '../../ui/components/ui.module.css';
 import { birthLine } from '../profiles/format';
 import s from './home.module.css';
@@ -32,11 +34,13 @@ function BootNoticeBanner() {
   );
 }
 
-/** Tổng hợp: tóm tắt 4 hệ thống của người đang xem + lối tắt sang mọi công cụ. */
+/** Tổng hợp: tóm tắt 4 hệ thống của người đang xem, lối tắt sang mọi công cụ, rồi phần đọc tổng hợp. */
 export function HomeScreen() {
   const nav = useNav();
   const profile = useApp(selectActiveProfile);
   const res = useMemo(() => (profile ? profileSummary(profile) : null), [profile]);
+
+  const parts = useMemo(() => (res?.ok ? tongHopParts(tongHopOf(res.birth)) : []), [res]);
 
   const go = (sc: (typeof SHORTCUTS)[number]) => {
     if (sc.route) nav.goTo(sc.tab, sc.route);
@@ -106,6 +110,13 @@ export function HomeScreen() {
           ))}
         </div>
       </section>
+
+      {parts.map((part) => (
+        <section key={part.id} className={ui.stack} aria-labelledby={`home-${part.id}`}>
+          <h2 id={`home-${part.id}`} className={ui.sectionTitle}>{part.title}</h2>
+          <div className={ui.card}><SectionView sections={part.sections} /></div>
+        </section>
+      ))}
 
       <p className={`${ui.muted} ${s.footer}`}>{CULTURAL_NOTE}</p>
     </div>

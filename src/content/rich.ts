@@ -79,7 +79,11 @@ export interface KvBlock extends BlockBase { kind: 'kv'; rows: { k: string; v: s
 export interface BarsBlock extends BlockBase { kind: 'bars'; rows: { label: string; pct: number }[] }
 /** Dãy mẫu màu kèm tên (ví dụ màu Ngũ hành của Bát Trạch) */
 export interface SwatchesBlock extends BlockBase { kind: 'swatches'; items: { label: string; hex: string }[] }
-export type Block = PBlock | ListBlock | VerdictBlock | ItemBlock | ChipsBlock | NoteBlock | KvBlock | BarsBlock | SwatchesBlock;
+/** Dãy thẻ nhỏ: nhãn + giá trị nổi bật + chi tiết (ví dụ Ngũ hành theo từng hệ thống) */
+export interface CardsBlock extends BlockBase { kind: 'cards'; cards: { label: string; value: string; rich: RichNode[] }[] }
+/** Bảng có tiêu đề cột (ví dụ so sánh 4 hệ thống) */
+export interface TableBlock extends BlockBase { kind: 'table'; head: string[]; rows: RichNode[][][] }
+export type Block = PBlock | ListBlock | VerdictBlock | ItemBlock | ChipsBlock | NoteBlock | KvBlock | BarsBlock | SwatchesBlock | CardsBlock | TableBlock;
 
 export interface Section { id: string; title: string; icon?: string; tone?: Tone; blocks: Block[] }
 
@@ -100,6 +104,8 @@ export function sectionPlainText(s: Section, withTitle = true): string {
       case 'kv': parts.push(b.rows.map((r) => r.k + ' ' + r.v).join('\n')); break;
       case 'bars': parts.push(b.rows.map((r) => r.label + ' ' + r.pct + '%').join('\n')); break;
       case 'swatches': parts.push(b.items.map((i) => i.label).join('\n')); break;
+      case 'cards': parts.push(b.cards.map((c) => c.label + '\n' + c.value + '\n' + toPlainText(c.rich)).join('\n')); break;
+      case 'table': parts.push(b.head.join('\n'), b.rows.map((r) => r.map((c) => toPlainText(c)).join('\n')).join('\n')); break;
     }
   }
   return parts.join('\n');

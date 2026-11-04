@@ -49,6 +49,29 @@ function BlockView({ b }: { b: Block }) {
           {b.items.map((i) => <li key={i.label}><span className={s.dot} style={{ background: i.hex }} aria-hidden="true" />{i.label}</li>)}
         </ul>
       );
+    case 'cards':
+      return (
+        <div className={s.cards}>
+          {b.cards.map((c) => (
+            <div key={c.label} className={s.card}>
+              <div className={s.cardLabel}>{c.label}</div>
+              <div className={s.cardValue}>{c.value}</div>
+              <div className={s.cardBody}><RichText nodes={c.rich} /></div>
+            </div>
+          ))}
+        </div>
+      );
+    case 'table':
+      return (
+        <table className={s.table}>
+          <thead><tr>{b.head.map((h) => <th key={h} scope="col">{h}</th>)}</tr></thead>
+          <tbody>
+            {b.rows.map((row, i) => (
+              <tr key={i}>{row.map((cell, j) => <td key={j} data-label={b.head[j]}><RichText nodes={cell} /></td>)}</tr>
+            ))}
+          </tbody>
+        </table>
+      );
     case 'chips':
       return (
         <p className={s.p}>

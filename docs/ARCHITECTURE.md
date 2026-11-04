@@ -35,7 +35,7 @@
 
 | # | Tab (nhãn) | Nội dung |
 |---|---|---|
-| 1 | 🏠 **Tổng hợp** | Màn hình chính: tóm tắt 4 hệ thống của người đang xem, ô lối tắt sang mọi công cụ. Phase 6 thay bằng "Tĩnh thất". |
+| 1 | 🏠 **Tổng hợp** | Màn hình chính: tóm tắt 4 hệ thống của người đang xem, ô lối tắt sang mọi công cụ, phần đọc tổng hợp (`src/content/tonghop`). Phase 6 thay bằng "Tĩnh thất". |
 | 2 | 🔮 **Tử Vi** | Lá số, Tứ Hoá, Đại Hạn, tra vận theo năm, giải thích, tổng kết. |
 | 3 | 📜 **Bát Tự** | 4 Trụ, Thập Thần, Vượng Suy, Đại Vận, Lưu Niên. |
 | 4 | ☯ **Lục Hào** | Gieo quẻ, quẻ chủ, quẻ biến, luận đoán. |
@@ -315,6 +315,7 @@ src/features/  màn hình React: trình bày Section[] và kết quả engine
   interface Section { id: string; title: string; blocks: Block[] }
   interface Block   { id: string; rich: RichNode[]; tags?: ContentTag[]; ref?: { palace?: number; hao?: number; pillar?: number } }
   // Phase 3.2: Block là union có `kind` — p | list | verdict (nhãn màu) | item (tiêu đề + nhãn + thân) | chips | note
+  // Về sau thêm: kv | bars | swatches | cards | table
   ```
   `id` ổn định (ví dụ `tuvi.explain.cuc`) để Phase 6 trỏ tới. `ref` chỉ ra block nói về cung, hào hay trụ nào, để thầy đọc
   tô sáng đúng chỗ. `tags` để dành cho cờ "không đọc thành lời" ở Phase 6. Danh sách nhãn do Phase 6.1 chốt, nên bây giờ

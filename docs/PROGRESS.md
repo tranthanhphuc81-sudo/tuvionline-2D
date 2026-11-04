@@ -5,16 +5,34 @@
 
 | Phase | Trạng thái |
 |---|---|
-| 0 — Kiểm tra môi trường | `npm test` 23/23 xanh, `npm run build` OK. `npm run android:debug` CHƯA chạy (máy cloud không có Android SDK — chạy trong Codespace). |
+| 0 — Kiểm tra môi trường | `npm test` 23/23 xanh, `npm run build` OK. APK debug đã build được ngày 04/11/2026 từ commit `617bc1e` trên máy Windows (đặt `ANDROID_HOME`). Mới thử trên máy ảo, chưa thử trên máy thật. |
 | 1.1 — Kiến trúc | XONG → `docs/ARCHITECTURE.md` |
 | 1.2 — Engine TypeScript | XONG — `npm test` 30 → 92 test xanh, `npm run build` OK |
-| 2.1 — Khung app | XONG (trừ `android:debug`, cần Codespace) — 121 test xanh, build OK |
+| 2.1 — Khung app | XONG — 121 test xanh, build OK; Back và lưu dữ liệu đã kiểm trên máy ảo, chưa kiểm trên máy thật |
 | 3.1 — Bố cục lá số Tử Vi | XONG — chọn phương án C (lưới gọn + thẻ chi tiết), xem ARCHITECTURE mục 10 |
 | 3.2 — Tử Vi | XONG — 191 test xanh, build OK |
 | 3.3 — Bát Tự | XONG — 257 test xanh, build OK |
 | 3.4 — Lục Hào | XONG — 302 test xanh, build OK |
 | 3.5 — Bát Trạch, Nạp Âm | XONG — 380 test xanh, build OK |
+| 3.5b — Tổng Hợp đầy đủ | XONG — 386 test xanh, build OK |
 | 4 — La bàn | CHƯA LÀM — chờ chủ dự án đồng ý |
+
+## Phase 3.5b — Tổng Hợp đầy đủ — XONG
+
+### Đã xong
+- **Tính toán:** `src/core/tonghop/reading.ts` (`tongHopReading`, `hanhRel` = legacy `relHanhPair`, `huongOfHanh` suy từ Hậu Thiên Bát Quái,
+  có test khớp `HANH_INFO`); `tongHopOf(birth)` trong `src/core/index.ts`. Không đổi công thức.
+- **Câu chữ (nguyên văn):** `src/content/tonghop/{tongket,explain}.ts`; `tongHopParts(r)` trả 4 phần, mỗi phần là `Section[]` để Phase 6 đọc lại.
+  `rich.ts` thêm khối `cards` và `table` (`SectionView` vẽ; dưới 560px mỗi hàng bảng thành một thẻ).
+- **Màn hình:** `HomeScreen`: tóm tắt 4 hệ thống → Công cụ → Tóm lại về bạn → Ngũ hành → Bảng so sánh → Đọc tổng hợp thế nào?.
+- **Đối chiếu legacy:** `tests/parity/tonghop.test.ts`: 52 hồ sơ, so toàn bộ `#tonghop-content`, khớp 100%, có kiểm đã đi qua đủ các nhánh
+  (hướng vàng, Vô Chính Diệu, Thân vượng/nhược, 5 kiểu quan hệ hành). Đã thử sửa một chữ → test báo đúng chỗ.
+  Thêm `src/features/home/HomeScreen.test.tsx`; `src/app/App.test.tsx` thêm `selector: 'b'` vì Cục và Nạp Âm nay hiện ở nhiều chỗ. 380 → 386 test.
+- Kiểm 360×740 sáng/tối: không cuộn ngang, không lỗi console. Chưa kiểm cỡ chữ 130% và chưa chạy trên máy Android.
+
+### Lưu ý
+- Bỏ có chủ ý các phần chỉ có nghĩa với form riêng từng tab của legacy: dải "Đồng bộ / Chưa đồng bộ", hộp "Chưa có dữ liệu", câu nhắc đồng bộ
+  thay cho đối chiếu chéo, nút "Cập nhật Tổng Hợp". App luôn tính từ một hồ sơ. Nút "Đọc toàn bộ tổng hợp" chờ Phase 5 (`src/platform/tts.ts`).
 
 ## Phase 3.5 — Bát Trạch, Nạp Âm — XONG
 
@@ -36,10 +54,6 @@
   Lục Hào. `src/features/legacy` chỉ còn phục vụ La Bàn.
 - `tests/locks.test.ts`: tăng thời gian chờ của test Lập Xuân Bát Tự lên 30 giây (chạy riêng 2,5 giây, quá 5 giây khi chạy song song; không đổi kỳ vọng).
 - Kiểm 360px sáng/tối: không cuộn ngang, không lỗi console. Chưa kiểm cỡ chữ 130% và chưa chạy trên máy Android.
-
-### Lưu ý
-- **Tab "Tổng Hợp" của bản web đã rời khỏi app** cùng `lyso-toolkit.html`, theo đúng PROMPT-KIT 3.5. Màn hình Tổng hợp mới chỉ tóm tắt 4 hệ thống;
-  các phần "Tóm lại về bạn", bảng so sánh 4 hệ thống, "Đọc tổng hợp thế nào?" CHƯA được dựng lại. Chủ dự án cần quyết định có dựng lại không.
 
 ### Việc tiếp theo
 - Phase 4 (La bàn) — hỏi chủ dự án trước khi bắt đầu.

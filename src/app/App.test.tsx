@@ -33,8 +33,8 @@ describe('Khung app', () => {
     fireEvent.change(within(panel).getByLabelText('Năm sinh'), { target: { value: '1996' } });
     fireEvent.click(within(panel).getByRole('button', { name: 'Lưu hồ sơ' }));
     expect(store.getState().profiles).toHaveLength(1);
-    expect(within(visible()).getByText('Giản Hạ Thuỷ')).toBeTruthy();
-    expect(within(visible()).getByText('Mộc Tam Cục')).toBeTruthy();
+    expect(within(visible()).getByText('Giản Hạ Thuỷ', { selector: 'b' })).toBeTruthy();
+    expect(within(visible()).getByText('Mộc Tam Cục', { selector: 'b' })).toBeTruthy();
   });
 
   it('form hồ sơ báo lỗi tiếng Việt như legacy, không lưu ngày không tồn tại', () => {
