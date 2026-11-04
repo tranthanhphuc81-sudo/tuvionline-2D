@@ -87,3 +87,16 @@ export function lookupYear(doc: Document, year: number): void {
 }
 
 export const text = (doc: Document, id: string) => doc.getElementById(id)?.textContent ?? '';
+
+/** Điền form Lục Hào của legacy ở chế độ "Nhập tay" và bấm "Luận Quẻ". */
+export function submitLucHao(doc: Document, date: [number, number, number], tosses: readonly number[], key: string): void {
+  const $ = (s: string) => doc.querySelector(s) as HTMLElement;
+  ($('#kd-dd') as HTMLInputElement).value = String(date[0]);
+  ($('#kd-mm') as HTMLInputElement).value = String(date[1]);
+  ($('#kd-yy') as HTMLInputElement).value = String(date[2]);
+  ($('#kd-methodSeg [data-val="manual"]')).click();
+  tosses.forEach((v, i) => { ($(`#kd-manualHaoGrid [data-hao="${i}"]`) as HTMLSelectElement).value = String(v); });
+  ($('#kd-dungThanSel') as HTMLSelectElement).value = key;
+  const ev = new (doc.defaultView as unknown as typeof globalThis).Event('submit', { cancelable: true });
+  $('#kd-form').dispatchEvent(ev);
+}

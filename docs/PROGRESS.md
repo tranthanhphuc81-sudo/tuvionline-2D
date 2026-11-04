@@ -12,7 +12,24 @@
 | 3.1 — Bố cục lá số Tử Vi | XONG — chọn phương án C (lưới gọn + thẻ chi tiết), xem ARCHITECTURE mục 10 |
 | 3.2 — Tử Vi | XONG — 191 test xanh, build OK |
 | 3.3 — Bát Tự | XONG — 257 test xanh, build OK |
-| 3.4 — Lục Hào | CHƯA LÀM — chờ chủ dự án đồng ý |
+| 3.4 — Lục Hào | ĐANG LÀM (xem dưới) |
+
+## Phase 3.4 — Lục Hào — đang làm
+
+### Đã xong
+- **Bước 1 — tính toán + câu chữ + đối chiếu legacy** (257 → 296 test):
+  - `src/core/luchao/reading.ts`: gieo quẻ (`randomToss`/`randomTosses`, nhận hàm tung đồng xu để test được; mặc định
+    `crypto.getRandomValues`), bối cảnh ngày xem (`castContext`: Nhật thần, Nguyệt lệnh theo tiết, mùa), `haoViews`,
+    `findDungThanHao`, `verdictHaos` (mục Luận đoán), `lucHaoReading` (chấm điểm Tổng kết).
+  - `src/content/interp/luchao.ts` (QUE 64 quẻ, DT_PLAIN, DT_EX cắt thẳng từ legacy, `queShort`);
+    `src/content/luchao/{explain,tongket}.ts`: Luận đoán, Giải thích chỉ số, Tổng kết, ghi chú (nguyên văn).
+    Riêng dòng báo kết quả gieo ngẫu nhiên đổi câu chỉ dẫn nút bấm cho đúng giao diện app (không còn nút "Luận Quẻ").
+  - `tests/parity/luchao.test.ts`: 31 tổ hợp gieo × 6 ngày xem × 7 loại "Hỏi về việc gì" × 4 khối: khớp 100%.
+    `tests/luchao-reading.test.ts` cho quy tắc nhỏ.
+
+### Việc tiếp theo
+2. Màn hình Lục Hào + rung nhẹ khi gieo xong (`@capacitor/haptics`); lưu quẻ gần nhất (`tools.lucHaoLastCast`),
+   giữ quẻ khi đổi việc hỏi.
 
 ## Phase 3.3 — Bát Tự — XONG
 

@@ -38,6 +38,10 @@ export {
 } from './battu/reading';
 export type { ThanAssessment, VuongSuyState, Mua, ThapThanFamily, ThapThanCombo, ThapThanProfile, BatTuReading, BatTuYearLookup, HanhPeriod } from './battu/reading';
 export type { Toss, HexaStep, LucThan, Hao, HaoHoa, QueBien, LucHaoResult, VuongSuy, Season } from './luchao/types';
+export {
+  coinFlip, randomToss, randomTosses, castContext, haoViews, findDungThanHao, verdictHaos, lucHaoReading, DUNG_THAN_KEYS,
+} from './luchao/reading';
+export type { DungThanKey, CastContext, HaoView, NhatRel, VerdictHao, LucHaoReading, LhTone } from './luchao/reading';
 export type { Huong, StarName, Nhom, DuNienStar, LySoYear } from './battrach/types';
 export type { NapAmYear, NapAmRelation, NapAmRelationKind, NapAmNeedsId } from './napam/types';
 
