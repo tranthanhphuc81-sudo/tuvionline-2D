@@ -5,7 +5,7 @@ import { TuViEngine as _TuVi } from './tuvi.js';
 import { BatTuEngine as _BatTu } from './battu.js';
 import { LucHaoEngine as _LucHao } from './luchao.js';
 import { PhongThuyEngine as _BatTrach } from './battrach.js';
-import { NapAmEngine as _NapAm } from './napam.js';
+import { NapAmEngine } from './napam/engine';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // Tạm thời để kiểu `any` vì engine còn là JS trích nguyên văn — Phase 1 (PROMPT-KIT) sẽ viết lại bằng TypeScript có kiểu đầy đủ.
@@ -14,7 +14,9 @@ export const TuViEngine: any = _TuVi;
 export const BatTuEngine: any = _BatTu;
 export const LucHaoEngine: any = _LucHao;
 export const PhongThuyEngine: any = _BatTrach;
-export const NapAmEngine: any = _NapAm;
+export { NapAmEngine };
+export type { NapAmYear, NapAmRelation, NapAmRelationKind, NapAmNeedsId } from './napam/types';
+export type { Hanh } from './canchi/hanh';
 
 export type Gender = 'M' | 'F';
 
