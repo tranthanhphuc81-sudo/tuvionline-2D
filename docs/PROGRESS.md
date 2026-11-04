@@ -43,6 +43,9 @@
   `LH_HANH_ORDER` đặt tên rõ; `type Quai` chuyển lên `src/core/types.ts` (Lục Hào và Bát Trạch không import lẫn nhau).
   Bỏ `pillClass` (hàm trình bày, chưa từng được xuất).
 
+- **Bước 4d — Bát Tự sang TS** (`src/core/battu/{engine,types}.ts`): `BT_HANH_ORDER` đặt tên rõ, giữ UTC+7 cố định cho
+  tiết khí (chú thích tại chỗ). Không tìm được tiết của tháng thì ném lỗi thay vì trả `null` (không xảy ra trong 1900–2100).
+
 ### Việc tiếp theo (theo ARCHITECTURE.md mục 10)
 1. ~~Test bổ sung theo yêu cầu kit, chạy xanh với bản JS hiện tại:
    - `tests/calendar.test.ts`: đổi dương → âm → dương khớp nhau mọi ngày 1900–2100, mẫu mỗi 7 ngày
