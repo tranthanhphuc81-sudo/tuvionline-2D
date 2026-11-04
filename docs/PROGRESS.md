@@ -8,7 +8,24 @@
 | 0 — Kiểm tra môi trường | `npm test` 23/23 xanh, `npm run build` OK. `npm run android:debug` CHƯA chạy (máy cloud không có Android SDK — chạy trong Codespace). |
 | 1.1 — Kiến trúc | XONG → `docs/ARCHITECTURE.md` |
 | 1.2 — Engine TypeScript | XONG — `npm test` 30 → 92 test xanh, `npm run build` OK |
-| 2.1 — Khung app | CHƯA LÀM — chờ chủ dự án đồng ý |
+| 2.1 — Khung app | ĐANG LÀM (xem dưới) |
+
+## Phase 2.1 — đang làm
+
+### Đã xong
+- **Bước 1 — nền tảng + trạng thái** (92 → 113 test): cài `@capacitor/app` 8.1, `@capacitor/preferences` 8.0,
+  `@fontsource/be-vietnam-pro`, `@fontsource/noto-serif` (dùng ở bước 2), dev: `@testing-library/react`, `jsdom`.
+  `src/platform/{native,storage,lifecycle,backStack,back}.ts`; `src/state/{schema,store,actions,migrations,persist,ids}.ts`
+  (lược đồ `lyso.state` v1, `parsePersisted`, migration 0 → 1 từ `lyso-shared-v1` + `lyso-theme`, giữ bản sao khi dữ liệu hỏng,
+  ghi gộp 300ms + ghi ngay khi vào nền); `src/app/{routes,router}.ts` (ngăn xếp mỗi tab, bảng quy tắc Back).
+  Test: `src/state/state.test.ts`, `src/app/router.test.ts`; `vite.config.ts` thêm `src/**/*.test.{ts,tsx}`.
+
+### Việc tiếp theo (ARCHITECTURE.md mục 10, Phase 2.1)
+2. `src/ui/tokens.css`, `base.css`, font offline, chủ đề sáng/tối, safe-area.
+3. Router + thanh tab dưới + thanh trên (chip người đang xem, ⚙) + Back.
+4. Màn hình Hồ sơ (thêm/sửa/xoá, dương/âm, nhuận, giờ, Tý muộn, báo lỗi như legacy).
+5. Tổng hợp đọc hồ sơ đang chọn; tab chưa dựng → nút mở trang legacy.
+6. Kiểm 360px; `npm run android:debug` (cần Codespace có Android SDK).
 
 ## Phase 1.2 — XONG
 

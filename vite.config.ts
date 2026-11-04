@@ -6,5 +6,5 @@ export default defineConfig({
   base: './',
   plugins: [react()],
   server: { port: 5173, strictPort: true },
-  test: { include: ['tests/**/*.test.ts'] },
+  test: { include: ['tests/**/*.test.ts', 'src/**/*.test.{ts,tsx}'] },
 } as never);
