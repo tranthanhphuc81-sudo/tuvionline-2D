@@ -463,6 +463,36 @@ Thứ tự công cụ: **3.2 Tử Vi** (lá số + `src/content/interp` dùng ch
 → **3.5 Bát Trạch, Nạp Âm** (+ tab con của Phong thủy, màn hình chọn cặp hợp hôn) → xoá
 `public/legacy/lyso-toolkit.html` khỏi app, chuyển bản sao sang `docs/legacy/`. Test đối chiếu sẽ đọc từ `docs/legacy/`.
 
+### Phase 3.1: bố cục lá số Tử Vi (ĐÃ CHỐT 04/11/2026)
+
+**Lựa chọn: phương án C — "lưới gọn + thẻ chi tiết"**, chủ dự án chọn sau khi xem bản mẫu chạy engine thật ở 360px
+(ảnh và mã bản mẫu: `docs/design/tuvi-3.1/`).
+
+- **Lưới 4×4 truyền thống** vừa khít chiều rộng 360px (không cuộn ngang). Vị trí 12 cung giữ đúng bảng `order` của legacy
+  (`renderChart`: Tỵ ở góc trên trái, Dần góc dưới trái, Hợi góc dưới phải), ô giữa 2×2 là "thiên bàn": tên, giới, ngày âm,
+  giờ, can chi năm, Cục, Nạp Âm. Mỗi ô là một `<button>` gồm: Chi (serif đậm), tên cung (vàng), chính tinh (mỗi sao một dòng,
+  chấm màu Tứ Hoá như legacy: Lộc `--jade`, Quyền `--gold`, Khoa `--blue`, Kỵ `--vermillion`; không có thì "vô chính diệu"),
+  tuổi Đại hạn ở đáy, nhãn **Thân** đầu ô. Phụ tinh và hai vòng KHÔNG hiện trong ô (không đủ chỗ).
+- **Cung Mệnh** viền vàng mảnh; **cung đang chọn** viền vàng đậm; ba cung **tam phương tứ chính** (+4, +8 tam hợp, +6 xung
+  chiếu) viền ngọc; **đường nối nét đứt** từ tâm cung đang chọn tới ba cung kia (SVG nằm trên thiên bàn, dưới các ô).
+  Mặc định chọn cung Mệnh.
+- **Thẻ chi tiết** ngay dưới lưới: "Cung X tại Chi · Đại hạn a–b tuổi", nút ‹ › (44px) chuyển cung trước/sau, chính tinh,
+  phụ tinh, vòng Trường Sinh · Thái Tuế, tam phương tứ chính. Phase 3.2 thêm độ sáng sao và câu giải thích cung từ
+  `src/content/interp`.
+- **Nút chuyển "Lá số · Danh sách"** ở đầu màn hình. Danh sách = 12 thẻ dọc bắt đầu từ Mệnh (phương án B), dùng để đọc
+  liền mạch và cho trình đọc màn hình.
+- **Cỡ chữ** trong ô tính bằng `rem` (0,62–0,85rem); ô cao theo nội dung (`grid-template-rows: auto`), tên sao được xuống dòng
+  khi cỡ chữ hệ thống lớn — đã thử 130%: không tràn, không cuộn ngang.
+- **Truy cập:** mỗi ô có `aria-label` đầy đủ ("Cung Mệnh tại Thìn, Thiên Cơ, Thiên Lương Hoá Khoa, Đại hạn 3 đến 12 tuổi"),
+  `aria-pressed` cho ô đang chọn; chấm Tứ Hoá có chữ ẩn cho trình đọc.
+- **Chừa chỗ Phase 6 (mục 8):** component `TuViChartGrid` nhận `selected` + `onSelect` và `focus?: { palace?: number;
+  lines?: [number, number][] }`. Khi có `focus` thì thầy đọc điều khiển ô tô sáng và đường nối thay cho người dùng.
+- Route: chọn cung là trạng thái cục bộ của màn hình Tử Vi (không đẩy route mới), để Back không phải lùi qua từng cung.
+
+**Phương án bị loại** (ảnh trong `docs/design/tuvi-3.1/` của bản mẫu):
+- *A — lưới gốc 720px cuộn ngang:* quen mắt với bản web nhưng trên điện thoại chỉ thấy nửa lá số, mất quan hệ giữa các cung.
+- *B — chỉ danh sách 12 cung:* dễ đọc nhưng mất hình dạng lá số truyền thống và quan hệ vị trí; giữ lại làm chế độ phụ.
+
 ### Cây thư mục đích (sau Phase 3)
 
 ```

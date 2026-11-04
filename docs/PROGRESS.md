@@ -9,6 +9,8 @@
 | 1.1 — Kiến trúc | XONG → `docs/ARCHITECTURE.md` |
 | 1.2 — Engine TypeScript | XONG — `npm test` 30 → 92 test xanh, `npm run build` OK |
 | 2.1 — Khung app | XONG (trừ `android:debug`, cần Codespace) — 121 test xanh, build OK |
+| 3.1 — Bố cục lá số Tử Vi | XONG — chọn phương án C (lưới gọn + thẻ chi tiết), xem ARCHITECTURE mục 10 |
+| 3.2 — Tử Vi | CHƯA LÀM — chờ chủ dự án đồng ý |
 
 ## Phase 2.1 — XONG
 
@@ -39,7 +41,11 @@
 
 ### Việc tiếp theo
 - Chạy `npm run android:debug` trong Codespace, cài APK, kiểm Back/lưu dữ liệu trên máy thật (ARCHITECTURE mục 7.3).
-- Phase 3.1 (quyết định bố cục lá số Tử Vi) — hỏi chủ dự án trước khi bắt đầu.
+- ~~Phase 3.1~~ XONG: 3 bản mẫu (A lưới gốc cuộn ngang, B danh sách, C lưới gọn + thẻ chi tiết) dựng bằng engine thật,
+  chụp ở 360px sáng/tối/cỡ chữ 130%; chủ dự án chọn **C**. Ghi ở ARCHITECTURE mục 10 "Phase 3.1", ảnh + mã bản mẫu ở
+  `docs/design/tuvi-3.1/`.
+- Phase 3.2 (Tử Vi: chuyển tính toán legacy còn lại vào `src/core/tuvi`, câu chữ vào `src/content`, dựng màn hình theo C)
+  — hỏi chủ dự án trước khi bắt đầu.
 
 ## Phase 1.2 — XONG
 

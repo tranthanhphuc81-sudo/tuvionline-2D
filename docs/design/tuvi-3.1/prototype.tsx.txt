@@ -1,0 +1,125 @@
+import { useState } from 'react';
+import { createRoot } from 'react-dom/client';
+import '../src/ui/fonts';
+import '../src/ui/tokens.css';
+import '../src/ui/base.css';
+import './proto.css';
+import { tuViChart, TuViEngine, resolveBirth, type TuViChart } from '../src/core';
+
+const { CHI, CAN, CUNG_NAME, mod } = TuViEngine;
+const r = resolveBirth({ gender: 'M', calendar: 'lunar', day: 12, month: 7, year: 1979, leapMonth: false, hourIdx: 4, lateTy: false });
+if (!r.ok) throw new Error();
+const ch = tuViChart(r.input);
+const POS: [number, number, number][] = [[5,1,1],[6,2,1],[7,3,1],[8,4,1],[4,1,2],[9,4,2],[3,1,3],[10,4,3],[2,1,4],[1,2,4],[0,3,4],[11,4,4]];
+const cung = (chi: number) => CUNG_NAME[mod(chi - ch.menhChi, 12)];
+const HOA: [keyof TuViChart['tuHoaBanMenh'], string][] = [['loc','Lộc'],['quyen','Quyền'],['khoa','Khoa'],['ky','Kỵ']];
+const hoaOf = (s: string) => HOA.filter(([k]) => ch.tuHoaBanMenh[k] === s).map(([k]) => k);
+const dh = (chi: number) => ch.daiHan.find((d) => d.chi === chi)!;
+const tamPhuong = (c: number) => [c, mod(c + 4, 12), mod(c + 8, 12), mod(c + 6, 12)];
+const params = new URLSearchParams(location.search);
+const variant = params.get('v') ?? 'D';
+const fs = params.get('fs');
+if (fs) document.documentElement.style.fontSize = fs;
+
+function Star({ s }: { s: string }) {
+  return <span className="star">{s}{hoaOf(s).map((k) => <i key={k} className={'dot ' + k} />)}</span>;
+}
+
+function Center() {
+  return (
+    <div className="center">
+      <b className="cname">Nguyễn Văn An</b>
+      <span>Nam · ÂL {ch.lunar.day}/{ch.lunar.month}/{ch.lunar.year}</span>
+      <span>Giờ {CHI[ch.gioChiIdx]} · {CAN[ch.yearCC.can]} {CHI[ch.yearCC.chi]}</span>
+      <span className="cuc">{ch.cucTen}</span>
+      <span className="muted">{ch.napAmTen}</span>
+    </div>
+  );
+}
+
+function Grid({ sel, onSel, lines }: { sel: number | null; onSel?: (c: number) => void; lines: boolean }) {
+  const tp = sel == null ? [] : tamPhuong(sel);
+  const center = (c: number) => { const p = POS.find((x) => x[0] === c)!; return [(p[1] - 0.5) * 25, (p[2] - 0.5) * 25]; };
+  return (
+    <div className="grid">
+      {POS.map(([c, col, row]) => (
+        <button key={c} type="button" style={{ gridColumn: col, gridRow: row }}
+          className={'cell' + (c === ch.menhChi ? ' menh' : '') + (c === sel ? ' sel' : tp.includes(c) ? ' tp' : '')}
+          aria-pressed={c === sel} onClick={() => onSel?.(c)}>
+          {c === ch.thanChi && <span className="than">Thân</span>}
+          <span className="hd"><b>{CHI[c]}</b><span className="cg">{cung(c)}</span></span>
+          <span className="stars">{(ch.stars[c] || []).length ? (ch.stars[c] || []).map((s) => <Star key={s} s={s} />) : <span className="vcd">vô chính diệu</span>}</span>
+          <span className="age">{dh(c).tuoiStart}–{dh(c).tuoiEnd}</span>
+        </button>
+      ))}
+      <Center />
+      {lines && sel != null && (
+        <svg className="lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          {[mod(sel + 4, 12), mod(sel + 8, 12), mod(sel + 6, 12)].map((o) => { const [x1, y1] = center(sel); const [x2, y2] = center(o); return <line key={o} x1={x1} y1={y1} x2={x2} y2={y2} />; })}
+        </svg>
+      )}
+    </div>
+  );
+}
+
+function Detail({ c, onSel }: { c: number; onSel: (c: number) => void }) {
+  const d = dh(c);
+  return (
+    <section className="detail">
+      <div className="dhead">
+        <button type="button" className="nav" aria-label="Cung trước" onClick={() => onSel(mod(c - 1, 12))}>‹</button>
+        <div><h2>Cung {cung(c)}</h2><span className="muted">tại {CHI[c]}{c === ch.thanChi ? ' · có Thân cư' : ''} · Đại hạn {d.tuoiStart}–{d.tuoiEnd} tuổi</span></div>
+        <button type="button" className="nav" aria-label="Cung sau" onClick={() => onSel(mod(c + 1, 12))}>›</button>
+      </div>
+      <div className="kv"><span>Chính tinh</span><b>{(ch.stars[c] || []).length ? (ch.stars[c] || []).map((s) => <Star key={s} s={s} />) : 'Vô chính diệu'}</b></div>
+      <div className="kv"><span>Phụ tinh</span><span>{(ch.phuTinh[c] || []).length ? (ch.phuTinh[c] || []).map((s, i) => <span key={s}>{i ? ', ' : ''}<Star s={s} /></span>) : '—'}</span></div>
+      <div className="kv"><span>Vòng</span><span>{ch.truongSinh[c]} · <b className="jade">{ch.thaiTue[c]}</b></span></div>
+      <div className="kv"><span>Tam phương tứ chính</span><span>{tamPhuong(c).slice(1).map((x) => cung(x) + ' (' + CHI[x] + ')').join(' · ')}</span></div>
+      <p className="muted">Bấm vào một ô trên lá số để xem cung đó. Đường nối là tam phương tứ chính của cung đang chọn.</p>
+    </section>
+  );
+}
+
+function ListView() {
+  const order = Array.from({ length: 12 }, (_, i) => mod(ch.menhChi + i, 12));
+  return (
+    <div className="list">
+      {order.map((c) => (
+        <article key={c} className={'lcard' + (c === ch.menhChi ? ' menh' : '')}>
+          <div className="lhead"><h3>{cung(c)} <span className="muted">· {CHI[c]}</span></h3><span className="muted">{dh(c).tuoiStart}–{dh(c).tuoiEnd} t.{c === ch.thanChi ? ' · Thân' : ''}</span></div>
+          <div className="lstars">{(ch.stars[c] || []).length ? (ch.stars[c] || []).map((s) => <Star key={s} s={s} />) : <span className="vcd">vô chính diệu</span>}</div>
+          <div className="muted small">{(ch.phuTinh[c] || []).join(', ')}</div>
+        </article>
+      ))}
+    </div>
+  );
+}
+
+function Legacy() {
+  return <div className="legacyWrap"><div className="lgrid">{POS.map(([c, col, row]) => (
+    <div key={c} className={'lcell' + (c === ch.menhChi ? ' menh' : '')} style={{ gridColumn: col, gridRow: row }}>
+      <div className="hd"><b>{CHI[c]}</b><span className="cg">{cung(c)}</span></div>
+      <div className="stars">{(ch.stars[c] || []).map((s) => <Star key={s} s={s} />)}</div>
+      <div className="small muted">{(ch.phuTinh[c] || []).join(', ')}</div>
+      <div className="small muted">{ch.truongSinh[c]} · {ch.thaiTue[c]} · {dh(c).tuoiStart}-{dh(c).tuoiEnd} t.</div>
+    </div>))}<Center /></div></div>;
+}
+
+function App() {
+  const [sel, setSel] = useState<number>(ch.menhChi);
+  const [mode, setMode] = useState<'chart' | 'list'>('chart');
+  return (
+    <div className="screen">
+      <div className="bar">{variant === 'A' ? 'A · Lưới gốc, cuộn ngang' : variant === 'B' ? 'B · Danh sách 12 cung' : 'C · Lưới gọn + thẻ chi tiết'}</div>
+      {variant === 'A' && <Legacy />}
+      {variant === 'B' && <ListView />}
+      {variant === 'D' && (
+        <>
+          <div className="seg" role="radiogroup"><button role="radio" aria-checked={mode === 'chart'} onClick={() => setMode('chart')}>Lá số</button><button role="radio" aria-checked={mode === 'list'} onClick={() => setMode('list')}>Danh sách</button></div>
+          {mode === 'chart' ? <><Grid sel={sel} onSel={setSel} lines /><Detail c={sel} onSel={setSel} /></> : <ListView />}
+        </>
+      )}
+    </div>
+  );
+}
+createRoot(document.getElementById('root')!).render(<App />);
