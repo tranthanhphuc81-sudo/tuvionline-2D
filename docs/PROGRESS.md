@@ -10,7 +10,27 @@
 | 1.2 — Engine TypeScript | XONG — `npm test` 30 → 92 test xanh, `npm run build` OK |
 | 2.1 — Khung app | XONG (trừ `android:debug`, cần Codespace) — 121 test xanh, build OK |
 | 3.1 — Bố cục lá số Tử Vi | XONG — chọn phương án C (lưới gọn + thẻ chi tiết), xem ARCHITECTURE mục 10 |
-| 3.2 — Tử Vi | CHƯA LÀM — chờ chủ dự án đồng ý |
+| 3.2 — Tử Vi | ĐANG LÀM (xem dưới) |
+
+## Phase 3.2 — Tử Vi — đang làm
+
+### Đã xong
+- **Bước 1 — tính toán + câu chữ + đối chiếu legacy** (121 → 185 test):
+  - `src/content/rich.ts`: `parseRich` (thẻ `<b> <i> <small> <br> <ul> <li>`, thẻ khác in ra như chữ), `toPlainText`,
+    kiểu `Section`/`Block` (p, list, verdict, item, chips, note) có `id` ổn định và `ref.palace` cho Phase 6.
+  - `src/core/tuvi/reading.ts`: phần TÍNH TOÁN của luận giải legacy — độ sáng sao, bản mệnh, Cục ↔ bản mệnh, quan hệ Chi,
+    tam phương tứ chính, đánh giá chung, Đại Hạn hiện tại, lưu niên (`tuViYear`), bảng tra năm (`tuViYearLookup`),
+    6 mảng cuộc sống. `nowYear` truyền vào thay cho `new Date()`. `banMenh` tính riêng (legacy gắn vào chart) để không đổi
+    đầu ra `calcChart` — bản chụp giữ nguyên.
+  - `src/content/interp/tuvi.ts`: 14 bảng câu chữ (STAR, PHU, PAIRS, AREA…) cắt thẳng từ legacy bằng script;
+    `src/content/tuvi/{explain,tongket,year}.ts`: "Giải thích chỉ số", "Tổng kết", "Đọc nhanh năm", ghi chú — nguyên văn.
+  - `tests/parity/`: chạy `lyso-toolkit.html` trong jsdom (ngày cố định 15/6/2026), điền form Tử Vi cho 50 hồ sơ
+    (tháng nhuận, trước 1968, trước Tết, Tý muộn, sinh sau năm nay…) + tra 3 năm mỗi hồ sơ: chữ khớp 100%
+    (so bỏ khoảng trắng). Đã thử sửa một chữ → test báo đúng chỗ. `tests/tuvi-reading.test.ts` cho các quy tắc nhỏ.
+
+### Việc tiếp theo
+2. Màn hình Tử Vi theo bố cục C (ARCHITECTURE mục 10, Phase 3.1): lưới gọn + thẻ chi tiết + Danh sách, tóm tắt, Tứ Hoá,
+   Đại Hạn, tra năm, Giải thích chỉ số, Tổng kết, ghi chú; component `RichText`/`SectionView`; vẫn có link bản web cũ.
 
 ## Phase 2.1 — XONG
 

@@ -299,7 +299,8 @@ src/features/  màn hình React: trình bày Section[] và kết quả engine
   `{ cls: 'ok' | 'warn', kind: 'same' | 'sinh' | 'khac' | 'exc-dai-hai-sa-trung' | 'exc-needs', from, to, note? }`.
   Câu văn cũ chuyển nguyên chữ sang `src/content/napam/relation.ts`. Tương tự, `STARS[].desc` chuyển sang
   `src/content/battrach/`. Test vàng cho Nạp Âm hiện chỉ kiểm `.cls`, nên vẫn xanh. Bổ sung test so khớp câu văn.
-- **Định dạng câu chữ:** giữ chuỗi có một tập thẻ tối thiểu **chép thẳng từ legacy**, gồm `<b> <i> <br> <ul> <li>`. Hàm
+- **Định dạng câu chữ:** giữ chuỗi có một tập thẻ tối thiểu **chép thẳng từ legacy**, gồm `<b> <i> <small> <br> <ul> <li>`
+  (`<small>` thêm ở Phase 3.2 vì tiêu đề "Từng mảng cuộc sống" và ghi chú lưu niên của legacy dùng nó). Hàm
   `parseRich()` trong `src/content/rich.ts` chuyển chuỗi thành cây `RichNode[]` (thẻ ngoài danh sách thì in ra dạng chữ thường).
   React vẽ cây này bằng component `<RichText>` mà **không dùng `dangerouslySetInnerHTML`**. Hàm `toPlainText()` lấy chữ thuần
   để đọc thành lời, làm phụ đề và chia sẻ.
@@ -307,6 +308,7 @@ src/features/  màn hình React: trình bày Section[] và kết quả engine
   ```ts
   interface Section { id: string; title: string; blocks: Block[] }
   interface Block   { id: string; rich: RichNode[]; tags?: ContentTag[]; ref?: { palace?: number; hao?: number; pillar?: number } }
+  // Phase 3.2: Block là union có `kind` — p | list | verdict (nhãn màu) | item (tiêu đề + nhãn + thân) | chips | note
   ```
   `id` ổn định (ví dụ `tuvi.explain.cuc`) để Phase 6 trỏ tới. `ref` chỉ ra block nói về cung, hào hay trụ nào, để thầy đọc
   tô sáng đúng chỗ. `tags` để dành cho cờ "không đọc thành lời" ở Phase 6. Danh sách nhãn do Phase 6.1 chốt, nên bây giờ

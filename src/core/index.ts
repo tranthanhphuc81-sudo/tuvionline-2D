@@ -25,6 +25,13 @@ export type { Hanh } from './canchi/hanh';
 export type { CanChi } from './canchi';
 export type { BirthProfile, BirthCalcInput, BirthError, BirthNote, ResolvedBirth, SolarDate, LunarDate } from './birth';
 export type { TuViChart, TuViInput, DaiHan, TuHoa, CungName } from './tuvi/types';
+export {
+  tuViReading, tuViYear, tuViYearLookup, lifeAreas, brightness, chiRel, relCucMenh, tamPhuong, cungNameFor, banMenh,
+  mainStarsOf, chiOfStar, HOA_KEYS, CAT_PHU, SAT_PHU, AREA_CUNG,
+} from './tuvi/reading';
+export type {
+  HoaKey, Tone, TuViReading, TuViYearReading, TuViYearLookup, AreaReading, AreaKey, DaiHanNow, LuuHoa, ChiRelKind, CucMenhRel,
+} from './tuvi/reading';
 export type { BatTuChart, BatTuInput, Pillar, ThapThan, TangCanRole } from './battu/types';
 export type { Toss, HexaStep, LucThan, Hao, HaoHoa, QueBien, LucHaoResult, VuongSuy, Season } from './luchao/types';
 export type { Huong, StarName, Nhom, DuNienStar, LySoYear } from './battrach/types';
