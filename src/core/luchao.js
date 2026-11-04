@@ -1,51 +1,10 @@
 // @ts-nocheck
 /* Trích nguyên văn từ legacy/lyso-toolkit.html (bản web đã kiểm chứng).
    Phase 1 của PROMPT-KIT sẽ chuyển sang TypeScript chặt chẽ — giữ cho tests/golden.test.ts luôn xanh. */
-import { LySoUtil } from './util.js';
-const window = { LySoUtil };
 
-/* ===== Solar-term engine (Meeus algorithms, same validated base as Phần 2 tool) ===== */
-function INT(d){return Math.floor(d);}
-const PI = Math.PI;
+import { jdFromDate, monthChiFromDate } from './calendar';
 function mod(n,m){ return ((n%m)+m)%m; }
-function jdFromDate(dd,mm,yy){
-  let a=INT((14-mm)/12), y=yy+4800-a, m=mm+12*a-3;
-  let jd=dd+INT((153*m+2)/5)+365*y+INT(y/4)-INT(y/100)+INT(y/400)-32045;
-  if(jd<2299161) jd=dd+INT((153*m+2)/5)+365*y+INT(y/4)-32083;
-  return jd;
-}
-function SunLongitude(jdn){
-  let T=(jdn-2451545.0)/36525, T2=T*T, dr=PI/180;
-  let M=357.52910+35999.05030*T-0.0001559*T2-0.00000048*T*T2;
-  let L0=280.46645+36000.76983*T+0.0003032*T2;
-  let DL=(1.914600-0.004817*T-0.000014*T2)*Math.sin(dr*M);
-  DL+=(0.019993-0.000101*T)*Math.sin(dr*2*M)+0.000290*Math.sin(dr*3*M);
-  let L=(L0+DL)*dr; L-=PI*2*INT(L/(PI*2)); return L;
-}
-function findSolarTerm(jdGuess, targetDeg, tz){
-  const targetRad = targetDeg*PI/180;
-  let lo = jdGuess-6, hi = jdGuess+6;
-  function f(jd){ let L = SunLongitude(jd - tz/24); let diff = L - targetRad;
-    while(diff> PI) diff-=2*PI; while(diff<-PI) diff+=2*PI; return diff; }
-  for(let i=0;i<60;i++){ let mid=(lo+hi)/2; if(f(lo)*f(mid)<=0) hi=mid; else lo=mid; }
-  return (lo+hi)/2;
-}
-const TIET = [
-  ["Tiểu Hàn",285,1,1,6],["Lập Xuân",315,2,2,4],["Kinh Trập",345,3,3,6],
-  ["Thanh Minh",15,4,4,5],["Lập Hạ",45,5,5,6],["Mang Chủng",75,6,6,6],
-  ["Tiểu Thử",105,7,7,7],["Lập Thu",135,8,8,8],["Bạch Lộ",165,9,9,8],
-  ["Hàn Lộ",195,10,10,8],["Lập Đông",225,11,11,7],["Đại Tuyết",255,0,12,7],
-];
-function tietBoundariesForYear(yy, tz){
-  return TIET.map(([name,deg,chiIdx,mm,dd])=>({name, chiIdx, jd: findSolarTerm(jdFromDate(dd,mm,yy), deg, tz)}));
-}
 function dayCanChiIndex(dd,mm,yy){ const jd=jdFromDate(dd,mm,yy); const idx=mod(jd+49,60); return {can:idx%10, chi:idx%12}; }
-function monthChiFromDate(dd,mm,yy,tz){
-  const inputJD = jdFromDate(dd,mm,yy); // noon-convention, consistent with findSolarTerm usage
-  const allTiet = [...tietBoundariesForYear(yy-1,tz), ...tietBoundariesForYear(yy,tz), ...tietBoundariesForYear(yy+1,tz)].sort((a,b)=>a.jd-b.jd);
-  for(let i=0;i<allTiet.length-1;i++){ if(inputJD>=allTiet[i].jd && inputJD<allTiet[i+1].jd) return allTiet[i].chiIdx; }
-  return 0;
-}
 
 /* ===== Luc Hao core ===== */
 const CAN = ["Giáp","Ất","Bính","Đinh","Mậu","Kỷ","Canh","Tân","Nhâm","Quý"];

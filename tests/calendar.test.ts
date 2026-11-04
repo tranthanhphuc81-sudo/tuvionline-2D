@@ -77,3 +77,21 @@ describe('Hai biến thể jdToDate (mục 5.3 điểm 1)', () => {
     expect(BatTuEngine.convertLunar2Solar(1, 1, 2024, 0, 7)).toEqual([10, 2, 2024]);
   });
 });
+
+describe('validLunar — đổi qua lại để kiểm tra ngày âm', () => {
+  it('nhận ngày có thật, trả ngày dương tương ứng', () => {
+    expect(LySoUtil.validLunar(1, 1, 2024, false)).toEqual([10, 2, 2024]);
+    expect(LySoUtil.validLunar(29, 1, 2024, false)).toEqual([9, 3, 2024]);
+    expect(LySoUtil.validLunar(1, 2, 2023, true)).toEqual([22, 3, 2023]);
+  });
+  it('loại 30 của tháng thiếu, tháng nhuận không có, giá trị ngoài miền', () => {
+    expect(LySoUtil.validLunar(30, 1, 2024, false)).toBeNull();
+    expect(LySoUtil.validLunar(1, 3, 2023, true)).toBeNull();
+    expect(LySoUtil.validLunar(0, 1, 2024, false)).toBeNull();
+    expect(LySoUtil.validLunar(1, 13, 2024, false)).toBeNull();
+    expect(LySoUtil.validLunar(1.5, 1, 2024, false)).toBeNull();
+  });
+  it('trước 1968 mặc định UTC+8: mùng 1 Tết Ất Tỵ là 2/2/1965', () => {
+    expect(LySoUtil.validLunar(1, 1, 1965, false)).toEqual([2, 2, 1965]);
+  });
+});

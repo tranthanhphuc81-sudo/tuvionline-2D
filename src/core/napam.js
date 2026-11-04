@@ -3,8 +3,6 @@
    Phase 1 của PROMPT-KIT sẽ chuyển sang TypeScript chặt chẽ — giữ cho tests/golden.test.ts luôn xanh. */
 /* ===== Engine (Nạp Âm — mạng theo năm sinh & hợp hôn) — dùng lại đúng bảng 30 Nạp Âm
    và công thức Can/Chi năm sinh đã trình bày ở Phụ lục Nạp Âm, tài liệu Phần 4 ===== */
-import { LySoUtil } from './util.js';
-const window = { LySoUtil };
 
 function mod(n,m){ return ((n%m)+m)%m; }
 const CAN=["Giáp","Ất","Bính","Đinh","Mậu","Kỷ","Canh","Tân","Nhâm","Quý"];

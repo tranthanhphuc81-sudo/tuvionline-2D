@@ -24,6 +24,10 @@
   khác lịch Trung Quốc, tham số `tz` của Tử Vi, hai biến thể `jdToDate`), `tests/locks.test.ts` (Mệnh Quái 2 × 100 năm
   so với công thức độc lập, thứ tự Ngũ Hành Bát Tự/Lục Hào, mốc Lập Xuân của Bát Tự UTC+7 cố định + giờ sinh và của Bát Trạch).
 
+- **Bước 2 — `src/core/calendar/*`** (`julian`, `astro`, `lunar`, `solarTerms`, `timezone`, `date`) bằng TypeScript strict,
+  gộp 4 bản sao hàm lịch; `util.js` bị xoá, `LySoUtil` lấy từ đây. Thêm `validLunar` (đổi âm → dương → âm để kiểm tra)
+  kèm test. Kiểu chỉ số dùng chung ở `src/core/types.ts` (calendar cần `ChiIdx` mà không được phụ thuộc `canchi`).
+
 ### Việc tiếp theo (theo ARCHITECTURE.md mục 10)
 1. ~~Test bổ sung theo yêu cầu kit, chạy xanh với bản JS hiện tại:
    - `tests/calendar.test.ts`: đổi dương → âm → dương khớp nhau mọi ngày 1900–2100, mẫu mỗi 7 ngày

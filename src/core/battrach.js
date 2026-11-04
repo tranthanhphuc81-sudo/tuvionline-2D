@@ -1,45 +1,8 @@
 // @ts-nocheck
 /* Trích nguyên văn từ legacy/lyso-toolkit.html (bản web đã kiểm chứng).
    Phase 1 của PROMPT-KIT sẽ chuyển sang TypeScript chặt chẽ — giữ cho tests/golden.test.ts luôn xanh. */
-import { LySoUtil } from './util.js';
-const window = { LySoUtil };
 
-/* ===== Solar-term engine (Meeus algorithms, same validated base as Phần 2/3 tools) — used only to find the exact Lập Xuân instant for each year ===== */
-function INT(d){return Math.floor(d);}
-const PI = Math.PI;
-function jdFromDate(dd,mm,yy){
-  let a=INT((14-mm)/12), y=yy+4800-a, m=mm+12*a-3;
-  let jd=dd+INT((153*m+2)/5)+365*y+INT(y/4)-INT(y/100)+INT(y/400)-32045;
-  if(jd<2299161) jd=dd+INT((153*m+2)/5)+365*y+INT(y/4)-32083;
-  return jd;
-}
-function SunLongitude(jdn){
-  let T=(jdn-2451545.0)/36525, T2=T*T, dr=PI/180;
-  let M=357.52910+35999.05030*T-0.0001559*T2-0.00000048*T*T2;
-  let L0=280.46645+36000.76983*T+0.0003032*T2;
-  let DL=(1.914600-0.004817*T-0.000014*T2)*Math.sin(dr*M);
-  DL+=(0.019993-0.000101*T)*Math.sin(dr*2*M)+0.000290*Math.sin(dr*3*M);
-  let L=(L0+DL)*dr; L-=PI*2*INT(L/(PI*2)); return L;
-}
-function findSolarTerm(jdGuess, targetDeg, tz){
-  const targetRad = targetDeg*PI/180;
-  let lo = jdGuess-6, hi = jdGuess+6;
-  function f(jd){ let L = SunLongitude(jd - tz/24); let diff = L - targetRad;
-    while(diff> PI) diff-=2*PI; while(diff<-PI) diff+=2*PI; return diff; }
-  for(let i=0;i<60;i++){ let mid=(lo+hi)/2; if(f(lo)*f(mid)<=0) hi=mid; else lo=mid; }
-  return (lo+hi)/2;
-}
-function lapXuanJD(year, tz){ return findSolarTerm(jdFromDate(4,2,year), 315, tz); }
-// Inverse of jdFromDate (integer JD -> {dd,mm,yy}), standard Gregorian algorithm, for display purposes only.
-function jdToDate(jd){
-  jd = Math.round(jd);
-  let a = jd + 32044, b = INT((4*a+3)/146097), c = a - INT((146097*b)/4);
-  let d0 = INT((4*c+3)/1461), e = c - INT((1461*d0)/4), m0 = INT((5*e+2)/153);
-  const dd = e - INT((153*m0+2)/5) + 1;
-  const mm = m0 + 3 - 12*INT(m0/10);
-  const yy = 100*b + d0 - 4800 + INT(m0/10);
-  return {dd, mm, yy};
-}
+import { jdFromDate, jdToDateRounded as jdToDate, lapXuanJD } from './calendar';
 // Returns the "năm lý số" to use for Mệnh Quái: if birth date falls before that year's tiết Lập Xuân, use the previous year (mục 2.2 Phần 4).
 function lySoYear(dd,mm,yy,tz){
   const birthJD = jdFromDate(dd,mm,yy);
