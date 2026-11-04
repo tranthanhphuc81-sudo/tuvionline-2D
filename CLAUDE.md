@@ -15,6 +15,7 @@ App tiếng Việt gồm 7 công cụ: Tử Vi Đẩu Số, Bát Tự, Lục Hà
 - `src/core/` — engine tính toán, là NGUỒN SỰ THẬT. Hiện là JS trích nguyên văn từ bản web đã kiểm chứng; `src/core/index.ts` là điểm vào duy nhất mà UI được phép import.
 - `src/App.tsx` — màn hình "Tra nhanh" tạm thời (bản khởi tạo 0.1).
 - `public/legacy/` — bản web đầy đủ đã kiểm chứng (`lyso-toolkit.html`, `la-ban-phong-thuy.html`). Dùng làm TÀI LIỆU THAM CHIẾU cho UI, câu chữ giải thích, phần "Giải thích chỉ số", "Tổng kết", và logic đọc thành lời. App hiện mở được các trang này để dùng tạm; xoá khỏi app khi đã có màn hình mới tương đương (Phase 3).
+- `docs/ARCHITECTURE.md` — các quyết định kiến trúc (Phase 1.1): điều hướng, trạng thái, lưu trữ, giao diện, cấu trúc `src/core`/`src/content`, plugin, kiểm thử. ĐỌC TRƯỚC khi làm bất kỳ phase nào; muốn đổi quyết định thì sửa tài liệu này trước.
 - `docs/` — 5 tài liệu Word (Phần 1–4 và bản Trọn bộ). Là căn cứ lý thuyết cho mọi công thức.
 - `android/` — project Android do Capacitor sinh ra (compileSdk 36, Java 21, Gradle 8.14).
 
