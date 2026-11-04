@@ -7,9 +7,10 @@
 |---|---|
 | 0 — Kiểm tra môi trường | `npm test` 23/23 xanh, `npm run build` OK. `npm run android:debug` CHƯA chạy (máy cloud không có Android SDK — chạy trong Codespace). |
 | 1.1 — Kiến trúc | XONG → `docs/ARCHITECTURE.md` |
-| 1.2 — Engine TypeScript | ĐANG LÀM (xem dưới) |
+| 1.2 — Engine TypeScript | XONG — `npm test` 30 → 92 test xanh, `npm run build` OK |
+| 2.1 — Khung app | CHƯA LÀM — chờ chủ dự án đồng ý |
 
-## Phase 1.2 — đang làm
+## Phase 1.2 — XONG
 
 ### Đã xong
 - **Bản chụp engine** (`tests/core-snapshot.test.ts`, `tests/snapshot/*`, `tests/fixtures/core-snapshot.json`):
@@ -54,17 +55,16 @@
   `index.ts` bỏ hết `any`, xuất kiểu và các hàm gọn `tuViChart`, `batTuChart`, `castHexagram`, `menhQuai`, `napAmOfBirth`;
   `quickProfile` dùng `resolveBirth`. Thêm `tests/birth.test.ts`. ARCHITECTURE mục 5.1 cập nhật dạng trả về của `resolveBirth`.
 
-### Việc tiếp theo (theo ARCHITECTURE.md mục 10)
-1. ~~Test bổ sung theo yêu cầu kit, chạy xanh với bản JS hiện tại:
-   - `tests/calendar.test.ts`: đổi dương → âm → dương khớp nhau mọi ngày 1900–2100, mẫu mỗi 7 ngày
-     (dùng CÙNG một tz cho cả hai chiều: `lunarTzForSolarYear(năm dương)`); bảng Tết 2000–2030 so với lịch chính thức;
-     tham số `tz` tuỳ chọn của `TuViEngine.calcChart`.
-   - Mệnh Quái 2 giới × 100 năm (1950–2049) so với công thức độc lập: Nam `(11 − năm mod 9) mod 9`,
-     Nữ `(năm mod 9 + 4) mod 9`; 0 → 9; 5 → Nam Khôn / Nữ Cấn.
-   - Bẫy ở ARCHITECTURE mục 5.3: hai biến thể `jdToDate`, thứ tự Ngũ Hành khác nhau giữa Bát Tự và Lục Hào.~~ XONG
-2. Gộp `src/core/calendar/*` → `canchi/*` → chuyển từng hệ thống sang `.ts` strict (napam → battrach → luchao → battu → tuvi),
-   `birth.ts`, `index.ts` có kiểu đầy đủ; câu chữ trong engine chuyển sang `src/content`.
-3. Xoá file `.js` cũ, bỏ `allowJs`, báo số test trước/sau. Commit mỗi bước, `npm test` + `npm run build` xanh.
+- **Bước 6 — dọn dẹp:** không còn file `.js` trong `src/`, bỏ `allowJs`/`checkJs` khỏi `tsconfig.json` và khai báo
+  `declare module '*.js'`. CLAUDE.md cập nhật mô tả `src/core`, `src/content`.
+
+**Số test:** trước Phase 1.2: 30 (23 vàng + 7 nhóm bản chụp). Sau: 92 (thêm `calendar` 42, `locks` 8, `birth` 8,
+`content-napam` 4 — gồm 31 test Tết 2000–2030). Bản chụp engine KHÔNG sinh lại lần nào.
+
+### Việc tiếp theo
+- Phase 2.1 (khung app) theo ARCHITECTURE.md mục 10 — **hỏi chủ dự án trước khi bắt đầu**.
 
 ## Tồn đọng
 - Xem ARCHITECTURE.md mục 9 ("Cần đối chiếu").
+- `validLunar` (mới) loại thêm ngày âm quy ra dương ngoài 1900–2100; `resolveBirth` giữ đúng logic legacy (không có kiểm tra này).
+- Golden test có 2 dấu `!` (chỉ về kiểu) do engine giờ có kiểu chặt; kỳ vọng không đổi.
