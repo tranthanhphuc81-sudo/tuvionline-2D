@@ -62,8 +62,10 @@ describe('cấu hình cảnh', () => {
   it('5 trạm đúng thứ tự, mỗi trạm 4 lớp có ảnh, độ sâu tăng dần', () => {
     expect(SCENES.map((x) => x.id)).toEqual(['gate', 'garden', 'hall', 'corridor', 'study']);
     for (const sc of SCENES) {
-      expect(sc.layers).toHaveLength(4);
-      sc.layers.forEach((l, i) => { expect(l.src).toBeTruthy(); if (i) expect(l.depth).toBeGreaterThan(sc.layers[i - 1].depth); });
+      const base = sc.layers.filter((l) => !l.when);
+      expect(base).toHaveLength(4);
+      base.forEach((l, i) => { if (i) expect(l.depth).toBeGreaterThan(base[i - 1].depth); });
+      sc.layers.forEach((l) => expect(l.src).toBeTruthy());
     }
   });
   it('đầy đủ 20–30 giây, rút gọn 2–3 giây', () => {

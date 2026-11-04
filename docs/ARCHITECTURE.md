@@ -348,7 +348,7 @@ Chỉ cài khi phase cần, không cài sẵn. Phiên bản lấy từ npm ngày
 | Rung nhẹ | `@capacitor/haptics` | 8.0.x | 3.4 | `impact({ style: Light })` khi gieo xong. Trên web không làm gì. |
 | Chia sẻ ảnh kết quả | `@capacitor/share` + `@capacitor/filesystem` | 8.0.x + 8.1.x | 7.1 | Ghi PNG vào thư mục `Cache` rồi chia sẻ URI. Ảnh tạo bằng `html-to-image` (1.11.x, thư viện JS). Phase 7.1 chốt lại sau khi thử font offline. |
 | Giữ màn hình sáng khi đo la bàn | `@capacitor-community/keep-awake` | 8.0.x | 4.2 | |
-| Cảm biến la bàn | Plugin nội bộ `LySoCompass` trong `android/`, không thêm gói npm | | 4.2 | Quyết định ở mục 11. |
+| Cảm biến la bàn | Plugin nội bộ `LySoDevice` trong `android/`, không thêm gói npm | | 4.2 | Quyết định ở mục 11. |
 | Biểu tượng và màn hình chờ | `@capacitor/assets` (dev) | 4.0.x | 8.2 | |
 
 **Lớp bọc nền tảng:** mỗi plugin chỉ được gọi trong `src/platform/<việc>.ts`, ví dụ `tts.ts`, `storage.ts`, `haptics.ts`,
@@ -525,7 +525,7 @@ tests/        golden.test.ts, calendar.test.ts, parity/ (đối chiếu legacy)
 
 ## 11. La bàn (Phase 4.1, 04/11/2026)
 
-**Lựa chọn:** viết một plugin native nhỏ NGAY TRONG `android/` (`LySoCompass`, khoảng 150 dòng Java, đăng ký trong `MainActivity`),
+**Lựa chọn:** viết một plugin native nhỏ NGAY TRONG `android/` (`LySoDevice`, tên cũ `LySoCompass`, khoảng 150 dòng Java, đăng ký trong `MainActivity`),
 đọc **`TYPE_ROTATION_VECTOR`**. Lớp bọc `src/platform/compass.ts` chọn nguồn theo thứ tự:
 
 1. Android: plugin, `TYPE_ROTATION_VECTOR`.
@@ -619,7 +619,7 @@ Trên web, trạng thái "bị chặn quyền" gộp chung vào "không có dữ
 Nút "Bỏ qua" luôn hiện. Back trong hành trình vào thẳng tĩnh thất. Khi đang có đường dẫn trực tiếp tới công cụ thì không chạy hành trình.
 
 **Âm thanh và chế độ im lặng:** Web Audio phát trên kênh media nên KHÔNG tự tắt theo chế độ im lặng của máy, và WebView không đọc được chế độ này. Vì vậy thêm hàm `ringerMode()` vào plugin nội bộ
-(đổi tên thành `LySoDevice`, gọi `AudioManager.getRingerMode()`). Máy đang im lặng hoặc rung thì không phát nhạc nền. Thầy đọc vẫn đọc vì đó là hành động người dùng tự bấm.
+(`LySoDevice`, gọi `AudioManager.getRingerMode()`). Máy đang im lặng hoặc rung thì không phát nhạc nền. Thầy đọc vẫn đọc vì đó là hành động người dùng tự bấm.
 
 **Phương án bị loại:** *Luôn đầy đủ:* người mở app mỗi ngày sẽ khó chịu. *Đầy đủ theo số lần mở:* không gắn với lịch nên mất ý nghĩa nghi lễ.
 

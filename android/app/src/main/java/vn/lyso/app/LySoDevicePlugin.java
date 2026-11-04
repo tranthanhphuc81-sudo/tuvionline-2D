@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.AudioManager;
 import android.os.SystemClock;
 import android.view.Surface;
 import com.getcapacitor.JSObject;
@@ -14,11 +15,12 @@ import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 
 /**
+ * Thông tin máy cho app. Chế độ chuông: ringerMode (ARCHITECTURE.md mục 12.2).
  * La bàn: đọc TYPE_ROTATION_VECTOR, kèm độ tin cậy mà sự kiện web không có (ARCHITECTURE.md mục 11).
  * Máy không có con quay thì dùng TYPE_GEOMAGNETIC_ROTATION_VECTOR. Hướng là Bắc từ, không cần quyền Android nào.
  */
-@CapacitorPlugin(name = "LySoCompass")
-public class LySoCompassPlugin extends Plugin implements SensorEventListener {
+@CapacitorPlugin(name = "LySoDevice")
+public class LySoDevicePlugin extends Plugin implements SensorEventListener {
 
     private static final long MIN_INTERVAL_MS = 66; // tối đa 15 lần/giây
     private static final double TILT_LIMIT_DEG = 60;
@@ -48,6 +50,16 @@ public class LySoCompassPlugin extends Plugin implements SensorEventListener {
         ret.put("available", rotation != null);
         listening = rotation != null;
         register();
+        call.resolve(ret);
+    }
+
+    /** WebView không đọc được chế độ im lặng; Web Audio lại phát trên kênh media nên không tự tắt theo. */
+    @PluginMethod
+    public void ringerMode(PluginCall call) {
+        AudioManager audio = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
+        int mode = audio.getRingerMode();
+        JSObject ret = new JSObject();
+        ret.put("mode", mode == AudioManager.RINGER_MODE_NORMAL ? "normal" : mode == AudioManager.RINGER_MODE_VIBRATE ? "vibrate" : "silent");
         call.resolve(ret);
     }
 

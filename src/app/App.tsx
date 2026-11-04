@@ -128,6 +128,7 @@ function TabBar() {
 export function App({ journey = false }: { journey?: boolean }) {
   const nav = useNav();
   const { store } = useAppCtx();
+  const journeySound = useApp((x) => x.settings.journeySound);
   const [entry, setEntry] = useState<TodayEntry>(() => (journey ? todayEntry(store) : { plan: 'none', today: '' }));
   useEffect(() => recordEntry(store, entry), [store, entry]);
   const activeId = useApp((x) => x.activeProfileId);
@@ -142,7 +143,7 @@ export function App({ journey = false }: { journey?: boolean }) {
         {TABS.map((t) => <TabPanel key={t.id} tab={t.id} active={nav.tab === t.id} />)}
       </main>
       <TabBar />
-      {entry.plan !== 'none' && <Journey plan={entry.plan} onDone={() => setEntry({ plan: 'none', today: '' })} />}
+      {entry.plan !== 'none' && <Journey plan={entry.plan} sound={journeySound} onDone={() => setEntry({ plan: 'none', today: '' })} />}
     </div>
   );
 }

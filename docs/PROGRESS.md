@@ -20,7 +20,8 @@
 | 5.1 — Đọc thành lời | XONG phần code — 447 test xanh, build OK. CHƯA nghe được tiếng thật: cần thử trên máy thật đã tải gói tiếng Việt |
 | 6.1 — Quyết định Đạo quán & Thầy đọc | XONG — ARCHITECTURE mục 12, còn 3 điểm chờ chủ dự án duyệt (cuối 12.11) |
 | 6.2 — Engine cảnh | XONG phần code — 467 test xanh, build OK, chạy trên máy ảo. CHƯA đo được 60 fps: cần máy thật |
-| 6.3 đến 6.8 | CHƯA LÀM — chờ chủ dự án đồng ý; 6.5 cần nghe giọng trên máy thật, 6.6 cần máy tầm thấp |
+| 6.3 — Biến thể lịch và âm thanh | XONG phần code — chưa nghe tiếng thật; tiếng hiện là tổng hợp giữ chỗ |
+| 6.4 đến 6.8 | CHƯA LÀM — chờ chủ dự án đồng ý; 6.5 cần nghe giọng trên máy thật, 6.6 cần máy tầm thấp |
 
 ## Phase 3.5b — Tổng Hợp đầy đủ — XONG
 
@@ -59,7 +60,7 @@ Máy ảo chạy không GPU nên chỉ một lớp di chuyển đã rớt còn k
 trình duyệt (khung xem bị ẩn nên `requestAnimationFrame` dừng), và máy Android thật. Hành trình nặng gấp khoảng 2,3 lần một lớp, nên vẫn là rủi ro cần đo.
 
 ### Chưa làm
-- Âm thanh, biến thể theo giờ/mùa/ngày âm (6.3); tĩnh thất thật (6.4); thắp hương, nhân vật (6.6); lời đạo đồng (6.7).
+- Tĩnh thất thật (6.4); thắp hương, nhân vật (6.6); lời đạo đồng (6.7).
 - Chữ đồng hồ trên thanh trạng thái Android khó đọc khi hành trình phủ nền tối.
 
 ## Phase 5.1 — Đọc thành lời — XONG PHẦN CODE, CHỜ THỬ MÁY THẬT
@@ -83,7 +84,7 @@ trình duyệt (khung xem bị ẩn nên `requestAnimationFrame` dừng), và m�
 - **Tính toán:** `src/core/laban/reading.ts` (8 cung, cung gần nhất, góc chạm, lọc nhiễu trên vòng tròn, `compassTrust`). Không đổi công thức Mệnh Quái, Du Niên.
 - **Câu chữ:** `src/content/laban/explain.ts` nguyên văn legacy. Riêng bài học 3 và thông báo cảm biến viết lại vì app không qua trình duyệt, không hỏi quyền.
   `tests/parity/laban.test.ts`: 12 hồ sơ × 16 hướng, khớp 100%.
-- **Plugin:** `android/app/src/main/java/vn/lyso/app/LySoCompassPlugin.java` (`TYPE_ROTATION_VECTOR`, dự phòng `TYPE_GEOMAGNETIC_ROTATION_VECTOR`), đăng ký trong `MainActivity`;
+- **Plugin:** `android/app/src/main/java/vn/lyso/app/LySoDevicePlugin.java` (`TYPE_ROTATION_VECTOR`, dự phòng `TYPE_GEOMAGNETIC_ROTATION_VECTOR`), đăng ký trong `MainActivity`;
   lớp bọc `src/platform/compass.ts` (kèm `keepScreenOn` dùng `navigator.wakeLock`).
 - **Màn hình:** `src/features/phongthuy/laban/{Dial,LaBanScreen}.tsx`, tự dùng cảm biến, 3 giây không có dữ liệu thì chuyển xoay tay. Ô hiệu chỉnh lưu ở `tools.laBanCalib`
   (thêm ở Phase 4.2, tuỳ chọn, không tăng version). `Dial` có prop `focus` cho Phase 6.

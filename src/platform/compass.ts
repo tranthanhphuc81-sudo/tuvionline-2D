@@ -1,6 +1,7 @@
-/* Cảm biến la bàn (ARCHITECTURE.md mục 11). Android: plugin nội bộ LySoCompass (có độ tin cậy). Trình duyệt: `deviceorientationabsolute`,
+/* Cảm biến la bàn (ARCHITECTURE.md mục 11). Android: plugin nội bộ LySoDevice (có độ tin cậy). Trình duyệt: `deviceorientationabsolute`,
    chỉ để chạy `npm run dev`. KHÔNG dùng `deviceorientation` thường vì không phải hướng Bắc. */
-import { registerPlugin, type PluginListenerHandle } from '@capacitor/core';
+import type { PluginListenerHandle } from '@capacitor/core';
+import { LySoDevice } from './device';
 import { isNative } from './native';
 import { onResume } from './lifecycle';
 
@@ -21,7 +22,7 @@ interface LySoCompassPlugin {
   stop(): Promise<void>;
   addListener(event: 'heading', cb: (r: NativeReading) => void): Promise<PluginListenerHandle>;
 }
-const Native = registerPlugin<LySoCompassPlugin>('LySoCompass');
+const Native = LySoDevice as unknown as LySoCompassPlugin;
 
 async function startNative(onReading: (r: CompassReading) => void): Promise<CompassStart> {
   const handle = await Native.addListener('heading', (r) => onReading({

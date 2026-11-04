@@ -16,7 +16,7 @@ App tiếng Việt gồm 7 công cụ: Tử Vi Đẩu Số, Bát Tự, Lục Hà
 - `src/content/` — câu chữ cho người đọc, chép NGUYÊN VĂN từ legacy, dạng hàm thuần nhận kết quả engine (ARCHITECTURE mục 5.4).
 - `tests/core-snapshot.test.ts` — bản chụp ~70.000 đầu ra engine; KHÔNG sinh lại (`UPDATE_CORE_SNAPSHOT=1`) để làm test xanh.
 - `src/app/` — khung app: `App.tsx` (thanh trên, 5 tab giữ mount, thanh tab dưới), `router.ts` (ngăn xếp mỗi tab + bảng quy tắc Back), `boot.ts`, `context.tsx`.
-- `src/state/` — store, hành động, lược đồ `lyso.state` + migration; `src/platform/` — bọc plugin Capacitor (storage, lifecycle, back, haptics, compass, tts); `src/ui/` — tokens, base, font offline, component dùng chung; `src/features/` — các màn hình (home, profiles, settings, tuvi, battu, luchao, phongthuy gồm Bát Trạch, La Bàn, Nạp Âm).
+- `src/state/` — store, hành động, lược đồ `lyso.state` + migration; `src/platform/` — bọc plugin Capacitor (storage, lifecycle, back, haptics, compass, tts, device, ambientAudio); `src/ui/` — tokens, base, font offline, component dùng chung; `src/features/` — các màn hình (home, profiles, settings, tuvi, battu, luchao, phongthuy gồm Bát Trạch, La Bàn, Nạp Âm).
 - `tests/parity/` — chạy trang legacy trong jsdom và so câu chữ với `src/content` (đã có cho Tử Vi, Bát Tự, Lục Hào, Bát Trạch, Nạp Âm, Tổng Hợp, La Bàn; bộ hồ sơ mẫu dùng chung `sampleProfiles()`). Sửa câu chữ ở `src/content` mà test này đỏ nghĩa là đã lệch nguyên văn legacy.
 - `docs/legacy/` — hai trang web đã kiểm chứng (`lyso-toolkit.html`, `la-ban-phong-thuy.html`). KHÔNG đóng gói vào app, giữ làm TÀI LIỆU THAM CHIẾU và để `tests/parity/` đối chiếu câu chữ.
 - `docs/ARCHITECTURE.md` — các quyết định kiến trúc (Phase 1.1): điều hướng, trạng thái, lưu trữ, giao diện, cấu trúc `src/core`/`src/content`, plugin, kiểm thử. ĐỌC TRƯỚC khi làm bất kỳ phase nào; muốn đổi quyết định thì sửa tài liệu này trước.
@@ -30,6 +30,6 @@ App tiếng Việt gồm 7 công cụ: Tử Vi Đẩu Số, Bát Tự, Lục Hà
 - Lịch âm: dùng UTC+7 từ năm 1968, UTC+8 trước 1968 (`LySoUtil.lunarTzForSolarYear`). Nạp Âm đổi năm theo Tết; Bát Tự và Bát Trạch đổi năm theo Lập Xuân.
 - Kiểm tra ngày nhập (`LySoUtil.validSolar`, âm lịch thì đổi qua lại để kiểm tra) trước khi tính; không được âm thầm "cuộn" 31/2 thành 3/3.
 - Android WebView KHÔNG có `speechSynthesis` → đọc thành lời phải dùng plugin native `@capacitor-community/text-to-speech` (lang `vi-VN`), chia văn bản thành đoạn ngắn.
-- La bàn: chỉ hoạt động trên máy thật có cảm biến từ trường; luôn có chế độ xoay tay dự phòng và thông báo chẩn đoán rõ ràng (ARCHITECTURE mục 11, plugin nội bộ `android/app/src/main/java/vn/lyso/app/LySoCompassPlugin.java`; `src/platform/compass.ts`).
+- La bàn: chỉ hoạt động trên máy thật có cảm biến từ trường; luôn có chế độ xoay tay dự phòng và thông báo chẩn đoán rõ ràng (ARCHITECTURE mục 11, plugin nội bộ `android/app/src/main/java/vn/lyso/app/LySoDevicePlugin.java`; `src/platform/compass.ts`).
 - Không commit khoá ký (`*.jks`, `*.keystore`, `keystore.properties`). Mật khẩu ký để trong Codespaces Secrets.
 - Mobile-first: vùng chạm tối thiểu 44px, chạy tốt ở chiều rộng 360px, hỗ trợ chế độ sáng/tối, có nhãn truy cập (aria) cho nút chỉ có biểu tượng.

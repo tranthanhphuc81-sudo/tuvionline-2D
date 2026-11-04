@@ -26,6 +26,8 @@ export function lunarOfSolar(dd: number, mm: number, yy: number): { day: number;
   return { day: l[0], month: l[1], year: l[2], leap: l[3] === 1 };
 }
 
+export { monthChiFromDate } from './calendar';
+
 export const LySoUtil = { pad2, validSolar, validLunar, shiftSolar, lunarTzForSolarYear, lunarTzForLunarYear };
 export { TuViEngine, BatTuEngine, LucHaoEngine, PhongThuyEngine, NapAmEngine, resolveBirth };
 

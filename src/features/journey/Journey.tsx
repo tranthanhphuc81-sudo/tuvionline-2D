@@ -1,6 +1,10 @@
-/* Hành trình vào đạo quán, phủ lên app khi mở (ARCHITECTURE.md mục 12.1, 12.2). Bản giữ chỗ: ảnh tự vẽ, chưa có âm thanh, chưa có nhân vật. */
-import { useEffect, useRef, useState, type PointerEvent } from 'react';
+/* Hành trình vào đạo quán, phủ lên app khi mở (ARCHITECTURE.md mục 12.1–12.3). Bản giữ chỗ: ảnh tự vẽ, tiếng tổng hợp, chưa có nhân vật. */
+import { useEffect, useMemo, useRef, useState, type PointerEvent } from 'react';
+import { createAmbientPlayer, type AmbientPlayer } from '../../platform/ambientAudio';
 import { backStack } from '../../platform/back';
+import { soundAllowed } from '../../platform/device';
+import { onPause, onResume } from '../../platform/lifecycle';
+import { getAmbience } from './ambience';
 import { skipJourney, startJourney, stepJourney, type EntryPlan } from './plan';
 import { SceneView } from './SceneEngine';
 import { SCENES, preloadScene } from './scenes';
@@ -10,11 +14,14 @@ const FADE_MS = 400;
 const SWIPE_PX = 40;
 const COUNT = SCENES.length;
 
-/** Bước tới trạm kế hoặc kết thúc. Tách riêng để nút trong trạm không bị tính thêm một lần chạm nền. */
-export function Journey({ plan, onDone }: { plan: Exclude<EntryPlan, 'none'>; onDone(): void }) {
+export function Journey({ plan, sound = false, onDone }: { plan: Exclude<EntryPlan, 'none'>; sound?: boolean; onDone(): void }) {
   const [st, setSt] = useState(() => startJourney(plan, COUNT));
   const startY = useRef<number | null>(null);
+  const audio = useRef<AmbientPlayer | null>(null);
+  const ambience = useMemo(() => getAmbience(new Date()), []);
   const scene = SCENES[st.index];
+  const sceneRef = useRef(scene);
+  sceneRef.current = scene;
   const animate = plan !== 'fade';
   const durationMs = plan === 'full' ? scene.durationMs.full : scene.durationMs.short;
 
@@ -31,6 +38,24 @@ export function Journey({ plan, onDone }: { plan: Exclude<EntryPlan, 'none'>; on
     return () => clearTimeout(t);
   }, [st.done, onDone]);
 
+  // Chỉ bản đầy đủ mới có tiếng: rút gọn quá ngắn, tiếng bật lên rồi tắt ngay chỉ gây khó chịu.
+  useEffect(() => {
+    if (!sound || plan !== 'full') return;
+    let dead = false;
+    void soundAllowed().then((ok) => {
+      if (dead || !ok) return;
+      audio.current = createAmbientPlayer();
+      audio.current?.mix(sceneRef.current.ambience); // quyền đọc chế độ chuông trả về trễ, trạm có thể đã đổi
+    });
+    const offPause = onPause(() => audio.current?.suspend());
+    const offResume = onResume(() => audio.current?.resume());
+    return () => { dead = true; offPause(); offResume(); audio.current?.stop(); audio.current = null; };
+  }, [sound, plan]);
+  useEffect(() => {
+    audio.current?.mix(scene.ambience);
+    if (scene.bell) audio.current?.bell();
+  }, [scene]);
+
   const step = () => setSt((x) => stepJourney(x, COUNT));
   const onUp = (e: PointerEvent) => {
     const dy = startY.current === null ? 0 : e.clientY - startY.current;
@@ -39,8 +64,8 @@ export function Journey({ plan, onDone }: { plan: Exclude<EntryPlan, 'none'>; on
   };
 
   return (
-    <div className={s.journey} data-done={st.done} role="dialog" aria-label="Lối vào đạo quán" onPointerDown={(e) => { startY.current = e.clientY; }} onPointerUp={onUp}>
-      <SceneView key={scene.id} scene={scene} durationMs={durationMs} animate={animate} />
+    <div className={s.journey} data-done={st.done} role="dialog" aria-label="Lối vào đạo quán" onPointerDown={(e) => { startY.current = e.clientY; audio.current?.unlock(); }} onPointerUp={onUp}>
+      <SceneView key={scene.id} scene={scene} ambience={ambience} durationMs={durationMs} animate={animate} />
       <button type="button" className={s.skip} onPointerUp={(e) => e.stopPropagation()} onClick={() => setSt((x) => skipJourney(x, COUNT))}>Bỏ qua</button>
       <div className={s.foot} onPointerUp={(e) => e.stopPropagation()}>
         {scene.interaction === 'incense' && <button type="button" className={s.action} onClick={step}>Đi tiếp</button>}

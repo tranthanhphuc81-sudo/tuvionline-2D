@@ -9,6 +9,7 @@ export function SettingsScreen() {
   const { store } = useAppCtx();
   const theme = useApp((x) => x.settings.theme);
   const entryMode = useApp((x) => x.settings.entryMode);
+  const journeySound = useApp((x) => x.settings.journeySound);
   const rate = useApp((x) => x.settings.ttsRate);
   const pitch = useApp((x) => x.settings.ttsPitch);
   return (
@@ -31,6 +32,13 @@ export function SettingsScreen() {
           options={[{ value: 'auto', label: 'Tự động' }, { value: 'full', label: 'Đầy đủ' }, { value: 'short', label: 'Rút gọn' }, { value: 'none', label: 'Không có' }]}
         />
         <p className={ui.muted}>Tự động: lần đầu và các ngày rằm, mùng 1, Tết đi đầy đủ, những lần khác rút gọn.</p>
+        <Segmented
+          label="Âm thanh lối vào"
+          value={journeySound ? 'on' : 'off'}
+          onChange={(v) => setSetting(store, 'journeySound', v === 'on')}
+          options={[{ value: 'on', label: 'Bật' }, { value: 'off', label: 'Tắt' }]}
+        />
+        <p className={ui.muted}>Khi máy đang để im lặng hoặc rung, lối vào không phát âm thanh.</p>
       </section>
       <section className={ui.card}>
         <h2>Đọc thành lời</h2>
