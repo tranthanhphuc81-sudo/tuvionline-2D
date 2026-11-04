@@ -28,8 +28,8 @@
 .kvRow:last-child { border-bottom: 0; }
 .kvRow dd { font-weight: 700; color: var(--gold); text-align: right; }
 .bars { display: grid; gap: 6px; }
-.barRow { display: grid; grid-template-columns: 6.5em 1fr 3em; align-items: center; gap: var(--space-2); font-size: var(--fs-sm); }
-.barName { font-weight: 600; }
+.barRow { display: grid; grid-template-columns: 7.2em 1fr 3em; align-items: center; gap: var(--space-2); font-size: var(--fs-sm); }
+.barName { font-weight: 600; white-space: nowrap; }
 .bar { height: 8px; border-radius: 4px; background: var(--surface3); overflow: hidden; }
 .bar > span { display: block; height: 100%; background: var(--gold); border-radius: 4px; }
 .barPct { text-align: right; font-variant-numeric: tabular-nums; color: var(--ink-dim); }

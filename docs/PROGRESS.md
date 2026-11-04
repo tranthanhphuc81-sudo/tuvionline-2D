@@ -11,9 +11,10 @@
 | 2.1 — Khung app | XONG (trừ `android:debug`, cần Codespace) — 121 test xanh, build OK |
 | 3.1 — Bố cục lá số Tử Vi | XONG — chọn phương án C (lưới gọn + thẻ chi tiết), xem ARCHITECTURE mục 10 |
 | 3.2 — Tử Vi | XONG — 191 test xanh, build OK |
-| 3.3 — Bát Tự | ĐANG LÀM (xem dưới) |
+| 3.3 — Bát Tự | XONG — 257 test xanh, build OK |
+| 3.4 — Lục Hào | CHƯA LÀM — chờ chủ dự án đồng ý |
 
-## Phase 3.3 — Bát Tự — đang làm
+## Phase 3.3 — Bát Tự — XONG
 
 ### Đã xong
 - **Bước 1 — tính toán + câu chữ + đối chiếu legacy** (191 → 252 test):
@@ -27,9 +28,14 @@
   - `tests/parity/battu.test.ts`: 52 hồ sơ (bộ mẫu dùng chung `sampleProfiles()` trong `tests/parity/legacy.ts`, thêm ví dụ
     vàng 6/2/2021 và ca giữa Lập Xuân – Tết) × 7 khối: khớp 100%. `tests/battu-reading.test.ts` cho quy tắc nhỏ.
 
+- **Bước 2 — màn hình Bát Tự** (252 → 257 test): `src/features/battu/` — `Pillars` (4 thẻ trụ, 2×2 ở 360px / 4 cột khi rộng:
+  Can Chi, hành Âm Dương, Thập Thần hoặc "NHẬT CHỦ", Tàng Can 3 lớp kèm Thập Thần, `aria-label` đầy đủ, prop `focus` cho
+  Phase 6), `BatTuScreen` (tóm tắt, lưu ý Lập Xuân/Tết, hộp Vượng Suy + Gợi ý Dụng Thần, dải Đại Vận tự cuộn tới chặng hiện
+  tại + tuổi khởi vận, tra Lưu Niên, Giải thích chỉ số gập/mở, Tổng kết có thanh tỷ lệ Thập Thần, ghi chú, nút bản web cũ).
+  Kiểm 360px sáng/tối/cỡ chữ 130%: không cuộn ngang, không lỗi console. Test: `src/features/battu/BatTuScreen.test.tsx`.
+
 ### Việc tiếp theo
-2. Màn hình Bát Tự: tóm tắt, 4 thẻ trụ (có Tàng Can, Thập Thần, prop `focus`), Vượng Suy + Dụng Thần, Đại Vận,
-   tra Lưu Niên, Giải thích chỉ số, Tổng kết, ghi chú.
+- Phase 3.4 (Lục Hào + rung nhẹ `haptics`) — hỏi chủ dự án trước khi bắt đầu.
 
 ## Phase 3.2 — Tử Vi — XONG
 
