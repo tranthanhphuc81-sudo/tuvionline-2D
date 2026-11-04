@@ -19,14 +19,19 @@
 - `tests/snapshot/adapters.ts`: lấy câu chữ (mô tả sao Du Niên, câu quan hệ Nạp Âm). Khi chuyển câu chữ sang `src/content`
   (ARCHITECTURE mục 5.4) thì CHỈ sửa file này cho trỏ sang `src/content`, bản chụp phải giữ nguyên.
 
+- **Bước 1 — test khoá hành vi** (xanh với bản JS gốc, 30 → 77 test):
+  `tests/calendar.test.ts` (vòng tròn dương → âm → dương mỗi 7 ngày 1900–2100, bảng Tết 2000–2030 gồm 2007 và 2030
+  khác lịch Trung Quốc, tham số `tz` của Tử Vi, hai biến thể `jdToDate`), `tests/locks.test.ts` (Mệnh Quái 2 × 100 năm
+  so với công thức độc lập, thứ tự Ngũ Hành Bát Tự/Lục Hào, mốc Lập Xuân của Bát Tự UTC+7 cố định + giờ sinh và của Bát Trạch).
+
 ### Việc tiếp theo (theo ARCHITECTURE.md mục 10)
-1. Test bổ sung theo yêu cầu kit, chạy xanh với bản JS hiện tại:
+1. ~~Test bổ sung theo yêu cầu kit, chạy xanh với bản JS hiện tại:
    - `tests/calendar.test.ts`: đổi dương → âm → dương khớp nhau mọi ngày 1900–2100, mẫu mỗi 7 ngày
      (dùng CÙNG một tz cho cả hai chiều: `lunarTzForSolarYear(năm dương)`); bảng Tết 2000–2030 so với lịch chính thức;
      tham số `tz` tuỳ chọn của `TuViEngine.calcChart`.
    - Mệnh Quái 2 giới × 100 năm (1950–2049) so với công thức độc lập: Nam `(11 − năm mod 9) mod 9`,
      Nữ `(năm mod 9 + 4) mod 9`; 0 → 9; 5 → Nam Khôn / Nữ Cấn.
-   - Bẫy ở ARCHITECTURE mục 5.3: hai biến thể `jdToDate`, thứ tự Ngũ Hành khác nhau giữa Bát Tự và Lục Hào.
+   - Bẫy ở ARCHITECTURE mục 5.3: hai biến thể `jdToDate`, thứ tự Ngũ Hành khác nhau giữa Bát Tự và Lục Hào.~~ XONG
 2. Gộp `src/core/calendar/*` → `canchi/*` → chuyển từng hệ thống sang `.ts` strict (napam → battrach → luchao → battu → tuvi),
    `birth.ts`, `index.ts` có kiểu đầy đủ; câu chữ trong engine chuyển sang `src/content`.
 3. Xoá file `.js` cũ, bỏ `allowJs`, báo số test trước/sau. Commit mỗi bước, `npm test` + `npm run build` xanh.
