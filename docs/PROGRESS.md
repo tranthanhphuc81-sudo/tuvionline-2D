@@ -11,7 +11,25 @@
 | 2.1 — Khung app | XONG (trừ `android:debug`, cần Codespace) — 121 test xanh, build OK |
 | 3.1 — Bố cục lá số Tử Vi | XONG — chọn phương án C (lưới gọn + thẻ chi tiết), xem ARCHITECTURE mục 10 |
 | 3.2 — Tử Vi | XONG — 191 test xanh, build OK |
-| 3.3 — Bát Tự | CHƯA LÀM — chờ chủ dự án đồng ý |
+| 3.3 — Bát Tự | ĐANG LÀM (xem dưới) |
+
+## Phase 3.3 — Bát Tự — đang làm
+
+### Đã xong
+- **Bước 1 — tính toán + câu chữ + đối chiếu legacy** (191 → 252 test):
+  - `src/core/battu/reading.ts`: Vượng Suy (`assessThan`), mùa sinh, gợi ý Dụng Thần (`dungThanPattern`: Sát trọng dụng Ấn /
+    vượng / nhược), hồ sơ Thập Thần (`thapThanProfile`: tỷ lệ 5 nhóm, 2 vai nổi bật, 6 mẫu kết hợp, nhóm vắng),
+    `batTuReading` (đếm hành 8 chữ, Dụng/Kỵ thần, Dụng Thần chính, Đại Vận + năm hiện tại), `batTuYearLookup`, `tangCanOf`.
+  - `src/content/interp/battu.ts` (FAMILY, GOD_SHORT, CAN_TRAITS cắt thẳng từ legacy), `interp/hanh.ts` (HANH_INFO dùng chung);
+    `src/content/battu/{explain,tongket}.ts`: Giải thích chỉ số, hộp Vượng Suy, Gợi ý Dụng Thần, lưu ý Lập Xuân/Tết,
+    tuổi khởi vận, Tổng kết (cả mục "🧩 Thập Thần nổi bật" có thanh tỷ lệ), ghi chú.
+  - `rich.ts` thêm khối `kv` (hàng nhãn – giá trị) và `bars` (thanh tỷ lệ).
+  - `tests/parity/battu.test.ts`: 52 hồ sơ (bộ mẫu dùng chung `sampleProfiles()` trong `tests/parity/legacy.ts`, thêm ví dụ
+    vàng 6/2/2021 và ca giữa Lập Xuân – Tết) × 7 khối: khớp 100%. `tests/battu-reading.test.ts` cho quy tắc nhỏ.
+
+### Việc tiếp theo
+2. Màn hình Bát Tự: tóm tắt, 4 thẻ trụ (có Tàng Can, Thập Thần, prop `focus`), Vượng Suy + Dụng Thần, Đại Vận,
+   tra Lưu Niên, Giải thích chỉ số, Tổng kết, ghi chú.
 
 ## Phase 3.2 — Tử Vi — XONG
 

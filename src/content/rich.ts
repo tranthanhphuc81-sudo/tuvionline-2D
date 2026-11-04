@@ -73,7 +73,11 @@ export interface ItemBlock extends BlockBase { kind: 'item'; title: RichNode[]; 
 export interface ChipsBlock extends BlockBase { kind: 'chips'; chips: { text: string; tone: Tone }[]; after?: RichNode[] }
 /** Ghi chú nhỏ, chữ mờ */
 export interface NoteBlock extends BlockBase { kind: 'note'; rich: RichNode[] }
-export type Block = PBlock | ListBlock | VerdictBlock | ItemBlock | ChipsBlock | NoteBlock;
+/** Các hàng nhãn – giá trị (ví dụ bảng Vượng Suy) */
+export interface KvBlock extends BlockBase { kind: 'kv'; rows: { k: string; v: string }[] }
+/** Thanh tỷ lệ phần trăm (ví dụ 5 nhóm Thập Thần) */
+export interface BarsBlock extends BlockBase { kind: 'bars'; rows: { label: string; pct: number }[] }
+export type Block = PBlock | ListBlock | VerdictBlock | ItemBlock | ChipsBlock | NoteBlock | KvBlock | BarsBlock;
 
 export interface Section { id: string; title: string; icon?: string; tone?: Tone; blocks: Block[] }
 
@@ -91,6 +95,8 @@ export function sectionPlainText(s: Section, withTitle = true): string {
       case 'list': parts.push(b.items.map((i) => toPlainText(i)).join('\n')); break;
       case 'item': parts.push(toPlainText(b.title) + (b.label ? ' ' + b.label : '') + '\n' + toPlainText(b.rich)); break;
       case 'chips': parts.push(b.chips.map((c) => c.text).join('\n') + (b.after ? ' ' + toPlainText(b.after) : '')); break;
+      case 'kv': parts.push(b.rows.map((r) => r.k + ' ' + r.v).join('\n')); break;
+      case 'bars': parts.push(b.rows.map((r) => r.label + ' ' + r.pct + '%').join('\n')); break;
     }
   }
   return parts.join('\n');

@@ -206,13 +206,6 @@ export const AREA_TIP: Record<AreaKey, { mid: string; good: string; bad: string 
   di:{ mid:'Giữ quan hệ với bạn bè, đồng nghiệp cũ — cơ hội thường đến từ những người quen.', good:'Mở rộng quan hệ, đi xa, đổi môi trường thường mang lại cơ hội.', bad:'Đi xa cẩn thận giấy tờ, phương tiện; ở môi trường mới nên quan sát trước khi hành động.' }
 };
 
-export const HANH_INFO: Record<string, { mau: string; huong: string[]; nghe: string; vat: string; mua: string }> = {
-  'Mộc': { mau:'xanh lá, xanh rêu', huong:['Đông','Đông Nam'], nghe:'giáo dục, xuất bản, thiết kế, thời trang, nông – lâm nghiệp, chăm sóc sức khoẻ', vat:'cây xanh, đồ gỗ, tranh cây cỏ', mua:'mùa Xuân (tháng Giêng, tháng Hai âm lịch)' },
-  'Hoả': { mau:'đỏ, cam, hồng, tím', huong:['Nam'], nghe:'truyền thông, quảng cáo, điện – điện tử, công nghệ, ẩm thực, làm đẹp, biểu diễn', vat:'đèn sáng, đồ màu đỏ/cam', mua:'mùa Hạ (tháng Tư, tháng Năm âm lịch)' },
-  'Thổ': { mau:'vàng, nâu đất, be', huong:['Đông Bắc','Tây Nam'], nghe:'bất động sản, xây dựng, nông nghiệp, kho vận, bảo hiểm, tư vấn, quản trị', vat:'gốm sứ, đá, pha lê', mua:'các tháng cuối mùa (tháng Ba, Sáu, Chín, Chạp âm lịch)' },
-  'Kim': { mau:'trắng, xám, bạc, ánh kim', huong:['Tây','Tây Bắc'], nghe:'tài chính – ngân hàng, kế toán, cơ khí, kỹ thuật, pháp luật, trang sức', vat:'đồ kim loại, chuông gió kim loại', mua:'mùa Thu (tháng Bảy, tháng Tám âm lịch)' },
-  'Thuỷ': { mau:'đen, xanh dương, xanh navy', huong:['Bắc'], nghe:'thương mại, xuất nhập khẩu, vận tải, logistics, du lịch, các nghề cần đi lại nhiều', vat:'bể cá, tiểu cảnh nước, tranh sông nước', mua:'mùa Đông (tháng Mười, tháng Mười Một âm lịch)' }
-};
 
 export function pairOf(stars: readonly string[]): [string, string] | null {
   return stars.length === 2 ? PAIRS[stars.slice().sort().join(' + ')] ?? null : null;

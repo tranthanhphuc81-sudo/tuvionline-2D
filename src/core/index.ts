@@ -33,6 +33,10 @@ export type {
   HoaKey, Tone, TuViReading, TuViYearReading, TuViYearLookup, AreaReading, AreaKey, DaiHanNow, LuuHoa, ChiRelKind, CucMenhRel,
 } from './tuvi/reading';
 export type { BatTuChart, BatTuInput, Pillar, ThapThan, TangCanRole } from './battu/types';
+export {
+  assessThan, locThapThan, muaOf, dungThanPattern, thapThanProfile, batTuReading, batTuYearLookup, tangCanOf, familyOf, FAMILY_GODS,
+} from './battu/reading';
+export type { ThanAssessment, VuongSuyState, Mua, ThapThanFamily, ThapThanCombo, ThapThanProfile, BatTuReading, BatTuYearLookup, HanhPeriod } from './battu/reading';
 export type { Toss, HexaStep, LucThan, Hao, HaoHoa, QueBien, LucHaoResult, VuongSuy, Season } from './luchao/types';
 export type { Huong, StarName, Nhom, DuNienStar, LySoYear } from './battrach/types';
 export type { NapAmYear, NapAmRelation, NapAmRelationKind, NapAmNeedsId } from './napam/types';

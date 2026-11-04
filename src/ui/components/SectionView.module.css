@@ -23,3 +23,13 @@
 .chips { display: inline-flex; flex-wrap: wrap; gap: 6px; vertical-align: middle; }
 .chip { font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 99px; border: 1px solid currentColor; }
 .p small { color: var(--muted); }
+.kv { display: grid; }
+.kvRow { display: flex; justify-content: space-between; gap: var(--space-3); padding: 6px 0; border-bottom: 1px dashed var(--line); font-size: var(--fs-sm); }
+.kvRow:last-child { border-bottom: 0; }
+.kvRow dd { font-weight: 700; color: var(--gold); text-align: right; }
+.bars { display: grid; gap: 6px; }
+.barRow { display: grid; grid-template-columns: 6.5em 1fr 3em; align-items: center; gap: var(--space-2); font-size: var(--fs-sm); }
+.barName { font-weight: 600; }
+.bar { height: 8px; border-radius: 4px; background: var(--surface3); overflow: hidden; }
+.bar > span { display: block; height: 100%; background: var(--gold); border-radius: 4px; }
+.barPct { text-align: right; font-variant-numeric: tabular-nums; color: var(--ink-dim); }

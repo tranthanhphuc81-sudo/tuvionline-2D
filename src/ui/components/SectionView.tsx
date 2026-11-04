@@ -29,6 +29,20 @@ function BlockView({ b }: { b: Block }) {
           <p className={s.itemBody}><RichText nodes={b.rich} /></p>
         </div>
       );
+    case 'kv':
+      return <dl className={s.kv}>{b.rows.map((r) => <div key={r.k} className={s.kvRow}><dt>{r.k}</dt><dd>{r.v}</dd></div>)}</dl>;
+    case 'bars':
+      return (
+        <div className={s.bars}>
+          {b.rows.map((r) => (
+            <div key={r.label} className={s.barRow}>
+              <span className={s.barName}>{r.label}</span>
+              <span className={s.bar} aria-hidden="true"><span style={{ width: r.pct + '%' }} /></span>
+              <span className={s.barPct}>{r.pct}%</span>
+            </div>
+          ))}
+        </div>
+      );
     case 'chips':
       return (
         <p className={s.p}>
