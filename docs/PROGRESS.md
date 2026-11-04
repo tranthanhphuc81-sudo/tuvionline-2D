@@ -39,6 +39,10 @@
   `duNien()` không còn `desc`; mô tả sao nguyên văn ở `src/content/battrach/stars.ts`. Golden test chỉ thêm một dấu `!`
   (kiểu `find()` có thể `undefined`), không đổi kỳ vọng.
 
+- **Bước 4c — Lục Hào sang TS** (`src/core/luchao/{engine,types,hexagrams}.ts`): bảng 64 quẻ + Nạp Giáp tách riêng,
+  `LH_HANH_ORDER` đặt tên rõ; `type Quai` chuyển lên `src/core/types.ts` (Lục Hào và Bát Trạch không import lẫn nhau).
+  Bỏ `pillClass` (hàm trình bày, chưa từng được xuất).
+
 ### Việc tiếp theo (theo ARCHITECTURE.md mục 10)
 1. ~~Test bổ sung theo yêu cầu kit, chạy xanh với bản JS hiện tại:
    - `tests/calendar.test.ts`: đổi dương → âm → dương khớp nhau mọi ngày 1900–2100, mẫu mỗi 7 ngày

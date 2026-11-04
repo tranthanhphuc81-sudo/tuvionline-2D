@@ -1,7 +1,6 @@
-import type { Gender } from '../types';
+import type { Gender, Quai } from '../types';
 import type { Hanh } from '../canchi/hanh';
 
-export type Quai = 'Càn' | 'Khảm' | 'Cấn' | 'Chấn' | 'Tốn' | 'Ly' | 'Khôn' | 'Đoài';
 export type Huong = 'Bắc' | 'Đông Bắc' | 'Đông' | 'Đông Nam' | 'Nam' | 'Tây Nam' | 'Tây' | 'Tây Bắc';
 export type StarName = 'Phục Vị' | 'Sinh Khí' | 'Thiên Y' | 'Diên Niên' | 'Tuyệt Mệnh' | 'Lục Sát' | 'Hoạ Hại' | 'Ngũ Quỷ';
 export type Nhom = 'Đông Tứ Mệnh' | 'Tây Tứ Mệnh';
@@ -11,4 +10,4 @@ export interface DuNienStar { star: StarName; good: boolean; quai: Quai; hanh: H
 
 export interface LySoYear { year: number; beforeLapXuan: boolean }
 
-export type { Gender };
+export type { Gender, Quai };

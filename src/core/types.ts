@@ -8,3 +8,6 @@ export type HourIdx = number;
 
 /** Giới tính: 'M' = nam, 'F' = nữ. */
 export type Gender = 'M' | 'F';
+
+/** Tên 8 quái đơn (Bát Quái). */
+export type Quai = 'Càn' | 'Khảm' | 'Cấn' | 'Chấn' | 'Tốn' | 'Ly' | 'Khôn' | 'Đoài';

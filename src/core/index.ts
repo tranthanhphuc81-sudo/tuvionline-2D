@@ -3,7 +3,7 @@
 import { pad2, validSolar, validLunar, shiftSolar, lunarTzForSolarYear, lunarTzForLunarYear } from './calendar';
 import { TuViEngine as _TuVi } from './tuvi.js';
 import { BatTuEngine as _BatTu } from './battu.js';
-import { LucHaoEngine as _LucHao } from './luchao.js';
+import { LucHaoEngine } from './luchao/engine';
 import { PhongThuyEngine } from './battrach/engine';
 import { NapAmEngine } from './napam/engine';
 
@@ -12,7 +12,8 @@ import { NapAmEngine } from './napam/engine';
 export const LySoUtil = { pad2, validSolar, validLunar, shiftSolar, lunarTzForSolarYear, lunarTzForLunarYear };
 export const TuViEngine: any = _TuVi;
 export const BatTuEngine: any = _BatTu;
-export const LucHaoEngine: any = _LucHao;
+export { LucHaoEngine };
+export type { Toss, HexaStep, LucThan, Hao, HaoHoa, QueBien, LucHaoResult, VuongSuy, Season } from './luchao/types';
 export { PhongThuyEngine };
 export type { Quai, Huong, StarName, Nhom, DuNienStar, LySoYear } from './battrach/types';
 export { NapAmEngine };
