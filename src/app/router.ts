@@ -48,3 +48,8 @@ export function routerBack(s: RouterState): { state: RouterState; action: 'handl
   if (s.tab !== 'home') return { state: { ...s, tab: 'home' }, action: 'handled' };
   return { state: s, action: 'minimize' };
 }
+
+/** Mở một tab ở đúng màn hình gốc `route` (lối tắt từ Tổng hợp). */
+export function goTo(s: RouterState, tab: TabId, route: Route): RouterState {
+  return { tab, stacks: { ...s.stacks, [tab]: [route] } };
+}

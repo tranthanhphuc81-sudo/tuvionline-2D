@@ -9,12 +9,12 @@ export function startPersistence(
   store: Store<PersistedState>,
   kv: KV,
   onPause: (cb: () => void) => () => void,
-): { flush(): Promise<void>; stop(): void } {
+): { flush(force?: boolean): Promise<void>; stop(): void } {
   let timer: ReturnType<typeof setTimeout> | null = null;
   let dirty = false;
-  const flush = async () => {
+  const flush = async (force = false) => {
     if (timer) { clearTimeout(timer); timer = null; }
-    if (!dirty) return;
+    if (!dirty && !force) return;
     dirty = false;
     await kv.set(STATE_KEY, JSON.stringify(store.getState()));
   };

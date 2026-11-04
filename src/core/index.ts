@@ -8,7 +8,7 @@ import { BatTuEngine } from './battu/engine';
 import { LucHaoEngine } from './luchao/engine';
 import { PhongThuyEngine } from './battrach/engine';
 import { NapAmEngine } from './napam/engine';
-import { resolveBirth, type BirthCalcInput } from './birth';
+import { resolveBirth, type BirthCalcInput, type BirthError, type BirthProfile, type ResolvedBirth, type SolarDate } from './birth';
 import type { Gender, HourIdx } from './types';
 import type { Hanh } from './canchi/hanh';
 import type { TuViChart } from './tuvi/types';
@@ -98,12 +98,21 @@ export function quickProfile(b: BirthInput): QuickProfile {
     gender: b.gender, calendar: 'solar', day: b.dd, month: b.mm, year: b.yy, leapMonth: false, hourIdx: b.hourIdx, lateTy: !!b.lateTy,
   });
   if (!r.ok) throw new Error('Ngày sinh không tồn tại trên lịch dương');
-  const { solar, input } = r;
+  return summarize(r.solar, r.input);
+}
 
+/** Tóm tắt nhanh từ hồ sơ (dương hoặc âm lịch, tháng nhuận, Tý muộn). Trả lỗi dạng mã nếu ngày không tồn tại. */
+export function profileSummary(p: BirthProfile): { ok: true; summary: QuickProfile; birth: Extract<ResolvedBirth, { ok: true }> } | { ok: false; errors: BirthError[] } {
+  const r = resolveBirth(p);
+  if (!r.ok) return r;
+  return { ok: true, summary: summarize(r.solar, r.input), birth: r };
+}
+
+function summarize(solar: SolarDate, input: BirthCalcInput): QuickProfile {
   const tv = tuViChart(input);
   const bt = batTuChart(input);
   const ly = PhongThuyEngine.lySoYear(solar.dd, solar.mm, solar.yy, 7);
-  const quai = PhongThuyEngine.menhQuai(ly.year, b.gender);
+  const quai = PhongThuyEngine.menhQuai(ly.year, input.gender);
   const na = napAmForBirth(solar.dd, solar.mm, solar.yy);
 
   return {

@@ -1,0 +1,43 @@
+.shell {
+  height: 100dvh; display: grid; grid-template-rows: auto 1fr auto;
+  padding-left: var(--safe-left); padding-right: var(--safe-right);
+}
+.topbar {
+  display: flex; align-items: center; gap: var(--space-1);
+  padding: calc(var(--space-2) + var(--safe-top)) var(--space-2) var(--space-2) var(--space-3);
+  min-height: calc(var(--topbar-h) + var(--safe-top));
+  background: var(--surface); border-bottom: 1px solid var(--line);
+}
+.title { flex: 1; min-width: 0; font-size: var(--fs-lg); color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.iconBtn {
+  min-width: var(--tap); min-height: var(--tap); border-radius: 50%; border: 0; background: transparent;
+  color: var(--ink-dim); font-size: 20px; display: inline-flex; align-items: center; justify-content: center; flex: none;
+}
+.iconBtn:active { background: var(--surface2); }
+.chip {
+  display: inline-flex; align-items: center; gap: 6px; min-height: var(--tap); max-width: 42vw; flex: none;
+  padding: 4px 12px 4px 4px; border-radius: 999px; border: 1px solid var(--line-strong); background: var(--surface2); color: var(--ink);
+}
+.chipAvatar {
+  width: 32px; height: 32px; border-radius: 50%; background: var(--gold); color: var(--on-gold); flex: none;
+  display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-family: var(--font-serif);
+}
+.chipName { font-weight: 600; font-size: var(--fs-sm); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.content { position: relative; min-height: 0; }
+.panel { position: absolute; inset: 0; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+.screen { max-width: 720px; margin: 0 auto; padding: var(--space-4); }
+.tabbar {
+  background: var(--surface); border-top: 1px solid var(--line);
+  padding-bottom: var(--safe-bottom);
+}
+.tablist { display: grid; grid-template-columns: repeat(5, 1fr); max-width: 720px; margin: 0 auto; }
+.tab {
+  min-height: var(--tabbar-h); border: 0; background: transparent; color: var(--muted);
+  display: grid; justify-items: center; align-content: center; gap: 2px; padding: 6px 2px; position: relative;
+}
+.tab[aria-selected='true'] { color: var(--gold); }
+.tab[aria-selected='true']::before {
+  content: ''; position: absolute; top: 0; left: 25%; right: 25%; height: 3px; border-radius: 0 0 3px 3px; background: var(--gold);
+}
+.tabIcon { font-size: 20px; line-height: 1; }
+.tabLabel { font-size: 12px; font-weight: 600; white-space: nowrap; }

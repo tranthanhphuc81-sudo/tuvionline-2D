@@ -8,9 +8,9 @@
 | 0 — Kiểm tra môi trường | `npm test` 23/23 xanh, `npm run build` OK. `npm run android:debug` CHƯA chạy (máy cloud không có Android SDK — chạy trong Codespace). |
 | 1.1 — Kiến trúc | XONG → `docs/ARCHITECTURE.md` |
 | 1.2 — Engine TypeScript | XONG — `npm test` 30 → 92 test xanh, `npm run build` OK |
-| 2.1 — Khung app | ĐANG LÀM (xem dưới) |
+| 2.1 — Khung app | XONG (trừ `android:debug`, cần Codespace) — 121 test xanh, build OK |
 
-## Phase 2.1 — đang làm
+## Phase 2.1 — XONG
 
 ### Đã xong
 - **Bước 1 — nền tảng + trạng thái** (92 → 113 test): cài `@capacitor/app` 8.1, `@capacitor/preferences` 8.0,
@@ -20,12 +20,26 @@
   ghi gộp 300ms + ghi ngay khi vào nền); `src/app/{routes,router}.ts` (ngăn xếp mỗi tab, bảng quy tắc Back).
   Test: `src/state/state.test.ts`, `src/app/router.test.ts`; `vite.config.ts` thêm `src/**/*.test.{ts,tsx}`.
 
-### Việc tiếp theo (ARCHITECTURE.md mục 10, Phase 2.1)
-2. `src/ui/tokens.css`, `base.css`, font offline, chủ đề sáng/tối, safe-area.
-3. Router + thanh tab dưới + thanh trên (chip người đang xem, ⚙) + Back.
-4. Màn hình Hồ sơ (thêm/sửa/xoá, dương/âm, nhuận, giờ, Tý muộn, báo lỗi như legacy).
-5. Tổng hợp đọc hồ sơ đang chọn; tab chưa dựng → nút mở trang legacy.
-6. Kiểm 360px; `npm run android:debug` (cần Codespace có Android SDK).
+- **Bước 2 — giao diện nền:** `src/ui/{tokens.css,base.css,fonts.ts,theme.ts}` — bảng màu nguyên từ legacy (sáng/tối theo
+  `data-theme` hoặc hệ thống), token khoảng cách/cỡ chữ/`--tap: 44px`/safe-area, Be Vietnam Pro + Noto Serif offline
+  (latin + vietnamese), `applyTheme` cập nhật `theme-color`.
+- **Bước 3–5 — khung app, Hồ sơ, Tổng hợp** (một commit vì phụ thuộc lẫn nhau): `src/app/{App,context,boot,hooks}.tsx`,
+  thanh trên (nút Quay lại, chip người đang xem → bảng chọn hồ sơ, ⚙), 5 tab luôn mount + giữ vị trí cuộn, thanh tab dưới;
+  Back: bảng chọn/hộp thoại → màn hình con → về Tổng hợp → thu nhỏ app (web: Esc + nút Back trình duyệt).
+  `src/features/profiles/*`: chọn, thêm, sửa, xoá (hỏi lại), dương/âm lịch, tháng nhuận, giờ, Tý muộn, báo lỗi nguyên văn
+  legacy, xem trước ngày quy đổi. `features/home`: tóm tắt 4 hệ thống (core thêm `profileSummary(profile)` nhận cả âm lịch),
+  lối tắt 6 công cụ, thông báo khi nhập từ bản 0.1 hoặc dữ liệu hỏng. `features/legacy`: tab Tử Vi/Bát Tự/Lục Hào và
+  Phong thủy (Bát Trạch · La Bàn · Nạp Âm) hiện giới thiệu + "Mở bản web đầy đủ" (tự điền hồ sơ). `features/settings`: chế độ màu,
+  thông tin app. Xoá `src/App.tsx`, `src/styles.css` (màn hình "Tra nhanh" 0.1).
+  Test: `src/app/App.test.tsx` (form báo lỗi, chuyển tab giữ trạng thái, thứ tự Back, aria-label nút biểu tượng, sửa/xoá),
+  `src/ui/theme.test.ts`. 113 → 121 test.
+- **Bước 6 — kiểm:** Playwright ở 360×740, sáng và tối: không cuộn ngang, không lỗi console, dữ liệu còn sau khi tải lại,
+  trang legacy tự điền hồ sơ và Back quay về app. `npx cap sync android` đã chạy (đăng ký plugin App + Preferences vào
+  `android/`). **`npm run android:debug` CHƯA chạy** — máy cloud không có Android SDK; cần chạy trong Codespace.
+
+### Việc tiếp theo
+- Chạy `npm run android:debug` trong Codespace, cài APK, kiểm Back/lưu dữ liệu trên máy thật (ARCHITECTURE mục 7.3).
+- Phase 3.1 (quyết định bố cục lá số Tử Vi) — hỏi chủ dự án trước khi bắt đầu.
 
 ## Phase 1.2 — XONG
 

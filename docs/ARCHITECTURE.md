@@ -447,7 +447,8 @@ Mỗi bước đều phải để `npm test` và `npm run build` xanh rồi mớ
 3. Router + thanh tab dưới + thanh trên (chip người đang xem, ⚙) + bảng quy tắc Back.
 4. Màn hình Hồ sơ: danh sách, thêm, sửa, xoá; nhập ngày dương hoặc âm, tháng nhuận, giờ, Tý muộn; báo lỗi giống legacy.
    Thêm migration `lyso-shared-v1`.
-5. Tổng hợp đọc từ hồ sơ đang chọn (thay "Tra nhanh"). Các tab chưa dựng thì hiện nút mở trang legacy.
+5. Tổng hợp đọc từ hồ sơ đang chọn (thay "Tra nhanh"). Các tab chưa dựng thì hiện nút mở trang legacy. Trước khi mở,
+   `openLegacy()` ghi hồ sơ đang xem vào `lyso-shared-v1` (định dạng của form "Thông tin dùng chung") để trang legacy tự điền.
 6. Kiểm ở 360px, rồi `npm run android:debug`.
 
 ### Phase 3: dựng lại từng công cụ

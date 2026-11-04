@@ -1,0 +1,8 @@
+.wrap { display: grid; gap: 6px; }
+.label { font-size: var(--fs-sm); color: var(--muted); font-weight: 500; }
+.group { display: flex; gap: 6px; background: var(--surface2); border: 1px solid var(--line); border-radius: 12px; padding: 4px; }
+.opt {
+  flex: 1; min-height: calc(var(--tap) - 8px); padding: 6px 10px; border: 0; border-radius: 9px;
+  background: transparent; color: var(--ink-dim); font-weight: 600; font-size: var(--fs-sm);
+}
+.opt[aria-checked='true'] { background: var(--gold); color: var(--on-gold); }

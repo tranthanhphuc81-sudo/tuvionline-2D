@@ -1,0 +1,15 @@
+.backdrop {
+  position: fixed; inset: 0; z-index: 50; background: rgba(0, 0, 0, 0.5);
+  display: flex; align-items: flex-end; justify-content: center;
+}
+.panel {
+  width: 100%; max-width: 560px; max-height: 85vh; overflow: auto; outline: none;
+  background: var(--surface); border: 1px solid var(--line-strong); border-bottom: 0;
+  border-radius: 18px 18px 0 0; box-shadow: var(--shadow);
+  padding: var(--space-2) var(--space-4) calc(var(--space-4) + var(--safe-bottom));
+  display: grid; gap: var(--space-3);
+  animation: up 160ms ease-out;
+}
+.grip { width: 40px; height: 4px; border-radius: 2px; background: var(--line-strong); margin: 4px auto 0; }
+.title { font-size: var(--fs-lg); }
+@keyframes up { from { transform: translateY(24px); opacity: 0; } to { transform: none; opacity: 1; } }

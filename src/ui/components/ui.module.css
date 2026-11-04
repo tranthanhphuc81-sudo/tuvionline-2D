@@ -1,0 +1,43 @@
+/* Khối dựng dùng chung: thẻ, nút, ô nhập, thông báo. Vùng chạm tối thiểu var(--tap) = 44px. */
+.card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: var(--space-4); display: grid; gap: var(--space-3);
+}
+.stack { display: grid; gap: var(--space-3); }
+.row { display: flex; gap: var(--space-2); align-items: center; flex-wrap: wrap; }
+.muted { color: var(--muted); font-size: var(--fs-sm); }
+.btn {
+  min-height: var(--tap); min-width: var(--tap); padding: 10px 16px; border-radius: 10px;
+  border: 1px solid var(--line-strong); background: var(--surface2); color: var(--ink-dim);
+  font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
+  text-decoration: none; text-align: center;
+}
+.btn:active { background: var(--surface3); }
+.primary { background: var(--gold); color: var(--on-gold); border-color: var(--gold); }
+.primary:active { background: var(--gold); filter: brightness(0.92); }
+.danger { color: var(--vermillion); border-color: var(--vermillion); background: transparent; }
+.ghost { background: transparent; border-color: transparent; }
+.block { width: 100%; }
+.iconBtn {
+  min-width: var(--tap); min-height: var(--tap); border-radius: 50%; border: 0; background: transparent;
+  color: var(--ink-dim); font-size: 20px; display: inline-flex; align-items: center; justify-content: center;
+}
+.iconBtn:active { background: var(--surface2); }
+.field { display: grid; gap: 6px; }
+.label { font-size: var(--fs-sm); color: var(--muted); font-weight: 500; }
+.input {
+  width: 100%; min-height: var(--tap); padding: 10px 12px; border-radius: 9px;
+  border: 1px solid var(--line-strong); background: var(--surface2); color: var(--ink); font-size: 16px;
+}
+.input[aria-invalid='true'] { border-color: var(--vermillion); }
+.check { display: flex; gap: var(--space-2); align-items: flex-start; color: var(--ink-dim); font-size: var(--fs-sm); min-height: var(--tap); padding-top: 10px; }
+.check input { width: 20px; height: 20px; margin: 0; flex: none; accent-color: var(--gold); }
+.error {
+  border: 1px solid var(--vermillion); border-radius: 10px; padding: var(--space-3);
+  color: var(--ink); background: color-mix(in srgb, var(--vermillion) 10%, transparent); font-size: var(--fs-sm);
+}
+.info {
+  border: 1px solid var(--line-strong); border-radius: 10px; padding: var(--space-3);
+  background: var(--surface2); font-size: var(--fs-sm);
+}
+.sectionTitle { font-size: var(--fs-sm); text-transform: uppercase; letter-spacing: .08em; color: var(--gold); font-family: var(--font-sans); font-weight: 600; }

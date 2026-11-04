@@ -15,8 +15,9 @@ App tiếng Việt gồm 7 công cụ: Tử Vi Đẩu Số, Bát Tự, Lục Hà
 - `src/core/` — engine tính toán, là NGUỒN SỰ THẬT. TypeScript strict (`calendar/`, `canchi/`, `tuvi/`, `battu/`, `luchao/`, `battrach/`, `napam/`, `birth.ts`), công thức giữ nguyên từ bản web đã kiểm chứng; `src/core/index.ts` là điểm vào duy nhất mà UI được phép import. Engine trả số liệu/mã, không trả câu văn.
 - `src/content/` — câu chữ cho người đọc, chép NGUYÊN VĂN từ legacy, dạng hàm thuần nhận kết quả engine (ARCHITECTURE mục 5.4).
 - `tests/core-snapshot.test.ts` — bản chụp ~70.000 đầu ra engine; KHÔNG sinh lại (`UPDATE_CORE_SNAPSHOT=1`) để làm test xanh.
-- `src/App.tsx` — màn hình "Tra nhanh" tạm thời (bản khởi tạo 0.1).
-- `public/legacy/` — bản web đầy đủ đã kiểm chứng (`lyso-toolkit.html`, `la-ban-phong-thuy.html`). Dùng làm TÀI LIỆU THAM CHIẾU cho UI, câu chữ giải thích, phần "Giải thích chỉ số", "Tổng kết", và logic đọc thành lời. App hiện mở được các trang này để dùng tạm; xoá khỏi app khi đã có màn hình mới tương đương (Phase 3).
+- `src/app/` — khung app: `App.tsx` (thanh trên, 5 tab giữ mount, thanh tab dưới), `router.ts` (ngăn xếp mỗi tab + bảng quy tắc Back), `boot.ts`, `context.tsx`.
+- `src/state/` — store, hành động, lược đồ `lyso.state` + migration; `src/platform/` — bọc plugin Capacitor (storage, lifecycle, back, legacy); `src/ui/` — tokens, base, font offline, component dùng chung; `src/features/` — các màn hình (home, profiles, settings, legacy tạm).
+- `public/legacy/` — bản web đầy đủ đã kiểm chứng (`lyso-toolkit.html`, `la-ban-phong-thuy.html`). Dùng làm TÀI LIỆU THAM CHIẾU cho UI, câu chữ giải thích, phần "Giải thích chỉ số", "Tổng kết", và logic đọc thành lời. App mở các trang này để dùng tạm (nút "Mở bản web đầy đủ" ở các tab chưa dựng lại, tự điền hồ sơ đang xem qua `lyso-shared-v1`); xoá khỏi app khi đã có màn hình mới tương đương (Phase 3).
 - `docs/ARCHITECTURE.md` — các quyết định kiến trúc (Phase 1.1): điều hướng, trạng thái, lưu trữ, giao diện, cấu trúc `src/core`/`src/content`, plugin, kiểm thử. ĐỌC TRƯỚC khi làm bất kỳ phase nào; muốn đổi quyết định thì sửa tài liệu này trước.
 - `docs/` — 5 tài liệu Word (Phần 1–4 và bản Trọn bộ). Là căn cứ lý thuyết cho mọi công thức.
 - `android/` — project Android do Capacitor sinh ra (compileSdk 36, Java 21, Gradle 8.14).

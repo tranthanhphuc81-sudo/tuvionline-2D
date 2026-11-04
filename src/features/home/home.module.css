@@ -1,0 +1,14 @@
+.name { font-size: var(--fs-xl); }
+.grid { display: grid; gap: var(--space-3); }
+@media (min-width: 640px) { .grid { grid-template-columns: 1fr 1fr; } }
+.grid article { gap: var(--space-1); }
+.pillars { font-family: var(--font-serif); font-size: var(--fs-lg); font-weight: 700; }
+.shortcuts { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2); }
+.shortcut {
+  min-height: 76px; padding: var(--space-2); border-radius: 12px; border: 1px solid var(--line);
+  background: var(--surface); color: var(--ink); font-weight: 600; font-size: var(--fs-sm);
+  display: grid; justify-items: center; align-content: center; gap: 4px; text-align: center;
+}
+.shortcut:active { background: var(--surface2); }
+.scIcon { font-size: 22px; }
+.footer { text-align: center; padding-bottom: var(--space-4); }

@@ -1,0 +1,16 @@
+.dateGrid { display: grid; grid-template-columns: 1fr 1fr 1.4fr; gap: var(--space-2); }
+.list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); }
+.item {
+  width: 100%; min-height: 56px; display: flex; align-items: center; gap: var(--space-3); text-align: left;
+  padding: var(--space-2) var(--space-3); border-radius: 12px; border: 1px solid var(--line); background: var(--surface2); color: var(--ink);
+}
+.item[aria-checked='true'], .item[aria-current='true'] { border-color: var(--gold); }
+.avatar {
+  width: 36px; height: 36px; flex: none; border-radius: 50%; background: var(--surface3); color: var(--gold);
+  display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-family: var(--font-serif);
+}
+.itemText { display: grid; min-width: 0; flex: 1; }
+.itemName { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.itemSub { font-size: var(--fs-sm); color: var(--muted); }
+.badge { font-size: 12px; color: var(--jade); font-weight: 600; flex: none; }
+.chev { color: var(--muted); flex: none; }
