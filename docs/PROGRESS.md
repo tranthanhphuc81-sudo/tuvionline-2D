@@ -1,0 +1,35 @@
+# Tiến độ theo PROMPT-KIT
+
+> Cập nhật sau mỗi bước. Phiên Claude Code mới: đọc `CLAUDE.md`, `docs/ARCHITECTURE.md`, rồi file này để làm tiếp.
+> Làm việc và push thẳng lên nhánh `main` (chủ dự án làm một mình, đã đồng ý).
+
+| Phase | Trạng thái |
+|---|---|
+| 0 — Kiểm tra môi trường | `npm test` 23/23 xanh, `npm run build` OK. `npm run android:debug` CHƯA chạy (máy cloud không có Android SDK — chạy trong Codespace). |
+| 1.1 — Kiến trúc | XONG → `docs/ARCHITECTURE.md` |
+| 1.2 — Engine TypeScript | ĐANG LÀM (xem dưới) |
+
+## Phase 1.2 — đang làm
+
+### Đã xong
+- **Bản chụp engine** (`tests/core-snapshot.test.ts`, `tests/snapshot/*`, `tests/fixtures/core-snapshot.json`):
+  băm ~70.000 ca đầu ra của engine JS gốc (lịch âm 1900–2100, Tử Vi, Bát Tự quanh Lập Xuân/tiết, đủ 4096 quẻ Lục Hào,
+  Bát Trạch, Nạp Âm mọi cặp, quickProfile). Đây là lưới an toàn: mọi bước refactor phải giữ test này xanh.
+  KHÔNG sinh lại bản chụp (`UPDATE_CORE_SNAPSHOT=1`) trừ khi cố ý đổi công thức và ghi rõ lý do.
+- `tests/snapshot/adapters.ts`: lấy câu chữ (mô tả sao Du Niên, câu quan hệ Nạp Âm). Khi chuyển câu chữ sang `src/content`
+  (ARCHITECTURE mục 5.4) thì CHỈ sửa file này cho trỏ sang `src/content`, bản chụp phải giữ nguyên.
+
+### Việc tiếp theo (theo ARCHITECTURE.md mục 10)
+1. Test bổ sung theo yêu cầu kit, chạy xanh với bản JS hiện tại:
+   - `tests/calendar.test.ts`: đổi dương → âm → dương khớp nhau mọi ngày 1900–2100, mẫu mỗi 7 ngày
+     (dùng CÙNG một tz cho cả hai chiều: `lunarTzForSolarYear(năm dương)`); bảng Tết 2000–2030 so với lịch chính thức;
+     tham số `tz` tuỳ chọn của `TuViEngine.calcChart`.
+   - Mệnh Quái 2 giới × 100 năm (1950–2049) so với công thức độc lập: Nam `(11 − năm mod 9) mod 9`,
+     Nữ `(năm mod 9 + 4) mod 9`; 0 → 9; 5 → Nam Khôn / Nữ Cấn.
+   - Bẫy ở ARCHITECTURE mục 5.3: hai biến thể `jdToDate`, thứ tự Ngũ Hành khác nhau giữa Bát Tự và Lục Hào.
+2. Gộp `src/core/calendar/*` → `canchi/*` → chuyển từng hệ thống sang `.ts` strict (napam → battrach → luchao → battu → tuvi),
+   `birth.ts`, `index.ts` có kiểu đầy đủ; câu chữ trong engine chuyển sang `src/content`.
+3. Xoá file `.js` cũ, bỏ `allowJs`, báo số test trước/sau. Commit mỗi bước, `npm test` + `npm run build` xanh.
+
+## Tồn đọng
+- Xem ARCHITECTURE.md mục 9 ("Cần đối chiếu").
