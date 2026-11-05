@@ -12,18 +12,38 @@ export interface SpeakOptions { rate?: number; pitch?: number }
    máy chủ Google (log máy ảo: vi-vn-x-vic-server) dù báo localService = true. Không có giọng trên máy thì báo, không lùi sang mạng. */
 interface VoiceInfo { lang: string; voiceURI: string; localService: boolean }
 
-export function pickLocalVoice(voices: readonly VoiceInfo[]): number | null {
+export function pickLocalVoice(voices: readonly VoiceInfo[], preferred: string | null = null): number | null {
+  const chosen = preferred === null ? -1 : voices.findIndex((v) => v.voiceURI === preferred && /^vi([-_]|$)/i.test(v.lang) && v.localService);
+  if (chosen >= 0) return chosen;
   const vi = voices.map((v, i) => ({ v, i })).filter((x) => /^vi([-_]|$)/i.test(x.v.lang) && x.v.localService);
   return (vi.find((x) => /-local$/i.test(x.v.voiceURI)) ?? (isNative() ? undefined : vi[0]))?.i ?? null;
 }
 
 let voiceIndex: number | null = null;
+let preferredVoice: string | null = null;
+
+/** Giọng người dùng chọn trong Cài đặt; `null` = tự chọn. Giọng đã gỡ khỏi máy thì quay về tự chọn. */
+export function setPreferredVoice(uri: string | null): void {
+  if (uri === preferredVoice) return;
+  preferredVoice = uri;
+  voiceIndex = null;
+}
+
+/** Các giọng tiếng Việt chạy trên máy, để chọn trong Cài đặt. */
+export async function localVietnameseVoices(): Promise<string[]> {
+  try {
+    const { voices } = await TextToSpeech.getSupportedVoices();
+    return voices.filter((v) => /^vi([-_]|$)/i.test(v.lang) && v.localService && (!isNative() || /-local$/i.test(v.voiceURI))).map((v) => v.voiceURI);
+  } catch {
+    return [];
+  }
+}
 
 async function loadVoice(): Promise<number | null> {
   if (voiceIndex !== null) return voiceIndex;
   for (let attempt = 0; attempt < 2; attempt++) {
     const { voices } = await TextToSpeech.getSupportedVoices();
-    if (voices.length) return (voiceIndex = pickLocalVoice(voices));
+    if (voices.length) return (voiceIndex = pickLocalVoice(voices, preferredVoice));
     await new Promise((r) => setTimeout(r, 600)); // dịch vụ giọng nói chưa sẵn sàng
   }
   return null;
@@ -55,19 +75,25 @@ export async function openVoiceInstall(): Promise<void> {
 }
 
 /* ===== Đọc nối tiếp ===== */
+/** Một đoạn đọc. `text` rỗng = không đọc thành tiếng, chỉ hiện phụ đề đủ lâu để xem chữ. */
+export interface SpeechItem { text: string; caption?: string }
 interface Session {
-  id: string; chunks: readonly string[]; opts: SpeakOptions; index: number; paused: boolean;
+  id: string; chunks: readonly SpeechItem[]; opts: SpeakOptions; index: number; paused: boolean;
   finish(ok: boolean): void;
 }
 /** Vị trí đang đọc cho thanh điều khiển. `index` tính từ 0. */
-export interface ReadingState { id: string; index: number; total: number; paused: boolean; /** đoạn đang đọc, để làm phụ đề */ text: string }
+export interface ReadingState { id: string; index: number; total: number; paused: boolean; /** chữ của đoạn đang đọc, để làm phụ đề */ text: string; cue: SpeechItem }
+const READ_CHARS_PER_SEC = 15, MIN_SILENT_MS = 3000;
+/** Thời gian dừng ở đoạn chỉ có chữ. */
+export const silentMs = (caption: string): number => Math.max(MIN_SILENT_MS, (caption.length / READ_CHARS_PER_SEC) * 1000);
 
 let token = 0;
 let session: Session | null = null;
 let state: ReadingState | null = null;
 const listeners = new Set<() => void>();
 const publish = () => {
-  state = session && { id: session.id, index: session.index, total: session.chunks.length, paused: session.paused, text: session.chunks[session.index] ?? '' };
+  const cue = session?.chunks[session.index] ?? { text: '' };
+  state = session && { id: session.id, index: session.index, total: session.chunks.length, paused: session.paused, text: cue.caption ?? cue.text, cue };
   listeners.forEach((f) => f());
 };
 
@@ -92,7 +118,9 @@ async function play(s: Session): Promise<void> {
   try {
     const voice = await loadVoice();
     while (mine === token && s.index < s.chunks.length) {
-      await say(s.chunks[s.index], voice, s.opts);
+      const cue = s.chunks[s.index];
+      if (cue.text) await say(cue.text, voice, s.opts);
+      else await new Promise((r) => setTimeout(r, silentMs(cue.caption ?? '')));
       if (mine !== token) return;
       s.index++;
       if (s.index < s.chunks.length) publish();
@@ -148,10 +176,10 @@ export function setReadingOptions(id: string, opts: SpeakOptions): void {
 }
 
 /** Đọc lần lượt các đoạn, thay cho lần đọc đang chạy nếu có. Trả `false` nếu máy lỗi giữa chừng; bị dừng hoặc đọc xong đều là `true`. */
-export function readAloud(id: string, chunks: readonly string[], opts: SpeakOptions): Promise<boolean> {
+export function readAloud(id: string, chunks: readonly (string | SpeechItem)[], opts: SpeakOptions): Promise<boolean> {
   stopReading();
   return new Promise((finish) => {
-    const s: Session = { id, chunks, opts, index: 0, paused: false, finish };
+    const s: Session = { id, chunks: chunks.map((c) => (typeof c === 'string' ? { text: c } : c)), opts, index: 0, paused: false, finish };
     session = s;
     publish();
     void play(s);

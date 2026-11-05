@@ -138,7 +138,7 @@ describe('đọc nối tiếp', () => {
     await tts.skipReading(-1);
     expect(plugin.stop).toHaveBeenCalled();
     await vi.waitFor(() => expect(plugin.speak).toHaveBeenCalledTimes(3));
-    expect(tts.readingState()).toEqual({ id: 'a', index: 0, total: 3, paused: false, text: 'một' });
+    expect(tts.readingState()).toMatchObject({ id: 'a', index: 0, total: 3, paused: false, text: 'một' });
     done[1](); // đoạn "hai" bị ngắt báo xong muộn: không được nhảy vị trí
     await Promise.resolve();
     expect(tts.readingState()?.index).toBe(0);
@@ -195,6 +195,32 @@ describe('đọc nối tiếp', () => {
     expect(plugin.speak).toHaveBeenCalledTimes(2);
     tts.stopReading();
     expect(tts.readingState()).toBeNull();
+  });
+
+  it('đoạn chỉ có chữ: không đọc, dừng đủ lâu rồi sang đoạn sau', async () => {
+    vi.useFakeTimers();
+    const done = pending();
+    void tts.readAloud('a', [{ text: '', caption: 'chữ' }, 'hai'], {});
+    await vi.advanceTimersByTimeAsync(1);
+    expect(tts.readingState()?.text).toBe('chữ');
+    expect(plugin.speak).not.toHaveBeenCalled();
+    await vi.advanceTimersByTimeAsync(3000);
+    expect(spoken()).toEqual(['hai']);
+    done[0]();
+    vi.useRealTimers();
+    tts.stopReading();
+  });
+
+  it('phụ đề là chữ gốc khi có caption', async () => {
+    pending();
+    void tts.readAloud('a', [{ text: 'ngày 1 tháng 2', caption: '1/2' }], {});
+    expect(tts.readingState()?.text).toBe('1/2');
+    tts.stopReading();
+  });
+
+  it('giọng đã chọn được ưu tiên, giọng không còn trên máy thì tự chọn', () => {
+    expect(tts.pickLocalVoice([V('vi-vn-x-vic-local'), V('vi-vn-x-vid-local')], 'vi-vn-x-vid-local')).toBe(1);
+    expect(tts.pickLocalVoice([V('vi-vn-x-vic-local')], 'vi-vn-x-vid-local')).toBe(0);
   });
 
   it('máy lỗi giữa chừng: báo false và nhả nút', async () => {

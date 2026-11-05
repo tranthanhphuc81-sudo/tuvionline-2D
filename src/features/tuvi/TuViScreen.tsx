@@ -11,7 +11,8 @@ import { useApp, useNav } from '../../app/context';
 import { Segmented } from '../../ui/components/Segmented';
 import { SectionView } from '../../ui/components/SectionView';
 import { SpeakButton } from '../../ui/components/SpeakButton';
-import { cellsSpeech, sectionsSpeech, speechOf } from '../../content/speech';
+import { buildScript, tuViLead } from '../reader/script';
+import { useCueFocus, useWho } from '../reader/hooks';
 import ui from '../../ui/components/ui.module.css';
 import { ChartGrid, HOA_LABEL } from './ChartGrid';
 import { PalaceDetail, PalaceList } from './PalaceDetail';
@@ -23,6 +24,8 @@ const thisYear = () => new Date().getFullYear();
 export function TuViScreen() {
   const nav = useNav();
   const profile = useApp(selectActiveProfile);
+  const who = useWho();
+  const cueFocus = useCueFocus('tuvi');
   const res = useMemo(() => (profile ? profileSummary(profile) : null), [profile]);
   const [mode, setMode] = useState<'chart' | 'list'>('chart');
   const [picked, setPicked] = useState<number | null>(null);
@@ -68,13 +71,13 @@ export function TuViScreen() {
       <dl className={s.summary}>
         {summary.map(([k, v]) => <div key={k} className={s.cell}><dt>{k}</dt><dd>{v}</dd></div>)}
       </dl>
-      <SpeakButton id="tuvi" getText={() => speechOf(cellsSpeech(summary), sectionsSpeech(tuViTongKet(ch, thisYear())))} />
+      <SpeakButton id="tuvi" getCues={() => buildScript('tuvi', who, { cells: summary, leads: [tuViLead(ch.menhChi, CHI[ch.menhChi], res.summary.tuvi.menhStars)], sections: tuViTongKet(ch, thisYear()) })} />
 
       <h2 className={ui.sectionTitle}>Lá số 12 cung</h2>
       <Segmented<"chart" | "list"> label="Cách xem lá số" hideLabel value={mode} onChange={setMode} options={[{ value: 'chart', label: 'Lá số' }, { value: 'list', label: 'Danh sách' }]} />
       {mode === 'chart' ? (
         <>
-          <ChartGrid ch={ch} name={profile.name} gender={profile.gender} selected={sel} onSelect={setPicked} />
+          <ChartGrid ch={ch} name={profile.name} gender={profile.gender} selected={sel} onSelect={setPicked} focus={cueFocus} />
           <PalaceDetail ch={ch} chi={sel} onSelect={setPicked} />
         </>
       ) : (

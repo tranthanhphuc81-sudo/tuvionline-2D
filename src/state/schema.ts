@@ -32,7 +32,7 @@ export type Theme = 'system' | 'light' | 'dark';
 /** Lối vào đạo quán (ARCHITECTURE.md mục 12.2). `auto` = lần đầu và ngày rằm, mùng 1, Tết thì đầy đủ, còn lại rút gọn. */
 export type EntryMode = 'auto' | 'full' | 'short' | 'none';
 export type XungHoSetting = 'tu-dong' | 'con' | 'anh' | 'chi' | 'co' | 'chu' | 'ban';
-export interface Settings { theme: Theme; ttsRate: number; ttsPitch: number; entryMode: EntryMode; journeySound: boolean; xungHo: XungHoSetting }
+export interface Settings { theme: Theme; ttsRate: number; ttsPitch: number; /** giọng người dùng chọn, tuỳ chọn; không có = tự chọn */ ttsVoice?: string; entryMode: EntryMode; journeySound: boolean; xungHo: XungHoSetting }
 
 export interface LucHaoCast {
   tosses: number[];

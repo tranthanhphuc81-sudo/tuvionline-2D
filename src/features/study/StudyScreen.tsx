@@ -1,6 +1,6 @@
 import { useMemo, useState, useSyncExternalStore } from 'react';
 import { profileSummary, tongHopOf } from '../../core';
-import { SPEECH_FAILED, SPEECH_NO_VOICE, chunkSpeech, sectionsSpeech, speechOf } from '../../content/speech';
+import { SPEECH_FAILED, SPEECH_NO_VOICE } from '../../content/speech';
 import { STUDY_GREETING, STUDY_INVALID, STUDY_OBJECTS, STUDY_READING_ID, type StudyObjectId } from '../../content/study';
 import { tongHopParts } from '../../content/tonghop/explain';
 import { CULTURAL_NOTE } from '../../content/common/notes';
@@ -10,6 +10,8 @@ import { pauseReading, readAloud, readingState, resumeReading, setReadingOptions
 import { selectActiveProfile } from '../../state/actions';
 import { BootNoticeBanner } from '../home/HomeScreen';
 import ui from '../../ui/components/ui.module.css';
+import { thayVoice, useWho } from '../reader/hooks';
+import { buildScript } from '../reader/script';
 import { Intake } from './Intake';
 import s from './study.module.css';
 
@@ -25,7 +27,6 @@ const OBJECTS: readonly { id: StudyObjectId; tab?: TabId; route?: Route }[] = [
   { id: 'so', route: { name: 'tonghop' } },
 ];
 
-const SLOW = 0.75;
 
 /** Tĩnh thất: màn hình chính. Án thư có đồ vật mở từng công cụ, dưới là phụ đề và điều khiển Thầy đọc (ARCHITECTURE.md mục 12.11). */
 export function StudyScreen() {
@@ -38,7 +39,7 @@ export function StudyScreen() {
   const mine = reading?.id === STUDY_READING_ID ? reading : null;
   const [slow, setSlow] = useState(false);
   const [note, setNote] = useState<string | null>(null);
-  const speed = (isSlow: boolean) => ({ rate: isSlow ? rate * SLOW : rate, pitch });
+  const who = useWho();
 
   const open = (o: (typeof OBJECTS)[number]) => {
     if (o.tab && o.route) nav.goTo(o.tab, o.route);
@@ -51,10 +52,10 @@ export function StudyScreen() {
     if (!res?.ok) return;
     setNote(null);
     if ((await vietnameseVoice()) === 'missing') { setNote(SPEECH_NO_VOICE); return; }
-    const text = speechOf(...tongHopParts(tongHopOf(res.birth)).map((part) => part.title + '. ' + sectionsSpeech(part.sections)));
-    if (!(await readAloud(STUDY_READING_ID, chunkSpeech(text), speed(slow)))) setNote(SPEECH_FAILED);
+    const cues = buildScript('tonghop', who, { sections: tongHopParts(tongHopOf(res.birth)).flatMap((part) => part.sections) });
+    if (!(await readAloud(STUDY_READING_ID, cues, thayVoice(rate, pitch, slow)))) setNote(SPEECH_FAILED);
   };
-  const toggleSlow = () => { const v = !slow; setSlow(v); setReadingOptions(STUDY_READING_ID, speed(v)); };
+  const toggleSlow = () => { const v = !slow; setSlow(v); setReadingOptions(STUDY_READING_ID, thayVoice(rate, pitch, v)); };
 
   const invalid = !!profile && !!res && !res.ok;
   return (

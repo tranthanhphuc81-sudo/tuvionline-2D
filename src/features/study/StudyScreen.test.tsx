@@ -63,7 +63,8 @@ describe('Thầy đọc', () => {
     fireEvent.click(screen.getByRole('button', { name: /Thầy đọc/ }));
     await waitFor(() => expect(plugin.speak).toHaveBeenCalled());
     expect(screen.getByRole('button', { name: /Tạm dừng/ })).toBeTruthy();
-    expect(screen.getByText(plugin.speak.mock.calls[0][0].text)).toBeTruthy();
+    expect(screen.getByText(/Thầy chào con/)).toBeTruthy();
+    expect(plugin.speak.mock.calls[0][0].pitch).toBeCloseTo(0.85);
   });
 
   it('nói chậm: đổi tốc độ ngay trong lúc đang đọc', async () => {
@@ -73,7 +74,7 @@ describe('Thầy đọc', () => {
     const before = plugin.speak.mock.calls[0][0].rate;
     fireEvent.click(screen.getByRole('button', { name: 'Nói chậm' }));
     await waitFor(() => expect(plugin.speak).toHaveBeenCalledTimes(2));
-    expect(plugin.speak.mock.calls[1][0].rate).toBeCloseTo(before * 0.75);
+    expect(plugin.speak.mock.calls[1][0].rate).toBeCloseTo(before * 0.85);
     expect(readingState()?.index).toBe(0);
   });
 

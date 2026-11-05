@@ -1,4 +1,5 @@
 .bar { background: var(--surface2); border-top: 1px solid var(--line-strong); }
+.caption { max-width: 720px; margin: 0 auto; padding: 6px var(--space-3) 0; max-height: 5.4em; overflow-y: auto; font-size: var(--fs-sm); line-height: 1.3; color: var(--ink-dim); }
 .inner {
   display: flex; align-items: center; gap: var(--space-1); max-width: 720px; margin: 0 auto; padding: 2px var(--space-2);
 }

@@ -19,7 +19,7 @@ import { initials } from '../features/profiles/format';
 import { Journey } from '../features/journey/Journey';
 import { recordEntry, todayEntry, type TodayEntry } from '../features/journey/gate';
 import { onPause } from '../platform/lifecycle';
-import { stopReading } from '../platform/tts';
+import { setPreferredVoice, stopReading } from '../platform/tts';
 import { ReadingBar } from '../ui/components/ReadingBar';
 import s from './App.module.css';
 
@@ -141,6 +141,8 @@ export function App({ journey = false }: { journey?: boolean }) {
   const routeKey = nav.tab + JSON.stringify(nav.route);
   useEffect(() => stopReading, [routeKey, activeId]);
   useEffect(() => onPause(stopReading), []);
+  const ttsVoice = useApp((x) => x.settings.ttsVoice);
+  useEffect(() => setPreferredVoice(ttsVoice ?? null), [ttsVoice]);
   return (
     <div className={s.shell}>
       <TopBar />

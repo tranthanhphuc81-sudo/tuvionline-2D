@@ -18,13 +18,28 @@
 | 4.1 — Chọn cách đọc cảm biến | XONG — plugin nội bộ đọc `TYPE_ROTATION_VECTOR`, xem ARCHITECTURE mục 11; chưa đo trên máy thật |
 | 4.2 — Dựng la bàn | XONG phần code — 418 test xanh, build OK, APK chạy trên máy ảo. CHƯA ĐẠT điều kiện nghiệm thu: còn 9 phép thử trên máy thật (ARCHITECTURE mục 11) |
 | 5.1 — Đọc thành lời | XONG phần code — 447 test xanh, build OK. CHƯA nghe được tiếng thật: cần thử trên máy thật đã tải gói tiếng Việt |
-| 6.1 — Quyết định Đạo quán & Thầy đọc | XONG — ARCHITECTURE mục 12, còn 3 điểm chờ chủ dự án duyệt (cuối 12.11) |
+| 6.1 — Quyết định Đạo quán & Thầy đọc | XONG — ARCHITECTURE mục 12, chủ dự án đã duyệt các điểm cuối 12.11 |
 | 6.2 — Engine cảnh | XONG phần code — 467 test xanh, build OK, chạy trên máy ảo. CHƯA đo được 60 fps: cần máy thật |
 | 6.3 — Biến thể lịch và âm thanh | XONG phần code — chưa nghe tiếng thật; tiếng hiện là tổng hợp giữ chỗ |
 | 6.4 — Tĩnh thất | XONG phần code — 502 test xanh, build OK, xem ở 360×740. Chưa thử trên máy thật |
-| 6.5 đến 6.8 | CHƯA LÀM — chờ chủ dự án đồng ý; đã nghe giọng trên máy thật (xem dưới), 6.6 cần máy tầm thấp |
+| 6.5 — Thầy đọc | XONG phần code — 520 test xanh, build OK. Chưa nghe trên máy thật |
+| 6.6 đến 6.8 | CHƯA LÀM — 6.6 cần máy tầm thấp |
 | 7 đến 9 | CHƯA LÀM |
 | Tranh hành trình | XONG bản tự vẽ — 26 SVG sơn mài, thuỷ mặc ở `src/assets/journey/art/`, sinh bằng `node scripts/build-journey-art.mjs`. Nhẹ, không dùng blur. Vẫn thay được bằng tranh hoạ sĩ. Chưa đo fps trên máy thật |
+
+## Phase 6.5 — Thầy đọc — XONG PHẦN CODE, CHƯA NGHE TRÊN MÁY THẬT
+
+### Đã xong
+- `src/content/noSpeech.ts`: từ cấm đọc theo từng câu; `speechOf` dùng chung nên nút "Đọc kết quả" của La Bàn cũng lọc.
+- `src/content/reader/templates.ts`: bộ mẫu tối thiểu; `src/features/reader/script.ts`: `xungHo`, `buildScript`, lời dẫn cho từng công cụ; `hooks.ts`: `thayVoice`, `useWho`, `useCueFocus`.
+- 5 công cụ và Tổng hợp đọc theo kịch bản; Tử Vi, Bát Tự, Lục Hào, Bát Trạch tô sáng vùng đang đọc qua prop `focus`.
+- Trình phát: dùng luôn phiên đọc trong `src/platform/tts.ts` (khác 12.7 tách `CuePlayer` riêng, để tạm dừng, lùi, tiến, `ReadingBar` chạy chung một chỗ). Đoạn chỉ có chữ dừng theo độ dài, tối thiểu 3 giây.
+- Cài đặt: chọn giọng (`settings.ttsVoice`, tuỳ chọn, không tăng version), nghe thử giọng thầy, "Thầy gọi bạn là". Mục chọn giọng chỉ hiện khi máy có từ 2 giọng trở lên.
+
+### Chưa làm hoặc chưa kiểm
+- Chưa có thời gian chờ khi `speak()` treo (lưu ý ở 12.7); lần thử S25 Ultra không gặp, cần xem trên máy thiếu gói giọng.
+- La Bàn vẫn đọc bằng nút thường, chưa có kịch bản thầy.
+- Chưa nghe giọng thầy, chưa xem tô sáng khi đang đọc trên máy thật. Bộ mẫu đầy đủ ở 6.7.
 
 ## Phase 6.4 — Tĩnh thất — XONG PHẦN CODE
 
@@ -35,7 +50,6 @@
 - `tts.ts`: `ReadingState` thêm `text` làm phụ đề, thêm `setReadingOptions`. `ReadingBar` ẩn với lần đọc của Tĩnh thất.
 
 ### Tạm thời
-- "Thầy đọc" hiện đọc đúng chữ phần Tổng hợp; Phase 6.5 thay bằng kịch bản. Câu chào chưa xưng hô riêng vì bảng 12.6 còn chờ duyệt.
 - Thầy là bóng người tĩnh, không rõ mặt; Phase 6.6 thay bằng nhân vật có hoạt ảnh.
 
 ## Thử trên máy thật lần 1 — Samsung Galaxy S25 Ultra, 05/11/2026

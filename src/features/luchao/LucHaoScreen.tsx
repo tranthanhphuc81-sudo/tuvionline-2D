@@ -13,6 +13,8 @@ import { RichText } from '../../ui/components/RichText';
 import { Segmented } from '../../ui/components/Segmented';
 import { SectionView } from '../../ui/components/SectionView';
 import { SpeakButton } from '../../ui/components/SpeakButton';
+import { buildScript, lucHaoLead } from '../reader/script';
+import { useCueFocus, useWho } from '../reader/hooks';
 import { cellsSpeech, sectionsSpeech, speechOf } from '../../content/speech';
 import ui from '../../ui/components/ui.module.css';
 import { BienCard, HaoList, HexagramDiagram } from './Hexagram';
@@ -31,6 +33,8 @@ const today = (): [number, number, number] => { const t = new Date(); return [t.
 
 export function LucHaoScreen() {
   const { store } = useAppCtx();
+  const who = useWho();
+  const cueFocus = useCueFocus('luchao');
   const cast = useApp((x) => x.tools.lucHaoLastCast);
   const [method, setMethod] = useState<'random' | 'manual'>(cast?.method ?? 'random');
   const [key, setKey] = useState<DungThanKey>('the');
@@ -41,6 +45,7 @@ export function LucHaoScreen() {
   const dateOk = LySoUtil.validSolar(...date);
   const result = useMemo(() => (cast && dateOk ? { r: castHexagram(cast.tosses), ctx: castContext(...date) } : null), [cast, dateOk, date[0], date[1], date[2]]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const theHao = result?.r.hao.find((h) => h.isThe);
   const summary: [string, string][] = result ? [
     ['Quẻ chủ', result.r.name],
     ['Cung / Bước', result.r.cung + ' — ' + result.r.step],
@@ -107,13 +112,13 @@ export function LucHaoScreen() {
           <dl className={s.summary}>
             {summary.map(([k, v]) => <div key={k} className={s.cell} data-wide={k === 'Nguyệt lệnh (tháng xem)'}><dt>{k}</dt><dd>{v}</dd></div>)}
           </dl>
-          {result && <SpeakButton id="luchao" getText={() => speechOf(cellsSpeech(summary), sectionsSpeech([lucHaoVerdict(result.r, result.ctx, key)]), sectionsSpeech(lucHaoTongKet(result.r, result.ctx, key)))} />}
+          {result && <SpeakButton id="luchao" getCues={() => buildScript('luchao', who, { cells: summary, leads: theHao ? [lucHaoLead(theHao.idx, result.r.theHao)] : [], sections: [lucHaoVerdict(result.r, result.ctx, key), ...lucHaoTongKet(result.r, result.ctx, key)] })} />}
           {cast.method === 'random' && <p className={ui.info}><RichText nodes={parseRich(lucHaoTossBanner(cast.tosses))} /></p>}
 
           <h2 className={ui.sectionTitle}>Quẻ chủ</h2>
           <div className={s.diagramRow}>
             <HexagramDiagram r={result.r} />
-            <HaoList views={haoViews(result.r, result.ctx, key)} />
+            <HaoList views={haoViews(result.r, result.ctx, key)} focus={cueFocus} />
           </div>
 
           {result.r.bien && <><h2 className={ui.sectionTitle}>Quẻ biến</h2><BienCard r={result.r} /></>}

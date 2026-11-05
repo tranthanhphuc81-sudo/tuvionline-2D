@@ -1,4 +1,4 @@
-/* Câu chữ của Tĩnh thất (ARCHITECTURE.md mục 12.11). Chưa dùng xưng hô riêng: bảng xưng hô (12.6) còn chờ chủ dự án duyệt, Phase 6.5 sẽ thay. */
+/* Câu chữ của Tĩnh thất (ARCHITECTURE.md mục 12.11). Lời chào chưa biến đổi theo xưng hô; Phase 6.7 viết lại cùng bộ mẫu đầy đủ. */
 import { lunarOfSolar, yearCanChiName } from '../core';
 
 /** Nhãn thanh trên: ngày tháng âm và năm Can Chi của hôm nay. */

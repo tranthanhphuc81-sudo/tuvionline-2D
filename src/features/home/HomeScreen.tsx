@@ -8,7 +8,8 @@ import { useApp, useAppCtx, useNav } from '../../app/context';
 import type { Route, TabId } from '../../app/routes';
 import { SectionView } from '../../ui/components/SectionView';
 import { SpeakButton } from '../../ui/components/SpeakButton';
-import { sectionsSpeech, speechOf } from '../../content/speech';
+import { useWho } from '../reader/hooks';
+import { buildScript } from '../reader/script';
 import ui from '../../ui/components/ui.module.css';
 import { birthLine } from '../profiles/format';
 import s from './home.module.css';
@@ -39,6 +40,7 @@ export function BootNoticeBanner() {
 /** Tổng hợp: tóm tắt 4 hệ thống của người đang xem, lối tắt sang mọi công cụ, rồi phần đọc tổng hợp. */
 export function HomeScreen() {
   const nav = useNav();
+  const who = useWho();
   const profile = useApp(selectActiveProfile);
   const res = useMemo(() => (profile ? profileSummary(profile) : null), [profile]);
 
@@ -112,7 +114,7 @@ export function HomeScreen() {
         </div>
       </section>
 
-      {parts.length > 0 && <SpeakButton id="tonghop" getText={() => speechOf(...parts.map((part) => part.title + '. ' + sectionsSpeech(part.sections)))} />}
+      {parts.length > 0 && <SpeakButton id="tonghop" getCues={() => buildScript('tonghop', who, { sections: parts.flatMap((part) => part.sections) })} />}
       {parts.map((part) => (
         <section key={part.id} className={ui.stack} aria-labelledby={`home-${part.id}`}>
           <h2 id={`home-${part.id}`} className={ui.sectionTitle}>{part.title}</h2>

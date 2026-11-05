@@ -818,7 +818,8 @@ Câu dính từ cấm: `text` rỗng, `caption` là chữ gốc kèm lời "(Ph�
 
 **Điều kiện chặn:** 6.5 cần kết quả nghe giọng đọc trên máy thật; 6.6 cần một máy Android tầm thấp để đo. 6.2–6.4 có thể làm trước.
 
-**Cần chủ dự án duyệt:**
-1. Danh sách từ cấm ở 12.8, gồm việc KHÔNG cấm "sức khoẻ", và áp dụng cả cho nút "Đọc kết quả".
-2. Bảng xưng hô ở 12.6, nhất là các mốc 40 và 55 tuổi.
-3. Dùng Lottie, và bỏ tên riêng của thầy cùng đạo quán.
+**Chủ dự án đã duyệt (05/11/2026):**
+1. Danh sách từ cấm ở 12.8, gồm việc KHÔNG cấm "sức khoẻ", áp dụng cả cho nút "Đọc kết quả".
+2. Bảng xưng hô ở 12.6, giữ các mốc 40 và 55 tuổi.
+3. Dùng Lottie; không đặt tên riêng cho thầy và đạo quán.
+4. Thêm mục chọn giọng trong Cài đặt: liệt kê giọng `-local`, có nút nghe thử (bổ sung cho 12.9).

@@ -14,6 +14,8 @@ import { useApp, useAppCtx, useNav } from '../../../app/context';
 import { RichText } from '../../../ui/components/RichText';
 import { SectionView } from '../../../ui/components/SectionView';
 import { SpeakButton } from '../../../ui/components/SpeakButton';
+import { buildScript, batTrachLead } from '../../reader/script';
+import { useCueFocus, useWho } from '../../reader/hooks';
 import { cellsSpeech, richSpeech, sectionsSpeech, speechOf } from '../../../content/speech';
 import ui from '../../../ui/components/ui.module.css';
 import { Banner } from '../Banner';
@@ -24,6 +26,8 @@ export function BatTrachScreen() {
   const nav = useNav();
   const { store } = useAppCtx();
   const profile = useApp(selectActiveProfile);
+  const who = useWho();
+  const cueFocus = useCueFocus('battrach');
   const huongCua = useApp((x) => x.tools.batTrachHuongCua);
   const birth = useMemo(() => (profile ? resolveBirth(profile) : null), [profile]);
   const r = useMemo(() => (profile && birth?.ok ? batTrachReading(birth.solar, profile.gender, huongCua) : null), [profile, birth, huongCua]);
@@ -49,7 +53,7 @@ export function BatTrachScreen() {
       <dl className={s.summary}>
         {batTrachSummary(r).map(([k, v]) => <div key={k} className={s.cell}><dt>{k}</dt><dd>{v}</dd></div>)}
       </dl>
-      <SpeakButton id="battrach" getText={() => speechOf(cellsSpeech(batTrachSummary(r)), r.house ? richSpeech(batTrachHouseBanner(r.house)) : '', sectionsSpeech([batTrachHanhCard(r)]), sectionsSpeech(batTrachTongKet(r)))} />
+      <SpeakButton id="battrach" getCues={() => buildScript('battrach', who, { cells: batTrachSummary(r), leads: r.goods[0] ? [batTrachLead(r.goods[0].huong, r.goods[0].star)] : [], prose: r.house ? [richSpeech(batTrachHouseBanner(r.house))] : [], sections: [batTrachHanhCard(r), ...batTrachTongKet(r)] })} />
 
       <section className={ui.card} aria-labelledby="pt-house-title">
         <h2 id="pt-house-title" className={ui.sectionTitle}>Căn nhà đang xét</h2>
@@ -65,7 +69,7 @@ export function BatTrachScreen() {
       </section>
 
       <h2 className={ui.sectionTitle}>Bảng Du Niên — 8 sao ứng với Mệnh Quái của bạn</h2>
-      <StarGrid cards={batTrachStarCards(r)} />
+      <StarGrid cards={batTrachStarCards(r)} focus={cueFocus} />
 
       <h2 className={ui.sectionTitle}>Gợi ý bố trí theo hướng</h2>
       <dl className={s.posGrid}>

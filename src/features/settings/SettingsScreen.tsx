@@ -1,9 +1,18 @@
+import { useEffect, useState } from 'react';
 import { CULTURAL_NOTE } from '../../content/common/notes';
 import { setSetting } from '../../state/actions';
-import type { EntryMode, Theme } from '../../state/schema';
+import type { EntryMode, Theme, XungHoSetting } from '../../state/schema';
+import { localVietnameseVoices, speak } from '../../platform/tts';
+import { thayVoice } from '../reader/hooks';
 import { useApp, useAppCtx } from '../../app/context';
 import { Segmented } from '../../ui/components/Segmented';
 import ui from '../../ui/components/ui.module.css';
+
+const VOICE_SAMPLE = 'Thầy chào bạn. Số là tham khảo, đức năng thắng số.';
+const XUNG_HO: readonly { value: XungHoSetting; label: string }[] = [
+  { value: 'tu-dong', label: 'Tự động theo tuổi' }, { value: 'con', label: 'Con' }, { value: 'anh', label: 'Anh' }, { value: 'chi', label: 'Chị' },
+  { value: 'chu', label: 'Chú' }, { value: 'co', label: 'Cô' }, { value: 'ban', label: 'Bạn' },
+];
 
 export function SettingsScreen() {
   const { store } = useAppCtx();
@@ -12,6 +21,10 @@ export function SettingsScreen() {
   const journeySound = useApp((x) => x.settings.journeySound);
   const rate = useApp((x) => x.settings.ttsRate);
   const pitch = useApp((x) => x.settings.ttsPitch);
+  const voice = useApp((x) => x.settings.ttsVoice);
+  const xungHo = useApp((x) => x.settings.xungHo);
+  const [voices, setVoices] = useState<string[]>([]);
+  useEffect(() => { void localVietnameseVoices().then(setVoices); }, []);
   return (
     <div className={ui.stack}>
       <section className={ui.card}>
@@ -54,6 +67,22 @@ export function SettingsScreen() {
           onChange={(v) => setSetting(store, 'ttsPitch', Number(v))}
           options={[{ value: '0.9', label: 'Trầm' }, { value: '1', label: 'Vừa' }, { value: '1.1', label: 'Cao' }]}
         />
+        {voices.length > 1 && (
+          <label className={ui.field}>
+            <span className={ui.label}>Giọng đọc</span>
+            <select className={ui.input} value={voice ?? ''} onChange={(e) => setSetting(store, 'ttsVoice', e.target.value || undefined)}>
+              <option value="">Tự chọn</option>
+              {voices.map((v, i) => <option key={v} value={v}>Giọng {i + 1}</option>)}
+            </select>
+          </label>
+        )}
+        <button type="button" className={`${ui.btn} ${ui.block}`} onClick={() => void speak(VOICE_SAMPLE, thayVoice(rate, pitch)).catch(() => {})}>🔊 Nghe thử giọng thầy</button>
+        <label className={ui.field}>
+          <span className={ui.label}>Thầy gọi bạn là</span>
+          <select className={ui.input} value={xungHo} onChange={(e) => setSetting(store, 'xungHo', e.target.value as XungHoSetting)}>
+            {XUNG_HO.map((x) => <option key={x.value} value={x.value}>{x.label}</option>)}
+          </select>
+        </label>
       </section>
       <section className={ui.card}>
         <h2>Về ứng dụng</h2>

@@ -10,6 +10,7 @@ export function ReadingBar() {
   const last = r.index >= r.total - 1;
   return (
     <div className={s.bar} role="group" aria-label="Điều khiển đọc thành lời">
+      <p className={s.caption}>{r.text}</p>
       <div className={s.inner}>
         <button type="button" className={s.btn} aria-label="Nghe lại đoạn trước" onClick={() => void skipReading(-1)}>⏮</button>
         <button

@@ -11,6 +11,8 @@ import { useApp, useNav } from '../../app/context';
 import { RichText } from '../../ui/components/RichText';
 import { SectionView } from '../../ui/components/SectionView';
 import { SpeakButton } from '../../ui/components/SpeakButton';
+import { buildScript, batTuLead } from '../reader/script';
+import { useCueFocus, useWho } from '../reader/hooks';
 import { cellsSpeech, sectionsSpeech, speechOf } from '../../content/speech';
 import ui from '../../ui/components/ui.module.css';
 import { Pillars, hanhAmDuong } from './Pillars';
@@ -22,6 +24,8 @@ const thisYear = () => new Date().getFullYear();
 export function BatTuScreen() {
   const nav = useNav();
   const profile = useApp(selectActiveProfile);
+  const who = useWho();
+  const cueFocus = useCueFocus('battu');
   const res = useMemo(() => (profile ? profileSummary(profile) : null), [profile]);
   const [yearInput, setYearInput] = useState(String(thisYear()));
   const [year, setYear] = useState(thisYear());
@@ -60,11 +64,11 @@ export function BatTuScreen() {
       <dl className={s.summary}>
         {summary.map(([k, v]) => <div key={k} className={s.cell} data-wide={k === 'Bát Tự' || k === 'Âm/Dương Nam Nữ'}><dt>{k}</dt><dd>{v}</dd></div>)}
       </dl>
-      <SpeakButton id="battu" getText={() => speechOf(cellsSpeech(summary), sectionsSpeech(batTuTongKet(ch, thisYear())))} />
+      <SpeakButton id="battu" getCues={() => buildScript('battu', who, { cells: summary, leads: [batTuLead(ch.pillars.findIndex((p) => p.isNhatChu), res.summary.battu.nhatChu)], sections: batTuTongKet(ch, thisYear()) })} />
       {lx && <p className={ui.info} role="note"><RichText nodes={parseRich(lx)} /></p>}
 
       <h2 className={ui.sectionTitle}>Tứ Trụ hoàn chỉnh</h2>
-      <Pillars ch={ch} />
+      <Pillars ch={ch} focus={cueFocus} />
 
       <h2 className={ui.sectionTitle}>Vượng Suy và Dụng Thần sơ bộ</h2>
       <section className={ui.card}><SectionView sections={[batTuVuongSuy(ch)]} /></section>

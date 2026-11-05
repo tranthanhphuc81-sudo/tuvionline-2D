@@ -1,5 +1,6 @@
 /* Chuẩn bị chữ để đọc thành lời, chuyển từ legacy (LySoTTS: readable, normalizeForSpeech, chunk). Hàm thuần, Phase 6 dùng lại
    cho phụ đề. Thêm so với legacy: đọc "độ" và "phần trăm"; bỏ dòng giải thích cách chấm; đoạn luôn ≤ 180 ký tự. */
+import { hasNoSpeech } from './noSpeech';
 import { parseRich, sectionPlainText, toPlainText, type Section } from './rich';
 
 export const SPEECH_MAX_CHUNK = 180;
@@ -45,14 +46,19 @@ export function richSpeech(html: string): string {
   return linesToSentences(toPlainText(parseRich(html)));
 }
 
-/** Ghép các phần rồi chuẩn hoá, sẵn sàng để đọc. */
+/** Tách câu theo dấu câu, giữ nguyên chữ. */
+export function splitSentences(text: string): string[] {
+  return (text.match(/[^.!?;]+[.!?;]*/g) ?? []).map((s) => s.trim()).filter(Boolean);
+}
+
+/** Ghép các phần rồi chuẩn hoá, sẵn sàng để đọc. Câu dính từ cấm đọc bị bỏ (ARCHITECTURE.md mục 12.8). */
 export function speechOf(...parts: readonly string[]): string {
-  return normalizeForSpeech(parts.filter(Boolean).join(' '));
+  return normalizeForSpeech(splitSentences(parts.filter(Boolean).join(' ')).filter((s) => !hasNoSpeech(s)).join(' '));
 }
 
 /** Cắt theo dấu câu, đoạn nào cũng ≤ `max` ký tự; câu quá dài thì cắt ở dấu phẩy hoặc khoảng trắng. */
 export function chunkSpeech(text: string, max = SPEECH_MAX_CHUNK): string[] {
-  const sentences = text.match(/[^.!?;]+[.!?;]*/g) ?? [];
+  const sentences = splitSentences(text);
   const out: string[] = [];
   let cur = '';
   const flush = () => { if (cur) out.push(cur); cur = ''; };
