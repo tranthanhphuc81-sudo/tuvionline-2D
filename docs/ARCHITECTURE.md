@@ -825,3 +825,22 @@ Câu dính từ cấm: `text` rỗng, `caption` là chữ gốc kèm lời "(Ph�
 2. Bảng xưng hô ở 12.6, giữ các mốc 40 và 55 tuổi.
 3. Dùng Lottie; không đặt tên riêng cho thầy và đạo quán.
 4. Thêm mục chọn giọng trong Cài đặt: liệt kê giọng `-local`, có nút nghe thử (bổ sung cho 12.9).
+
+## 13. Xem chỉ tay (chốt cách nhập liệu 05/11/2026)
+
+Căn cứ nội dung: `docs/CHI-TAY.md`, `docs/palm-content.vi.json`. Thứ tự bước: `docs/PROMPT-KIT-CHI-TAY.md`. Mục này là quyết định cho bước 3B.1, các ý còn lại của 3B.1 sẽ bổ sung khi có số đo.
+
+**Cách nhập liệu: máy đo trước, phần còn lại hỏi bằng câu ngắn** (phương án (c) của kit, có giới hạn).
+- Lý do: nhiều người không tự tin khi tự so với hình mẫu, nên bỏ phương án (a), (b). Nhưng ảnh lòng bàn tay không trả lời được hết 32 câu ở CHI-TAY §11, nên không thể tự động hoàn toàn.
+- Máy đo được khá chắc: Q04, Q08–Q12. Cần số đo mới biết: Q17, Q20, Q21, Q23. Khó, chưa làm ở bản đầu: Q18, Q19, Q22, Q24–Q29, Q32. Phải hỏi: Q01–Q03, Q05–Q07, Q13–Q16, Q30, Q31.
+- Máy vẽ đường và đặc điểm đã đo lên ảnh để người dùng xác nhận. Không chắc thì để trống, không đoán.
+- Câu còn lại luôn có "Không rõ"; `analyzePalm` phải chạy được khi thiếu câu trả lời.
+- Phương án bị loại: gửi ảnh lên máy chủ AI, vì phá cam kết không gửi dữ liệu đi đâu.
+
+**Mô hình:** MediaPipe Hand Landmarker (`@mediapipe/tasks-vision`, Apache-2.0) cho 21 điểm bàn tay, lọc đường vân tự viết cho 3 đường chính. Đóng gói trong app, nạp lười. APK tăng khoảng 10 MB. Giấy phép của file mô hình cần kiểm tra trước khi đóng gói.
+
+**Cửa kiểm chứng:** bản thử ở `spike/chitay/` (không commit) đo trên khoảng 30 ảnh thật. Chỉ làm tính năng khi: từ 80% ảnh tốt đúng cả 3 đường, phân loại đủ tốt để không luận sai, dưới 5 giây trên S25 Ultra, và ảnh kém được báo "không chắc".
+
+**Ảnh tay:** bản đầu đề xuất không lưu ảnh, chỉ lưu kết quả; chủ dự án chưa chốt.
+
+**Mã nguồn và nội dung:** dùng tên `palm` (`src/core/palm`, `src/content/palm`). Câu chữ chỉ tay là nội dung mới, không chép nguyên văn sách. `V19`, `V26`, `N04` ẩn cho tới khi đối chiếu xong với sách.

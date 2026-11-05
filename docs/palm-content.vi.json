@@ -1,0 +1,4658 @@
+{
+ "schema": "palm-content/1",
+ "locale": "vi-VN",
+ "generatedFrom": "docs/CHI-TAY.md",
+ "sources": {
+  "DVT": "Đoàn Văn Thông, Những kinh nghiệm về khoa Xem Chỉ Tay, NXB Đại Nam",
+  "HCM": "Hiến Chi Mai (biên dịch), Bàn Tay Mã Số Cuộc Đời, NXB VH-TT 2004",
+  "TCT": "Trang Chấn Tây (chủ biên), Bàn Tay Với Sức Khỏe Con Người, NXB Hà Nội 2001",
+  "JDJ": "Jeanne Dujarric, Ngũ Văn Bằng dịch, Có Gì Bí Mật Trong Bàn Tay?"
+ },
+ "ttsForbidden": [
+  "ly hôn",
+  "ly dị",
+  "goá",
+  "góa",
+  "chết",
+  "tử vong",
+  "tai nạn",
+  "bệnh",
+  "ung thư",
+  "tù",
+  "kiện tụng",
+  "tuổi thọ",
+  "sẩy thai",
+  "ngoại tình",
+  "chia tay"
+ ],
+ "readings": [
+  {
+   "id": "H01",
+   "group": "hand",
+   "feature": "Bàn tay vuông: lòng bàn tay và đầu ngón đều vuông",
+   "text": "Thực tế, ngăn nắp, làm đâu chắc đó. Hợp với việc cần quy trình rõ ràng.",
+   "topics": [
+    "tc",
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "JDJ",
+    "HCM",
+    "DVT"
+   ]
+  },
+  {
+   "id": "H02",
+   "group": "hand",
+   "feature": "Bàn tay chữ nhật: dài hơn rộng, đầu ngón vuông",
+   "text": "Có nghị lực và óc khoa học kỹ thuật, thích hiểu tận gốc vấn đề trước khi làm.",
+   "topics": [
+    "tc",
+    "tt"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "JDJ"
+   ]
+  },
+  {
+   "id": "H03",
+   "group": "hand",
+   "feature": "Bàn tay thon nhọn (tam giác): ngón thon, đầu ngón nhọn",
+   "text": "Nhạy cảm, trực giác tốt, thiên về văn hoá nghệ thuật. Nên biến ý tưởng thành kế hoạch cụ thể.",
+   "topics": [
+    "tc",
+    "st"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "JDJ",
+    "HCM",
+    "DVT"
+   ]
+  },
+  {
+   "id": "H04",
+   "group": "hand",
+   "feature": "Bàn tay bè: đầu ngón loe rộng như cái bay",
+   "text": "Năng động, nhiều sáng kiến, làm nhanh. Học thêm sự kiên nhẫn sẽ đi được xa hơn.",
+   "topics": [
+    "tc",
+    "sn"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "JDJ"
+   ]
+  },
+  {
+   "id": "H05",
+   "group": "hand",
+   "feature": "Bàn tay tròn đầy: ngón tròn, lòng tròn, phần gần cổ tay đầy",
+   "text": "Ưa ổn định, thực tế, chậm mà chắc, hiếu khách và dễ gần.",
+   "topics": [
+    "tc",
+    "gt"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "JDJ",
+    "HCM"
+   ]
+  },
+  {
+   "id": "H06",
+   "group": "hand",
+   "feature": "Bàn tay xương khớp: ít thịt, ngón dài, khớp nổi",
+   "text": "Suy nghĩ chín chắn, thích lý lẽ và nguyên tắc; đôi khi hơi giữ ý kiến.",
+   "topics": [
+    "tc",
+    "tt"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM",
+    "DVT"
+   ]
+  },
+  {
+   "id": "H07",
+   "group": "hand",
+   "feature": "Bàn tay phối hợp: lòng một dạng, ngón một dạng khác",
+   "text": "Đa năng, linh hoạt, làm được nhiều việc. Chọn một hướng chính sẽ phát huy tốt nhất.",
+   "topics": [
+    "tc",
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "JDJ"
+   ]
+  },
+  {
+   "id": "H08",
+   "group": "hand",
+   "feature": "Bàn tay to so với vóc người",
+   "text": "Bền bỉ, kỹ lưỡng, chậm mà chắc; ít bộc lộ cảm xúc ra ngoài.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "JDJ",
+    "HCM"
+   ]
+  },
+  {
+   "id": "H09",
+   "group": "hand",
+   "feature": "Bàn tay nhỏ so với vóc người",
+   "text": "Nhanh nhẹn, khéo léo, nhận thức nhanh; đôi lúc hành động theo hứng.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "JDJ"
+   ]
+  },
+  {
+   "id": "H10",
+   "group": "hand",
+   "feature": "Bàn tay dài",
+   "text": "Kín đáo, cân nhắc kỹ, sống nhiều về nội tâm; có lúc do dự.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "JDJ"
+   ]
+  },
+  {
+   "id": "H11",
+   "group": "hand",
+   "feature": "Bàn tay rộng",
+   "text": "Hướng ngoại, nhiều hoài bão, thích mở rộng phạm vi hoạt động.",
+   "topics": [
+    "tc",
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "JDJ"
+   ]
+  },
+  {
+   "id": "H12",
+   "group": "hand",
+   "feature": "Tay cứng, chắc khi nắm",
+   "text": "Quyết đoán, chuộng hành động, không ngại va chạm. Lắng nghe thêm sẽ thuận lợi hơn.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "JDJ"
+   ]
+  },
+  {
+   "id": "H13",
+   "group": "hand",
+   "feature": "Tay mềm, dẻo",
+   "text": "Giàu tưởng tượng, uyển chuyển, sống bằng cảm xúc; dễ phân vân khi phải chọn.",
+   "topics": [
+    "tc",
+    "st"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "JDJ",
+    "DVT"
+   ]
+  },
+  {
+   "id": "H14",
+   "group": "hand",
+   "feature": "Tay thường ấm",
+   "text": "Nhiệt tình, dễ đồng cảm, để trái tim dẫn đường.",
+   "topics": [
+    "tc",
+    "tcm"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "JDJ",
+    "HCM"
+   ]
+  },
+  {
+   "id": "H15",
+   "group": "hand",
+   "feature": "Tay thường mát",
+   "text": "Điềm tĩnh, để lý trí điều tiết cảm xúc, ít khi nóng vội.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "JDJ",
+    "HCM"
+   ]
+  },
+  {
+   "id": "H16",
+   "group": "hand",
+   "feature": "Lòng bàn tay đầy đặn, đàn hồi",
+   "text": "Hoạt bát, rõ ràng, sinh lực tốt.",
+   "topics": [
+    "ss",
+    "tc"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "JDJ"
+   ]
+  },
+  {
+   "id": "H17",
+   "group": "hand",
+   "feature": "Lòng bàn tay trũng sâu ở giữa",
+   "text": "Dễ sốt ruột khi việc chậm. Giữ nhịp đều và quản lý chi tiêu cẩn thận sẽ vững hơn.",
+   "topics": [
+    "tc",
+    "tl"
+   ],
+   "tone": "!",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ]
+  },
+  {
+   "id": "H18",
+   "group": "hand",
+   "feature": "Lòng bàn tay mỏng, phẳng",
+   "text": "Kín đáo, ít phô bày. Nên chủ động nạp lại năng lượng bằng nghỉ ngơi và vận động.",
+   "topics": [
+    "tc",
+    "ss"
+   ],
+   "tone": "!",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "JDJ"
+   ]
+  },
+  {
+   "id": "F01",
+   "group": "finger",
+   "feature": "Ngón cái dài (xem §2.3)",
+   "text": "Ý chí mạnh, tự trọng, theo đuổi mục tiêu bền bỉ, có tố chất dẫn dắt.",
+   "topics": [
+    "tc",
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM",
+    "JDJ",
+    "DVT"
+   ]
+  },
+  {
+   "id": "F02",
+   "group": "finger",
+   "feature": "Ngón cái ngắn",
+   "text": "Giàu cảm hứng, linh hoạt, nắm cơ hội nhanh. Rèn thêm sự bền bỉ sẽ đi đến cùng.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM",
+    "DVT"
+   ]
+  },
+  {
+   "id": "F03",
+   "group": "finger",
+   "feature": "Ngón cái dang xa ngón trỏ khi xoè tự nhiên",
+   "text": "Phóng khoáng, cởi mở, dễ đón nhận cái mới.",
+   "topics": [
+    "tc",
+    "gt"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ]
+  },
+  {
+   "id": "F04",
+   "group": "finger",
+   "feature": "Ngón cái khép sát ngón trỏ",
+   "text": "Thận trọng, dè dặt, thích giữ mình trước khi tin người.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ]
+  },
+  {
+   "id": "F05",
+   "group": "finger",
+   "feature": "Đốt trên ngón cái (ý chí) to, dài hơn đốt giữa (lý lẽ)",
+   "text": "Hành động mạnh hơn suy xét. Dừng lại cân nhắc một nhịp trước việc lớn.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "!",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "JDJ"
+   ]
+  },
+  {
+   "id": "F06",
+   "group": "finger",
+   "feature": "Đốt giữa ngón cái dài hơn đốt trên",
+   "text": "Nhiều kế hoạch, suy xét kỹ. Biến kế hoạch thành bước làm cụ thể là chìa khoá.",
+   "topics": [
+    "tc",
+    "tt"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "JDJ"
+   ]
+  },
+  {
+   "id": "F07",
+   "group": "finger",
+   "feature": "Ngón cái dẻo, uốn được ra sau",
+   "text": "Hào hiệp, dễ thích nghi, hay bênh người yếu; đôi khi thiếu kiên nhẫn.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ]
+  },
+  {
+   "id": "F08",
+   "group": "finger",
+   "feature": "Ngón trỏ dài hơn ngón áp út",
+   "text": "Tự tin, tự chủ, không dễ bỏ cuộc, được người khác tin tưởng.",
+   "topics": [
+    "tc",
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM",
+    "DVT"
+   ]
+  },
+  {
+   "id": "F09",
+   "group": "finger",
+   "feature": "Ngón trỏ ngắn hơn ngón áp út (phổ biến nhất)",
+   "text": "Hoà nhã, dĩ hoà vi quý, thích nghi tốt với nhiều hoàn cảnh.",
+   "topics": [
+    "tc",
+    "gt"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "F10",
+   "group": "finger",
+   "feature": "Ngón trỏ gần bằng ngón áp út",
+   "text": "Độc lập, có chính kiến, nội tâm sâu nên người khác cần thời gian để hiểu.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "F11",
+   "group": "finger",
+   "feature": "Ngón áp út dài trội",
+   "text": "Óc thẩm mỹ, yêu nghệ thuật, hay quyết theo cảm nhận.",
+   "topics": [
+    "st",
+    "tc"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM",
+    "DVT"
+   ]
+  },
+  {
+   "id": "F12",
+   "group": "finger",
+   "feature": "Ngón giữa dài, thẳng, cứng cáp",
+   "text": "Nghiêm túc, chín chắn, có trách nhiệm từ sớm.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM",
+    "DVT"
+   ]
+  },
+  {
+   "id": "F13",
+   "group": "finger",
+   "feature": "Ngón giữa ngắn",
+   "text": "Thích tự do, ứng biến nhanh; nên đặt mục tiêu rõ để không bị phân tán.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ]
+  },
+  {
+   "id": "F14",
+   "group": "finger",
+   "feature": "Ngón út dài (vượt ngấn đốt trên ngón áp út)",
+   "text": "Diễn đạt tốt, giỏi giao tiếp và quan sát, có sức hút trong đám đông.",
+   "topics": [
+    "gt"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM"
+   ]
+  },
+  {
+   "id": "F15",
+   "group": "finger",
+   "feature": "Ngón út ngắn",
+   "text": "Giao tiếp chọn lọc, thích hành động hơn lời nói.",
+   "topics": [
+    "gt"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ]
+  },
+  {
+   "id": "F16",
+   "group": "finger",
+   "feature": "Các ngón dài so với lòng bàn tay",
+   "text": "Tỉ mỉ, ngăn nắp, bền chí nên thường thành công chắc chắn.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "JDJ"
+   ]
+  },
+  {
+   "id": "F17",
+   "group": "finger",
+   "feature": "Các ngón ngắn so với lòng bàn tay",
+   "text": "Nắm tổng thể nhanh, quyết nhanh; chú ý chi tiết để tránh vội vàng.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ]
+  },
+  {
+   "id": "F18",
+   "group": "finger",
+   "feature": "Khớp ngón nổi rõ (mấu gút)",
+   "text": "Thích phân tích, lý luận, cân nhắc kỹ trước khi làm.",
+   "topics": [
+    "tt"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM",
+    "JDJ"
+   ]
+  },
+  {
+   "id": "F19",
+   "group": "finger",
+   "feature": "Ngón nhẵn, khó thấy khớp",
+   "text": "Trực giác và cảm hứng dẫn đường, có khiếu nghệ thuật.",
+   "topics": [
+    "st"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM"
+   ]
+  },
+  {
+   "id": "F20",
+   "group": "finger",
+   "feature": "Xoè tự nhiên, ngón giữa và ngón út nghiêng về ngón áp út",
+   "text": "Có năng khiếu nghệ thuật.",
+   "topics": [
+    "st"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ]
+  },
+  {
+   "id": "F21",
+   "group": "finger",
+   "feature": "Xoè tự nhiên, ngón áp út nghiêng về ngón trỏ",
+   "text": "Chăm chỉ, cần mẫn, làm việc đến nơi đến chốn.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ]
+  },
+  {
+   "id": "T01",
+   "group": "tip",
+   "feature": "Đa số đầu ngón vuông",
+   "text": "Thực tế, chọn việc thiết thực, dễ thành công trong công việc cụ thể.",
+   "topics": [
+    "tc",
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "JDJ"
+   ]
+  },
+  {
+   "id": "T02",
+   "group": "tip",
+   "feature": "Đa số đầu ngón nhọn",
+   "text": "Nhiều mơ ước, giỏi tạo thiện cảm. Cần một người bạn thực tế đồng hành.",
+   "topics": [
+    "tc",
+    "gt"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "JDJ"
+   ]
+  },
+  {
+   "id": "T03",
+   "group": "tip",
+   "feature": "Đa số đầu ngón tròn",
+   "text": "Ôn hoà, nhân hậu, điềm đạm; đôi khi phân vân lâu.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "JDJ"
+   ]
+  },
+  {
+   "id": "T04",
+   "group": "tip",
+   "feature": "Đa số đầu ngón bè",
+   "text": "Năng động, nhiều sáng kiến, làm nhanh; giữ bình tĩnh khi bị cản trở.",
+   "topics": [
+    "tc",
+    "sn"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "JDJ"
+   ]
+  },
+  {
+   "id": "P01",
+   "group": "print",
+   "feature": "Đa số (≥ 4 ngón) vân móng thú",
+   "text": "Ôn hoà, hoà hợp với mọi người; nhớ dành thời gian cho chính mình vì hay cố chiều lòng người khác.",
+   "topics": [
+    "tc",
+    "gt"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "P02",
+   "group": "print",
+   "feature": "Đa số (≥ 4 ngón) vân xoáy",
+   "text": "Cá tính, độc lập, linh cảm mạnh, có sức hút với những điều huyền bí.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "P03",
+   "group": "print",
+   "feature": "Có vân cung",
+   "text": "Nghiêm chỉnh, hăng hái, đáng tin cậy.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "P04",
+   "group": "print",
+   "feature": "Rất ít vân xoáy",
+   "text": "Người thực tế, mạnh ở việc làm từng bước chắc chắn.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ]
+  },
+  {
+   "id": "P05",
+   "group": "print",
+   "feature": "Vân xoáy tụ giữa ngón cái",
+   "text": "Tự tin, khéo léo, có tài đứng ra điều phối công việc.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ]
+  },
+  {
+   "id": "P06",
+   "group": "print",
+   "feature": "Vân xoáy tụ giữa ngón trỏ",
+   "text": "Nhiều may mắn trong công việc, cơ hội đến từ chỗ không ngờ.",
+   "topics": [
+    "sn",
+    "tl"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ]
+  },
+  {
+   "id": "P07",
+   "group": "print",
+   "feature": "Vân xoáy tụ giữa ngón áp út",
+   "text": "Có khả năng mỹ thuật, thành quả đến về sau.",
+   "topics": [
+    "st"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ]
+  },
+  {
+   "id": "P08",
+   "group": "print",
+   "feature": "Vân xoáy tụ giữa ngón út",
+   "text": "Sự nghiệp dễ phát triển khi làm việc ở môi trường xa hoặc với nước ngoài.",
+   "topics": [
+    "sn",
+    "dx"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ]
+  },
+  {
+   "id": "V01",
+   "group": "combo-print",
+   "feature": "Vân móng thú ở: Chỉ ngón cái (các ngón còn lại ngược lại)",
+   "text": "Năng lực cao hơn mặt bằng nhưng dễ nóng vội, căng thẳng. Làm chậm lại sẽ ít sai hơn.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "V02",
+   "group": "combo-print",
+   "feature": "Vân móng thú ở: Chỉ ngón trỏ (các ngón còn lại ngược lại)",
+   "text": "Yêu ai là hết lòng, rất tôn trọng người mình thương. Nên tách bạch chuyện tình và chuyện việc.",
+   "topics": [
+    "tcm"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "V03",
+   "group": "combo-print",
+   "feature": "Vân móng thú ở: Chỉ ngón giữa (các ngón còn lại ngược lại)",
+   "text": "Thành thật, tự tin, sẵn lòng giúp người. Giữ chừng mực để không bị lợi dụng.",
+   "topics": [
+    "tc",
+    "gt"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "V04",
+   "group": "combo-print",
+   "feature": "Vân móng thú ở: Chỉ ngón áp út (các ngón còn lại ngược lại)",
+   "text": "Hài hoà, xã giao rộng, tinh thần cầu thị nên làm việc hiệu quả.",
+   "topics": [
+    "gt",
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "V05",
+   "group": "combo-print",
+   "feature": "Vân móng thú ở: Chỉ ngón út (các ngón còn lại ngược lại)",
+   "text": "Ghét tranh chấp, thích bình ổn, giỏi hoà giải bất đồng giữa mọi người.",
+   "topics": [
+    "gt"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "V06",
+   "group": "combo-print",
+   "feature": "Vân móng thú ở: Trỏ – giữa – áp út (các ngón còn lại ngược lại)",
+   "text": "Cẩn thận, có nhân cách, quyết tâm cao; đôi khi ít nhân nhượng với bạn bè.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "V07",
+   "group": "combo-print",
+   "feature": "Vân móng thú ở: Trỏ – giữa – út (các ngón còn lại ngược lại)",
+   "text": "Thành đạt nhiều hơn sau tuổi trung niên. Lúc trẻ gặp khó đừng nản.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "V08",
+   "group": "combo-print",
+   "feature": "Vân móng thú ở: Cái – giữa – út (các ngón còn lại ngược lại)",
+   "text": "Tự lập, ý chí kiên cường, không khuất phục khó khăn; mềm mỏng hơn sẽ ít va chạm.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "V09",
+   "group": "combo-print",
+   "feature": "Vân móng thú ở: Cái – giữa – áp út (các ngón còn lại ngược lại)",
+   "text": "Chắc mới làm nên cuộc sống vững vàng, đôi khi bỏ lỡ cơ hội vì quá cẩn thận.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "V10",
+   "group": "combo-print",
+   "feature": "Vân móng thú ở: Cái – trỏ – út (các ngón còn lại ngược lại)",
+   "text": "Thích đổi mới, nhạy với thương trường, giàu sáng tạo; dễ chán khi bị gò bó.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "V11",
+   "group": "combo-print",
+   "feature": "Vân móng thú ở: Cái – trỏ – áp út (các ngón còn lại ngược lại)",
+   "text": "Chính kiến mạnh. Lắng nghe ý người khác sẽ được nhiều thiện cảm hơn.",
+   "topics": [
+    "tc",
+    "gt"
+   ],
+   "tone": "!",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "V12",
+   "group": "combo-print",
+   "feature": "Vân móng thú ở: Trỏ – áp út – út (các ngón còn lại ngược lại)",
+   "text": "Tự lập sớm. Ổn định một nghề và mở rộng quan hệ sẽ giúp cuộc sống vững hơn.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "!",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "V13",
+   "group": "combo-print",
+   "feature": "Vân móng thú ở: Cái – áp út – út (các ngón còn lại ngược lại)",
+   "text": "Giữ nguyên tắc, coi trọng đạo đức; bớt so sánh với người khác sẽ nhẹ lòng hơn.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "V14",
+   "group": "combo-print",
+   "feature": "Vân móng thú ở: Giữa – áp út – út (các ngón còn lại ngược lại)",
+   "text": "Duy mỹ, cảm thụ nghệ thuật tốt. Tự tin và thực tế hơn sẽ ít bị cô lập.",
+   "topics": [
+    "st"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "V15",
+   "group": "combo-print",
+   "feature": "Vân móng thú ở: Cái – trỏ – giữa (các ngón còn lại ngược lại)",
+   "text": "Nhạy bén, hoạt ngôn, có duyên và hài hước; tránh chủ quan khi xem nhẹ người khác.",
+   "topics": [
+    "gt"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "V16",
+   "group": "combo-print",
+   "feature": "Vân xoáy ở: Chỉ ngón cái (các ngón còn lại ngược lại)",
+   "text": "Thời trẻ nhiều thử thách nhưng không bi quan; công sức bỏ ra càng nhiều, thành quả về sau càng lớn.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "V17",
+   "group": "combo-print",
+   "feature": "Vân xoáy ở: Chỉ ngón trỏ (các ngón còn lại ngược lại)",
+   "text": "Xã giao rộng, chu đáo với người khác, chín chắn trước tuổi nên được quý mến.",
+   "topics": [
+    "gt"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "V18",
+   "group": "combo-print",
+   "feature": "Vân xoáy ở: Chỉ ngón giữa (các ngón còn lại ngược lại)",
+   "text": "Linh hoạt, làm việc gì cũng được việc; cẩn trọng lời nói để giữ uy tín.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "V19",
+   "group": "combo-print",
+   "feature": "Vân xoáy ở: Chỉ ngón áp út (cần đối chiếu: OCR ghi \"ngón út\" trùng với V20) (các ngón còn lại ngược lại)",
+   "text": "Rộng rãi, có sức hút, biết nắm cơ hội và được xung quanh hỗ trợ.",
+   "topics": [
+    "gt",
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ],
+   "needsReview": true
+  },
+  {
+   "id": "V20",
+   "group": "combo-print",
+   "feature": "Vân xoáy ở: Chỉ ngón út (các ngón còn lại ngược lại)",
+   "text": "Nhiều hoài bão, không ngại thử thách. Quyết đoán hơn, bớt phụ thuộc ý kiến người khác.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "!",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "V21",
+   "group": "combo-print",
+   "feature": "Vân xoáy ở: Trỏ – giữa – áp út (các ngón còn lại ngược lại)",
+   "text": "Chất phác, tâm tốt; càng lớn tuổi càng chân thành và được kính nể.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "V22",
+   "group": "combo-print",
+   "feature": "Vân xoáy ở: Trỏ – giữa – út (các ngón còn lại ngược lại)",
+   "text": "Đôn hậu, mến khách; về sau thành công nhiều hơn lúc khởi đầu.",
+   "topics": [
+    "gt"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "V23",
+   "group": "combo-print",
+   "feature": "Vân xoáy ở: Cái – giữa – út (các ngón còn lại ngược lại)",
+   "text": "Nóng nảy, hay tự quyết một mình. Mềm mỏng và tôn trọng tập quán nơi mình sống sẽ bớt phiền.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "!",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "V24",
+   "group": "combo-print",
+   "feature": "Vân xoáy ở: Cái – giữa – áp út (các ngón còn lại ngược lại)",
+   "text": "Bình tĩnh, quyết đoán, thành thật, có năng lực lãnh đạo và gắn kết mọi người.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "V25",
+   "group": "combo-print",
+   "feature": "Vân xoáy ở: Cái – trỏ – út (các ngón còn lại ngược lại)",
+   "text": "Khao khát tự do, hợp nghề tự do và lối sống thong dong.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "V26",
+   "group": "combo-print",
+   "feature": "Vân xoáy ở: Cái – trỏ – áp út (cần đối chiếu: sách in trùng nội dung với V22) (các ngón còn lại ngược lại)",
+   "text": "Đôn hậu, có trực giác tốt khi giải quyết việc.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ],
+   "needsReview": true
+  },
+  {
+   "id": "V27",
+   "group": "combo-print",
+   "feature": "Vân xoáy ở: Trỏ – áp út – út (các ngón còn lại ngược lại)",
+   "text": "Thiên về khoa học xã hội hơn tự nhiên; tập nhìn xa hơn việc trước mắt.",
+   "topics": [
+    "tt"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "V28",
+   "group": "combo-print",
+   "feature": "Vân xoáy ở: Cái – áp út – út (các ngón còn lại ngược lại)",
+   "text": "Chu đáo, bền bỉ nên được tin cậy; đừng tự tạo áp lực quá mức.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "V29",
+   "group": "combo-print",
+   "feature": "Vân xoáy ở: Giữa – áp út – út (các ngón còn lại ngược lại)",
+   "text": "Hoạt bát, có duyên, nhiều ước mơ thành hiện thực nếu không tự mãn.",
+   "topics": [
+    "gt"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "V30",
+   "group": "combo-print",
+   "feature": "Vân xoáy ở: Cái – trỏ – giữa (các ngón còn lại ngược lại)",
+   "text": "Cảm xúc dao động giữa rất tự tin và bi quan. Tập giữ thăng bằng tâm lý.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "!",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "N01",
+   "group": "nail",
+   "feature": "Móng vuông",
+   "text": "Sức chịu đựng cao, đôi khi hơi cố chấp.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "N02",
+   "group": "nail",
+   "feature": "Móng tròn / bầu",
+   "text": "Ôn hoà, đôn hậu, ít tranh chấp; chỉ nổi giận khi bị chạm lòng tự trọng.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "N03",
+   "group": "nail",
+   "feature": "Móng chữ nhật dài",
+   "text": "Chín chắn, thận trọng, tuân thủ quy tắc, làm việc đâu ra đấy.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "N04",
+   "group": "nail",
+   "feature": "Móng hình hạnh nhân (cần đối chiếu Hình 129 HCM)",
+   "text": "Mộc mạc, thành thực, lễ độ, trang nhã; hiếm khi nóng giận.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ],
+   "needsReview": true
+  },
+  {
+   "id": "N05",
+   "group": "nail",
+   "feature": "Móng nhọn (hình kiếm)",
+   "text": "Nhiệt tình, quyết đạt mục tiêu; nhớ giữ sức và cân nhắc cái giá phải trả.",
+   "topics": [
+    "tc",
+    "sn"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "N06",
+   "group": "nail",
+   "feature": "Móng rộng bản",
+   "text": "Rộng rãi, hào phóng, hứng thú mạnh; đôi khi làm theo hứng.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM",
+    "DVT"
+   ]
+  },
+  {
+   "id": "N07",
+   "group": "nail",
+   "feature": "Móng rất ngắn",
+   "text": "Tiết kiệm, thực tế.",
+   "topics": [
+    "tl"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ]
+  },
+  {
+   "id": "N08",
+   "group": "nail",
+   "feature": "Móng tam giác",
+   "text": "Dễ nóng tính; hít thở một nhịp trước khi phản ứng.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "!",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ]
+  },
+  {
+   "id": "M01",
+   "group": "mount",
+   "feature": "Gò Kim tinh đầy đặn, đàn hồi",
+   "text": "Ấm áp, giàu sức sống và tình cảm, yêu đời, hợp vận động thể thao.",
+   "topics": [
+    "ss",
+    "tcm"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM",
+    "JDJ"
+   ],
+   "mount": "kim"
+  },
+  {
+   "id": "M02",
+   "group": "mount",
+   "feature": "Gò Kim tinh phẳng, thấp",
+   "text": "Tiết chế, ít bộc lộ cảm xúc. Chăm sóc năng lượng bản thân đều đặn.",
+   "topics": [
+    "ss",
+    "tcm"
+   ],
+   "tone": "!",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "JDJ"
+   ],
+   "mount": "kim"
+  },
+  {
+   "id": "M03",
+   "group": "mount",
+   "feature": "Gò Kim tinh rất cao",
+   "text": "Cảm xúc và mong muốn mãnh liệt; cần giữ điều độ.",
+   "topics": [
+    "tcm"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "kim"
+  },
+  {
+   "id": "M04",
+   "group": "mount",
+   "feature": "Gò Mộc tinh đầy đặn, sáng",
+   "text": "Tự tin, có chí tiến thủ và tài điều khiển, thích đứng ra dẫn dắt.",
+   "topics": [
+    "sn",
+    "tc"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM",
+    "JDJ"
+   ],
+   "mount": "moc"
+  },
+  {
+   "id": "M05",
+   "group": "mount",
+   "feature": "Gò Mộc tinh quá cao",
+   "text": "Ham danh vị; giữ khiêm tốn sẽ được lòng người hơn.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "!",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "moc"
+  },
+  {
+   "id": "M06",
+   "group": "mount",
+   "feature": "Gò Mộc tinh phẳng",
+   "text": "Khiêm tốn, không tranh giành, hợp vai trò hỗ trợ.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "JDJ"
+   ],
+   "mount": "moc"
+  },
+  {
+   "id": "M07",
+   "group": "mount",
+   "feature": "Gò Thổ tinh vừa phải",
+   "text": "Cẩn thận, nhẫn nại, hợp nghiên cứu, kế toán, hành chính.",
+   "topics": [
+    "sn",
+    "tt"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM",
+    "DVT"
+   ],
+   "mount": "tho"
+  },
+  {
+   "id": "M08",
+   "group": "mount",
+   "feature": "Gò Thổ tinh nhô cao rõ",
+   "text": "Hay trầm tư, dễ buồn vô cớ. Chia sẻ với người thân sẽ nhẹ lòng.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "!",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM"
+   ],
+   "mount": "tho"
+  },
+  {
+   "id": "M09",
+   "group": "mount",
+   "feature": "Gò Thổ tinh trũng",
+   "text": "Đường đi có phần vất vả; kiên trì là lợi thế.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "!",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "tho"
+  },
+  {
+   "id": "M10",
+   "group": "mount",
+   "feature": "Gò Thái dương đầy đặn",
+   "text": "Lạc quan, yêu cái đẹp, có duyên với thành công và tiếng tăm.",
+   "topics": [
+    "st",
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM",
+    "JDJ"
+   ],
+   "mount": "thaiduong"
+  },
+  {
+   "id": "M11",
+   "group": "mount",
+   "feature": "Gò Thái dương rất cao",
+   "text": "Đam mê nghệ thuật, thích được chú ý.",
+   "topics": [
+    "st"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "thaiduong"
+  },
+  {
+   "id": "M12",
+   "group": "mount",
+   "feature": "Gò Thủy tinh đầy đặn",
+   "text": "Lanh lợi, nhớ nhanh, giỏi giao tiếp và thương lượng, nhạy kinh doanh.",
+   "topics": [
+    "gt",
+    "tl"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM",
+    "JDJ"
+   ],
+   "mount": "thuy"
+  },
+  {
+   "id": "M13",
+   "group": "mount",
+   "feature": "Gò Thủy tinh rất cao",
+   "text": "Khôn khéo hơn người; giữ chữ tín để sự khéo léo thành uy tín.",
+   "topics": [
+    "gt"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "thuy"
+  },
+  {
+   "id": "M14",
+   "group": "mount",
+   "feature": "Gò Thái âm đầy đặn",
+   "text": "Giàu tưởng tượng và sáng tạo, thích khám phá, có duyên đi xa.",
+   "topics": [
+    "st",
+    "dx"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM",
+    "JDJ"
+   ],
+   "mount": "thaiam"
+  },
+  {
+   "id": "M15",
+   "group": "mount",
+   "feature": "Gò Thái âm rất cao",
+   "text": "Dễ mơ mộng xa thực tế; ghi lại ý tưởng và chọn một cái để làm.",
+   "topics": [
+    "st"
+   ],
+   "tone": "!",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "thaiam"
+  },
+  {
+   "id": "M16",
+   "group": "mount",
+   "feature": "Gò Thái âm phẳng",
+   "text": "Thực tế, ít mơ mộng.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "JDJ"
+   ],
+   "mount": "thaiam"
+  },
+  {
+   "id": "M17",
+   "group": "mount",
+   "feature": "Gò Hỏa tinh dương đầy",
+   "text": "Dũng cảm, xông xáo, không ngại khó; cần thêm kiên nhẫn ở chặng dài.",
+   "topics": [
+    "tc",
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM",
+    "DVT"
+   ],
+   "mount": "hoaduong"
+  },
+  {
+   "id": "M18",
+   "group": "mount",
+   "feature": "Gò Hỏa tinh âm đầy",
+   "text": "Bền bỉ, giữ vững lập trường dưới áp lực.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM",
+    "DVT"
+   ],
+   "mount": "hoaam"
+  },
+  {
+   "id": "M19",
+   "group": "mount",
+   "feature": "Cả hai gò Hỏa tinh đều trũng",
+   "text": "Năng lượng hành động dễ hụt; đặt mục tiêu nhỏ để giữ đà.",
+   "topics": [
+    "ss"
+   ],
+   "tone": "!",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ]
+  },
+  {
+   "id": "M20",
+   "group": "mount",
+   "feature": "Cả hai gò Hỏa tinh đều rất nảy",
+   "text": "Dễ làm quá sức, quá đà; biết dừng đúng lúc là sức mạnh.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "!",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ]
+  },
+  {
+   "id": "M21",
+   "group": "mount",
+   "feature": "Các gò đều nổi, cân đối",
+   "text": "Nhiệt tình, dễ cảm xúc, năng lượng dồi dào.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ]
+  },
+  {
+   "id": "SD01",
+   "group": "line",
+   "feature": "Rõ, sâu, liền mạch",
+   "text": "Sức bền tốt, hồi phục nhanh, nhiệt thành và lạc quan.",
+   "topics": [
+    "ss"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "JDJ",
+    "HCM"
+   ],
+   "line": "sinh"
+  },
+  {
+   "id": "SD02",
+   "group": "line",
+   "feature": "Cong rộng, vượt ra ngoài đường tham chiếu cổ tay–ngón giữa",
+   "text": "Năng lượng dồi dào, mệt mấy cũng mau lấy lại sức, hướng ngoại.",
+   "topics": [
+    "ss",
+    "tc"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ],
+   "line": "sinh"
+  },
+  {
+   "id": "SD03",
+   "group": "line",
+   "feature": "Vòng hẹp, ôm sát gốc ngón cái",
+   "text": "Tiết chế, thận trọng, thích ổn định. Vận động và mở lòng nhiều hơn sẽ thêm sinh khí.",
+   "topics": [
+    "ss",
+    "tc"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM"
+   ],
+   "line": "sinh"
+  },
+  {
+   "id": "SD04",
+   "group": "line",
+   "feature": "Mờ, mảnh",
+   "text": "Nhạy cảm, dễ mệt khi làm dồn. Giữ nhịp nghỉ ngơi đều đặn.",
+   "topics": [
+    "ss"
+   ],
+   "tone": "!",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM"
+   ],
+   "line": "sinh"
+  },
+  {
+   "id": "SD05",
+   "group": "line",
+   "feature": "Dạng dây xích, nhiều đoạn nhỏ nối nhau",
+   "text": "Giai đoạn hay lo nghĩ, năng lượng lúc lên lúc xuống. Ưu tiên chăm sóc bản thân.",
+   "topics": [
+    "ss"
+   ],
+   "tone": "!",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM"
+   ],
+   "line": "sinh"
+  },
+  {
+   "id": "SD06",
+   "group": "line",
+   "feature": "Đứt đoạn",
+   "text": "Dấu mốc thay đổi lớn trong nếp sống (nơi ở, công việc, hướng đi).",
+   "topics": [
+    "ss",
+    "sn"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ],
+   "line": "sinh"
+  },
+  {
+   "id": "SD07",
+   "group": "line",
+   "feature": "Đứt nhưng có đoạn chồng lên hoặc hình vuông bao chỗ đứt",
+   "text": "Có lực đỡ để vượt qua giai đoạn chuyển tiếp thuận lợi.",
+   "topics": [
+    "ss"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM"
+   ],
+   "line": "sinh"
+  },
+  {
+   "id": "SD08",
+   "group": "line",
+   "feature": "Có Sinh đạo đôi hoặc đường song hành phía trong",
+   "text": "Sức bền và sự hậu thuẫn mạnh, có người hoặc điều gì đó luôn nâng đỡ.",
+   "topics": [
+    "ss"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM"
+   ],
+   "line": "sinh"
+  },
+  {
+   "id": "SD09",
+   "group": "line",
+   "feature": "Nhánh từ Sinh đạo đi lên phía ngón trỏ (đường Thượng thăng)",
+   "text": "Cầu tiến, chăm chỉ, nỗ lực được cấp trên ghi nhận; mọi việc dễ suôn sẻ.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM",
+    "DVT"
+   ],
+   "line": "sinh"
+  },
+  {
+   "id": "SD10",
+   "group": "line",
+   "feature": "Nhánh từ Sinh đạo đi lên phía ngón giữa",
+   "text": "Nỗ lực bền bỉ đem lại danh dự.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "line": "sinh"
+  },
+  {
+   "id": "SD11",
+   "group": "line",
+   "feature": "Nhánh từ Sinh đạo đi về phía ngón út",
+   "text": "Thuận lợi cho buôn bán, kinh doanh.",
+   "topics": [
+    "tl",
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "line": "sinh"
+  },
+  {
+   "id": "SD12",
+   "group": "line",
+   "feature": "Cuối Sinh đạo tách một nhánh dài về phía gò Thái âm",
+   "text": "Có duyên đi xa, học tập hoặc làm việc ở nơi mới, đem về kinh nghiệm quý.",
+   "topics": [
+    "dx"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM",
+    "DVT"
+   ],
+   "line": "sinh"
+  },
+  {
+   "id": "SD13",
+   "group": "line",
+   "feature": "Điểm khởi đầu cao, gần ngón trỏ",
+   "text": "Nhiều hoài bão, tự tin, thích vươn lên.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "line": "sinh"
+  },
+  {
+   "id": "SD14",
+   "group": "line",
+   "feature": "Điểm khởi đầu thấp, gần ngón cái",
+   "text": "Điềm đạm, an phận, ít bon chen.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "line": "sinh"
+  },
+  {
+   "id": "SD15",
+   "group": "line",
+   "feature": "Đoạn đầu nhiều vạch cắt hoặc dạng xích",
+   "text": "Tuổi nhỏ có nhiều xáo trộn; chính điều đó rèn nên sự cứng cỏi.",
+   "topics": [
+    "ss"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM"
+   ],
+   "line": "sinh"
+  },
+  {
+   "id": "SD16",
+   "group": "line",
+   "feature": "Nhiều vạch ngắn cắt ngang thân đường",
+   "text": "Hay gặp trở ngại nhỏ trong kế hoạch. Tập thói quen chuẩn bị phương án dự phòng.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "!",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM"
+   ],
+   "line": "sinh"
+  },
+  {
+   "id": "SD17",
+   "group": "line",
+   "feature": "Ngôi sao ở cuối đường",
+   "text": "Về sau sung túc, an vui.",
+   "topics": [
+    "tl"
+   ],
+   "tone": "+",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "line": "sinh"
+  },
+  {
+   "id": "SD18",
+   "group": "line",
+   "feature": "Ngôi sao hoặc chữ thập ở đầu đường",
+   "text": "Khởi đầu vất vả nhưng tương lai tốt lành.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "line": "sinh"
+  },
+  {
+   "id": "SD19",
+   "group": "line",
+   "feature": "Có cù lao (hình đảo)",
+   "text": "Một giai đoạn áp lực, hao năng lượng; thường qua đi khi nhịp sống ổn định lại.",
+   "topics": [
+    "ss"
+   ],
+   "tone": "!",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM"
+   ],
+   "line": "sinh"
+  },
+  {
+   "id": "SD20",
+   "group": "line",
+   "feature": "Từ gò Kim tinh có vạch cắt qua Sinh đạo (đường cản trở)",
+   "text": "Có lúc chịu áp lực từ gia đình hoặc người thân; nói chuyện thẳng thắn sẽ gỡ được.",
+   "topics": [
+    "tcm"
+   ],
+   "tone": "!",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM"
+   ],
+   "line": "sinh"
+  },
+  {
+   "id": "TD01",
+   "group": "line",
+   "feature": "Rõ, sâu, đậm",
+   "text": "Trí nhớ tốt, tập trung, xử lý khôn ngoan.",
+   "topics": [
+    "tt"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "line": "tri"
+  },
+  {
+   "id": "TD02",
+   "group": "line",
+   "feature": "Thẳng ngang",
+   "text": "Nhìn sự việc thực tế, logic, làm nhanh và gọn, hợp công việc chuyên môn.",
+   "topics": [
+    "tt",
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ],
+   "line": "tri"
+  },
+  {
+   "id": "TD03",
+   "group": "line",
+   "feature": "Cong nhẹ xuống",
+   "text": "Sáng tạo, giàu tưởng tượng.",
+   "topics": [
+    "tt",
+    "st"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM",
+    "DVT"
+   ],
+   "line": "tri"
+  },
+  {
+   "id": "TD04",
+   "group": "line",
+   "feature": "Cong sâu xuống tới gò Thái âm",
+   "text": "Lãng mạn, nghệ sĩ tính, trực giác mạnh. Neo ý tưởng vào việc cụ thể để thành quả.",
+   "topics": [
+    "st"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM",
+    "DVT"
+   ],
+   "line": "tri"
+  },
+  {
+   "id": "TD05",
+   "group": "line",
+   "feature": "Dài tới gần mép bàn tay",
+   "text": "Trực giác nhạy bén, có thể thành công ở nhiều lĩnh vực.",
+   "topics": [
+    "tt"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ],
+   "line": "tri"
+  },
+  {
+   "id": "TD06",
+   "group": "line",
+   "feature": "Dài vừa, dừng khoảng dưới ngón áp út",
+   "text": "Dễ thích nghi, hoà hợp với nhiều kiểu người.",
+   "topics": [
+    "tt",
+    "gt"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ],
+   "line": "tri"
+  },
+  {
+   "id": "TD07",
+   "group": "line",
+   "feature": "Ngắn, dừng dưới ngón giữa",
+   "text": "Quyết nhanh, thực dụng, mạnh ở việc trước mắt. Lập thêm kế hoạch dài hơi sẽ vững.",
+   "topics": [
+    "tt"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM",
+    "DVT"
+   ],
+   "line": "tri"
+  },
+  {
+   "id": "TD08",
+   "group": "line",
+   "feature": "Cuối đường chẻ đôi",
+   "text": "Nhìn vấn đề nhiều góc, giỏi lý luận, viết lách.",
+   "topics": [
+    "tt",
+    "st"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM"
+   ],
+   "line": "tri"
+  },
+  {
+   "id": "TD09",
+   "group": "line",
+   "feature": "Đầu đường phân 3 nhánh trở lên",
+   "text": "Thích ứng cao, nhiều tài, năng lực hơn mặt bằng.",
+   "topics": [
+    "tt"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ],
+   "line": "tri"
+  },
+  {
+   "id": "TD10",
+   "group": "line",
+   "feature": "Có hai đường Trí đạo",
+   "text": "Đa tài, làm nhiều việc song song một cách hứng thú.",
+   "topics": [
+    "tt",
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ],
+   "line": "tri"
+  },
+  {
+   "id": "TD11",
+   "group": "line",
+   "feature": "Uốn lượn",
+   "text": "Linh hoạt, năng động nhưng hay đổi ý; ghi lại quyết định giúp giữ hướng.",
+   "topics": [
+    "tt"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM"
+   ],
+   "line": "tri"
+  },
+  {
+   "id": "TD12",
+   "group": "line",
+   "feature": "Dạng dây xích",
+   "text": "Dễ phân tán khi áp lực. Cho trí óc nghỉ ngơi định kỳ.",
+   "topics": [
+    "tt"
+   ],
+   "tone": "!",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM"
+   ],
+   "line": "tri"
+  },
+  {
+   "id": "TD13",
+   "group": "line",
+   "feature": "Có cù lao",
+   "text": "Giai đoạn suy nghĩ nhiều, căng thẳng; sẽ nhẹ đi khi bớt ôm việc.",
+   "topics": [
+    "tt"
+   ],
+   "tone": "!",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM"
+   ],
+   "line": "tri"
+  },
+  {
+   "id": "TD14",
+   "group": "line",
+   "feature": "Khởi đầu cao từ gò Mộc tinh",
+   "text": "Tự tin, nhiều chí hướng, có tố chất lãnh đạo; giữ sự khiêm tốn.",
+   "topics": [
+    "tt",
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM"
+   ],
+   "line": "tri"
+  },
+  {
+   "id": "TD15",
+   "group": "line",
+   "feature": "Đầu đường dính với Sinh đạo một đoạn",
+   "text": "Thận trọng, cân nhắc kỹ trước khi hành động, gắn bó với gia đình.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM",
+    "DVT"
+   ],
+   "line": "tri"
+  },
+  {
+   "id": "TD16",
+   "group": "line",
+   "feature": "Tách hẳn khỏi Sinh đạo (có khe hở)",
+   "text": "Độc lập, tự tin, tự quyết, dám nghĩ dám làm.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM"
+   ],
+   "line": "tri"
+  },
+  {
+   "id": "TD17",
+   "group": "line",
+   "feature": "Có nhánh nhỏ hướng lên ở đoạn đầu",
+   "text": "Nỗ lực bền bỉ để đạt điều mình muốn.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ],
+   "line": "tri"
+  },
+  {
+   "id": "TD18",
+   "group": "line",
+   "feature": "Cuối đường cong lên về phía gò Thái dương",
+   "text": "Yêu thích và có năng khiếu nghệ thuật.",
+   "topics": [
+    "st"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "line": "tri"
+  },
+  {
+   "id": "TD19",
+   "group": "line",
+   "feature": "Đứt đoạn",
+   "text": "Giai đoạn đổi cách nghĩ, đổi hướng học tập hoặc nghề nghiệp.",
+   "topics": [
+    "tt",
+    "sn"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ],
+   "line": "tri"
+  },
+  {
+   "id": "TAM01",
+   "group": "line",
+   "feature": "Kết thúc giữa ngón trỏ và ngón giữa, cong tự nhiên",
+   "text": "Chu đáo, nhã nhặn, ghét tranh chấp, biết nhường nhịn và vun vén hạnh phúc.",
+   "topics": [
+    "tcm"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM",
+    "DVT"
+   ],
+   "line": "tam"
+  },
+  {
+   "id": "TAM02",
+   "group": "line",
+   "feature": "Kéo dài tới gốc ngón trỏ",
+   "text": "Điềm tĩnh, tự trọng, lý tưởng cao trong tình cảm; chậm bộc lộ nên dễ bị hiểu là lạnh.",
+   "topics": [
+    "tcm"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ],
+   "line": "tam"
+  },
+  {
+   "id": "TAM03",
+   "group": "line",
+   "feature": "Chạy suốt ngang bàn tay",
+   "text": "Tình cảm mãnh liệt, yêu ghét rõ ràng, đã thương là hết lòng.",
+   "topics": [
+    "tcm"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "line": "tam"
+  },
+  {
+   "id": "TAM04",
+   "group": "line",
+   "feature": "Ngắn, dừng dưới ngón giữa",
+   "text": "Thực tế trong tình cảm, ít nói lời yêu thương; nói ra nhiều hơn sẽ gần nhau hơn.",
+   "topics": [
+    "tcm"
+   ],
+   "tone": "!",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM"
+   ],
+   "line": "tam"
+  },
+  {
+   "id": "TAM05",
+   "group": "line",
+   "feature": "Cong vút lên ngón giữa",
+   "text": "Coi trọng bản thân trong tình cảm; lắng nghe cảm xúc người kia để giữ bền.",
+   "topics": [
+    "tcm"
+   ],
+   "tone": "!",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ],
+   "line": "tam"
+  },
+  {
+   "id": "TAM06",
+   "group": "line",
+   "feature": "Gần như thẳng",
+   "text": "Lý trí, điềm tĩnh trong tình cảm, có sức hút riêng.",
+   "topics": [
+    "tcm"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ],
+   "line": "tam"
+  },
+  {
+   "id": "TAM07",
+   "group": "line",
+   "feature": "Cuối đường chẻ đôi hoặc chẻ ba",
+   "text": "Giàu tình cảm, quan tâm người thân, hết lòng với người mình quý.",
+   "topics": [
+    "tcm",
+    "gt"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM"
+   ],
+   "line": "tam"
+  },
+  {
+   "id": "TAM08",
+   "group": "line",
+   "feature": "Nhiều nhánh nhỏ hướng lên",
+   "text": "Vui vẻ, có trách nhiệm trong tình cảm, nhân duyên tốt.",
+   "topics": [
+    "tcm"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ],
+   "line": "tam"
+  },
+  {
+   "id": "TAM09",
+   "group": "line",
+   "feature": "Nhiều nhánh nhỏ hướng xuống",
+   "text": "Tận tâm với người mình thương nhưng dễ cả tin; giữ chút tỉnh táo.",
+   "topics": [
+    "tcm"
+   ],
+   "tone": "!",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ],
+   "line": "tam"
+  },
+  {
+   "id": "TAM10",
+   "group": "line",
+   "feature": "Dạng dây xích hoặc răng cưa",
+   "text": "Cảm xúc nhiều thăng trầm. Tập gọi tên cảm xúc trước khi phản ứng.",
+   "topics": [
+    "tcm"
+   ],
+   "tone": "!",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "JDJ"
+   ],
+   "line": "tam"
+  },
+  {
+   "id": "TAM11",
+   "group": "line",
+   "feature": "Có cù lao",
+   "text": "Một giai đoạn tình cảm vướng mắc hoặc chưa được ủng hộ; thường qua đi.",
+   "topics": [
+    "tcm"
+   ],
+   "tone": "!",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM"
+   ],
+   "line": "tam"
+  },
+  {
+   "id": "TAM12",
+   "group": "line",
+   "feature": "Nằm sát Trí đạo",
+   "text": "Hay cân nhắc, để lý trí dẫn dắt tình cảm.",
+   "topics": [
+    "tcm",
+    "tt"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "line": "tam"
+  },
+  {
+   "id": "TAM13",
+   "group": "line",
+   "feature": "Đi xuống chạm hoặc nhập vào Trí đạo",
+   "text": "Vị tha, bác ái, được nhiều người thương mến; học cách từ chối để không bị lợi dụng.",
+   "topics": [
+    "tcm",
+    "gt"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "line": "tam"
+  },
+  {
+   "id": "TAM14",
+   "group": "line",
+   "feature": "Có hai đường Tâm đạo song song",
+   "text": "Tình cảm dồi dào, thuỷ chung.",
+   "topics": [
+    "tcm"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "line": "tam"
+  },
+  {
+   "id": "TAM15",
+   "group": "line",
+   "feature": "Đứt đoạn, có nhiều vân nhỏ",
+   "text": "Tâm tính vui vẻ nhưng cảm xúc thay đổi theo giai đoạn.",
+   "topics": [
+    "tcm"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ],
+   "line": "tam"
+  },
+  {
+   "id": "TAM16",
+   "group": "line",
+   "feature": "Có nhánh hướng về gò Thủy tinh",
+   "text": "Thuận lợi phát triển nghề nghiệp và buôn bán.",
+   "topics": [
+    "sn",
+    "tl"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "line": "tam"
+  },
+  {
+   "id": "TAM17",
+   "group": "line",
+   "feature": "Có nhánh nhỏ tách ra ở mé dưới đường",
+   "text": "Tâm địa tốt, sẵn lòng giúp người lúc khó; đôi khi dễ bị ý kiến người khác chi phối.",
+   "topics": [
+    "gt"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ],
+   "line": "tam"
+  },
+  {
+   "id": "DM01",
+   "group": "line",
+   "feature": "Rõ, thẳng, dài lên tới ngón giữa",
+   "text": "Định hướng rõ, trung thực, giỏi tính đường dài; sự nghiệp phát triển vững.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 3,
+   "tts": true,
+   "sources": [
+    "HCM",
+    "DVT"
+   ],
+   "line": "dinhmang"
+  },
+  {
+   "id": "DM02",
+   "group": "line",
+   "feature": "Xuất phát từ cổ tay",
+   "text": "Tự lập sớm.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "line": "dinhmang"
+  },
+  {
+   "id": "DM03",
+   "group": "line",
+   "feature": "Xuất phát từ hoặc dính với Sinh đạo",
+   "text": "Độc lập, chín chắn, tự bồi dưỡng năng lực để đi lên.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ],
+   "line": "dinhmang"
+  },
+  {
+   "id": "DM04",
+   "group": "line",
+   "feature": "Xuất phát từ gò Thái âm",
+   "text": "Thành công nhờ quý nhân, công chúng hoặc môi trường xa quê.",
+   "topics": [
+    "sn",
+    "dx"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM"
+   ],
+   "line": "dinhmang"
+  },
+  {
+   "id": "DM05",
+   "group": "line",
+   "feature": "Xuất phát từ gò Kim tinh",
+   "text": "Người thân, gia đình tiếp sức cho sự nghiệp.",
+   "topics": [
+    "sn",
+    "tcm"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "line": "dinhmang"
+  },
+  {
+   "id": "DM06",
+   "group": "line",
+   "feature": "Bắt đầu từ giữa lòng bàn tay",
+   "text": "Thành quả đến nhờ nỗ lực bản thân, thuận với lĩnh vực sáng tạo, văn chương.",
+   "topics": [
+    "sn",
+    "st"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "line": "dinhmang"
+  },
+  {
+   "id": "DM07",
+   "group": "line",
+   "feature": "Chỉ rõ ở đoạn trên",
+   "text": "Có tài nhưng thành đạt muộn; thực lực phát huy mạnh sau tuổi 30.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ],
+   "line": "dinhmang"
+  },
+  {
+   "id": "DM08",
+   "group": "line",
+   "feature": "Ngắn, đoạn trên không rõ",
+   "text": "Năng nổ, thành công sớm trước 30; nhìn xa hơn để giữ được thành quả.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ],
+   "line": "dinhmang"
+  },
+  {
+   "id": "DM09",
+   "group": "line",
+   "feature": "Đứt đoạn, chắp nối",
+   "text": "Đa năng, nhiều lần đổi việc hoặc đổi hướng.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM",
+    "DVT"
+   ],
+   "line": "dinhmang"
+  },
+  {
+   "id": "DM10",
+   "group": "line",
+   "feature": "Đứt nhưng đoạn mới bắt đầu trước khi đoạn cũ dứt (hướng về phía ngón cái)",
+   "text": "Biết nắm cơ hội chuyển đổi và thường thành công ở vị trí mới.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ],
+   "line": "dinhmang"
+  },
+  {
+   "id": "DM11",
+   "group": "line",
+   "feature": "Hơi cong",
+   "text": "Nhân duyên tốt, được nhiều người mến mộ, hợp nghề tiếp xúc công chúng.",
+   "topics": [
+    "sn",
+    "gt"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ],
+   "line": "dinhmang"
+  },
+  {
+   "id": "DM12",
+   "group": "line",
+   "feature": "Chạy hết lên gò Thổ tinh",
+   "text": "Phải bền bỉ qua thử thách mới thành; thành công đó rất vững.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "line": "dinhmang"
+  },
+  {
+   "id": "DM13",
+   "group": "line",
+   "feature": "Có nhiều đường nhỏ song song đi kèm",
+   "text": "Có tài và được hỗ trợ, sự nghiệp mở rộng.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "line": "dinhmang"
+  },
+  {
+   "id": "DM14",
+   "group": "line",
+   "feature": "Cuối đường chẻ ba",
+   "text": "Nhiều thành công trong đời.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "line": "dinhmang"
+  },
+  {
+   "id": "DM15",
+   "group": "line",
+   "feature": "Không có hoặc rất mờ",
+   "text": "Tự do, không theo khuôn mẫu; tự vạch đường đi và dấn thân đúng lúc sẽ thành.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "line": "dinhmang"
+  },
+  {
+   "id": "DM16",
+   "group": "line",
+   "feature": "Bị đường Trí đạo cong xuống che lấp",
+   "text": "Dễ khinh suất vì tin vào may mắn; tính kỹ trước khi xuống tiền.",
+   "topics": [
+    "tl"
+   ],
+   "tone": "!",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ],
+   "line": "dinhmang"
+  },
+  {
+   "id": "TDU01",
+   "group": "line",
+   "feature": "Rõ, dài, liền mạch",
+   "text": "Có tài năng riêng và dễ được công nhận.",
+   "topics": [
+    "st",
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 3,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM"
+   ],
+   "line": "thaiduong"
+  },
+  {
+   "id": "TDU02",
+   "group": "line",
+   "feature": "Chỉ có đoạn ngắn từ Tâm đạo lên gốc áp út",
+   "text": "Tích luỹ đều đặn, kiên nhẫn, về sau an nhàn.",
+   "topics": [
+    "tl"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM",
+    "DVT"
+   ],
+   "line": "thaiduong"
+  },
+  {
+   "id": "TDU03",
+   "group": "line",
+   "feature": "Vượt qua Tâm đạo đi xuống",
+   "text": "Tài vận đẹp, thực lực phát huy sau tuổi 30.",
+   "topics": [
+    "tl",
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ],
+   "line": "thaiduong"
+  },
+  {
+   "id": "TDU04",
+   "group": "line",
+   "feature": "Xuất phát từ Trí đạo",
+   "text": "Thành công nhờ tri thức, khoảng từ tuổi 35.",
+   "topics": [
+    "sn",
+    "tt"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "line": "thaiduong"
+  },
+  {
+   "id": "TDU05",
+   "group": "line",
+   "feature": "Xuất phát từ Sinh đạo",
+   "text": "Thành công nhờ cần cù và kiên trì.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "line": "thaiduong"
+  },
+  {
+   "id": "TDU06",
+   "group": "line",
+   "feature": "Xuất phát từ Định mạng hoặc giao với Định mạng",
+   "text": "Thành công thuận lợi hơn, kinh tế mở rộng sau tuổi 30.",
+   "topics": [
+    "sn",
+    "tl"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM"
+   ],
+   "line": "thaiduong"
+  },
+  {
+   "id": "TDU07",
+   "group": "line",
+   "feature": "Xuất phát từ gò Thái âm hoặc cong về phía đó",
+   "text": "Có năng lực chuyên môn, sáng tạo, tính nghệ thuật; dễ được công chúng biết đến.",
+   "topics": [
+    "st"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM",
+    "DVT"
+   ],
+   "line": "thaiduong"
+  },
+  {
+   "id": "TDU08",
+   "group": "line",
+   "feature": "Xuất phát từ gò Kim tinh",
+   "text": "Đam mê và ý chí theo đuổi dẫn tới thành công.",
+   "topics": [
+    "st"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "line": "thaiduong"
+  },
+  {
+   "id": "TDU09",
+   "group": "line",
+   "feature": "Xuất phát từ gò Hỏa tinh",
+   "text": "Thành công nhờ quyết chí.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "line": "thaiduong"
+  },
+  {
+   "id": "TDU10",
+   "group": "line",
+   "feature": "Nhiều đường ngắn nằm chếch cạnh nhau",
+   "text": "Đa tài, ham học nhiều thứ; chọn một lĩnh vực để chuyên sâu sẽ toả sáng. Để ý chi tiêu.",
+   "topics": [
+    "st",
+    "tl"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM"
+   ],
+   "line": "thaiduong"
+  },
+  {
+   "id": "TDU11",
+   "group": "line",
+   "feature": "Hai đường song song",
+   "text": "Lúc khó khăn về kinh tế có người giúp vượt qua.",
+   "topics": [
+    "tl"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ],
+   "line": "thaiduong"
+  },
+  {
+   "id": "TDU12",
+   "group": "line",
+   "feature": "Có ngôi sao trên đường hoặc ở đầu trên",
+   "text": "Tài năng sắp bừng sáng; hãy mạnh dạn thể hiện.",
+   "topics": [
+    "st"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM"
+   ],
+   "line": "thaiduong"
+  },
+  {
+   "id": "TDU13",
+   "group": "line",
+   "feature": "Phân làm ba ở đầu trên",
+   "text": "Nhân duyên tốt, được đánh giá cao nhờ kiên trì.",
+   "topics": [
+    "sn",
+    "gt"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ],
+   "line": "thaiduong"
+  },
+  {
+   "id": "TDU14",
+   "group": "line",
+   "feature": "Có vân nhỏ từ mé ngón út cong lên nhập vào",
+   "text": "Thời điểm vận thế mạnh, có quý nhân phù trợ.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ],
+   "line": "thaiduong"
+  },
+  {
+   "id": "TDU15",
+   "group": "line",
+   "feature": "Bị cắt, có chữ thập hoặc cù lao",
+   "text": "Tài năng chưa gặp thời. Kiên nhẫn, giữ uy tín và cẩn trọng chuyện tiền bạc.",
+   "topics": [
+    "st",
+    "tl"
+   ],
+   "tone": "!",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM"
+   ],
+   "line": "thaiduong"
+  },
+  {
+   "id": "TT01",
+   "group": "line",
+   "feature": "Rõ, thẳng, dài",
+   "text": "Có khả năng thương mại, ngoại giao, thích đi đây đi đó và dễ thành công lớn.",
+   "topics": [
+    "gt",
+    "tl"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "line": "thuytinh"
+  },
+  {
+   "id": "TT02",
+   "group": "line",
+   "feature": "Đứt khúc, uốn éo",
+   "text": "Hay thay đổi công việc; tìm nghề hợp sở trường giao tiếp sẽ ổn định.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "line": "thuytinh"
+  },
+  {
+   "id": "TT03",
+   "group": "line",
+   "feature": "Không có",
+   "text": "Rất phổ biến, không mang ý nghĩa xấu.",
+   "topics": [
+    "gt"
+   ],
+   "tone": "=",
+   "weight": 1,
+   "tts": true,
+   "sources": [],
+   "line": "thuytinh"
+  },
+  {
+   "id": "HN01",
+   "group": "line",
+   "feature": "Một đường rõ, dài, thẳng",
+   "text": "Coi trọng sự gắn bó lâu dài, chân thành và chung thuỷ.",
+   "topics": [
+    "tcm"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM"
+   ],
+   "line": "tinhduyen"
+  },
+  {
+   "id": "HN02",
+   "group": "line",
+   "feature": "Dài, mảnh, thanh",
+   "text": "Trang nhã, chân thành; rụt rè khi bày tỏ với người mình thích.",
+   "topics": [
+    "tcm"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ],
+   "line": "tinhduyen"
+  },
+  {
+   "id": "HN03",
+   "group": "line",
+   "feature": "Ngắn và nhiều",
+   "text": "Quan hệ rộng, duyên lành dễ đến qua bạn bè giới thiệu.",
+   "topics": [
+    "tcm",
+    "gt"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ],
+   "line": "tinhduyen"
+  },
+  {
+   "id": "HN04",
+   "group": "line",
+   "feature": "Không có",
+   "text": "Thận trọng trong tình cảm, ít bày tỏ nhưng có nhiều bạn bè.",
+   "topics": [
+    "tcm"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ],
+   "line": "tinhduyen"
+  },
+  {
+   "id": "HN05",
+   "group": "line",
+   "feature": "Uốn cong lên, chạm đường Thái dương",
+   "text": "Duyên lành giúp cả hai cùng tiến, cuộc sống chung viên mãn.",
+   "topics": [
+    "tcm",
+    "tl"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM",
+    "DVT"
+   ],
+   "line": "tinhduyen"
+  },
+  {
+   "id": "HN06",
+   "group": "line",
+   "feature": "Uốn cong xuống",
+   "text": "Hết lòng lo cho người thương nhưng dễ bi quan; chủ động chăm sóc mối quan hệ.",
+   "topics": [
+    "tcm"
+   ],
+   "tone": "!",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM",
+    "DVT"
+   ],
+   "line": "tinhduyen"
+  },
+  {
+   "id": "HN07",
+   "group": "line",
+   "feature": "Uốn khúc",
+   "text": "Thích chủ động, không chờ đợi; có thể kết duyên nhanh.",
+   "topics": [
+    "tcm"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ],
+   "line": "tinhduyen"
+  },
+  {
+   "id": "HN08",
+   "group": "line",
+   "feature": "Đầu đường (phía mép tay) chẻ đôi rồi nhập lại",
+   "text": "Lúc đầu xa cách, trắc trở, về sau tốt đẹp.",
+   "topics": [
+    "tcm"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "line": "tinhduyen"
+  },
+  {
+   "id": "HN09",
+   "group": "line",
+   "feature": "Cuối đường chẻ đôi",
+   "text": "Dễ để cảm xúc dẫn dắt; dung hoà khác biệt và trò chuyện nhiều sẽ giữ bền.",
+   "topics": [
+    "tcm"
+   ],
+   "tone": "!",
+   "weight": 2,
+   "tts": false,
+   "sources": [
+    "HCM",
+    "DVT"
+   ],
+   "line": "tinhduyen"
+  },
+  {
+   "id": "HN10",
+   "group": "line",
+   "feature": "Đứt, có vạch cắt hoặc có cù lao",
+   "text": "Có giai đoạn bất đồng. Giao tiếp và lùi một bước để cùng suy ngẫm.",
+   "topics": [
+    "tcm"
+   ],
+   "tone": "!",
+   "weight": 2,
+   "tts": false,
+   "sources": [
+    "HCM",
+    "DVT"
+   ],
+   "line": "tinhduyen"
+  },
+  {
+   "id": "HN11",
+   "group": "line",
+   "feature": "Có ngôi sao hoặc hình như mặt trời ở cuối",
+   "text": "Duyên lành, cuộc sống chung đủ đầy.",
+   "topics": [
+    "tcm"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM"
+   ],
+   "line": "tinhduyen"
+  },
+  {
+   "id": "HN12",
+   "group": "line",
+   "feature": "Màu hồng, rõ nét",
+   "text": "Cuộc sống chung ổn định, ít sóng gió.",
+   "topics": [
+    "tcm"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ],
+   "line": "tinhduyen"
+  },
+  {
+   "id": "X01",
+   "group": "extra",
+   "feature": "Vòng Kim tinh rõ, liền",
+   "text": "Nhạy cảm với cái đẹp, cảm thụ nghệ thuật tốt, cảm xúc tinh tế.",
+   "topics": [
+    "st"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM"
+   ],
+   "line": "vongkim"
+  },
+  {
+   "id": "X02",
+   "group": "extra",
+   "feature": "Vòng Kim tinh đứt, nhiều tầng",
+   "text": "Cảm xúc dễ dao động. Nghệ thuật là nơi tốt để gửi gắm cảm xúc.",
+   "topics": [
+    "st",
+    "tcm"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM",
+    "DVT"
+   ],
+   "line": "vongkim"
+  },
+  {
+   "id": "X03",
+   "group": "extra",
+   "feature": "Vòng Mộc tinh (vòng cung dưới ngón trỏ)",
+   "text": "Sáng suốt, trực giác nhanh, hiểu người, phản ứng kịp thời trước tình thế.",
+   "topics": [
+    "tt"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "line": "vongmoc"
+  },
+  {
+   "id": "X04",
+   "group": "extra",
+   "feature": "Vòng cung dưới ngón giữa (vòng Thổ tinh)",
+   "text": "Hay thu mình trong tình cảm; chia sẻ nhiều hơn sẽ được thấu hiểu.",
+   "topics": [
+    "tcm"
+   ],
+   "tone": "!",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ]
+  },
+  {
+   "id": "X05",
+   "group": "extra",
+   "feature": "Đường Viễn du rõ",
+   "text": "Đi xa thuận lợi, gặt hái kinh nghiệm và thành công.",
+   "topics": [
+    "dx"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM"
+   ],
+   "line": "vienDu"
+  },
+  {
+   "id": "X06",
+   "group": "extra",
+   "feature": "Đường Viễn du nhập vào Định mạng",
+   "text": "Sự nghiệp phát triển nhờ xa quê hoặc làm việc với nơi khác.",
+   "topics": [
+    "dx",
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "line": "vienDu"
+  },
+  {
+   "id": "X07",
+   "group": "extra",
+   "feature": "Đường Viễn du biến dạng trên gò Thái âm",
+   "text": "Đi xa dễ gặp người quý giúp đỡ.",
+   "topics": [
+    "dx"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ],
+   "line": "vienDu"
+  },
+  {
+   "id": "X08",
+   "group": "extra",
+   "feature": "Đầu đường Viễn du chẻ đôi hoặc có cù lao",
+   "text": "Khi đi xa nên chuẩn bị kỹ giấy tờ, ngôn ngữ, lịch trình; an toàn là trên hết.",
+   "topics": [
+    "dx"
+   ],
+   "tone": "!",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ],
+   "line": "vienDu"
+  },
+  {
+   "id": "X09",
+   "group": "extra",
+   "feature": "Đường Trực giác (cung từ gò Thái âm lên gò Thủy tinh)",
+   "text": "Giác quan nhạy bén, hay đoán trúng xu hướng.",
+   "topics": [
+    "tt"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "line": "trucgiac"
+  },
+  {
+   "id": "X10",
+   "group": "extra",
+   "feature": "Đường ảnh hưởng nhập Định mạng từ phía gò Thái âm",
+   "text": "Có người đồng hành tốt trong các mối quan hệ và công việc.",
+   "topics": [
+    "gt",
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ],
+   "line": "anhhuong"
+  },
+  {
+   "id": "X11",
+   "group": "extra",
+   "feature": "Chữ thập thần bí (giữa Tâm đạo và Trí đạo)",
+   "text": "Say mê triết lý, tâm linh; phản ứng nhanh trước tình huống bất ngờ.",
+   "topics": [
+    "tt"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM"
+   ]
+  },
+  {
+   "id": "X12",
+   "group": "extra",
+   "feature": "Tam giác nhỏ giữa Tâm đạo và Trí đạo",
+   "text": "Ham nghiên cứu, tìm hiểu.",
+   "topics": [
+    "tt"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ]
+  },
+  {
+   "id": "X13",
+   "group": "extra",
+   "feature": "Hình chữ M do 4 đường chính tạo thành",
+   "text": "Trí tuệ, tình cảm và sức sống cân bằng; tuổi 30–50 là giai đoạn nổi bật.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 3,
+   "tts": true,
+   "sources": [
+    "HCM",
+    "DVT"
+   ]
+  },
+  {
+   "id": "X14",
+   "group": "extra",
+   "feature": "Chỉ nhỏ chạy từ gốc ngón út lên các lóng trên",
+   "text": "Danh tiếng tăng nhanh nhờ giao tế, thương mại hoặc khoa học.",
+   "topics": [
+    "gt",
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ]
+  },
+  {
+   "id": "X15",
+   "group": "extra",
+   "feature": "Gò Thủy tinh có các sọc dọc ngắn",
+   "text": "Thuận lợi trong buôn bán; có thiên hướng chăm sóc người khác.",
+   "topics": [
+    "tl",
+    "gt"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM"
+   ]
+  },
+  {
+   "id": "X16",
+   "group": "extra",
+   "feature": "Đường phụ dọc đi kèm Định mạng và Thái dương",
+   "text": "Đủ đầy, có hậu thuẫn.",
+   "topics": [
+    "tl"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ]
+  },
+  {
+   "id": "X17",
+   "group": "extra",
+   "feature": "Đường nối gò Kim tinh tới gò Thổ tinh",
+   "text": "Tình cảm, gia đình là động lực cho sự nghiệp.",
+   "topics": [
+    "sn",
+    "tcm"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ]
+  },
+  {
+   "id": "X18",
+   "group": "extra",
+   "feature": "Đường nối gò Kim tinh tới gò Mộc tinh",
+   "text": "Mối quan hệ gắn bó giúp vị thế đi lên.",
+   "topics": [
+    "sn",
+    "tcm"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ]
+  },
+  {
+   "id": "X19",
+   "group": "extra",
+   "feature": "Chữ thập ở lóng giữa ngón trỏ",
+   "text": "Được người có uy tín nâng đỡ.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ]
+  },
+  {
+   "id": "X20",
+   "group": "extra",
+   "feature": "Lóng trên ngón giữa có chỉ nhỏ cong queo",
+   "text": "Sự nghiệp có lúc gian nan, dễ nản; giữ nhịp kiên trì.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "!",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ]
+  },
+  {
+   "id": "C01",
+   "group": "combo",
+   "feature": "Ba đường chính rõ, sâu, dài",
+   "text": "Nền tảng vững: sức bền, trí tuệ và tình cảm đều sung mãn.",
+   "topics": [
+    "ss",
+    "tc"
+   ],
+   "tone": "+",
+   "weight": 3,
+   "tts": true,
+   "sources": [
+    "HCM"
+   ]
+  },
+  {
+   "id": "C02",
+   "group": "combo",
+   "feature": "Ba đường chính xuất phát chung một điểm",
+   "text": "Hành động nhanh, quyết liệt, bên ngoài điềm tĩnh. Chậm lại một nhịp với việc lớn.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "!",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM"
+   ]
+  },
+  {
+   "id": "C03",
+   "group": "combo",
+   "feature": "Ba đường chính tách rời nhau",
+   "text": "Phóng khoáng, tự tin, thích tự quyết; tham khảo thêm người đi trước sẽ bớt vất vả.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ]
+  },
+  {
+   "id": "C04",
+   "group": "combo",
+   "feature": "Trí đạo và Tâm đạo dính nhau ở điểm khởi đầu",
+   "text": "Trí tuệ, nhẫn nại, có tố chất dẫn dắt trong nghề khoa học kỹ thuật.",
+   "topics": [
+    "tt",
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ]
+  },
+  {
+   "id": "C05",
+   "group": "combo",
+   "feature": "Bàn tay chữ nhất: Tâm đạo và Trí đạo nhập thành một đường ngang",
+   "text": "Tập trung cao độ, làm gì cũng hết mình, yêu ghét rõ ràng.",
+   "topics": [
+    "tc",
+    "tcm"
+   ],
+   "tone": "=",
+   "weight": 3,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ]
+  },
+  {
+   "id": "C06",
+   "group": "combo",
+   "feature": "Bàn tay ít chỉ, chủ yếu 3 đường chính",
+   "text": "Đơn giản, thẳng tính, thực tế.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "=",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ]
+  },
+  {
+   "id": "C07",
+   "group": "combo",
+   "feature": "Bàn tay nhiều chỉ nhỏ",
+   "text": "Nhạy cảm, tinh tế, dễ lo nghĩ. Thói quen thư giãn giúp tâm trí nhẹ hơn.",
+   "topics": [
+    "tc",
+    "ss"
+   ],
+   "tone": "!",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT",
+    "HCM"
+   ]
+  },
+  {
+   "id": "C08",
+   "group": "combo",
+   "feature": "Ngôi sao ở cuối cả Định mạng và Thái dương",
+   "text": "Dấu hiệu thành công nổi bật, đa tài, thông minh.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ]
+  },
+  {
+   "id": "C09",
+   "group": "combo",
+   "feature": "Trí đạo dài + nhiều sao trên các gò + Thủy tinh dài",
+   "text": "Đa tài, giàu tưởng tượng; nhớ nghỉ ngơi để không quá tải.",
+   "topics": [
+    "st"
+   ],
+   "tone": "+",
+   "weight": 2,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ]
+  },
+  {
+   "id": "C10",
+   "group": "combo",
+   "feature": "Chỉ thấy 2 đường chính (Sinh đạo + một đường ngang)",
+   "text": "Xem đường ngang là Trí đạo kiêm Tâm đạo (như C05).",
+   "topics": [
+    "tc"
+   ],
+   "tone": "=",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ]
+  },
+  {
+   "id": "G-kim.star",
+   "group": "mark",
+   "feature": "Sao trên gò Kim tinh",
+   "text": "Có duyên, dễ tạo thiện cảm.",
+   "topics": [
+    "tcm"
+   ],
+   "tone": "+",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "kim",
+   "mark": "star"
+  },
+  {
+   "id": "G-kim.cross",
+   "group": "mark",
+   "feature": "Chữ thập trên gò Kim tinh",
+   "text": "Tình cảm sâu đậm, chung thuỷ.",
+   "topics": [
+    "tcm"
+   ],
+   "tone": "=",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "kim",
+   "mark": "cross"
+  },
+  {
+   "id": "G-kim.triangle",
+   "group": "mark",
+   "feature": "Tam giác trên gò Kim tinh",
+   "text": "Tình cảm trong sáng.",
+   "topics": [
+    "tcm"
+   ],
+   "tone": "+",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "kim",
+   "mark": "triangle"
+  },
+  {
+   "id": "G-kim.island",
+   "group": "mark",
+   "feature": "Cù lao trên gò Kim tinh",
+   "text": "Tình cảm có lúc chùng xuống.",
+   "topics": [
+    "tcm"
+   ],
+   "tone": "!",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "kim",
+   "mark": "island"
+  },
+  {
+   "id": "G-kim.grille",
+   "group": "mark",
+   "feature": "Lưới trên gò Kim tinh",
+   "text": "Đam mê mạnh, cần cân bằng.",
+   "topics": [
+    "tcm"
+   ],
+   "tone": "=",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "kim",
+   "mark": "grille"
+  },
+  {
+   "id": "G-moc.star",
+   "group": "mark",
+   "feature": "Sao trên gò Mộc tinh",
+   "text": "Thành công khi đứng ra quản lý, điều hành.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "moc",
+   "mark": "star"
+  },
+  {
+   "id": "G-moc.cross",
+   "group": "mark",
+   "feature": "Chữ thập trên gò Mộc tinh",
+   "text": "Công danh hợp ý.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "moc",
+   "mark": "cross"
+  },
+  {
+   "id": "G-moc.triangle",
+   "group": "mark",
+   "feature": "Tam giác trên gò Mộc tinh",
+   "text": "Thu hút thiện cảm.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "moc",
+   "mark": "triangle"
+  },
+  {
+   "id": "G-moc.island",
+   "group": "mark",
+   "feature": "Cù lao trên gò Mộc tinh",
+   "text": "Tránh tự kiêu, tham lợi quá đà.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "!",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "moc",
+   "mark": "island"
+  },
+  {
+   "id": "G-moc.grille",
+   "group": "mark",
+   "feature": "Lưới trên gò Mộc tinh",
+   "text": "Tham vọng lớn, giữ tỉnh táo.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "!",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "moc",
+   "mark": "grille"
+  },
+  {
+   "id": "G-tho.star",
+   "group": "mark",
+   "feature": "Sao trên gò Thổ tinh",
+   "text": "Có áp lực đột ngột nhưng thành công ở khoa học, thương mại.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "=",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "tho",
+   "mark": "star"
+  },
+  {
+   "id": "G-tho.cross",
+   "group": "mark",
+   "feature": "Chữ thập trên gò Thổ tinh",
+   "text": "Hay lo lắng, mất niềm tin; chia sẻ để nhẹ lòng.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "!",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "tho",
+   "mark": "cross"
+  },
+  {
+   "id": "G-tho.triangle",
+   "group": "mark",
+   "feature": "Tam giác trên gò Thổ tinh",
+   "text": "Tin vào bản thân, thích điều huyền bí.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "+",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "tho",
+   "mark": "triangle"
+  },
+  {
+   "id": "G-tho.square",
+   "group": "mark",
+   "feature": "Hình vuông trên gò Thổ tinh",
+   "text": "Nhiều trở ngại, bền bỉ sẽ vượt.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "!",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "tho",
+   "mark": "square"
+  },
+  {
+   "id": "G-tho.island",
+   "group": "mark",
+   "feature": "Cù lao trên gò Thổ tinh",
+   "text": "Suy nghĩ cần hướng về điều tích cực.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "!",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "tho",
+   "mark": "island"
+  },
+  {
+   "id": "G-tho.grille",
+   "group": "mark",
+   "feature": "Lưới trên gò Thổ tinh",
+   "text": "Hay buồn lo; tìm niềm vui đơn giản.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "!",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "tho",
+   "mark": "grille"
+  },
+  {
+   "id": "G-thaiduong.star",
+   "group": "mark",
+   "feature": "Sao trên gò Thái dương",
+   "text": "Tài năng nở rộ, may mắn lớn; giữ sức.",
+   "topics": [
+    "st"
+   ],
+   "tone": "+",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "thaiduong",
+   "mark": "star"
+  },
+  {
+   "id": "G-thaiduong.cross",
+   "group": "mark",
+   "feature": "Chữ thập trên gò Thái dương",
+   "text": "Tài năng tạm chưa phát huy.",
+   "topics": [
+    "st"
+   ],
+   "tone": "!",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "thaiduong",
+   "mark": "cross"
+  },
+  {
+   "id": "G-thaiduong.triangle",
+   "group": "mark",
+   "feature": "Tam giác trên gò Thái dương",
+   "text": "Nổi danh nhờ tài riêng.",
+   "topics": [
+    "st"
+   ],
+   "tone": "+",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "thaiduong",
+   "mark": "triangle"
+  },
+  {
+   "id": "G-thaiduong.square",
+   "group": "mark",
+   "feature": "Hình vuông trên gò Thái dương",
+   "text": "Tài năng bị giới hạn, kiên nhẫn.",
+   "topics": [
+    "st"
+   ],
+   "tone": "!",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "thaiduong",
+   "mark": "square"
+  },
+  {
+   "id": "G-thaiduong.island",
+   "group": "mark",
+   "feature": "Cù lao trên gò Thái dương",
+   "text": "Giữ gìn uy tín.",
+   "topics": [
+    "st"
+   ],
+   "tone": "!",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "thaiduong",
+   "mark": "island"
+  },
+  {
+   "id": "G-thaiduong.grille",
+   "group": "mark",
+   "feature": "Lưới trên gò Thái dương",
+   "text": "Tự tin quá mức, chậm lại.",
+   "topics": [
+    "st"
+   ],
+   "tone": "!",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "thaiduong",
+   "mark": "grille"
+  },
+  {
+   "id": "G-thuy.star",
+   "group": "mark",
+   "feature": "Sao trên gò Thủy tinh",
+   "text": "Toại nguyện về buôn bán, đi xa.",
+   "topics": [
+    "gt",
+    "tl"
+   ],
+   "tone": "+",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "thuy",
+   "mark": "star"
+  },
+  {
+   "id": "G-thuy.cross",
+   "group": "mark",
+   "feature": "Chữ thập trên gò Thủy tinh",
+   "text": "Kế hoạch mở rộng cần tính kỹ.",
+   "topics": [
+    "gt",
+    "tl"
+   ],
+   "tone": "!",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "thuy",
+   "mark": "cross"
+  },
+  {
+   "id": "G-thuy.triangle",
+   "group": "mark",
+   "feature": "Tam giác trên gò Thủy tinh",
+   "text": "Nhạy bén trong thương mại.",
+   "topics": [
+    "gt",
+    "tl"
+   ],
+   "tone": "+",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "thuy",
+   "mark": "triangle"
+  },
+  {
+   "id": "G-thuy.island",
+   "group": "mark",
+   "feature": "Cù lao trên gò Thủy tinh",
+   "text": "Thận trọng khi hùn hạp làm ăn.",
+   "topics": [
+    "gt",
+    "tl"
+   ],
+   "tone": "!",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "thuy",
+   "mark": "island"
+  },
+  {
+   "id": "G-thuy.grille",
+   "group": "mark",
+   "feature": "Lưới trên gò Thủy tinh",
+   "text": "Tỉnh táo trước cám dỗ lợi lộc.",
+   "topics": [
+    "gt",
+    "tl"
+   ],
+   "tone": "!",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "thuy",
+   "mark": "grille"
+  },
+  {
+   "id": "G-thaiam.star",
+   "group": "mark",
+   "feature": "Sao trên gò Thái âm",
+   "text": "Thành công nhờ trí tưởng tượng.",
+   "topics": [
+    "st",
+    "dx"
+   ],
+   "tone": "+",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "thaiam",
+   "mark": "star"
+  },
+  {
+   "id": "G-thaiam.cross",
+   "group": "mark",
+   "feature": "Chữ thập trên gò Thái âm",
+   "text": "Mơ mộng nhiều, cần thực tế.",
+   "topics": [
+    "st",
+    "dx"
+   ],
+   "tone": "!",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "thaiam",
+   "mark": "cross"
+  },
+  {
+   "id": "G-thaiam.triangle",
+   "group": "mark",
+   "feature": "Tam giác trên gò Thái âm",
+   "text": "Ước mơ thực tế, khả thi.",
+   "topics": [
+    "st",
+    "dx"
+   ],
+   "tone": "+",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "thaiam",
+   "mark": "triangle"
+  },
+  {
+   "id": "G-thaiam.island",
+   "group": "mark",
+   "feature": "Cù lao trên gò Thái âm",
+   "text": "Dự định có thể chậm lại.",
+   "topics": [
+    "st",
+    "dx"
+   ],
+   "tone": "!",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "thaiam",
+   "mark": "island"
+  },
+  {
+   "id": "G-hoaam.star",
+   "group": "mark",
+   "feature": "Sao trên gò Hỏa tinh âm",
+   "text": "Thuận lợi về tinh thần.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "+",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "hoaam",
+   "mark": "star"
+  },
+  {
+   "id": "G-hoaam.cross",
+   "group": "mark",
+   "feature": "Chữ thập trên gò Hỏa tinh âm",
+   "text": "Hay tranh luận để thắng.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "!",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "hoaam",
+   "mark": "cross"
+  },
+  {
+   "id": "G-hoaam.triangle",
+   "group": "mark",
+   "feature": "Tam giác trên gò Hỏa tinh âm",
+   "text": "Coi trọng đời sống tâm linh.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "+",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "hoaam",
+   "mark": "triangle"
+  },
+  {
+   "id": "G-hoaduong.star",
+   "group": "mark",
+   "feature": "Sao trên gò Hỏa tinh dương",
+   "text": "Muốn dấn thân, sánh vai trong môi trường cạnh tranh.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "+",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "hoaduong",
+   "mark": "star"
+  },
+  {
+   "id": "G-hoaduong.cross",
+   "group": "mark",
+   "feature": "Chữ thập trên gò Hỏa tinh dương",
+   "text": "Hăng hái, nóng nảy.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "=",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "hoaduong",
+   "mark": "cross"
+  },
+  {
+   "id": "G-hoaduong.triangle",
+   "group": "mark",
+   "feature": "Tam giác trên gò Hỏa tinh dương",
+   "text": "Lợi khi tham gia hoạt động xã hội.",
+   "topics": [
+    "tc"
+   ],
+   "tone": "+",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "hoaduong",
+   "mark": "triangle"
+  },
+  {
+   "id": "G-donghoa.star",
+   "group": "mark",
+   "feature": "Sao trên gò Đồng Hỏa tinh",
+   "text": "Nổi danh nhờ sáng tạo.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "donghoa",
+   "mark": "star"
+  },
+  {
+   "id": "G-donghoa.cross",
+   "group": "mark",
+   "feature": "Chữ thập trên gò Đồng Hỏa tinh",
+   "text": "Siêng năng, kiên nhẫn tiến từng nấc.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "donghoa",
+   "mark": "cross"
+  },
+  {
+   "id": "G-donghoa.triangle",
+   "group": "mark",
+   "feature": "Tam giác trên gò Đồng Hỏa tinh",
+   "text": "Được cảm tình của người khác.",
+   "topics": [
+    "sn"
+   ],
+   "tone": "+",
+   "weight": 1,
+   "tts": true,
+   "sources": [
+    "DVT"
+   ],
+   "mount": "donghoa",
+   "mark": "triangle"
+  }
+ ]
+}

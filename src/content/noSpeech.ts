@@ -3,6 +3,7 @@
 export const NO_SPEECH_TERMS: readonly string[] = [
   'tai nạn', 'bệnh', 'ốm', 'tuổi thọ', 'trường thọ', 'chết', 'tử vong', 'qua đời', 'kiện tụng', 'kiện cáo',
   'ly hôn', 'ly dị', 'ly thân', 'tai hoạ', 'tai họa', 'tai ương', 'hoả hoạn', 'hỏa hoạn', 'tổn hại', 'mổ', 'phẫu thuật', 'tang lễ',
+  'goá', 'góa', 'ung thư', 'sẩy thai', 'ngoại tình', 'chia tay',
 ];
 
 /* Khớp nguyên từ: "ốm" không được bắt nhầm trong một chữ dài hơn. */
