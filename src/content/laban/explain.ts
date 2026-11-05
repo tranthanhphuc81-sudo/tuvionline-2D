@@ -25,6 +25,10 @@ export function laBanCalibrateText(headingErrorDeg: number | null): string {
   return 'Độ tin cậy của cảm biến đang thấp' + (headingErrorDeg !== null ? ' (sai số khoảng ±' + Math.round(headingErrorDeg) + '°)' : '')
     + ' — số đo có thể sai. Hãy vẽ hình số 8 trong không khí vài lần và tránh xa kim loại, loa, sạc.';
 }
+export function laBanInterferenceText(fieldUT: number): string {
+  return 'Từ trường quanh máy đang bất thường (' + Math.round(fieldUT) + ' µT, bình thường khoảng 25–65 µT) — số đo có thể sai. Hãy đưa máy ra xa kim loại, loa, sạc rồi đo lại.';
+}
+export const laBanFieldText = (fieldUT: number): string => 'Từ trường đo được: ' + Math.round(fieldUT) + ' µT';
 export const LABAN_TILTED = 'Hãy đặt máy nằm ngang để đọc hướng chính xác hơn.';
 
 /** Ô "Hướng hiện tại" (legacy #resultGrid). */

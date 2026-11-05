@@ -18,6 +18,7 @@ import { Journey } from '../features/journey/Journey';
 import { recordEntry, todayEntry, type TodayEntry } from '../features/journey/gate';
 import { onPause } from '../platform/lifecycle';
 import { stopReading } from '../platform/tts';
+import { ReadingBar } from '../ui/components/ReadingBar';
 import s from './App.module.css';
 
 function routeTitle(r: Route): string {
@@ -142,6 +143,7 @@ export function App({ journey = false }: { journey?: boolean }) {
       <main className={s.content}>
         {TABS.map((t) => <TabPanel key={t.id} tab={t.id} active={nav.tab === t.id} />)}
       </main>
+      <ReadingBar />
       <TabBar />
       {entry.plan !== 'none' && <Journey plan={entry.plan} sound={journeySound} onDone={() => setEntry({ plan: 'none', today: '' })} />}
     </div>

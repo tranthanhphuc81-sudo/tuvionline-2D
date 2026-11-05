@@ -47,8 +47,14 @@ export function smoothHeading(prev: number | null, next: number, k = 0.25): numb
 /** Từ ngưỡng này trở lên coi là cần hiệu chỉnh. Số tạm, chốt sau khi đo trên máy thật (ARCHITECTURE.md mục 11). */
 export const HEADING_ERROR_LIMIT = 15;
 
-/** Độ tin cậy của cảm biến. `accuracy` theo SensorManager: −1, 0 không tin cậy · 1 thấp · 2 vừa · 3 cao; null = không biết. */
-export function compassTrust(accuracy: number | null, headingErrorDeg: number | null): 'ok' | 'calibrate' {
+/** Từ trường Trái Đất ở mặt đất khoảng 25–65 µT. Ngoài khoảng này là có vật khác gây nhiễu. Số tạm, chốt sau khi đo (ARCHITECTURE.md mục 11). */
+export const FIELD_MIN_UT = 25;
+export const FIELD_MAX_UT = 65;
+
+/** Độ tin cậy của cảm biến. `accuracy` theo SensorManager: −1, 0 không tin cậy · 1 thấp · 2 vừa · 3 cao; null = không biết.
+    `fieldUT` là độ lớn từ trường đo được: máy thật có thể vẫn báo `accuracy` cao khi để cạnh loa, nên phải xét riêng. */
+export function compassTrust(accuracy: number | null, headingErrorDeg: number | null, fieldUT: number | null = null): 'ok' | 'calibrate' | 'interference' {
+  if (fieldUT !== null && (fieldUT < FIELD_MIN_UT || fieldUT > FIELD_MAX_UT)) return 'interference';
   if (accuracy !== null && accuracy <= 1) return 'calibrate';
   return headingErrorDeg !== null && headingErrorDeg > HEADING_ERROR_LIMIT ? 'calibrate' : 'ok';
 }

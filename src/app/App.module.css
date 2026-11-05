@@ -1,5 +1,5 @@
 .shell {
-  height: 100dvh; display: grid; grid-template-rows: auto 1fr auto;
+  height: 100dvh; display: grid; grid-template-rows: auto 1fr auto auto;
   padding-left: var(--safe-left); padding-right: var(--safe-right);
 }
 .topbar {

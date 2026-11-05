@@ -122,6 +122,81 @@ describe('đọc nối tiếp', () => {
     expect(plugin.speak.mock.calls[0][0].voice).toBe(4);
   });
 
+  const pending = () => {
+    const done: (() => void)[] = [];
+    plugin.speak.mockImplementation(() => new Promise<void>((r) => { done.push(r); }));
+    return done;
+  };
+  const spoken = () => plugin.speak.mock.calls.map((c) => c[0].text);
+
+  it('lùi một đoạn: đọc lại đoạn trước rồi đọc tiếp bình thường', async () => {
+    const done = pending();
+    const p = tts.readAloud('a', ['một', 'hai', 'ba'], {});
+    await vi.waitFor(() => expect(plugin.speak).toHaveBeenCalledTimes(1));
+    done[0]();
+    await vi.waitFor(() => expect(plugin.speak).toHaveBeenCalledTimes(2));
+    await tts.skipReading(-1);
+    expect(plugin.stop).toHaveBeenCalled();
+    await vi.waitFor(() => expect(plugin.speak).toHaveBeenCalledTimes(3));
+    expect(tts.readingState()).toEqual({ id: 'a', index: 0, total: 3, paused: false });
+    done[1](); // đoạn "hai" bị ngắt báo xong muộn: không được nhảy vị trí
+    await Promise.resolve();
+    expect(tts.readingState()?.index).toBe(0);
+    done[2]();
+    await vi.waitFor(() => expect(plugin.speak).toHaveBeenCalledTimes(4));
+    done[3]();
+    await vi.waitFor(() => expect(plugin.speak).toHaveBeenCalledTimes(5));
+    done[4]();
+    expect(await p).toBe(true);
+    expect(spoken()).toEqual(['một', 'hai', 'một', 'hai', 'ba']);
+  });
+
+  it('đang ở đoạn đầu mà lùi: đọc lại đoạn đầu; tiến ở đoạn cuối không vượt quá', async () => {
+    pending();
+    void tts.readAloud('a', ['một', 'hai'], {});
+    await vi.waitFor(() => expect(plugin.speak).toHaveBeenCalledTimes(1));
+    await tts.skipReading(-1);
+    await vi.waitFor(() => expect(plugin.speak).toHaveBeenCalledTimes(2));
+    await tts.skipReading(5);
+    await vi.waitFor(() => expect(plugin.speak).toHaveBeenCalledTimes(3));
+    expect(spoken()).toEqual(['một', 'một', 'hai']);
+    tts.stopReading();
+  });
+
+  it('tạm dừng rồi đọc tiếp: đọc lại từ đầu đoạn đang dở, vẫn giữ quyền đọc', async () => {
+    const done = pending();
+    const p = tts.readAloud('a', ['một', 'hai'], {});
+    await vi.waitFor(() => expect(plugin.speak).toHaveBeenCalledTimes(1));
+    tts.pauseReading();
+    expect(plugin.stop).toHaveBeenCalled();
+    expect(tts.readingState()?.paused).toBe(true);
+    expect(tts.readingOwner()).toBe('a');
+    done[0]();
+    await Promise.resolve();
+    expect(plugin.speak).toHaveBeenCalledTimes(1);
+    tts.resumeReading();
+    await vi.waitFor(() => expect(plugin.speak).toHaveBeenCalledTimes(2));
+    done[1]();
+    await vi.waitFor(() => expect(plugin.speak).toHaveBeenCalledTimes(3));
+    done[2]();
+    expect(await p).toBe(true);
+    expect(spoken()).toEqual(['một', 'một', 'hai']);
+  });
+
+  it('đang tạm dừng mà lùi: chỉ đổi vị trí, chưa đọc', async () => {
+    pending();
+    void tts.readAloud('a', ['một', 'hai'], {});
+    await vi.waitFor(() => expect(plugin.speak).toHaveBeenCalledTimes(1));
+    await tts.skipReading(1);
+    await vi.waitFor(() => expect(plugin.speak).toHaveBeenCalledTimes(2));
+    tts.pauseReading();
+    await tts.skipReading(-1);
+    expect(tts.readingState()).toMatchObject({ index: 0, paused: true });
+    expect(plugin.speak).toHaveBeenCalledTimes(2);
+    tts.stopReading();
+    expect(tts.readingState()).toBeNull();
+  });
+
   it('máy lỗi giữa chừng: báo false và nhả nút', async () => {
     plugin.speak.mockRejectedValue(new Error('x'));
     expect(await tts.readAloud('a', ['một'], {})).toBe(false);

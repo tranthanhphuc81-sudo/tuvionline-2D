@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { batTrachReading, compassTrust, laBanSectors, normDeg, resolveBirth, sectorOf, smoothHeading } from '../../../core';
 import {
   LABAN_FAILURE, LABAN_FOOT, LABAN_INTRO, LABAN_MANUAL_HINT, LABAN_NO_PROFILE, LABAN_STATUS, LABAN_TILTED,
-  laBanCalibrateText, laBanCells, laBanLessons, laBanVerdict, type LaBanFailure,
+  laBanCalibrateText, laBanCells, laBanFieldText, laBanInterferenceText, laBanLessons, laBanVerdict, type LaBanFailure,
 } from '../../../content/laban/explain';
 import { birthErrorText } from '../../../content/common/birth';
 import { CULTURAL_NOTE } from '../../../content/common/notes';
@@ -34,7 +34,7 @@ export function LaBanScreen({ active }: { active: boolean }) {
   const [heading, setHeading] = useState(0);
   const [live, setLive] = useState(false);
   const [failure, setFailure] = useState<LaBanFailure | null>(null);
-  const [signal, setSignal] = useState<Pick<CompassReading, 'accuracy' | 'headingErrorDeg' | 'tilted'>>({ accuracy: null, headingErrorDeg: null, tilted: false });
+  const [signal, setSignal] = useState<Pick<CompassReading, 'accuracy' | 'headingErrorDeg' | 'fieldUT' | 'tilted'>>({ accuracy: null, headingErrorDeg: null, fieldUT: null, tilted: false });
   const [degInput, setDegInput] = useState('0');
   const [calibInput, setCalibInput] = useState(String(calib));
 
@@ -56,7 +56,8 @@ export function LaBanScreen({ active }: { active: boolean }) {
       if (shown === null || angleGap(shown, next) >= DEADBAND_DEG) { shown = next; setHeading(next); setDegInput(String(Math.round(next) % 360)); }
       setSignal((p) => {
         const err = r.headingErrorDeg === null ? null : Math.round(r.headingErrorDeg);
-        return p.accuracy === r.accuracy && p.headingErrorDeg === err && p.tilted === r.tilted ? p : { accuracy: r.accuracy, headingErrorDeg: err, tilted: r.tilted };
+        const field = r.fieldUT === null ? null : Math.round(r.fieldUT);
+        return p.accuracy === r.accuracy && p.headingErrorDeg === err && p.fieldUT === field && p.tilted === r.tilted ? p : { accuracy: r.accuracy, headingErrorDeg: err, fieldUT: field, tilted: r.tilted };
       });
     }).then((res) => {
       if (dead) { if (res.ok) res.stop(); return; }
@@ -79,7 +80,7 @@ export function LaBanScreen({ active }: { active: boolean }) {
   const pickMode = (m: Mode) => { setFailure(null); setMode(m); };
 
   const status = mode === 'manual' ? (failure ? LABAN_FAILURE[failure] : LABAN_STATUS.manual) : live ? LABAN_STATUS.on : LABAN_STATUS.waiting;
-  const calibrate = mode === 'sensor' && live && compassTrust(signal.accuracy, signal.headingErrorDeg) === 'calibrate';
+  const trust = mode === 'sensor' && live ? compassTrust(signal.accuracy, signal.headingErrorDeg, signal.fieldUT) : 'ok';
   const deg = Math.round(heading) % 360;
 
   return (
@@ -89,12 +90,14 @@ export function LaBanScreen({ active }: { active: boolean }) {
         sectors={sectors} heading={heading} onDrag={mode === 'manual' ? setManual : undefined}
         label={`La bàn: ${deg} độ, hướng ${cur.huong}, quẻ ${cur.quai}${cur.star ? ', sao ' + cur.star.star : ''}`}
       />
-      <div className={s.readout} data-dim={calibrate}>
+      <div className={s.readout} data-dim={trust !== 'ok'}>
         <div className={s.deg}>{deg}°</div>
         <div className={s.huong}>{cur.huong} — {cur.quai}</div>
       </div>
       <p className={s.status} data-on={mode === 'sensor' && live} role="status">{status}</p>
-      {calibrate && <p className={ui.error} role="alert">{laBanCalibrateText(signal.headingErrorDeg)}</p>}
+      {trust === 'calibrate' && <p className={ui.error} role="alert">{laBanCalibrateText(signal.headingErrorDeg)}</p>}
+      {trust === 'interference' && signal.fieldUT !== null && <p className={ui.error} role="alert">{laBanInterferenceText(signal.fieldUT)}</p>}
+      {mode === 'sensor' && live && signal.fieldUT !== null && <p className={ui.muted}>{laBanFieldText(signal.fieldUT)}</p>}
       {mode === 'sensor' && live && signal.tilted && <p className={ui.info}>{LABAN_TILTED}</p>}
 
       <Segmented<Mode> label="Cách đọc hướng" hideLabel value={mode} onChange={pickMode} options={[{ value: 'sensor', label: '🧭 Dùng cảm biến' }, { value: 'manual', label: '✋ Xoay tay' }]} />

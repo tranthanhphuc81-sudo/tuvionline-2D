@@ -25,7 +25,7 @@ const profile = {
   id: 'a', name: 'An', gender: 'M' as const, calendar: 'solar' as const, day: 15, month: 6, year: 1988, leapMonth: false, hourIdx: 6, lateTy: false, createdAt: 't', updatedAt: 't',
 };
 const withProfile = (): PersistedState => ({ ...emptyState(), profiles: [profile], activeProfileId: 'a' });
-const reading = (heading: number, x: Partial<CompassReading> = {}): CompassReading => ({ heading, accuracy: 3, headingErrorDeg: 2, tilted: false, ...x });
+const reading = (heading: number, x: Partial<CompassReading> = {}): CompassReading => ({ heading, accuracy: 3, headingErrorDeg: 2, fieldUT: 45, tilted: false, ...x });
 
 function setup(state: PersistedState = withProfile(), active = true) {
   const store = createStore<PersistedState>(state);
@@ -48,6 +48,18 @@ describe('Màn hình La Bàn', () => {
     expect(screen.getByText('Đông — Chấn')).toBeTruthy();
     expect(screen.getByText('Phục Vị', { selector: 'b' })).toBeTruthy();
     expect(screen.getByRole('img').getAttribute('aria-label')).toBe('La bàn: 90 độ, hướng Đông, quẻ Chấn, sao Phục Vị');
+  });
+
+  it('để gần loa: báo nhiễu từ trường dù cảm biến tự báo tin cậy cao; ra xa thì mất cảnh báo', async () => {
+    setup();
+    await tick();
+    act(() => compass.emit!(reading(10)));
+    expect(screen.queryByRole('alert')).toBeNull();
+    expect(screen.getByText('Từ trường đo được: 45 µT')).toBeTruthy();
+    act(() => compass.emit!(reading(10, { fieldUT: 180 })));
+    expect(screen.getByRole('alert').textContent).toContain('180 µT');
+    act(() => compass.emit!(reading(10)));
+    expect(screen.queryByRole('alert')).toBeNull();
   });
 
   it('sai số lớn: cảnh báo cần hiệu chỉnh, không tắt la bàn; hết nhiễu thì mất cảnh báo', async () => {

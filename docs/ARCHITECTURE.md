@@ -554,6 +554,8 @@ KHÔNG cho biết độ tin cậy, nên không thể báo "cần hiệu chỉnh"
 - **Máy không có từ kế:** `getDefaultSensor` trả `null` thì báo rõ và chuyển xoay tay. Không dùng `GAME_ROTATION_VECTOR` vì không có Bắc.
 - **Hiệu chỉnh hình số 8:** `accuracy` thấp hoặc không tin cậy, hoặc `headingErrorDeg > 15`, thì hiện hướng dẫn và làm mờ số độ, nhưng không tắt la bàn.
   Ngưỡng 15° là tạm, chốt sau khi đo trên máy thật.
+- **Nhiễu từ trường:** thử trên S25 Ultra (05/11/2026): để gần loa, kim loại không hiện cảnh báo, vì hai số trên do máy tự báo và không đủ. Plugin gửi thêm `fieldUT`,
+  độ lớn từ trường của `TYPE_MAGNETIC_FIELD`; ngoài 25–65 µT thì báo nhiễu, làm mờ số độ, không tắt la bàn. Ngưỡng là tạm, số µT hiện trên màn hình để đo.
 - **Xoay màn hình:** app không khoá chiều dọc. Plugin dùng `remapCoordinateSystem` theo `Display.getRotation()`. Máy dựng đứng thì azimuth
   mất ổn định, nên có nhắc đặt máy nằm ngang.
 - **Pin:** `SENSOR_DELAY_UI`, gửi lên JS tối đa 15 lần/giây, chỉ đăng ký khi đang ở tab La Bàn và chế độ cảm biến; huỷ khi rời tab hoặc `pause`.

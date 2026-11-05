@@ -55,41 +55,98 @@ export async function openVoiceInstall(): Promise<void> {
 }
 
 /* ===== Đọc nối tiếp ===== */
-let token = 0;
-let owner: string | null = null;
-const listeners = new Set<() => void>();
-const setOwner = (o: string | null) => { owner = o; listeners.forEach((f) => f()); };
+interface Session {
+  id: string; chunks: readonly string[]; opts: SpeakOptions; index: number; paused: boolean;
+  finish(ok: boolean): void;
+}
+/** Vị trí đang đọc cho thanh điều khiển. `index` tính từ 0. */
+export interface ReadingState { id: string; index: number; total: number; paused: boolean }
 
-export const readingOwner = (): string | null => owner;
+let token = 0;
+let session: Session | null = null;
+let state: ReadingState | null = null;
+const listeners = new Set<() => void>();
+const publish = () => {
+  state = session && { id: session.id, index: session.index, total: session.chunks.length, paused: session.paused };
+  listeners.forEach((f) => f());
+};
+
+export const readingOwner = (): string | null => session?.id ?? null;
+export const readingState = (): ReadingState | null => state;
 export function subscribeReading(f: () => void): () => void {
   listeners.add(f);
   return () => { listeners.delete(f); };
 }
 
+const haltSpeech = () => TextToSpeech.stop().catch(() => { /* đã dừng */ });
+
+function end(s: Session, ok: boolean): void {
+  session = null;
+  publish();
+  s.finish(ok);
+}
+
+/** Đọc từ `s.index` tới hết. Mỗi lần gọi là một lượt: tăng `token` thì lượt cũ tự thôi, kể cả khi đoạn đang đọc không báo xong. */
+async function play(s: Session): Promise<void> {
+  const mine = ++token;
+  try {
+    const voice = await loadVoice();
+    while (mine === token && s.index < s.chunks.length) {
+      await say(s.chunks[s.index], voice, s.opts);
+      if (mine !== token) return;
+      s.index++;
+      if (s.index < s.chunks.length) publish();
+    }
+  } catch {
+    if (mine === token) end(s, false);
+    return;
+  }
+  if (mine === token) end(s, true);
+}
+
 /** Dừng đọc ngay. Gọi lúc không đọc gì cũng không sao. */
 export function stopReading(): void {
-  if (owner === null) return;
+  if (!session) return;
   token++;
-  setOwner(null);
-  void TextToSpeech.stop().catch(() => { /* đã dừng */ });
+  end(session, true);
+  void haltSpeech();
+}
+
+/** Tạm dừng. Đoạn đang đọc bị ngắt, đọc tiếp sẽ đọc lại từ đầu đoạn đó vì plugin không dừng giữa câu được. */
+export function pauseReading(): void {
+  if (!session || session.paused) return;
+  token++;
+  session.paused = true;
+  publish();
+  void haltSpeech();
+}
+
+export function resumeReading(): void {
+  if (!session?.paused) return;
+  session.paused = false;
+  publish();
+  void play(session);
+}
+
+/** Lùi (`-1`) hoặc tiến (`1`) một đoạn; đang ở đoạn đầu mà lùi thì đọc lại đoạn đầu. Đang tạm dừng thì chỉ đổi vị trí. */
+export async function skipReading(delta: number): Promise<void> {
+  const s = session;
+  if (!s) return;
+  s.index = Math.min(Math.max(s.index + delta, 0), s.chunks.length - 1);
+  publish();
+  if (s.paused) return;
+  const mine = ++token;
+  await haltSpeech();
+  if (mine === token && session === s && !s.paused) void play(s);
 }
 
 /** Đọc lần lượt các đoạn, thay cho lần đọc đang chạy nếu có. Trả `false` nếu máy lỗi giữa chừng; bị dừng hoặc đọc xong đều là `true`. */
-export async function readAloud(id: string, chunks: readonly string[], opts: SpeakOptions): Promise<boolean> {
+export function readAloud(id: string, chunks: readonly string[], opts: SpeakOptions): Promise<boolean> {
   stopReading();
-  const mine = ++token;
-  setOwner(id);
-  try {
-    const voice = await loadVoice();
-    for (const c of chunks) {
-      if (mine !== token) return true;
-      await say(c, voice, opts);
-    }
-  } catch {
-    if (mine !== token) return true;
-    setOwner(null);
-    return false;
-  }
-  if (mine === token) setOwner(null);
-  return true;
+  return new Promise((finish) => {
+    const s: Session = { id, chunks, opts, index: 0, paused: false, finish };
+    session = s;
+    publish();
+    void play(s);
+  });
 }

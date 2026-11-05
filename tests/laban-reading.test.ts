@@ -61,4 +61,14 @@ describe('độ tin cậy', () => {
     expect(compassTrust(-1, null)).toBe('calibrate');
     expect(compassTrust(3, 20)).toBe('calibrate');
   });
+
+  it('từ trường bất thường: báo nhiễu dù cảm biến tự báo độ tin cậy cao', () => {
+    expect(compassTrust(3, 2, 45)).toBe('ok');
+    expect(compassTrust(3, 2, 25)).toBe('ok');
+    expect(compassTrust(3, 2, 65)).toBe('ok');
+    expect(compassTrust(3, 2, 66)).toBe('interference');
+    expect(compassTrust(3, 2, 24)).toBe('interference');
+    expect(compassTrust(3, null, 300)).toBe('interference');
+    expect(compassTrust(0, 20, 300)).toBe('interference');
+  });
 });

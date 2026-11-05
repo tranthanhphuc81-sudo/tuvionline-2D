@@ -21,7 +21,30 @@
 | 6.1 — Quyết định Đạo quán & Thầy đọc | XONG — ARCHITECTURE mục 12, còn 3 điểm chờ chủ dự án duyệt (cuối 12.11) |
 | 6.2 — Engine cảnh | XONG phần code — 467 test xanh, build OK, chạy trên máy ảo. CHƯA đo được 60 fps: cần máy thật |
 | 6.3 — Biến thể lịch và âm thanh | XONG phần code — chưa nghe tiếng thật; tiếng hiện là tổng hợp giữ chỗ |
-| 6.4 đến 6.8 | CHƯA LÀM — chờ chủ dự án đồng ý; 6.5 cần nghe giọng trên máy thật, 6.6 cần máy tầm thấp |
+| 6.4 đến 6.8 | CHƯA LÀM — chờ chủ dự án đồng ý; đã nghe giọng trên máy thật (xem dưới), 6.6 cần máy tầm thấp |
+| 7 đến 9 | CHƯA LÀM |
+
+## Thử trên máy thật lần 1 — Samsung Galaxy S25 Ultra, 05/11/2026
+
+Chủ dự án tự thử, APK debug đề 06:20 ngày 05/11. Mới một máy, cao cấp; ARCHITECTURE mục 11 cần 2 máy, gồm một máy đời cũ.
+
+| Phần | Kết quả |
+|---|---|
+| Chung | Đạt: Back đúng, đóng mở lại còn hồ sơ, không tràn màn hình, không khó đọc |
+| Hành trình | Mượt, có tiếng nền, chữ thanh trạng thái đọc được. Chưa ấn tượng vì còn là ảnh giữ chỗ |
+| Đọc thành lời | Có tiếng Việt, đọc hết bài dài, tắt mạng vẫn đọc, bấm đọc không bị im lâu. Giọng nghe cứng, thiếu truyền cảm, chưa đổi được giọng |
+| La bàn | Kim không rung. **KHÔNG ĐẠT phép thử 4:** gần loa, kim loại không hiện cảnh báo. Phép thử 1 (so hướng) chưa làm |
+
+### Đã sửa sau lần thử (chưa thử lại trên máy thật)
+- **La bàn báo nhiễu:** cảnh báo cũ chỉ dựa vào `accuracy` và `headingErrorDeg`, là số do máy tự báo. Plugin gửi thêm `fieldUT` (độ lớn từ trường);
+  ngoài 25–65 µT thì `compassTrust` trả `interference`, màn hình báo lỗi và làm mờ số độ, đồng thời luôn hiện số µT đo được để chốt ngưỡng.
+- **Điều khiển đọc:** `src/ui/components/ReadingBar.tsx` nằm trên thanh tab, chỉ hiện khi đang đọc: nghe lại đoạn trước, tạm dừng / đọc tiếp, đoạn sau, dừng, vị trí đoạn.
+  `tts.ts` thêm `pauseReading`, `resumeReading`, `skipReading`, `readingState`. Tạm dừng rồi đọc tiếp thì đọc lại từ đầu đoạn dở vì plugin không dừng giữa câu được.
+
+- 490 test xanh, build OK. **Chưa biên dịch được file Java và chưa có APK mới:** máy làm việc này không có Android SDK. Thanh đọc mới kiểm bằng test, chưa xem ở 360px.
+
+### Cần thử lại
+- Phép thử 4: xem số µT lúc bình thường và lúc để sát loa; từ kế tự hiệu chỉnh có thể làm nhiễu nhẹ không vượt ngưỡng.
 
 ## Phase 3.5b — Tổng Hợp đầy đủ — XONG
 

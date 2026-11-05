@@ -55,7 +55,7 @@ export {
 export type { DungThanKey, CastContext, HaoView, NhatRel, VerdictHao, LucHaoReading, LhTone } from './luchao/reading';
 export type { Huong, StarName, Nhom, DuNienStar, LySoYear } from './battrach/types';
 export { HUONG_LIST, batTrachReading, trachQuaiOf } from './battrach/reading';
-export { HEADING_ERROR_LIMIT, angleFromCenter, compassTrust, laBanSectors, normDeg, sectorOf, smoothHeading } from './laban/reading';
+export { FIELD_MAX_UT, FIELD_MIN_UT, HEADING_ERROR_LIMIT, angleFromCenter, compassTrust, laBanSectors, normDeg, sectorOf, smoothHeading } from './laban/reading';
 export type { LaBanSector } from './laban/reading';
 export type { BatTrachReading, BtTone, HouseReading, HuongSao } from './battrach/reading';
 export type { NapAmYear, NapAmRelation, NapAmRelationKind, NapAmNeedsId } from './napam/types';

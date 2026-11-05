@@ -30,6 +30,7 @@ public class LySoDevicePlugin extends Plugin implements SensorEventListener {
     private Sensor magnetometer;
     private boolean listening = false;
     private int magAccuracy = Integer.MIN_VALUE;
+    private double fieldUT = -1;
     private long lastSent = 0;
     private final float[] matrix = new float[9];
     private final float[] remapped = new float[9];
@@ -95,6 +96,7 @@ public class LySoDevicePlugin extends Plugin implements SensorEventListener {
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor == magnetometer) {
             magAccuracy = event.accuracy;
+            fieldUT = Math.sqrt(event.values[0] * event.values[0] + event.values[1] * event.values[1] + event.values[2] * event.values[2]);
             return;
         }
         long now = SystemClock.elapsedRealtime();
@@ -108,6 +110,7 @@ public class LySoDevicePlugin extends Plugin implements SensorEventListener {
         JSObject ret = new JSObject();
         ret.put("heading", (Math.toDegrees(angles[0]) + 360) % 360);
         if (magAccuracy != Integer.MIN_VALUE) ret.put("accuracy", magAccuracy);
+        if (fieldUT >= 0) ret.put("fieldUT", fieldUT);
         if (event.values.length > 4 && event.values[4] >= 0) ret.put("headingErrorDeg", Math.toDegrees(event.values[4]));
         ret.put("tilted", Math.abs(Math.toDegrees(angles[1])) > TILT_LIMIT_DEG || Math.abs(Math.toDegrees(angles[2])) > TILT_LIMIT_DEG);
         notifyListeners("heading", ret);

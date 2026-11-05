@@ -11,12 +11,14 @@ export interface CompassReading {
   /** SensorManager: −1, 0 không tin cậy · 1 thấp · 2 vừa · 3 cao; null = không biết */
   accuracy: number | null;
   headingErrorDeg: number | null;
+  /** độ lớn từ trường đo được (µT); null = không biết */
+  fieldUT: number | null;
   /** máy dựng đứng, hướng kém ổn định */
   tilted: boolean;
 }
 export type CompassStart = { ok: true; stop(): void } | { ok: false };
 
-interface NativeReading { heading: number; accuracy?: number; headingErrorDeg?: number; tilted: boolean }
+interface NativeReading { heading: number; accuracy?: number; headingErrorDeg?: number; fieldUT?: number; tilted: boolean }
 interface LySoCompassPlugin {
   start(): Promise<{ available: boolean }>;
   stop(): Promise<void>;
@@ -26,7 +28,7 @@ const Native = LySoDevice as unknown as LySoCompassPlugin;
 
 async function startNative(onReading: (r: CompassReading) => void): Promise<CompassStart> {
   const handle = await Native.addListener('heading', (r) => onReading({
-    heading: r.heading, accuracy: r.accuracy ?? null, headingErrorDeg: r.headingErrorDeg ?? null, tilted: r.tilted,
+    heading: r.heading, accuracy: r.accuracy ?? null, headingErrorDeg: r.headingErrorDeg ?? null, fieldUT: r.fieldUT ?? null, tilted: r.tilted,
   }));
   const { available } = await Native.start();
   if (!available) { void handle.remove(); return { ok: false }; }
@@ -37,7 +39,7 @@ function startWeb(onReading: (r: CompassReading) => void): CompassStart {
   if (!('ondeviceorientationabsolute' in window)) return { ok: false };
   const fn = (e: DeviceOrientationEvent) => {
     if (e.alpha === null) return;
-    onReading({ heading: (360 - e.alpha + (screen.orientation?.angle ?? 0)) % 360, accuracy: null, headingErrorDeg: null, tilted: false });
+    onReading({ heading: (360 - e.alpha + (screen.orientation?.angle ?? 0)) % 360, accuracy: null, headingErrorDeg: null, fieldUT: null, tilted: false });
   };
   const target = window as unknown as { addEventListener(t: string, f: typeof fn, c: boolean): void; removeEventListener(t: string, f: typeof fn, c: boolean): void };
   target.addEventListener('deviceorientationabsolute', fn, true);
