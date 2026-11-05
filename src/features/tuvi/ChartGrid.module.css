@@ -38,3 +38,8 @@
 .dot[data-hoa='khoa'] { background: var(--blue); }
 .dot[data-hoa='ky'] { background: var(--vermillion); }
 .nowrap { white-space: nowrap; }
+/* An sao: 12 cung lần lượt trong khoảng 2,6 giây, chỉ đổi transform và opacity */
+.grid[data-reveal='true'] { --surface: #efe3c4; --surface2: #e8d9b4; --surface3: #e6d6ae; --ink: #2b2014; --ink-dim: #4a3a26; --muted: #6a5a42; --gold: #8a6a1f; --line: #c9b78c; }
+.grid[data-reveal='true'] .stars { animation: starFall .5s ease-out both; animation-delay: calc(var(--i) * 180ms); }
+@keyframes starFall { from { opacity: 0; transform: translateY(-18px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .grid[data-reveal='true'] .stars { animation: none; } }

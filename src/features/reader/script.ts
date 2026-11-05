@@ -8,7 +8,8 @@ import type { Huong } from '../../core';
 import type { Relation, XungHoSetting } from '../../state/schema';
 
 export interface CueFocus { palace?: number; hao?: number; pillar?: number; huong?: Huong }
-export interface Cue extends SpeechItem { id: string; focus?: CueFocus }
+export type CueGesture = 'point' | 'turnPage' | 'nod';
+export interface Cue extends SpeechItem { id: string; focus?: CueFocus; gesture?: CueGesture }
 
 /** Người được đọc cho. `third` = hồ sơ của người khác: thầy nói ngôi thứ ba, không gọi hồ sơ đó là "con". */
 export interface Who { goi: string; third: boolean; name: string }
@@ -55,16 +56,16 @@ export interface ScriptInput {
 export function buildScript(tool: ReaderTool, who: Who, input: ScriptInput): Cue[] {
   const { name, owned } = TOOL_NAME[tool];
   const vars = { goi: who.goi, tool: name, ten: who.name };
-  const say = (text: string, focus?: CueFocus): SpeechItemDraft[] => chunkSpeech(normalizeForSpeech(text)).map((t) => ({ text: t, caption: text, focus }));
+  const say = (text: string, focus?: CueFocus, gesture?: CueGesture): SpeechItemDraft[] => chunkSpeech(normalizeForSpeech(text)).map((t) => ({ text: t, caption: text, focus, gesture }));
   const open = !owned || !who.name ? T.openPlain : who.third ? T.openOther : T.openSelf;
   const draft: SpeechItemDraft[] = [
     ...say(fill(open, vars)),
     ...(input.cells?.length ? [...say(T.leadCells), ...proseCues(cellsSpeech(input.cells), who.goi)] : []),
-    ...(input.leads ?? []).flatMap((l) => say(l.text, l.focus)),
+    ...(input.leads ?? []).flatMap((l) => say(l.text, l.focus, 'point')),
     ...(input.prose ?? []).flatMap((p) => proseCues(p, who.goi)),
-    ...say(T.leadSections),
+    ...say(T.leadSections, undefined, 'turnPage'),
     ...proseCues(sectionsSpeech(input.sections), who.goi),
-    ...say(T.close),
+    ...say(T.close, undefined, 'nod'),
   ];
   return draft.map((c, i) => ({ ...c, id: `${tool}-${i}` }));
 }

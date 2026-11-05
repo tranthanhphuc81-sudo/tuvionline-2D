@@ -13,3 +13,4 @@
 .tint[data-time='dawn'] { background: rgba(255, 214, 160, .1); }
 .tint[data-time='dusk'] { background: rgba(214, 120, 60, .2); }
 .tint[data-time='night'] { background: rgba(8, 14, 40, .45); }
+.dong { position: absolute; left: 4%; bottom: calc(env(safe-area-inset-bottom, 0px) + 96px); width: 42%; max-width: 200px; aspect-ratio: 200 / 220; pointer-events: none; }

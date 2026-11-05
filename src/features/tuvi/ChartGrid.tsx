@@ -1,6 +1,7 @@
 /* Lá số 12 cung — bố cục C đã chốt ở Phase 3.1 (ARCHITECTURE.md mục 10): lưới 4×4 gọn vừa 360px, ô giữa là thiên bàn,
    chạm ô để chọn cung; tô cung Mệnh, cung đang chọn, tam phương tứ chính và vẽ đường nối.
    `focus` dành cho Phase 6 (thầy đọc điều khiển ô tô sáng và đường nối). */
+import type { CSSProperties } from 'react';
 import { TuViEngine, cungNameFor, tamPhuong, HOA_KEYS, type HoaKey, type TuViChart } from '../../core';
 import s from './ChartGrid.module.css';
 
@@ -42,21 +43,23 @@ function palaceLabel(ch: TuViChart, c: number): string {
   return `Cung ${cungNameFor(ch.menhChi, c)} tại ${CHI[c]}${c === ch.thanChi ? ', có Thân' : ''}: ${starTxt}. Đại hạn ${dh.tuoiStart} đến ${dh.tuoiEnd} tuổi`;
 }
 
-export function ChartGrid({ ch, name, gender, selected, onSelect, focus }: {
+export function ChartGrid({ ch, name, gender, selected, onSelect, focus, reveal }: {
   ch: TuViChart; name: string; gender: 'M' | 'F'; selected: number; onSelect(c: number): void; focus?: ChartFocus;
+  /** hoạt ảnh an sao: nền giấy dó, sao rơi lần lượt vào từng cung */
+  reveal?: boolean;
 }) {
   const sel = focus?.palace ?? selected;
   const tp = tamPhuong(sel);
   const lines: [number, number][] = focus?.lines ?? [[sel, tp[1]], [sel, tp[2]], [sel, tp[3]]];
   const center = (c: number) => { const p = PALACE_POS.find((x) => x[0] === c)!; return [(p[1] - 0.5) * 25, (p[2] - 0.5) * 25]; };
   return (
-    <div className={s.grid} role="group" aria-label="Lá số 12 cung">
-      {PALACE_POS.map(([c, col, row]) => {
+    <div className={s.grid} data-reveal={!!reveal} role="group" aria-label="Lá số 12 cung">
+      {PALACE_POS.map(([c, col, row], i) => {
         const stars = ch.stars[c] || [];
         const dh = ch.daiHan.find((d) => d.chi === c)!;
         const cls = [s.cell, c === ch.menhChi && s.menh, c === sel ? s.sel : tp.includes(c) && s.tp].filter(Boolean).join(' ');
         return (
-          <button key={c} type="button" className={cls} style={{ gridColumn: col, gridRow: row }}
+          <button key={c} type="button" className={cls} style={{ gridColumn: col, gridRow: row, '--i': i } as CSSProperties}
             aria-pressed={c === sel} aria-label={palaceLabel(ch, c)} onClick={() => onSelect(c)}>
             {c === ch.thanChi && <span className={s.than} aria-hidden="true">Thân</span>}
             <span className={s.hd} aria-hidden="true"><b>{CHI[c]}</b><span className={s.cg}>{cungNameFor(ch.menhChi, c)}</span></span>

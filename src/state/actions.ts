@@ -66,6 +66,11 @@ export function setLucHaoCast(
   store.setState((s) => ({ ...s, tools: { ...s.tools, lucHaoLastCast: { tosses: [...tosses], castAt: now, ...extra } } }));
 }
 
+/** Ghi lúc thắp hương. Chỉ dùng để vẽ nén hương, không ảnh hưởng kết quả nào. */
+export function setIncenseLit(store: AppStore, now = nowIso()): void {
+  store.setState((s) => ({ ...s, tools: { ...s.tools, incenseLitAt: now } }));
+}
+
 /** Đổi ngày xem của quẻ đang giữ (không gieo lại). */
 export function setLucHaoDate(store: AppStore, date: [number, number, number]): void {
   store.setState((s) => (s.tools.lucHaoLastCast ? { ...s, tools: { ...s.tools, lucHaoLastCast: { ...s.tools.lucHaoLastCast, date } } } : s));

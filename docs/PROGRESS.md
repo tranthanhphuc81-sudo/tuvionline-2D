@@ -23,9 +23,24 @@
 | 6.3 — Biến thể lịch và âm thanh | XONG phần code — chưa nghe tiếng thật; tiếng hiện là tổng hợp giữ chỗ |
 | 6.4 — Tĩnh thất | XONG phần code — 502 test xanh, build OK, xem ở 360×740. Chưa thử trên máy thật |
 | 6.5 — Thầy đọc | XONG phần code — 520 test xanh, build OK. Chưa nghe trên máy thật |
-| 6.6 đến 6.8 | CHƯA LÀM — 6.6 cần máy tầm thấp |
+| 6.6 — Nhân vật, nghi thức | XONG phần code — CHƯA ĐẠT nghiệm thu: chủ dự án đồng ý đo fps trên máy tầm thấp sau; chưa thử lắc máy trên máy thật |
+| 6.7, 6.8 | CHƯA LÀM |
 | 7 đến 9 | CHƯA LÀM |
 | Tranh hành trình | XONG bản tự vẽ — 26 SVG sơn mài, thuỷ mặc ở `src/assets/journey/art/`, sinh bằng `node scripts/build-journey-art.mjs`. Nhẹ, không dùng blur. Vẫn thay được bằng tranh hoạ sĩ. Chưa đo fps trên máy thật |
+
+## Phase 6.6 — Nhân vật và nghi thức — XONG PHẦN CODE, CHƯA ĐO
+
+### Đã xong
+- Lottie: `lottie-web` 5.13, gói `lottie_light`, tải riêng khi cần. `src/features/reader/Character.tsx` chọn trạng thái theo marker `idle, talk, point, turnPage, nod`, nên thay file không đổi code. File giữ chỗ sinh bằng `node scripts/build-characters.mjs` vào `src/assets/journey/character/`.
+- Thầy ngồi sau án thư ở Tĩnh thất, đổi tư thế theo `Cue.gesture`; đạo đồng ở cổng và hành lang (chỉ bản đầy đủ).
+- Khác brief: KHÔNG cho miệng mấp máy và không xoay tay quanh khớp. Bản đầu làm vậy, chủ dự án thấy giống con rối, nên vẽ lại mắt nhắm hiền, chỉ thở, nghiêng đầu, đưa tay áo nhẹ.
+- Thắp hương: `src/features/journey/incense.tsx`, chạm giữ 0,8 giây, cháy thật 20 phút theo `tools.incenseLitAt`, hiện ở điện và trên án thư. Trạm điện kéo dài 9 giây ở bản đầy đủ để kịp giữ.
+- Gieo xu: `CoinToss` tự gieo 6 hào, chạm hoặc lắc (`src/platform/shake.ts`), rung nhẹ. Nút gieo nhanh vẫn giữ.
+- An sao: mở Tử Vi từ tờ lá số thì sao rơi vào 12 cung trong khoảng 2,6 giây trên nền giấy; chạm để bỏ qua, tắt khi giảm chuyển động.
+
+### Chưa đo
+- fps và số nét trên máy Android tầm thấp (điều kiện chặn 6.6, chủ dự án đồng ý làm sau). Nếu không đạt thì đổi sang ảnh động CSS.
+- Ngưỡng lắc 22 m/s² là số tạm.
 
 ## Phase 6.5 — Thầy đọc — XONG PHẦN CODE, CHƯA NGHE TRÊN MÁY THẬT
 
@@ -50,7 +65,6 @@
 - `tts.ts`: `ReadingState` thêm `text` làm phụ đề, thêm `setReadingOptions`. `ReadingBar` ẩn với lần đọc của Tĩnh thất.
 
 ### Tạm thời
-- Thầy là bóng người tĩnh, không rõ mặt; Phase 6.6 thay bằng nhân vật có hoạt ảnh.
 
 ## Thử trên máy thật lần 1 — Samsung Galaxy S25 Ultra, 05/11/2026
 

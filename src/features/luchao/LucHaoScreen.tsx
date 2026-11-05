@@ -8,7 +8,8 @@ import { lucHaoExplain, lucHaoNotes, lucHaoTossBanner, lucHaoVerdict } from '../
 import { lucHaoTongKet } from '../../content/luchao/tongket';
 import { setLucHaoCast, setLucHaoDate } from '../../state/actions';
 import { tapLight } from '../../platform/haptics';
-import { useApp, useAppCtx } from '../../app/context';
+import { CoinToss } from './CoinToss';
+import { useApp, useAppCtx, useNav } from '../../app/context';
 import { RichText } from '../../ui/components/RichText';
 import { Segmented } from '../../ui/components/Segmented';
 import { SectionView } from '../../ui/components/SectionView';
@@ -35,6 +36,7 @@ export function LucHaoScreen() {
   const { store } = useAppCtx();
   const who = useWho();
   const cueFocus = useCueFocus('luchao');
+  const nav = useNav();
   const cast = useApp((x) => x.tools.lucHaoLastCast);
   const [method, setMethod] = useState<'random' | 'manual'>(cast?.method ?? 'random');
   const [key, setKey] = useState<DungThanKey>('the');
@@ -103,6 +105,7 @@ export function LucHaoScreen() {
         {method === 'random'
           ? <button type="button" className={`${ui.btn} ${ui.primary} ${ui.block}`} onClick={() => doCast(randomTosses(), 'random')}>{cast ? '🎲 Gieo quẻ mới' : '🎲 Gieo quẻ'}</button>
           : <button type="button" className={`${ui.btn} ${ui.primary} ${ui.block}`} onClick={() => doCast(manual, 'manual')}>Lập quẻ từ 6 số đã nhập</button>}
+        {method === 'random' && <CoinToss active={nav.tab === 'luchao'} onDone={(t) => doCast(t, 'random')} />}
       </section>
 
       {!cast && <p className={ui.muted}>Chọn việc muốn hỏi rồi bấm gieo. Quẻ vừa gieo được giữ lại — đổi việc hỏi hay ngày xem không làm gieo lại.</p>}

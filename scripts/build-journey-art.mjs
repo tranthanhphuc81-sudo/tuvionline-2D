@@ -365,7 +365,7 @@ layers['over-tet'] = svg(
 layers.room = svg(
   lg('wl', [[0, '#2a1a14'], [0.6, '#4a2d1e'], [1, '#22140f']]) + lg('desk', [[0, '#7a4f35'], [0.3, '#54321f'], [1, '#2e1b12']])
   + lg('sky', [[0, '#1c2c50'], [0.6, '#50658a'], [1, '#e3bb8a']]) + rg('moon', [[0, '#fff5d6', 0.95], [0.3, '#ffe6ad', 0.6], [1, '#ffe6ad', 0]])
-  + lg('robe', [[0, '#3c3350'], [1, '#191322']]) + rg('rim', [[0, '#ffd488', 0.5], [1, '#ffd488', 0]])
+  + rg('rim', [[0, '#ffd488', 0.5], [1, '#ffd488', 0]])
   + rg('f', [[0, '#fff7d8', 1], [0.5, '#ffc05c', 0.85], [1, '#ff9d3a', 0]]) + lg('b', [[0, '#a5833f'], [1, '#4c3a1e']])
   + '<clipPath id="w"><circle cx="180" cy="104" r="66"/></clipPath>',
   rect(0, 0, 360, 490, 'url(#wl)') + `<g transform="translate(0 -96)">${shelf(61, 8, 80)}${shelf(67, 272, 80)}</g>`
@@ -373,11 +373,7 @@ layers.room = svg(
   + [[136, 1], [160, 0], [222, 1]].map(([x, b]) => line(`M${x} 180Q${x + 5} 110 ${x - 2} 34`, C.pine, 3.6) + [60, 88, 116, 142].map((y, i) => path(`M${x} ${y}q${b ? 20 : -20} ${-7 + i} ${b ? 34 : -34} 7q${b ? -20 : 20} ${-2 + i} ${b ? -34 : 34} -7Z`, C.pine)).join('')).join('')
   + `</g><circle cx="180" cy="104" r="66" fill="none" stroke="${C.wood}" stroke-width="9"/><circle cx="180" cy="104" r="71" fill="none" stroke="${C.gold}" stroke-width="1.4"/>`
   + line('M180 38V170M114 104H246M133 57Q180 104 227 57M133 151Q180 104 227 151', C.wood, 2.1) + '</g>'
-  /* Thầy: bóng người cách điệu, không rõ mặt; Phase 6.6 thay bằng nhân vật có hoạt ảnh. */
   + ell(180, 216, 96, 96, 'url(#rim)')
-  + path('M112 312C110 262 138 226 160 214L200 214C222 226 250 262 248 312Z', 'url(#robe)')
-  + line('M170 216Q180 240 190 216M180 230V312', C.gold, 1, 'opacity=".6"')
-  + ell(180, 192, 21, 24, '#171120') + path('M160 176C166 160 194 160 200 176L196 182H164Z', '#100c18') + rect(172, 154, 16, 12, '#100c18', 'rx="2"')
   + path('M14 300H346L374 500H-14Z', 'url(#desk)') + rect(10, 298, 340, 3, C.gold, 'opacity=".75"')
   + `<g transform="translate(60 -160)">${path('M274 460Q294 448 314 460L308 472H280Z', 'url(#b)')}${rect(290, 424, 8, 36, 'url(#b)')}${path('M274 424Q294 436 314 424L308 414H280Z', 'url(#b)')}${rect(291, 402, 6, 12, '#e8ddc1')}${ell(294, 386, 16, 26, 'url(#f)')}${ell(294, 392, 3, 9, '#fff9e2')}</g>`,
 ).replace('0 0 360 640', '0 0 360 490').replace('xMidYMid', 'xMidYMax');

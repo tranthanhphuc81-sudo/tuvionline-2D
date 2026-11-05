@@ -22,6 +22,12 @@ export const INTAKE_ASK = {
   hour: 'Sinh vào giờ nào?',
 } as const;
 
+export const INCENSE_TEXT = {
+  hold: 'Chạm giữ để thắp hương',
+  burning: 'Hương đang cháy',
+  ash: 'Hương đã tàn',
+} as const;
+
 /** Đồ vật trên án thư. `label` hiện trên màn hình, `aria` đọc cho trình đọc màn hình. */
 export const STUDY_OBJECTS = {
   laso: { label: 'Tử Vi', aria: 'Tờ lá số giấy dó: mở Tử Vi' },

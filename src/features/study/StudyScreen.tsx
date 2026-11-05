@@ -12,6 +12,10 @@ import { BootNoticeBanner } from '../home/HomeScreen';
 import ui from '../../ui/components/ui.module.css';
 import { thayVoice, useWho } from '../reader/hooks';
 import { buildScript } from '../reader/script';
+import { Character } from '../reader/Character';
+import type { Cue } from '../reader/script';
+import { IncenseStick, useIncense } from '../journey/incense';
+import { requestStarReveal } from '../tuvi/reveal';
 import { Intake } from './Intake';
 import s from './study.module.css';
 
@@ -41,7 +45,12 @@ export function StudyScreen() {
   const [note, setNote] = useState<string | null>(null);
   const who = useWho();
 
+  const incense = useIncense();
+  const cue = mine?.cue as Cue | undefined;
+  const pose = !cue || mine?.paused || !cue.text ? 'idle' : cue.gesture ?? 'talk';
+
   const open = (o: (typeof OBJECTS)[number]) => {
+    if (o.id === 'laso') requestStarReveal();
     if (o.tab && o.route) nav.goTo(o.tab, o.route);
     else if (o.tab) nav.selectTab(o.tab);
     else if (o.route) nav.push(o.route);
@@ -63,6 +72,8 @@ export function StudyScreen() {
       <div className={s.room}>
         <img className={s.art} src={file('room')} alt="" draggable={false} />
         <div className={s.glow} aria-hidden="true" />
+        <Character name="thay" state={pose} className={s.thay} />
+        {incense.kind !== 'none' && <div className={s.incense}><IncenseStick state={incense} /></div>}
         {profile && (
           <nav className={s.desk} aria-label="Đồ vật trên án thư">
             {OBJECTS.map((o) => (

@@ -16,9 +16,11 @@ import { useCueFocus, useWho } from '../reader/hooks';
 import ui from '../../ui/components/ui.module.css';
 import { ChartGrid, HOA_LABEL } from './ChartGrid';
 import { PalaceDetail, PalaceList } from './PalaceDetail';
+import { takeStarReveal } from './reveal';
 import s from './tuvi.module.css';
 
 const { CHI, CAN } = TuViEngine;
+const REVEAL_MS = 2800;
 const thisYear = () => new Date().getFullYear();
 
 export function TuViScreen() {
@@ -26,6 +28,15 @@ export function TuViScreen() {
   const profile = useApp(selectActiveProfile);
   const who = useWho();
   const cueFocus = useCueFocus('tuvi');
+  const [revealing, setRevealing] = useState(false);
+  const chartBox = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (nav.tab !== 'tuvi' || !takeStarReveal()) return;
+    setRevealing(true);
+    chartBox.current?.scrollIntoView?.({ block: 'center' });
+    const t = setTimeout(() => setRevealing(false), REVEAL_MS);
+    return () => clearTimeout(t);
+  }, [nav.tab]);
   const res = useMemo(() => (profile ? profileSummary(profile) : null), [profile]);
   const [mode, setMode] = useState<'chart' | 'list'>('chart');
   const [picked, setPicked] = useState<number | null>(null);
@@ -77,7 +88,10 @@ export function TuViScreen() {
       <Segmented<"chart" | "list"> label="Cách xem lá số" hideLabel value={mode} onChange={setMode} options={[{ value: 'chart', label: 'Lá số' }, { value: 'list', label: 'Danh sách' }]} />
       {mode === 'chart' ? (
         <>
-          <ChartGrid ch={ch} name={profile.name} gender={profile.gender} selected={sel} onSelect={setPicked} focus={cueFocus} />
+          <div ref={chartBox} className={ui.stack} onClickCapture={() => setRevealing(false)}>
+            <ChartGrid ch={ch} name={profile.name} gender={profile.gender} selected={sel} onSelect={setPicked} focus={cueFocus} reveal={revealing} />
+            {revealing && <p className={ui.muted}>Thầy đang an sao. Chạm vào lá số để bỏ qua.</p>}
+          </div>
           <PalaceDetail ch={ch} chi={sel} onSelect={setPicked} />
         </>
       ) : (

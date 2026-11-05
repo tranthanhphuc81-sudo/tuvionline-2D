@@ -7,6 +7,12 @@ import { adaptCount, particleAlpha, spawnParticle, stepParticle } from './partic
 import { entryPlan, lunarEventOf, skipJourney, startJourney, stepJourney } from './plan';
 import { SCENES } from './scenes';
 import { layerTransform } from './SceneEngine';
+import { AppProvider } from '../../app/context';
+import { createStore } from '../../state/store';
+import { emptyState, type PersistedState } from '../../state/schema';
+import type { ReactElement } from 'react';
+
+const withStore = (ui: ReactElement) => <AppProvider store={createStore<PersistedState>(emptyState())}>{ui}</AppProvider>;
 
 const THUONG = { day: 8, month: 5, leap: false };
 const done = { firstDone: true };
@@ -105,7 +111,7 @@ describe('màn hình hành trình', () => {
   const at = () => document.querySelector('[data-scene]')?.getAttribute('data-scene');
 
   it('chạm để bước tới; nút Bỏ qua luôn hiện', () => {
-    render(<Journey plan="full" onDone={() => {}} />);
+    render(withStore(<Journey plan="full" onDone={() => {}} />));
     expect(at()).toBe('gate');
     const d = screen.getByRole('dialog');
     fireEvent.pointerDown(d, { clientY: 300 });
@@ -116,14 +122,14 @@ describe('màn hình hành trình', () => {
 
   it('tự đi hết hành trình đầy đủ rồi vào tĩnh thất', () => {
     const onDone = vi.fn();
-    render(<Journey plan="full" onDone={onDone} />);
-    for (let i = 0; i < 5; i++) act(() => { vi.advanceTimersByTime(5000); });
+    render(withStore(<Journey plan="full" onDone={onDone} />));
+    for (const scene of SCENES) act(() => { vi.advanceTimersByTime(scene.durationMs.full); });
     act(() => { vi.advanceTimersByTime(400); });
     expect(onDone).toHaveBeenCalledTimes(1);
   });
 
   it('điện Tam Thanh có "Đi tiếp", hành lang có lời mời vào; không chặn ai lại', () => {
-    render(<Journey plan="full" onDone={() => {}} />);
+    render(withStore(<Journey plan="full" onDone={() => {}} />));
     act(() => { vi.advanceTimersByTime(5000); });
     act(() => { vi.advanceTimersByTime(5000); });
     expect(at()).toBe('hall');
@@ -135,7 +141,7 @@ describe('màn hình hành trình', () => {
   it('nút Back từ bất kỳ trạm nào đều vào thẳng tĩnh thất, rồi trả Back về cho app', () => {
     const onDone = vi.fn();
     const before = backStack.size;
-    const { unmount } = render(<Journey plan="full" onDone={onDone} />);
+    const { unmount } = render(withStore(<Journey plan="full" onDone={onDone} />));
     expect(backStack.size).toBe(before + 1);
     act(() => { expect(backStack.dispatch()).toBe('handled'); });
     act(() => { vi.advanceTimersByTime(400); });
@@ -146,7 +152,7 @@ describe('màn hình hành trình', () => {
 
   it('giảm chuyển động: chỉ thấy tĩnh thất rồi mờ đi, không có hạt', () => {
     const onDone = vi.fn();
-    render(<Journey plan="fade" onDone={onDone} />);
+    render(withStore(<Journey plan="fade" onDone={onDone} />));
     expect(at()).toBe('study');
     expect(document.querySelector('canvas')).toBeNull();
     act(() => { vi.advanceTimersByTime(400); });

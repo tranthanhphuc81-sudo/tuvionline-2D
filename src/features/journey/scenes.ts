@@ -40,7 +40,7 @@ export const SCENES: readonly Scene[] = [
   },
   {
     id: 'hall', layers: layers('hall'), particles: [{ kind: 'smoke', count: 16 }, { kind: 'smoke', count: 10, when: 'mung1' }],
-    ambience: { wind: 0.05 }, bell: true, interaction: 'incense', durationMs: DUR,
+    ambience: { wind: 0.05 }, bell: true, interaction: 'incense', durationMs: { ...DUR, full: 9000 },
   },
   { id: 'corridor', layers: layers('corridor'), particles: [{ kind: 'smoke', count: 6 }], ambience: { wind: 0.03 }, interaction: 'invite', durationMs: DUR },
   { id: 'study', layers: layers('study'), particles: [{ kind: 'smoke', count: 6 }], ambience: { lamp: 0.2 }, interaction: 'step', durationMs: DUR },

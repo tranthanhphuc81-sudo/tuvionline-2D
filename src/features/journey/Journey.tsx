@@ -1,4 +1,4 @@
-/* Hành trình vào đạo quán, phủ lên app khi mở (ARCHITECTURE.md mục 12.1–12.3). Ảnh sinh từ scripts/build-journey-art.mjs, tiếng tổng hợp giữ chỗ, chưa có nhân vật. */
+/* Hành trình vào đạo quán, phủ lên app khi mở (ARCHITECTURE.md mục 12.1–12.3). Ảnh sinh từ scripts/build-journey-art.mjs, tiếng tổng hợp giữ chỗ, nhân vật Lottie giữ chỗ. */
 import { useEffect, useMemo, useRef, useState, type PointerEvent } from 'react';
 import { createAmbientPlayer, type AmbientPlayer } from '../../platform/ambientAudio';
 import { backStack } from '../../platform/back';
@@ -8,6 +8,8 @@ import { getAmbience } from './ambience';
 import { skipJourney, startJourney, stepJourney, type EntryPlan } from './plan';
 import { SceneView } from './SceneEngine';
 import { SCENES, preloadScene } from './scenes';
+import { IncenseControl } from './incense';
+import { Character } from '../reader/Character';
 import s from './journey.module.css';
 
 const FADE_MS = 400;
@@ -67,7 +69,9 @@ export function Journey({ plan, sound = false, onDone }: { plan: Exclude<EntryPl
     <div className={s.journey} data-done={st.done} role="dialog" aria-label="Lối vào đạo quán" onPointerDown={(e) => { startY.current = e.clientY; audio.current?.unlock(); }} onPointerUp={onUp}>
       <SceneView key={scene.id} scene={scene} ambience={ambience} durationMs={durationMs} animate={animate} />
       <button type="button" className={s.skip} onPointerUp={(e) => e.stopPropagation()} onClick={() => setSt((x) => skipJourney(x, COUNT))}>Bỏ qua</button>
+      {plan === 'full' && (scene.id === 'gate' || scene.id === 'corridor') && <Character name="daodong" state={scene.id === 'gate' ? 'nod' : 'point'} className={s.dong} />}
       <div className={s.foot} onPointerUp={(e) => e.stopPropagation()}>
+        {scene.interaction === 'incense' && plan === 'full' && <IncenseControl />}
         {scene.interaction === 'incense' && <button type="button" className={s.action} onClick={step}>Đi tiếp</button>}
         {scene.interaction === 'invite' && <button type="button" className={s.action} onClick={step}>Vào tĩnh thất</button>}
         {st.index === 0 && plan === 'full' && <p className={s.hint}>Vuốt lên hoặc chạm để bước tới</p>}
