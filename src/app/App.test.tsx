@@ -22,25 +22,31 @@ const visible = () => screen.getAllByRole('tabpanel').find((p) => !p.hidden)!;
 
 afterEach(cleanup);
 
+/** Màn hình trên cùng của tab đang mở: các màn hình dưới nó vẫn mount, chỉ ẩn. */
+function topScreen(): HTMLElement {
+  return visible().lastElementChild as HTMLElement;
+}
+
 describe('Khung app', () => {
   it('chưa có hồ sơ: mời thêm hồ sơ; thêm xong thì Tổng hợp hiện tóm tắt', () => {
     const { store } = setup();
-    fireEvent.click(screen.getByRole('button', { name: '＋ Thêm hồ sơ đầu tiên' }));
-    const panel = visible();
+    fireEvent.click(screen.getByRole('button', { name: 'Điền cả hồ sơ một lần' }));
+    const panel = topScreen();
     fireEvent.change(within(panel).getByLabelText('Tên hoặc biệt danh'), { target: { value: 'An' } });
     fireEvent.change(within(panel).getByLabelText('Ngày'), { target: { value: '15' } });
     fireEvent.change(within(panel).getByLabelText('Tháng'), { target: { value: '6' } });
     fireEvent.change(within(panel).getByLabelText('Năm sinh'), { target: { value: '1996' } });
     fireEvent.click(within(panel).getByRole('button', { name: 'Lưu hồ sơ' }));
     expect(store.getState().profiles).toHaveLength(1);
+    fireEvent.click(within(visible()).getByRole('button', { name: /Sổ tổng hợp/ }));
     expect(within(visible()).getByText('Giản Hạ Thuỷ', { selector: 'b' })).toBeTruthy();
     expect(within(visible()).getByText('Mộc Tam Cục', { selector: 'b' })).toBeTruthy();
   });
 
   it('form hồ sơ báo lỗi tiếng Việt như legacy, không lưu ngày không tồn tại', () => {
     const { store } = setup();
-    fireEvent.click(screen.getByRole('button', { name: '＋ Thêm hồ sơ đầu tiên' }));
-    const panel = visible();
+    fireEvent.click(screen.getByRole('button', { name: 'Điền cả hồ sơ một lần' }));
+    const panel = topScreen();
     fireEvent.click(within(panel).getByRole('button', { name: 'Lưu hồ sơ' }));
     expect(within(panel).getByText('Vui lòng nhập tên hoặc biệt danh cho hồ sơ.')).toBeTruthy();
     fireEvent.change(within(panel).getByLabelText('Tên hoặc biệt danh'), { target: { value: 'An' } });

@@ -5,6 +5,8 @@ import { TABS, type Route, type TabId } from './routes';
 import { useStore } from '../state/store';
 import { selectActiveProfile } from '../state/actions';
 import { HomeScreen } from '../features/home/HomeScreen';
+import { StudyScreen } from '../features/study/StudyScreen';
+import { studyTitle } from '../content/study';
 import { ProfilesScreen } from '../features/profiles/ProfilesScreen';
 import { ProfileEditScreen } from '../features/profiles/ProfileEditScreen';
 import { ProfileSheet } from '../features/profiles/ProfileSheet';
@@ -23,7 +25,8 @@ import s from './App.module.css';
 
 function routeTitle(r: Route): string {
   switch (r.name) {
-    case 'home': return 'Lý Số Trọn Bộ';
+    case 'home': return studyTitle(new Date());
+    case 'tonghop': return 'Tổng hợp';
     case 'tuvi': return 'Tử Vi Đẩu Số';
     case 'battu': return 'Bát Tự';
     case 'luchao': return 'Lục Hào';
@@ -36,7 +39,8 @@ function routeTitle(r: Route): string {
 
 function renderRoute(r: Route): ReactNode {
   switch (r.name) {
-    case 'home': return <HomeScreen />;
+    case 'home': return <StudyScreen />;
+    case 'tonghop': return <HomeScreen />;
     case 'tuvi': return <TuViScreen />;
     case 'battu': return <BatTuScreen />;
     case 'luchao': return <LucHaoScreen />;

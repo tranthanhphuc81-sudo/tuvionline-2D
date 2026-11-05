@@ -60,14 +60,14 @@ interface Session {
   finish(ok: boolean): void;
 }
 /** Vị trí đang đọc cho thanh điều khiển. `index` tính từ 0. */
-export interface ReadingState { id: string; index: number; total: number; paused: boolean }
+export interface ReadingState { id: string; index: number; total: number; paused: boolean; /** đoạn đang đọc, để làm phụ đề */ text: string }
 
 let token = 0;
 let session: Session | null = null;
 let state: ReadingState | null = null;
 const listeners = new Set<() => void>();
 const publish = () => {
-  state = session && { id: session.id, index: session.index, total: session.chunks.length, paused: session.paused };
+  state = session && { id: session.id, index: session.index, total: session.chunks.length, paused: session.paused, text: session.chunks[session.index] ?? '' };
   listeners.forEach((f) => f());
 };
 
@@ -138,6 +138,13 @@ export async function skipReading(delta: number): Promise<void> {
   const mine = ++token;
   await haltSpeech();
   if (mine === token && session === s && !s.paused) void play(s);
+}
+
+/** Đổi tốc độ, cao độ của lần đọc `id` đang chạy: đọc lại đoạn hiện tại với giọng mới. Lần đọc khác thì bỏ qua. */
+export function setReadingOptions(id: string, opts: SpeakOptions): void {
+  if (session?.id !== id) return;
+  session.opts = opts;
+  void skipReading(0);
 }
 
 /** Đọc lần lượt các đoạn, thay cho lần đọc đang chạy nếu có. Trả `false` nếu máy lỗi giữa chừng; bị dừng hoặc đọc xong đều là `true`. */

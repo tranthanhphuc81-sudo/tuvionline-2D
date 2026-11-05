@@ -22,7 +22,7 @@ const SHORTCUTS: readonly { icon: string; label: string; tab: TabId; route?: Rou
   { icon: '🌙', label: 'Nạp Âm & hợp hôn', tab: 'phongthuy', route: { name: 'phongthuy', sub: 'napam' } },
 ];
 
-function BootNoticeBanner() {
+export function BootNoticeBanner() {
   const { notice } = useAppCtx();
   if (!notice) return null;
   if (notice.kind === 'imported-legacy') {
@@ -51,7 +51,6 @@ export function HomeScreen() {
 
   return (
     <div className={ui.stack}>
-      <BootNoticeBanner />
       {!profile && (
         <section className={ui.card}>
           <h2>Chào bạn</h2>

@@ -360,6 +360,63 @@ layers['over-tet'] = svg(
   strip(30) + strip(302) + lantern(92, 348, 14, '#c82d1f', 'g', 34) + lantern(268, 348, 14, '#c82d1f', 'g', 34),
 );
 
+/* ===== Tĩnh thất (màn hình chính) và đồ vật trên án thư ===== */
+/* Khung thấp hơn ảnh hành trình; màn hình neo đáy nên án thư luôn ở đúng chỗ, trên máy thấp thì mất phần đỉnh tường. */
+layers.room = svg(
+  lg('wl', [[0, '#2a1a14'], [0.6, '#4a2d1e'], [1, '#22140f']]) + lg('desk', [[0, '#7a4f35'], [0.3, '#54321f'], [1, '#2e1b12']])
+  + lg('sky', [[0, '#1c2c50'], [0.6, '#50658a'], [1, '#e3bb8a']]) + rg('moon', [[0, '#fff5d6', 0.95], [0.3, '#ffe6ad', 0.6], [1, '#ffe6ad', 0]])
+  + lg('robe', [[0, '#3c3350'], [1, '#191322']]) + rg('rim', [[0, '#ffd488', 0.5], [1, '#ffd488', 0]])
+  + rg('f', [[0, '#fff7d8', 1], [0.5, '#ffc05c', 0.85], [1, '#ff9d3a', 0]]) + lg('b', [[0, '#a5833f'], [1, '#4c3a1e']])
+  + '<clipPath id="w"><circle cx="180" cy="104" r="66"/></clipPath>',
+  rect(0, 0, 360, 490, 'url(#wl)') + `<g transform="translate(0 -96)">${shelf(61, 8, 80)}${shelf(67, 272, 80)}</g>`
+  + `<g transform="translate(0 42)"><g clip-path="url(#w)">${rect(110, 34, 140, 140, 'url(#sky)')}${ell(208, 76, 36, 36, 'url(#moon)')}${ridge(83, 150, 22, 180, '#2c3b55')}`
+  + [[136, 1], [160, 0], [222, 1]].map(([x, b]) => line(`M${x} 180Q${x + 5} 110 ${x - 2} 34`, C.pine, 3.6) + [60, 88, 116, 142].map((y, i) => path(`M${x} ${y}q${b ? 20 : -20} ${-7 + i} ${b ? 34 : -34} 7q${b ? -20 : 20} ${-2 + i} ${b ? -34 : 34} -7Z`, C.pine)).join('')).join('')
+  + `</g><circle cx="180" cy="104" r="66" fill="none" stroke="${C.wood}" stroke-width="9"/><circle cx="180" cy="104" r="71" fill="none" stroke="${C.gold}" stroke-width="1.4"/>`
+  + line('M180 38V170M114 104H246M133 57Q180 104 227 57M133 151Q180 104 227 151', C.wood, 2.1) + '</g>'
+  /* Thầy: bóng người cách điệu, không rõ mặt; Phase 6.6 thay bằng nhân vật có hoạt ảnh. */
+  + ell(180, 216, 96, 96, 'url(#rim)')
+  + path('M112 312C110 262 138 226 160 214L200 214C222 226 250 262 248 312Z', 'url(#robe)')
+  + line('M170 216Q180 240 190 216M180 230V312', C.gold, 1, 'opacity=".6"')
+  + ell(180, 192, 21, 24, '#171120') + path('M160 176C166 160 194 160 200 176L196 182H164Z', '#100c18') + rect(172, 154, 16, 12, '#100c18', 'rx="2"')
+  + path('M14 300H346L374 500H-14Z', 'url(#desk)') + rect(10, 298, 340, 3, C.gold, 'opacity=".75"')
+  + `<g transform="translate(60 -160)">${path('M274 460Q294 448 314 460L308 472H280Z', 'url(#b)')}${rect(290, 424, 8, 36, 'url(#b)')}${path('M274 424Q294 436 314 424L308 414H280Z', 'url(#b)')}${rect(291, 402, 6, 12, '#e8ddc1')}${ell(294, 386, 16, 26, 'url(#f)')}${ell(294, 392, 3, 9, '#fff9e2')}</g>`,
+).replace('0 0 360 640', '0 0 360 490').replace('xMidYMid', 'xMidYMax');
+const obj = (defs, body) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 72">${defs ? `<defs>${defs}</defs>` : ''}${body}</svg>`;
+const shadow = (cx, cy, rx) => ell(cx, cy, rx, rx * 0.2, '#000', 'opacity=".4"');
+layers['obj-laso'] = obj(
+  lg('p', [[0, '#f1e6c9'], [1, '#cdbb93']]),
+  shadow(48, 62, 38) + path('M16 12L80 8L86 60L10 64Z', 'url(#p)', `stroke="${C.gold}" stroke-width="1"`)
+  + line('M32 11L28 63M48 10L48 62M64 9L68 61M14 25L82 21M12 38L84 34M11 51L85 47', C.red, 0.9, 'opacity=".7"')
+  + path('M32 24L64 22L66 47L30 49Z', '#e6d5ae') + line('M38 30H58M38 36H58M38 42H52', C.red, 1, 'opacity=".6"'),
+);
+layers['obj-thetre'] = obj(
+  lg('b', [[0, '#d9c078'], [1, '#8f7a3a']], 0, 1),
+  shadow(48, 64, 34) + [[-24, 24], [-8, 40], [8, 56], [24, 72]].map(([a, x]) => `<g transform="rotate(${a / 3} ${x} 62)">${rect(x - 6, 8, 12, 54, 'url(#b)', 'rx="2"')}${rect(x - 6, 14, 12, 1.4, '#6b5a2a')}${rect(x - 6, 54, 12, 1.4, '#6b5a2a')}${line(`M${x} 22V48`, C.red, 1.6, 'stroke-dasharray="3 4"')}</g>`).join(''),
+);
+const coin = (x, y) => ell(x, y, 12, 11, '#b88f3e', `stroke="#6e5420" stroke-width="1.2"`) + ell(x, y, 8.6, 7.8, 'none', `stroke="#6e5420" stroke-width=".8"`) + rect(x - 3, y - 3, 6, 6, '#3a2318');
+layers['obj-xu'] = obj(
+  lg('t', [[0, '#7c6a42'], [1, '#3b2f1c']]),
+  shadow(48, 64, 40) + path('M12 44C14 18 46 10 62 22C72 30 74 42 74 50C60 58 26 58 12 44Z', 'url(#t)', 'stroke="#27200f" stroke-width="1"')
+  + line('M30 22L24 48M46 17L44 54M60 22L62 52M18 34L68 36', '#27200f', 1, 'opacity=".7"')
+  + coin(44, 56) + coin(66, 52) + coin(78, 62),
+);
+layers['obj-laban'] = obj(
+  lg('w', [[0, '#8a5a35'], [1, '#42281a']]) + lg('f', [[0, '#efe2c2'], [1, '#c2ad82']]),
+  shadow(48, 64, 34) + ell(48, 36, 34, 30, 'url(#w)', `stroke="${C.gold}" stroke-width="1.2"`) + ell(48, 36, 25, 22, 'url(#f)', 'stroke="#6e5420" stroke-width=".8"')
+  + line('M48 15V21M48 51V57M24 36H30M66 36H72M31 21L35 25M65 21L61 25M31 51L35 47M65 51L61 47', '#5a3b22', 1.3)
+  + path('M48 22L52 36L48 50L44 36Z', C.red) + path('M48 36L52 36L48 50L44 36Z', '#23304a') + ell(48, 36, 2.2, 2, C.gold),
+);
+layers['obj-sach'] = obj(
+  lg('c', [[0, '#3f5478'], [1, '#232f4a']]),
+  shadow(48, 64, 38) + path('M14 16L78 10L84 54L18 60Z', '#d9ccae') + path('M12 12L76 6L82 50L16 56Z', 'url(#c)', `stroke="${C.gold}" stroke-width=".8"`)
+  + line('M22 12L26 55M16 22L26 21M18 34L27 33M18 46L28 45', C.goldHi, 1) + path('M44 18L66 16L68 28L46 30Z', '#e8dcc0'),
+);
+layers['obj-so'] = obj(
+  lg('c', [[0, C.redHi], [1, '#5c1a15']]) + lg('p', [[0, '#f3e8cc'], [1, '#d3c29c']]),
+  shadow(48, 64, 40) + path('M8 14L48 18L88 12V58L48 64L8 60Z', 'url(#c)') + path('M12 12L48 16V60L12 56Z', 'url(#p)') + path('M84 10L48 16V60L84 54Z', 'url(#p)')
+  + line('M18 22L42 24M18 30L42 32M18 38L42 40M54 24L78 20M54 32L78 28M54 40L78 36', '#8c7d62', 1, 'opacity=".6"') + rect(47, 16, 2, 44, C.gold) + path('M62 16V38L66 34L70 38V14Z', C.red),
+);
+
 rmSync(OUT, { recursive: true, force: true });
 mkdirSync(OUT, { recursive: true });
 let total = 0;

@@ -1,33 +1,13 @@
-import { useMemo, useState } from 'react';
-import { resolveBirth } from '../../core';
+import { useState } from 'react';
 import { birthErrorText, birthNotesText } from '../../content/common/birth';
 import { NAME_MISSING, RELATION_LABEL } from '../../content/common/notes';
 import { RELATIONS, type Relation } from '../../state/schema';
 import type { ProfileInput } from '../../state/actions';
 import { Segmented } from '../../ui/components/Segmented';
 import ui from '../../ui/components/ui.module.css';
+import { MISSING_DATE, toDraft, toInput, useDraftBirth, type Draft } from './draft';
 import { hourLabel } from './format';
 import s from './profiles.module.css';
-
-interface Draft {
-  name: string; relation: Relation | ''; gender: 'M' | 'F'; calendar: 'solar' | 'lunar';
-  day: string; month: string; year: string; leapMonth: boolean; hourIdx: number; lateTy: boolean;
-}
-
-const MISSING_DATE = 'Vui lòng nhập đủ ngày, tháng, năm sinh (năm từ 1900 đến 2100).';
-
-function toDraft(p?: ProfileInput): Draft {
-  if (!p) return { name: '', relation: '', gender: 'M', calendar: 'solar', day: '', month: '', year: '', leapMonth: false, hourIdx: 6, lateTy: false };
-  return { ...p, relation: p.relation ?? '', day: String(p.day), month: String(p.month), year: String(p.year) };
-}
-
-function toInput(d: Draft): ProfileInput | null {
-  const day = parseInt(d.day, 10), month = parseInt(d.month, 10), year = parseInt(d.year, 10);
-  if (![day, month, year].every(Number.isInteger)) return null;
-  const p: ProfileInput = { name: d.name, gender: d.gender, calendar: d.calendar, day, month, year, leapMonth: d.leapMonth, hourIdx: d.hourIdx, lateTy: d.lateTy };
-  if (d.relation) p.relation = d.relation;
-  return p;
-}
 
 /** Form nhập hồ sơ: dương/âm lịch, tháng nhuận, giờ, Tý muộn; báo lỗi tiếng Việt như legacy. */
 export function ProfileForm({ initial, submitLabel, onSubmit }: { initial?: ProfileInput; submitLabel: string; onSubmit(p: ProfileInput): void }) {
@@ -36,7 +16,7 @@ export function ProfileForm({ initial, submitLabel, onSubmit }: { initial?: Prof
   const set = <K extends keyof Draft>(k: K, v: Draft[K]) => setD((x) => ({ ...x, [k]: v }));
 
   const input = toInput(d);
-  const birth = useMemo(() => (input ? resolveBirth(input) : null), [input?.calendar, input?.day, input?.month, input?.year, input?.leapMonth, input?.hourIdx, input?.lateTy]); // eslint-disable-line react-hooks/exhaustive-deps
+  const birth = useDraftBirth(input);
   const nameError = tried && d.name.trim() === '' ? NAME_MISSING : null;
   const dateError = !tried ? null : !input ? MISSING_DATE : birth && !birth.ok ? birthErrorText(birth.errors[0]) : null;
   const note = birth?.ok ? birthNotesText(birth.notes) : '';

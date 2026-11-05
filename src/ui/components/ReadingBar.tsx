@@ -1,11 +1,12 @@
 import { useSyncExternalStore } from 'react';
 import { pauseReading, readingState, resumeReading, skipReading, stopReading, subscribeReading } from '../../platform/tts';
+import { STUDY_READING_ID } from '../../content/study';
 import s from './ReadingBar.module.css';
 
 /** Thanh điều khiển đọc thành lời, nằm ngay trên thanh tab nên cuộn tới đâu cũng thấy. Chỉ hiện khi đang đọc. */
 export function ReadingBar() {
   const r = useSyncExternalStore(subscribeReading, readingState);
-  if (!r) return null;
+  if (!r || r.id === STUDY_READING_ID) return null;
   const last = r.index >= r.total - 1;
   return (
     <div className={s.bar} role="group" aria-label="Điều khiển đọc thành lời">

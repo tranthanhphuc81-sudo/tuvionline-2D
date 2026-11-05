@@ -2,7 +2,7 @@
 // Công thức trích nguyên văn từ bản web đã kiểm chứng (docs/legacy/lyso-toolkit.html); đầu ra được khoá bởi
 // tests/golden.test.ts và tests/core-snapshot.test.ts.
 import { convertSolar2Lunar, pad2, validSolar, validLunar, shiftSolar, lunarTzForSolarYear, lunarTzForLunarYear } from './calendar';
-import { CAN, CHI } from './canchi';
+import { CAN, CHI, yearCanChiIndex } from './canchi';
 import { TuViEngine } from './tuvi/engine';
 import { BatTuEngine } from './battu/engine';
 import { LucHaoEngine } from './luchao/engine';
@@ -27,6 +27,12 @@ export function lunarOfSolar(dd: number, mm: number, yy: number): { day: number;
 }
 
 export { monthChiFromDate } from './calendar';
+
+/** Tên Can Chi của một năm, ví dụ 2026 → "Bính Ngọ". */
+export function yearCanChiName(year: number): string {
+  const { can, chi } = yearCanChiIndex(year);
+  return CAN[can] + ' ' + CHI[chi];
+}
 
 export const LySoUtil = { pad2, validSolar, validLunar, shiftSolar, lunarTzForSolarYear, lunarTzForLunarYear };
 export { TuViEngine, BatTuEngine, LucHaoEngine, PhongThuyEngine, NapAmEngine, resolveBirth };

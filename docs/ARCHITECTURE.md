@@ -35,7 +35,7 @@
 
 | # | Tab (nhãn) | Nội dung |
 |---|---|---|
-| 1 | 🏠 **Tổng hợp** | Màn hình chính: tóm tắt 4 hệ thống của người đang xem, ô lối tắt sang mọi công cụ, phần đọc tổng hợp (`src/content/tonghop`). Phase 6 thay bằng "Tĩnh thất". |
+| 1 | 🏠 **Tổng hợp** | Màn hình chính: tóm tắt 4 hệ thống của người đang xem, ô lối tắt sang mọi công cụ, phần đọc tổng hợp (`src/content/tonghop`). Phase 6.4 đã thay bằng "Tĩnh thất"; phần đọc tổng hợp chuyển sang route `tonghop`. |
 | 2 | 🔮 **Tử Vi** | Lá số, Tứ Hoá, Đại Hạn, tra vận theo năm, giải thích, tổng kết. |
 | 3 | 📜 **Bát Tự** | 4 Trụ, Thập Thần, Vượng Suy, Đại Vận, Lưu Niên. |
 | 4 | ☯ **Lục Hào** | Gieo quẻ, quẻ chủ, quẻ biến, luận đoán. |

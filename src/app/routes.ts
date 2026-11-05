@@ -2,7 +2,7 @@
 export type TabId = 'home' | 'tuvi' | 'battu' | 'luchao' | 'phongthuy';
 
 export const TABS: readonly { id: TabId; icon: string; label: string }[] = [
-  { id: 'home', icon: '🏠', label: 'Tổng hợp' },
+  { id: 'home', icon: '🏮', label: 'Tĩnh thất' },
   { id: 'tuvi', icon: '🔮', label: 'Tử Vi' },
   { id: 'battu', icon: '📜', label: 'Bát Tự' },
   { id: 'luchao', icon: '☯', label: 'Lục Hào' },
@@ -13,6 +13,7 @@ export type PhongThuySub = 'battrach' | 'laban' | 'napam';
 
 export type Route =
   | { name: 'home' }
+  | { name: 'tonghop' }
   | { name: 'tuvi' }
   | { name: 'battu' }
   | { name: 'luchao' }

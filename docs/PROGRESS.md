@@ -21,9 +21,22 @@
 | 6.1 — Quyết định Đạo quán & Thầy đọc | XONG — ARCHITECTURE mục 12, còn 3 điểm chờ chủ dự án duyệt (cuối 12.11) |
 | 6.2 — Engine cảnh | XONG phần code — 467 test xanh, build OK, chạy trên máy ảo. CHƯA đo được 60 fps: cần máy thật |
 | 6.3 — Biến thể lịch và âm thanh | XONG phần code — chưa nghe tiếng thật; tiếng hiện là tổng hợp giữ chỗ |
-| 6.4 đến 6.8 | CHƯA LÀM — chờ chủ dự án đồng ý; đã nghe giọng trên máy thật (xem dưới), 6.6 cần máy tầm thấp |
+| 6.4 — Tĩnh thất | XONG phần code — 502 test xanh, build OK, xem ở 360×740. Chưa thử trên máy thật |
+| 6.5 đến 6.8 | CHƯA LÀM — chờ chủ dự án đồng ý; đã nghe giọng trên máy thật (xem dưới), 6.6 cần máy tầm thấp |
 | 7 đến 9 | CHƯA LÀM |
 | Tranh hành trình | XONG bản tự vẽ — 26 SVG sơn mài, thuỷ mặc ở `src/assets/journey/art/`, sinh bằng `node scripts/build-journey-art.mjs`. Nhẹ, không dùng blur. Vẫn thay được bằng tranh hoạ sĩ. Chưa đo fps trên máy thật |
+
+## Phase 6.4 — Tĩnh thất — XONG PHẦN CODE
+
+### Đã xong
+- `src/features/study/`: `StudyScreen` là gốc tab chính, 6 đồ vật trên án thư có nhãn truy cập, phụ đề, điều khiển ⏮ ⏯ Thầy đọc ⏭ 🐢. Tranh `room.svg`, `obj-*.svg` sinh cùng script hành trình.
+- `HomeScreen` chuyển sang route `tonghop`, mở từ sổ tổng hợp. Thanh trên hiện ngày âm và năm Can Chi (`yearCanChiName` thêm ở core). Tab đổi tên thành Tĩnh thất.
+- `Intake.tsx`: chưa có hồ sơ thì hỏi lần lượt tên, giới tính, ngày, giờ; dùng chung `profiles/draft.ts` với `ProfileForm` nên kiểm tra ngày đúng một logic. Vẫn có nút "Điền cả hồ sơ một lần".
+- `tts.ts`: `ReadingState` thêm `text` làm phụ đề, thêm `setReadingOptions`. `ReadingBar` ẩn với lần đọc của Tĩnh thất.
+
+### Tạm thời
+- "Thầy đọc" hiện đọc đúng chữ phần Tổng hợp; Phase 6.5 thay bằng kịch bản. Câu chào chưa xưng hô riêng vì bảng 12.6 còn chờ duyệt.
+- Thầy là bóng người tĩnh, không rõ mặt; Phase 6.6 thay bằng nhân vật có hoạt ảnh.
 
 ## Thử trên máy thật lần 1 — Samsung Galaxy S25 Ultra, 05/11/2026
 

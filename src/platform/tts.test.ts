@@ -138,7 +138,7 @@ describe('đọc nối tiếp', () => {
     await tts.skipReading(-1);
     expect(plugin.stop).toHaveBeenCalled();
     await vi.waitFor(() => expect(plugin.speak).toHaveBeenCalledTimes(3));
-    expect(tts.readingState()).toEqual({ id: 'a', index: 0, total: 3, paused: false });
+    expect(tts.readingState()).toEqual({ id: 'a', index: 0, total: 3, paused: false, text: 'một' });
     done[1](); // đoạn "hai" bị ngắt báo xong muộn: không được nhảy vị trí
     await Promise.resolve();
     expect(tts.readingState()?.index).toBe(0);
