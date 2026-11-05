@@ -1,6 +1,6 @@
 /* Dựng kịch bản đọc cho thầy (ARCHITECTURE.md mục 12.6–12.8). Hàm thuần, không gọi engine: màn hình truyền kết quả đã tính vào. */
 import { hasNoSpeech } from '../../content/noSpeech';
-import { T, TOOL_NAME, fill, type ReaderTool } from '../../content/reader/templates';
+import { LEADS, NO_SPEECH_LINE, TOOL_LINES, fill, pick, type ReaderTool } from '../../content/reader/templates';
 import type { Section } from '../../content/rich';
 import { cellsSpeech, chunkSpeech, normalizeForSpeech, sectionsSpeech, splitSentences } from '../../content/speech';
 import type { SpeechItem } from '../../platform/tts';
@@ -36,43 +36,45 @@ function proseCues(raw: string, goi: string, focus?: CueFocus): SpeechItemDraft[
     clean = '';
   };
   for (const s of splitSentences(raw)) {
-    if (hasNoSpeech(s)) { flush(); out.push({ text: '', caption: s + ' ' + fill(T.noSpeech, { goi }), focus }); } else clean += ' ' + s;
+    if (hasNoSpeech(s)) { flush(); out.push({ text: '', caption: s + ' ' + fill(NO_SPEECH_LINE, { goi }), focus }); } else clean += ' ' + s;
   }
   flush();
   return out;
 }
 type SpeechItemDraft = Omit<Cue, 'id'>;
 
+export interface Lead { lines: readonly string[]; vars: Record<string, string | number>; focus: CueFocus }
+
 export interface ScriptInput {
   cells?: readonly (readonly [string, string])[];
   /** lời dẫn tô sáng trên lá số, đọc ngay sau các chỉ số */
-  leads?: readonly { text: string; focus: CueFocus }[];
+  leads?: readonly Lead[];
   /** đoạn văn thêm trước phần tổng kết, ví dụ lời nhận định */
   prose?: readonly string[];
   sections: readonly Section[];
 }
 
-/** Câu mở (có lời nhắc văn hoá) → chỉ số → lời dẫn → luận giải nguyên văn → câu kết. */
-export function buildScript(tool: ReaderTool, who: Who, input: ScriptInput): Cue[] {
-  const { name, owned } = TOOL_NAME[tool];
-  const vars = { goi: who.goi, tool: name, ten: who.name };
+/** Câu mở (có lời nhắc văn hoá) → chỉ số → lời dẫn → luận giải nguyên văn → câu kết. `seed` chọn biến thể câu, mặc định đổi theo ngày để đỡ lặp. */
+export function buildScript(tool: ReaderTool, who: Who, input: ScriptInput, seed = new Date().getDate()): Cue[] {
+  const lines = TOOL_LINES[tool];
+  const cuaAi = who.third ? 'của ' + who.name : 'của ' + who.goi;
+  const vars = { goi: who.goi, cuaAi, ten: who.name };
   const say = (text: string, focus?: CueFocus, gesture?: CueGesture): SpeechItemDraft[] => chunkSpeech(normalizeForSpeech(text)).map((t) => ({ text: t, caption: text, focus, gesture }));
-  const open = !owned || !who.name ? T.openPlain : who.third ? T.openOther : T.openSelf;
   const draft: SpeechItemDraft[] = [
-    ...say(fill(open, vars)),
-    ...(input.cells?.length ? [...say(T.leadCells), ...proseCues(cellsSpeech(input.cells), who.goi)] : []),
-    ...(input.leads ?? []).flatMap((l) => say(l.text, l.focus, 'point')),
+    ...say(fill(pick(lines.open, seed), vars)),
+    ...(input.cells?.length ? [...say(fill(pick(lines.cells, seed), vars)), ...proseCues(cellsSpeech(input.cells), who.goi)] : []),
+    ...(input.leads ?? []).flatMap((l) => say(fill(pick(l.lines, seed), { ...vars, ...l.vars }), l.focus, 'point')),
     ...(input.prose ?? []).flatMap((p) => proseCues(p, who.goi)),
-    ...say(T.leadSections, undefined, 'turnPage'),
+    ...say(fill(pick(lines.sections, seed), vars), undefined, 'turnPage'),
     ...proseCues(sectionsSpeech(input.sections), who.goi),
-    ...say(T.close, undefined, 'nod'),
+    ...say(fill(pick(lines.close, seed), vars), undefined, 'nod'),
   ];
   return draft.map((c, i) => ({ ...c, id: `${tool}-${i}` }));
 }
 
-export const tuViLead = (menhChi: number, chiName: string, stars: readonly string[]) => ({
-  text: fill(T.tuviMenh, { cung: chiName, sao: stars.length ? ', có ' + stars.join(', ') : '' }), focus: { palace: menhChi },
+export const tuViLead = (menhChi: number, chiName: string, stars: readonly string[]): Lead => ({
+  lines: LEADS.tuviMenh, vars: { cung: chiName, sao: stars.length ? ', có ' + stars.join(', ') : '' }, focus: { palace: menhChi },
 });
-export const batTuLead = (pillar: number, nhatChu: string) => ({ text: fill(T.battuNhatChu, { nhatChu }), focus: { pillar } });
-export const lucHaoLead = (hao: number, shown: number) => ({ text: fill(T.luchaoThe, { hao: shown }), focus: { hao } });
-export const batTrachLead = (huong: Huong, sao: string) => ({ text: fill(T.battrachHuong, { huong, sao }), focus: { huong } });
+export const batTuLead = (pillar: number, nhatChu: string): Lead => ({ lines: LEADS.battuNhatChu, vars: { nhatChu }, focus: { pillar } });
+export const lucHaoLead = (hao: number, shown: number): Lead => ({ lines: LEADS.luchaoThe, vars: { hao: shown }, focus: { hao } });
+export const batTrachLead = (huong: Huong, sao: string): Lead => ({ lines: LEADS.battrachHuong, vars: { huong, sao }, focus: { huong } });

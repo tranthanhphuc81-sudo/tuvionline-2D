@@ -1,7 +1,7 @@
 import { useMemo, useState, useSyncExternalStore } from 'react';
 import { profileSummary, tongHopOf } from '../../core';
 import { SPEECH_FAILED, SPEECH_NO_VOICE } from '../../content/speech';
-import { STUDY_GREETING, STUDY_INVALID, STUDY_OBJECTS, STUDY_READING_ID, type StudyObjectId } from '../../content/study';
+import { STUDY_INVALID, STUDY_OBJECTS, STUDY_READING_ID, studyGreeting, type StudyObjectId } from '../../content/study';
 import { tongHopParts } from '../../content/tonghop/explain';
 import { CULTURAL_NOTE } from '../../content/common/notes';
 import { useApp, useNav } from '../../app/context';
@@ -72,7 +72,7 @@ export function StudyScreen() {
       <div className={s.room}>
         <img className={s.art} src={file('room')} alt="" draggable={false} />
         <div className={s.glow} aria-hidden="true" />
-        <Character name="thay" state={pose} className={s.thay} />
+        {profile ? <Character name="thay" state={pose} className={s.thay} /> : <Character name="daodong" state="nod" className={s.dong} />}
         {incense.kind !== 'none' && <div className={s.incense}><IncenseStick state={incense} /></div>}
         {profile && (
           <nav className={s.desk} aria-label="Đồ vật trên án thư">
@@ -89,7 +89,7 @@ export function StudyScreen() {
       <BootNoticeBanner />
       {profile ? (
         <div className={s.panel}>
-          <p className={s.subtitle} data-speaking={!!mine}>{note ?? mine?.text ?? (invalid ? STUDY_INVALID : STUDY_GREETING)}</p>
+          <p className={s.subtitle} data-speaking={!!mine}>{note ?? mine?.text ?? (invalid ? STUDY_INVALID : studyGreeting(who.goi, who.name, who.third, new Date().getDate()))}</p>
           <div className={s.controls} role="group" aria-label="Điều khiển Thầy đọc">
             <button type="button" className={s.ctl} aria-label="Nghe lại đoạn trước" disabled={!mine} onClick={() => void skipReading(-1)}>⏮</button>
             <button type="button" className={s.main} disabled={invalid} onClick={() => void main()}>

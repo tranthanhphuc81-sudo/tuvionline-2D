@@ -1,5 +1,6 @@
-/* Câu chữ của Tĩnh thất (ARCHITECTURE.md mục 12.11). Lời chào chưa biến đổi theo xưng hô; Phase 6.7 viết lại cùng bộ mẫu đầy đủ. */
+/* Câu chữ của Tĩnh thất (ARCHITECTURE.md mục 12.11). */
 import { lunarOfSolar, yearCanChiName } from '../core';
+import { STUDY_LINES, fill, pick } from './reader/templates';
 
 /** Nhãn thanh trên: ngày tháng âm và năm Can Chi của hôm nay. */
 export function studyTitle(now: Date): string {
@@ -11,16 +12,11 @@ export function studyTitle(now: Date): string {
 /** `id` của lần đọc ở Tĩnh thất; thanh đọc chung ẩn với id này vì màn hình đã có điều khiển riêng. */
 export const STUDY_READING_ID = 'thay';
 
-export const STUDY_GREETING = 'Mời bạn chọn một vật trên án thư, hoặc bấm "Thầy đọc" để nghe phần tổng hợp.';
+/** Lời chào khi chưa đọc gì, đổi theo ngày cho đỡ lặp. */
+export function studyGreeting(goi: string, ten: string, third: boolean, seed: number): string {
+  return fill(pick(third ? STUDY_LINES.other : STUDY_LINES.self, seed), { goi, ten });
+}
 export const STUDY_INVALID = 'Hồ sơ này có ngày sinh chưa đúng nên thầy chưa đọc được. Hãy sửa lại trong mục Quản lý hồ sơ.';
-
-export const INTAKE_INTRO = 'Chào bạn, xin mời vào. Thầy xin hỏi vài điều để lập hồ sơ. Mọi thứ chỉ lưu trên máy này.';
-export const INTAKE_ASK = {
-  name: 'Xin cho biết họ tên hoặc biệt danh?',
-  gender: 'Hồ sơ này là của nam hay nữ?',
-  date: 'Ngày tháng năm sinh là khi nào?',
-  hour: 'Sinh vào giờ nào?',
-} as const;
 
 export const INCENSE_TEXT = {
   hold: 'Chạm giữ để thắp hương',

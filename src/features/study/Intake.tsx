@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { birthErrorText, birthNotesText } from '../../content/common/birth';
 import { NAME_MISSING } from '../../content/common/notes';
-import { INTAKE_ASK, INTAKE_INTRO } from '../../content/study';
+import { DONG_LINES } from '../../content/reader/templates';
 import { addProfile, setActiveProfile } from '../../state/actions';
 import { useAppCtx, useNav } from '../../app/context';
 import { Segmented } from '../../ui/components/Segmented';
@@ -41,8 +41,8 @@ export function Intake() {
 
   return (
     <form className={s.intake} noValidate onSubmit={next}>
-      {i === 0 && <p className={s.line}>{INTAKE_INTRO}</p>}
-      <p className={s.ask}>{INTAKE_ASK[step]}</p>
+      {i === 0 && <p className={s.line}>{DONG_LINES.intro[0]}</p>}
+      <p className={s.ask}>{DONG_LINES[step][0]}</p>
 
       {step === 'name' && (
         <label className={ui.field}>

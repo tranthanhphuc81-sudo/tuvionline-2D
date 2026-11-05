@@ -24,9 +24,14 @@
 | 6.4 — Tĩnh thất | XONG phần code — 502 test xanh, build OK, xem ở 360×740. Chưa thử trên máy thật |
 | 6.5 — Thầy đọc | XONG phần code — 520 test xanh, build OK. Chưa nghe trên máy thật |
 | 6.6 — Nhân vật, nghi thức | XONG phần code — CHƯA ĐẠT nghiệm thu: chủ dự án đồng ý đo fps trên máy tầm thấp sau; chưa thử lắc máy trên máy thật |
-| 6.7, 6.8 | CHƯA LÀM |
+| 6.7 — Lời thầy, đạo đồng | XONG bản nháp — chờ chủ dự án đọc duyệt `docs/LOI-THAY.md` |
+| 6.8 | CHƯA LÀM |
 | 7 đến 9 | CHƯA LÀM |
 | Tranh hành trình | XONG bản tự vẽ — 26 SVG sơn mài, thuỷ mặc ở `src/assets/journey/art/`, sinh bằng `node scripts/build-journey-art.mjs`. Nhẹ, không dùng blur. Vẫn thay được bằng tranh hoạ sĩ. Chưa đo fps trên máy thật |
+
+## APK thử tự cập nhật
+
+APK từ GitHub Actions đặt `LYSO_LIVE_URL` (`capacitor.config.ts`) nên tải giao diện từ Cloudflare, plugin native vẫn chạy. Mất mạng thì dùng file đóng gói qua `errorPath`, chưa thử trên máy. `scripts/gradle.mjs` chặn `bundleRelease` khi có biến này.
 
 ## Phase 6.6 — Nhân vật và nghi thức — XONG PHẦN CODE, CHƯA ĐO
 

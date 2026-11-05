@@ -5,6 +5,10 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const [task, output] = process.argv.slice(2);
+if (task === 'bundleRelease' && process.env.LYSO_LIVE_URL) {
+  console.error('Bản phát hành không được đặt LYSO_LIVE_URL: app phải chạy offline từ file đóng gói.');
+  process.exit(1);
+}
 const android = join(dirname(fileURLToPath(import.meta.url)), '..', 'android');
 const gradlew = join(android, process.platform === 'win32' ? 'gradlew.bat' : 'gradlew');
 

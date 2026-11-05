@@ -10,7 +10,7 @@ import { INCENSE_MS, IncenseControl, incenseState } from './incense';
 import { CoinToss } from '../luchao/CoinToss';
 import { requestStarReveal, takeStarReveal } from '../tuvi/reveal';
 import { SHAKE_GAP_MS, SHAKE_LIMIT, shakeDetector } from '../../platform/shake';
-import { T } from '../../content/reader/templates';
+import { allLines } from '../../content/reader/templates';
 import { INCENSE_TEXT } from '../../content/study';
 
 const T0 = Date.parse('2026-11-05T08:00:00Z');
@@ -32,7 +32,7 @@ describe('nén hương', () => {
   it('lời về hương không hứa hẹn gì', () => {
     const text = Object.values(INCENSE_TEXT).join(' ').toLowerCase();
     for (const w of ['vận', 'may mắn', 'giải hạn', 'điểm', 'công đức']) expect(text).not.toContain(w);
-    expect(Object.values(T).join(' ')).not.toContain('hương');
+    expect(allLines().join(' ')).not.toMatch(/thắp hương|nén hương/);
   });
 });
 

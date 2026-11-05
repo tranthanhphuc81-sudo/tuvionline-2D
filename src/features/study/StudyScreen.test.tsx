@@ -63,7 +63,7 @@ describe('Thầy đọc', () => {
     fireEvent.click(screen.getByRole('button', { name: /Thầy đọc/ }));
     await waitFor(() => expect(plugin.speak).toHaveBeenCalled());
     expect(screen.getByRole('button', { name: /Tạm dừng/ })).toBeTruthy();
-    expect(screen.getByText(/Thầy chào con/)).toBeTruthy();
+    expect(screen.getByText(/đức năng thắng số/)).toBeTruthy();
     expect(plugin.speak.mock.calls[0][0].pitch).toBeCloseTo(0.85);
   });
 

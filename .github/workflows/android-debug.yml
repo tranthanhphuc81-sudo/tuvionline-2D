@@ -39,6 +39,8 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run android:debug
+        env:
+          LYSO_LIVE_URL: https://lyso-tron-bo.pages.dev
 
       - uses: actions/upload-artifact@v4
         with:

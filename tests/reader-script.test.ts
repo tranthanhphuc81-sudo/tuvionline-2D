@@ -2,7 +2,7 @@
 import { describe, it, expect } from 'vitest';
 import { batTrachReading, castContext, castHexagram, profileSummary } from '../src/core';
 import { NO_SPEECH_TERMS, hasNoSpeech } from '../src/content/noSpeech';
-import { CULTURE_LINE, T } from '../src/content/reader/templates';
+import { CULTURE_LINE, DONG_LINES, LEADS, TOOL_LINES, allLines, fill } from '../src/content/reader/templates';
 import { sectionsSpeech, speechOf } from '../src/content/speech';
 import { batTrachTongKet } from '../src/content/battrach/tongket';
 import { batTuTongKet } from '../src/content/battu/tongket';
@@ -69,25 +69,62 @@ describe('kịch bản đọc', () => {
     }
   });
 
+  it('mỗi công cụ có 3 câu mở, 3 câu kết đều có lời nhắc, ít nhất 2 lời dẫn', () => {
+    for (const t of Object.values(TOOL_LINES)) {
+      expect(t.open).toHaveLength(3);
+      expect(t.close).toHaveLength(3);
+      for (const l of [...t.open, ...t.close]) expect(l).toContain(CULTURE_LINE);
+      expect(t.cells.length).toBeGreaterThanOrEqual(2);
+      expect(t.sections.length).toBeGreaterThanOrEqual(2);
+    }
+    for (const l of Object.values(LEADS)) expect(l.length).toBeGreaterThanOrEqual(2);
+    for (const k of ['gate', 'corridor', 'intro', 'name', 'gender', 'date', 'hour'] as const) expect(DONG_LINES[k].length).toBeGreaterThan(0);
+  });
+
+  it('mẫu câu không dính từ cấm đọc, không còn biến chưa thay, không quá dài', () => {
+    const vars = { goi: 'con', cuaAi: 'của con', ten: 'Lan', cung: 'Hợi', sao: ', có Tử Vi', nhatChu: 'Quý', hao: 3, huong: 'Đông Nam', sao2: '' };
+    for (const l of allLines()) {
+      const s = fill(l, vars);
+      expect(hasNoSpeech(s)).toBe(false);
+      expect(s).not.toMatch(/[{}]/);
+      expect(s.length).toBeLessThanOrEqual(180);
+    }
+  });
+
+  it('{goi} đầu câu được viết hoa', () => {
+    expect(fill('{goi} xem đây.', { goi: 'con' })).toBe('Con xem đây.');
+    expect(fill('Thầy chào {goi}. {goi} ngồi đi.', { goi: 'chị' })).toBe('Thầy chào chị. Chị ngồi đi.');
+  });
+
+  it('biến thể nào cũng dựng được, kể cả người khác', () => {
+    for (const seed of [0, 1, 2]) {
+      const s = buildScript('tonghop', { goi: 'bạn', third: true, name: 'Lan' }, { sections: [] }, seed);
+      expect(s.at(-1)?.gesture).toBe('nod');
+      expect(s.map((c) => c.caption).join(' ')).not.toContain('{');
+    }
+  });
+
   it('id cue không trùng', () => {
     for (const s of all) expect(new Set(s.map((c) => c.id)).size).toBe(s.length);
   });
 
   it('hồ sơ người khác: thầy nói ngôi thứ ba', () => {
-    const [open] = buildScript('tuvi', { goi: 'bạn', third: true, name: 'Lan' }, { sections: [] });
-    expect(open.caption).toContain('lá số Tử Vi của Lan');
+    for (const seed of [0, 1, 2]) {
+      const [open] = buildScript('tuvi', { goi: 'bạn', third: true, name: 'Lan' }, { sections: [] }, seed);
+      expect(open.caption).toContain('của Lan');
+    }
   });
 
   it('Lục Hào dựng được kịch bản, câu mở không gắn với người', () => {
     const r = castHexagram([7, 8, 7, 8, 7, 8]);
     const ctx = castContext(5, 11, 2026);
     const s = buildScript('luchao', who, { sections: lucHaoTongKet(r, ctx, 'the') });
-    expect(s[0].caption).toContain('quẻ Lục Hào này');
+    expect(s[0].caption).toContain(CULTURE_LINE);
   });
 
   it('mẫu câu không có lời khuyên cúng giải hạn hay mua vật phẩm', () => {
-    const text = Object.values(T).join(' ').toLowerCase();
-    for (const w of ['cúng', 'giải hạn', 'vật phẩm', 'mua', 'phải làm']) expect(text).not.toContain(w);
+    const text = allLines().join(' ').toLowerCase();
+    for (const w of ['cúng', 'giải hạn', 'vật phẩm', 'mua', 'phải làm', 'chắc chắn', 'nhất định', 'đại hoạ', 'xui']) expect(text).not.toContain(w);
   });
 });
 
