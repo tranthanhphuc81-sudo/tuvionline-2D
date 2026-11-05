@@ -1,4 +1,4 @@
-/* Hành trình vào đạo quán, phủ lên app khi mở (ARCHITECTURE.md mục 12.1–12.3). Bản giữ chỗ: ảnh tự vẽ, tiếng tổng hợp, chưa có nhân vật. */
+/* Hành trình vào đạo quán, phủ lên app khi mở (ARCHITECTURE.md mục 12.1–12.3). Ảnh sinh từ scripts/build-journey-art.mjs, tiếng tổng hợp giữ chỗ, chưa có nhân vật. */
 import { useEffect, useMemo, useRef, useState, type PointerEvent } from 'react';
 import { createAmbientPlayer, type AmbientPlayer } from '../../platform/ambientAudio';
 import { backStack } from '../../platform/back';

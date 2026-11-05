@@ -19,22 +19,22 @@ export interface Scene {
   durationMs: { full: number; short: number };
 }
 
-const files = import.meta.glob('../../assets/journey/placeholder/*.svg', { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
+const files = import.meta.glob('../../assets/journey/art/*.svg', { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
 
 function layers(id: string): SceneLayer[] {
-  return [0, 1, 2, 3].map((n) => ({ src: files[`../../assets/journey/placeholder/${id}-${n}.svg`], depth: n / 3 }));
+  return [0, 1, 2, 3].map((n) => ({ src: files[`../../assets/journey/art/${id}-${n}.svg`], depth: n / 3 }));
 }
-const over = (name: string, when: VariantKey, depth = 0.6): SceneLayer => ({ src: files[`../../assets/journey/placeholder/over-${name}.svg`], depth, when });
+const over = (name: string, when: VariantKey, depth = 0.6): SceneLayer => ({ src: files[`../../assets/journey/art/over-${name}.svg`], depth, when });
 const DUR = { full: 5000, short: 500 };
 
 export const SCENES: readonly Scene[] = [
   {
-    id: 'gate', layers: [...layers('gate'), over('tet', 'tet', 0.34)], particles: [{ kind: 'leaf', count: 14 }],
+    id: 'gate', layers: [...layers('gate'), over('tet', 'tet', 0.72)], particles: [{ kind: 'leaf', count: 14 }],
     ambience: { wind: 0.25, bird: 0.15, chime: 0.1 }, interaction: 'step', durationMs: DUR,
   },
   {
     id: 'garden',
-    layers: [...layers('garden'), over('xuan', 'xuan'), over('ha', 'ha'), over('thu', 'thu'), over('dong', 'dong'), over('moon', 'ram', 0)],
+    layers: [...layers('garden'), over('xuan', 'xuan', 0.72), over('ha', 'ha', 0.72), over('thu', 'thu', 0.72), over('dong', 'dong', 0.72), over('moon', 'ram', 0)],
     particles: [{ kind: 'ripple', count: 8 }, { kind: 'firefly', count: 10, when: 'night' }],
     ambience: { wind: 0.2, bird: 0.15, stream: 0.2, chime: 0.1 }, interaction: 'step', durationMs: DUR,
   },

@@ -23,6 +23,7 @@
 | 6.3 — Biến thể lịch và âm thanh | XONG phần code — chưa nghe tiếng thật; tiếng hiện là tổng hợp giữ chỗ |
 | 6.4 đến 6.8 | CHƯA LÀM — chờ chủ dự án đồng ý; đã nghe giọng trên máy thật (xem dưới), 6.6 cần máy tầm thấp |
 | 7 đến 9 | CHƯA LÀM |
+| Tranh hành trình | XONG bản tự vẽ — 26 SVG sơn mài, thuỷ mặc ở `src/assets/journey/art/`, sinh bằng `node scripts/build-journey-art.mjs`. Nhẹ, không dùng blur. Vẫn thay được bằng tranh hoạ sĩ. Chưa đo fps trên máy thật |
 
 ## Thử trên máy thật lần 1 — Samsung Galaxy S25 Ultra, 05/11/2026
 
@@ -71,7 +72,7 @@ Chủ dự án tự thử, APK debug đề 06:20 ngày 05/11. Mới một máy, 
 
 ### Đã xong
 - `src/features/journey/`: `plan.ts` (quy tắc lối vào, máy trạng thái), `scenes.ts` (cấu hình 5 trạm), `SceneEngine.tsx`, `particles.ts` + `ParticleLayer.tsx`, `Journey.tsx` (phủ lên app, Bỏ qua, Back), `gate.ts`.
-- 20 ảnh SVG giữ chỗ ở `src/assets/journey/placeholder/`, tổng 24 KB trên đĩa. `tests/assets-budget.test.ts` chặn vượt 3 MB.
+- 20 ảnh SVG giữ chỗ ở `src/assets/journey/placeholder/` (nay thay bằng `art/`), tổng 24 KB trên đĩa. `tests/assets-budget.test.ts` chặn vượt 3 MB.
 - Lược đồ lên version 2 (migration 1 → 2): `settings.entryMode`, `journeySound`, `xungHo`; `tools.journey`, `incenseLitAt`.
 - Đổi so với 6.1: thêm chế độ `auto` làm mặc định. Nếu mặc định là `full` như đã ghi thì quy tắc rút gọn không bao giờ chạy (ARCHITECTURE 12.2, 12.11).
 - Cài đặt có mục "Lối vào đạo quán". `App` chỉ chạy hành trình khi có prop `journey` (bật ở `main.tsx`).
