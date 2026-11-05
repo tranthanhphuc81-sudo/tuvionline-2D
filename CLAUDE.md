@@ -9,7 +9,7 @@ App tiếng Việt gồm 7 công cụ: Tử Vi Đẩu Số, Bát Tự, Lục Hà
 - `npm run build` — typecheck + build ra `dist/`.
 - `npm run android:debug` — build + `cap sync` + Gradle → `android/app/build/outputs/apk/debug/app-debug.apk`.
 - GitHub Actions (`.github/workflows/android-debug.yml`) — mỗi lần đẩy lên `main` tự chạy test và build APK debug; lấy ở tab Actions, mục Artifacts `lyso-debug-apk`. Dùng khi máy không có Android SDK.
-- Cloudflare Pages — bản xem trên trình duyệt, tự build khi đẩy lên `main` (build `npm run build`, thư mục `dist`, `NODE_VERSION=22`). Rung, la bàn thật và giọng đọc của app vẫn phải thử bằng APK.
+- Cloudflare Pages (`.github/workflows/deploy-pages.yml`, dự án `lyso-tron-bo`) — bản xem trên trình duyệt, tự đăng khi đẩy lên `main`, cần secret `CLOUDFLARE_API_TOKEN`. Rung, la bàn thật và giọng đọc của app vẫn phải thử bằng APK.
 - `npm run android:release` — build AAB để đưa lên Google Play (cần cấu hình ký ở Phase 8).
 
 ## Cấu trúc

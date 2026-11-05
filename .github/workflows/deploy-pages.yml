@@ -1,0 +1,44 @@
+# Bản xem trên trình duyệt, giống dự án harptabs: mỗi lần đẩy lên main tự đăng lên Cloudflare Pages.
+# Cần secret CLOUDFLARE_API_TOKEN trong repo (quyền Cloudflare Pages: Edit).
+name: Deploy Cloudflare Pages
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CLOUDFLARE_ACCOUNT_ID: a26c5a5c07ffa3054c4cefabbdffd75e
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      PROJECT: lyso-tron-bo
+    steps:
+      - name: Kiểm tra token
+        run: test -n "$CLOUDFLARE_API_TOKEN" || { echo "::error::Thiếu secret CLOUDFLARE_API_TOKEN"; exit 1; }
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - name: Tạo dự án nếu chưa có
+        run: npx --yes wrangler@4 pages project create "$PROJECT" --production-branch main || echo "Dự án đã có sẵn"
+      - name: Deploy dist lên Pages
+        env:
+          COMMIT_MSG: ${{ github.event.head_commit.message || 'manual deploy' }}
+        run: npx --yes wrangler@4 pages deploy dist --project-name "$PROJECT" --branch main --commit-hash "$GITHUB_SHA" --commit-message "$(printf '%s' "$COMMIT_MSG" | head -n 1)"
