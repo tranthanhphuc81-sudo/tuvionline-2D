@@ -8,6 +8,8 @@ import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.os.SystemClock;
 import android.view.Surface;
+import android.view.Window;
+import android.view.WindowManager;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
@@ -62,6 +64,18 @@ public class LySoDevicePlugin extends Plugin implements SensorEventListener {
         JSObject ret = new JSObject();
         ret.put("mode", mode == AudioManager.RINGER_MODE_NORMAL ? "normal" : mode == AudioManager.RINGER_MODE_VIBRATE ? "vibrate" : "silent");
         call.resolve(ret);
+    }
+
+    /** Giữ màn hình sáng khi thầy đang đọc. Cờ gắn với cửa sổ nên phải đổi trên luồng giao diện. */
+    @PluginMethod
+    public void keepScreenOn(PluginCall call) {
+        boolean on = Boolean.TRUE.equals(call.getBoolean("on", false));
+        getActivity().runOnUiThread(() -> {
+            Window window = getActivity().getWindow();
+            if (on) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            else window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            call.resolve();
+        });
     }
 
     @PluginMethod

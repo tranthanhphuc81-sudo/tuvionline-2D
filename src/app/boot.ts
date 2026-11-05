@@ -4,6 +4,7 @@ import type { PersistedState } from '../state/schema';
 import { LEGACY_SHARED_KEY, LEGACY_THEME_KEY, loadState, type BootNotice } from '../state/migrations';
 import { startPersistence } from '../state/persist';
 import { preferencesKV, readLocalStorage } from '../platform/storage';
+import { keepScreenOnWhileReading } from '../platform/keepAwake';
 import { onPause } from '../platform/lifecycle';
 import { backStack, initBackButton } from '../platform/back';
 import { applyTheme, onSystemThemeChange } from '../ui/theme';
@@ -33,5 +34,6 @@ export async function boot(): Promise<Booted> {
     return r.action;
   });
   initBackButton();
+  keepScreenOnWhileReading();
   return { store, nav, notice: loaded.notice };
 }

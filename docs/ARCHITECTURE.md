@@ -367,6 +367,8 @@ mà văn bản đọc có ngày sinh và luận giải. Không có giọng trên
 
 ---
 
+**Giữ màn hình sáng:** chỉ khi thầy đang đọc, tạm dừng hoặc đọc xong thì thôi giữ (`src/platform/keepAwake.ts`). Android dùng cờ `FLAG_KEEP_SCREEN_ON` qua lệnh `keepScreenOn` của `LySoDevicePlugin.java`, trình duyệt dùng Wake Lock.
+
 ## 7. Chiến lược kiểm thử
 
 ### 7.1 Tự động (chạy bằng `npm test`)
