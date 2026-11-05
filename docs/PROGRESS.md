@@ -45,6 +45,8 @@ Chủ dự án tự thử, APK debug đề 06:20 ngày 05/11. Mới một máy, 
 
 - Máy Windows hiện tại không có Android SDK và JDK 21, nên APK build bằng GitHub Actions (`.github/workflows/android-debug.yml`).
 
+- APK từ Actions chạy trên S25 Ultra: thanh đọc hiện, nhưng dòng từ trường không hiện; chưa rõ nguyên nhân. Plugin đổi sang nhận từ kế theo loại cảm biến, màn hình báo rõ khi chưa có số đo.
+
 ### Cần thử lại
 - Phép thử 4: xem số µT lúc bình thường và lúc để sát loa; từ kế tự hiệu chỉnh có thể làm nhiễu nhẹ không vượt ngưỡng.
 

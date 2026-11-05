@@ -94,7 +94,7 @@ public class LySoDevicePlugin extends Plugin implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        if (event.sensor == magnetometer) {
+        if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
             magAccuracy = event.accuracy;
             fieldUT = Math.sqrt(event.values[0] * event.values[0] + event.values[1] * event.values[1] + event.values[2] * event.values[2]);
             return;
@@ -140,6 +140,6 @@ public class LySoDevicePlugin extends Plugin implements SensorEventListener {
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        if (sensor == magnetometer) magAccuracy = accuracy;
+        if (sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) magAccuracy = accuracy;
     }
 }

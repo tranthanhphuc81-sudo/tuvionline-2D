@@ -9,6 +9,7 @@ import {
 import { birthErrorText } from '../../../content/common/birth';
 import { CULTURAL_NOTE } from '../../../content/common/notes';
 import { keepScreenOn, startCompass, type CompassReading } from '../../../platform/compass';
+import { isNative } from '../../../platform/native';
 import { selectActiveProfile, setLaBanCalib } from '../../../state/actions';
 import { useApp, useAppCtx } from '../../../app/context';
 import { SectionView } from '../../../ui/components/SectionView';
@@ -97,7 +98,7 @@ export function LaBanScreen({ active }: { active: boolean }) {
       <p className={s.status} data-on={mode === 'sensor' && live} role="status">{status}</p>
       {trust === 'calibrate' && <p className={ui.error} role="alert">{laBanCalibrateText(signal.headingErrorDeg)}</p>}
       {trust === 'interference' && signal.fieldUT !== null && <p className={ui.error} role="alert">{laBanInterferenceText(signal.fieldUT)}</p>}
-      {mode === 'sensor' && live && signal.fieldUT !== null && <p className={ui.muted}>{laBanFieldText(signal.fieldUT)}</p>}
+      {mode === 'sensor' && live && (signal.fieldUT !== null || isNative()) && <p className={ui.muted}>{laBanFieldText(signal.fieldUT)}</p>}
       {mode === 'sensor' && live && signal.tilted && <p className={ui.info}>{LABAN_TILTED}</p>}
 
       <Segmented<Mode> label="Cách đọc hướng" hideLabel value={mode} onChange={pickMode} options={[{ value: 'sensor', label: '🧭 Dùng cảm biến' }, { value: 'manual', label: '✋ Xoay tay' }]} />

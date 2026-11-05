@@ -1,6 +1,7 @@
 /* Phần tính toán La Bàn (src/core/laban/reading.ts). Câu chữ kiểm ở tests/parity/laban.test.ts. */
 import { describe, it, expect } from 'vitest';
 import { angleFromCenter, batTrachReading, compassTrust, laBanSectors, normDeg, sectorOf, smoothHeading } from '../src/core';
+import { laBanFieldText } from '../src/content/laban/explain';
 
 const gap = (a: number, b: number) => { const d = Math.abs(a - b) % 360; return d > 180 ? 360 - d : d; };
 
@@ -60,6 +61,11 @@ describe('độ tin cậy', () => {
     expect(compassTrust(0, 1)).toBe('calibrate');
     expect(compassTrust(-1, null)).toBe('calibrate');
     expect(compassTrust(3, 20)).toBe('calibrate');
+  });
+
+  it('dòng từ trường: có số và chưa có số', () => {
+    expect(laBanFieldText(45.4)).toBe('Từ trường đo được: 45 µT');
+    expect(laBanFieldText(null)).toContain('chưa nhận được');
   });
 
   it('từ trường bất thường: báo nhiễu dù cảm biến tự báo độ tin cậy cao', () => {
