@@ -12,8 +12,8 @@
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
     "cap:sync": "npm run build && npx cap sync android",
-    "android:debug": "npm run cap:sync && cd android && ./gradlew assembleDebug && echo '\n✓ APK: android/app/build/outputs/apk/debug/app-debug.apk'",
-    "android:release": "npm run cap:sync && cd android && ./gradlew bundleRelease && echo '\n✓ AAB: android/app/build/outputs/bundle/release/app-release.aab'"
+    "android:debug": "npm run cap:sync && node scripts/gradle.mjs assembleDebug app/build/outputs/apk/debug/app-debug.apk",
+    "android:release": "npm run cap:sync && node scripts/gradle.mjs bundleRelease app/build/outputs/bundle/release/app-release.aab"
   },
   "dependencies": {
     "@capacitor-community/text-to-speech": "~8.0.2",

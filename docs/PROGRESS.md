@@ -43,6 +43,8 @@ Chủ dự án tự thử, APK debug đề 06:20 ngày 05/11. Mới một máy, 
 
 - 490 test xanh, build OK. **Chưa biên dịch được file Java và chưa có APK mới:** máy làm việc này không có Android SDK. Thanh đọc mới kiểm bằng test, chưa xem ở 360px.
 
+- Máy Windows hiện tại không có Android SDK và JDK 21, nên APK build bằng GitHub Actions (`.github/workflows/android-debug.yml`).
+
 ### Cần thử lại
 - Phép thử 4: xem số µT lúc bình thường và lúc để sát loa; từ kế tự hiệu chỉnh có thể làm nhiễu nhẹ không vượt ngưỡng.
 

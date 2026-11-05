@@ -8,6 +8,7 @@ App tiếng Việt gồm 7 công cụ: Tử Vi Đẩu Số, Bát Tự, Lục Hà
 - `npm run dev` — chạy app trên trình duyệt (cổng 5173, Codespaces tự mở preview).
 - `npm run build` — typecheck + build ra `dist/`.
 - `npm run android:debug` — build + `cap sync` + Gradle → `android/app/build/outputs/apk/debug/app-debug.apk`.
+- GitHub Actions (`.github/workflows/android-debug.yml`) — mỗi lần đẩy lên `main` tự chạy test và build APK debug; lấy ở tab Actions, mục Artifacts `lyso-debug-apk`. Dùng khi máy không có Android SDK.
 - `npm run android:release` — build AAB để đưa lên Google Play (cần cấu hình ký ở Phase 8).
 
 ## Cấu trúc
