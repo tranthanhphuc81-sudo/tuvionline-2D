@@ -1,10 +1,12 @@
 /* Đọc thành lời (ARCHITECTURE.md mục 6). Android WebView không có speechSynthesis nên dùng @capacitor-community/text-to-speech;
-   trên trình duyệt plugin tự dùng speechSynthesis. `speak()` là lớp thấp cho Phase 6; `readAloud()` đọc nối tiếp nhiều đoạn,
+   trên trình duyệt dùng `webSpeech.ts`. `speak()` là lớp thấp cho Phase 6; `readAloud()` đọc nối tiếp nhiều đoạn,
    mỗi lúc chỉ một nơi đọc. */
 import { TextToSpeech } from '@capacitor-community/text-to-speech';
 import { isNative } from './native';
+import { webSpeech } from './webSpeech';
 
 const LANG = 'vi-VN';
+const engine = () => (isNative() ? TextToSpeech : webSpeech);
 
 export interface SpeakOptions { rate?: number; pitch?: number }
 
@@ -21,6 +23,10 @@ export function pickLocalVoice(voices: readonly VoiceInfo[], preferred: string |
 
 let voiceIndex: number | null = null;
 let preferredVoice: string | null = null;
+let lastError: string | null = null;
+
+/** Mã lỗi của lần đọc hỏng gần nhất, để hiện cho người dùng và báo lại khi cần dò lỗi. */
+export const lastSpeechError = (): string | null => lastError;
 
 /** Giọng người dùng chọn trong Cài đặt; `null` = tự chọn. Giọng đã gỡ khỏi máy thì quay về tự chọn. */
 export function setPreferredVoice(uri: string | null): void {
@@ -32,7 +38,7 @@ export function setPreferredVoice(uri: string | null): void {
 /** Các giọng tiếng Việt chạy trên máy, để chọn trong Cài đặt. */
 export async function localVietnameseVoices(): Promise<string[]> {
   try {
-    const { voices } = await TextToSpeech.getSupportedVoices();
+    const { voices } = await engine().getSupportedVoices();
     return voices.filter((v) => /^vi([-_]|$)/i.test(v.lang) && v.localService && (!isNative() || /-local$/i.test(v.voiceURI))).map((v) => v.voiceURI);
   } catch {
     return [];
@@ -42,7 +48,7 @@ export async function localVietnameseVoices(): Promise<string[]> {
 async function loadVoice(): Promise<number | null> {
   if (voiceIndex !== null) return voiceIndex;
   for (let attempt = 0; attempt < 2; attempt++) {
-    const { voices } = await TextToSpeech.getSupportedVoices();
+    const { voices } = await engine().getSupportedVoices();
     if (voices.length) return (voiceIndex = pickLocalVoice(voices, preferredVoice));
     await new Promise((r) => setTimeout(r, 600)); // dịch vụ giọng nói chưa sẵn sàng
   }
@@ -51,7 +57,12 @@ async function loadVoice(): Promise<number | null> {
 
 async function say(text: string, voice: number | null, { rate = 1, pitch = 1 }: SpeakOptions): Promise<void> {
   if (voice === null && isNative()) throw new Error('no-local-voice');
-  await TextToSpeech.speak({ text, lang: LANG, rate, pitch, volume: 1, ...(voice === null ? {} : { voice }) });
+  try {
+    await engine().speak({ text, lang: LANG, rate, pitch, volume: 1, ...(voice === null ? {} : { voice }) });
+  } catch (e) {
+    lastError = e instanceof Error ? e.message : String(e);
+    throw e;
+  }
 }
 
 /** Đọc một đoạn. Promise resolve khi đọc xong đoạn đó; reject nếu máy không đọc được hoặc không có giọng trên máy. */
@@ -104,7 +115,7 @@ export function subscribeReading(f: () => void): () => void {
   return () => { listeners.delete(f); };
 }
 
-const haltSpeech = () => TextToSpeech.stop().catch(() => { /* đã dừng */ });
+const haltSpeech = () => engine().stop().catch(() => { /* đã dừng */ });
 
 function end(s: Session, ok: boolean): void {
   session = null;

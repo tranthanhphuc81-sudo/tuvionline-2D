@@ -1,9 +1,9 @@
 import { useState, useSyncExternalStore } from 'react';
 import { thayVoice } from '../../features/reader/hooks';
 import type { Cue } from '../../features/reader/script';
-import { SPEECH_FAILED, SPEECH_NO_VOICE, chunkSpeech } from '../../content/speech';
+import { SPEECH_NO_VOICE, chunkSpeech, speechFailedText } from '../../content/speech';
 import { isNative } from '../../platform/native';
-import { openVoiceInstall, readAloud, readingOwner, stopReading, subscribeReading, vietnameseVoice } from '../../platform/tts';
+import { lastSpeechError, openVoiceInstall, readAloud, readingOwner, stopReading, subscribeReading, vietnameseVoice } from '../../platform/tts';
 import { useApp } from '../../app/context';
 import ui from './ui.module.css';
 
@@ -29,7 +29,7 @@ export function SpeakButton({ id, getText, getCues }: { id: string; getText?(): 
       </button>
       {note && (
         <div className={ui.info} role="status">
-          <p>{note === 'voice' ? SPEECH_NO_VOICE : SPEECH_FAILED}</p>
+          <p>{note === 'voice' ? SPEECH_NO_VOICE : speechFailedText(isNative(), lastSpeechError())}</p>
           {isNative() && <button type="button" className={`${ui.btn} ${ui.block}`} onClick={() => void openVoiceInstall()}>Mở cài đặt giọng đọc</button>}
         </div>
       )}

@@ -1,12 +1,13 @@
 import { useMemo, useState, useSyncExternalStore } from 'react';
 import { profileSummary, tongHopOf } from '../../core';
-import { SPEECH_FAILED, SPEECH_NO_VOICE } from '../../content/speech';
+import { SPEECH_NO_VOICE, speechFailedText } from '../../content/speech';
+import { isNative } from '../../platform/native';
 import { STUDY_INVALID, STUDY_OBJECTS, STUDY_READING_ID, studyGreeting, type StudyObjectId } from '../../content/study';
 import { tongHopParts } from '../../content/tonghop/explain';
 import { CULTURAL_NOTE } from '../../content/common/notes';
 import { useApp, useNav } from '../../app/context';
 import type { Route, TabId } from '../../app/routes';
-import { pauseReading, readAloud, readingState, resumeReading, setReadingOptions, skipReading, subscribeReading, vietnameseVoice } from '../../platform/tts';
+import { lastSpeechError, pauseReading, readAloud, readingState, resumeReading, setReadingOptions, skipReading, subscribeReading, vietnameseVoice } from '../../platform/tts';
 import { selectActiveProfile } from '../../state/actions';
 import { BootNoticeBanner } from '../home/HomeScreen';
 import ui from '../../ui/components/ui.module.css';
@@ -62,7 +63,7 @@ export function StudyScreen() {
     setNote(null);
     if ((await vietnameseVoice()) === 'missing') { setNote(SPEECH_NO_VOICE); return; }
     const cues = buildScript('tonghop', who, { sections: tongHopParts(tongHopOf(res.birth)).flatMap((part) => part.sections) });
-    if (!(await readAloud(STUDY_READING_ID, cues, thayVoice(rate, pitch, slow)))) setNote(SPEECH_FAILED);
+    if (!(await readAloud(STUDY_READING_ID, cues, thayVoice(rate, pitch, slow)))) setNote(speechFailedText(isNative(), lastSpeechError()));
   };
   const toggleSlow = () => { const v = !slow; setSlow(v); setReadingOptions(STUDY_READING_ID, thayVoice(rate, pitch, v)); };
 

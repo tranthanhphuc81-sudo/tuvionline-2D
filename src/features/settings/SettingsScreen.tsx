@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react';
 import { CULTURAL_NOTE } from '../../content/common/notes';
 import { setSetting } from '../../state/actions';
 import type { EntryMode, Theme, XungHoSetting } from '../../state/schema';
-import { localVietnameseVoices, speak } from '../../platform/tts';
+import { speechFailedText } from '../../content/speech';
+import { isNative } from '../../platform/native';
+import { lastSpeechError, localVietnameseVoices, speak } from '../../platform/tts';
 import { thayVoice } from '../reader/hooks';
 import { useApp, useAppCtx } from '../../app/context';
 import { Segmented } from '../../ui/components/Segmented';
@@ -24,6 +26,7 @@ export function SettingsScreen() {
   const voice = useApp((x) => x.settings.ttsVoice);
   const xungHo = useApp((x) => x.settings.xungHo);
   const [voices, setVoices] = useState<string[]>([]);
+  const [sampleNote, setSampleNote] = useState<string | null>(null);
   useEffect(() => { void localVietnameseVoices().then(setVoices); }, []);
   return (
     <div className={ui.stack}>
@@ -76,7 +79,8 @@ export function SettingsScreen() {
             </select>
           </label>
         )}
-        <button type="button" className={`${ui.btn} ${ui.block}`} onClick={() => void speak(VOICE_SAMPLE, thayVoice(rate, pitch)).catch(() => {})}>🔊 Nghe thử giọng thầy</button>
+        <button type="button" className={`${ui.btn} ${ui.block}`} onClick={() => { setSampleNote(null); void speak(VOICE_SAMPLE, thayVoice(rate, pitch)).catch(() => setSampleNote(speechFailedText(isNative(), lastSpeechError()))); }}>🔊 Nghe thử giọng thầy</button>
+        {sampleNote && <p className={ui.info} role="status">{sampleNote}</p>}
         <label className={ui.field}>
           <span className={ui.label}>Thầy gọi bạn là</span>
           <select className={ui.input} value={xungHo} onChange={(e) => setSetting(store, 'xungHo', e.target.value as XungHoSetting)}>
