@@ -36,6 +36,14 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run build
+      - name: Build trang thử chỉ tay, chỉ đăng ở /chitay-thu/ và không vào APK
+        working-directory: spike/chitay
+        run: |
+          npm ci
+          npx vite build
+          mkdir -p dist/mp
+          cp node_modules/@mediapipe/tasks-vision/wasm/vision_wasm_internal.* dist/mp/
+          cp -r dist ../../dist/chitay-thu
       - name: Tạo dự án nếu chưa có
         run: npx --yes wrangler@4 pages project create "$PROJECT" --production-branch main || echo "Dự án đã có sẵn"
       - name: Deploy dist lên Pages

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Thử chỉ tay trên điện thoại</title>
+<style>
+  :root { color-scheme: light dark; --bg:#f6f3ec; --card:#fff; --ink:#26211a; --muted:#6f6657; --line:#d9d2c4; --ok:#1f7a44; --bad:#b3372d; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#1b1815; --card:#26221d; --ink:#efe8db; --muted:#a79d8c; --line:#40392f; --ok:#5fc48a; --bad:#ef8a80; } }
+  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body { margin:0; height:100%; background:var(--bg); color:var(--ink); font:16px/1.45 system-ui,sans-serif; overscroll-behavior:none; }
+  main { max-width:560px; margin:auto; padding:12px 12px calc(12px + env(safe-area-inset-bottom)); }
+  h1 { font-size:20px; margin:0 0 6px; }
+  p { margin:6px 0; }
+  .muted { color:var(--muted); font-size:14px; }
+  .pick { display:block; text-align:center; padding:14px; margin:8px 0; border-radius:10px; background:#8a3b22; color:#fff; font-weight:600; }
+  .pick.alt { background:transparent; color:inherit; border:1px solid var(--line); }
+  .pick input { display:none; }
+  button { min-height:44px; padding:0 10px; border-radius:9px; border:1px solid var(--line); background:var(--card); color:inherit; font:inherit; font-size:15px; touch-action:manipulation; user-select:none; -webkit-user-select:none; }
+  button.main { flex:2; background:var(--ok); color:#fff; border-color:var(--ok); font-weight:600; }
+  #edit[hidden], #start[hidden], #done[hidden] { display:none; }
+  #edit { display:flex; flex-direction:column; height:100dvh; max-width:560px; margin:auto; }
+  .head { padding:8px 12px 6px; }
+  .head b { font-size:17px; }
+  .head p { margin:2px 0 0; font-size:14px; color:var(--muted); min-height:2.6em; }
+  .stage { flex:1; min-height:0; display:flex; align-items:center; justify-content:center; }
+  canvas { display:block; width:100%; max-height:100%; aspect-ratio:1; object-fit:contain; touch-action:none; }
+  .tools { display:flex; gap:6px; padding:6px 8px 0; }
+  .tools button { flex:1; }
+  .next { padding-bottom:calc(8px + env(safe-area-inset-bottom)); }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  td { padding:6px 4px; border-bottom:1px solid var(--line); }
+  td:last-child { text-align:right; }
+  .big { font-size:30px; font-weight:700; }
+</style>
+</head>
+<body>
+<main id="start">
+  <h1>Thử xem chỉ tay trên điện thoại</h1>
+  <p class="muted">Ảnh chỉ xử lý ngay trên máy này, không gửi đi đâu và không được lưu lại. Lần đầu trang tải mô hình nhận diện bàn tay khoảng 8MB. Nội dung mang tính văn hoá, tham khảo.</p>
+  <p>Chụp lòng bàn tay trên nền thoáng, đủ sáng, thấy cả các ngón.</p>
+  <label class="pick">Chụp ảnh<input id="camera" type="file" accept="image/*" capture="environment"></label>
+  <label class="pick alt">Chọn từ thư viện ảnh<input id="library" type="file" accept="image/*"></label>
+  <p id="status" class="muted" role="status">Đang nạp mô hình…</p>
+  <div id="log"></div>
+</main>
+<section id="edit" hidden>
+  <div class="head"><b id="title"></b><p id="hint"></p></div>
+  <div class="stage"><canvas id="canvas" width="512" height="512" aria-label="Lòng bàn tay, kéo các vòng tròn cho khớp đường thật"></canvas></div>
+  <div class="tools">
+    <button type="button" id="undo" aria-label="Quay lại thao tác trước">↶ Lùi</button>
+    <button type="button" id="plain">Giữ xem gốc</button>
+    <button type="button" id="point">+ Điểm</button>
+    <button type="button" id="segment">+ Đoạn</button>
+  </div>
+  <div class="tools next">
+    <button type="button" id="back">‹ Trước</button>
+    <button type="button" id="none" hidden></button>
+    <button type="button" id="ok" class="main">Đường này đúng ›</button>
+  </div>
+</section>
+<main id="done" hidden>
+  <h1>Xong</h1>
+  <p class="big" id="total"></p>
+  <table id="result"></table>
+  <p class="muted">Nội dung mang tính văn hoá, tham khảo, không phải căn cứ để quyết định việc quan trọng.</p>
+  <button type="button" id="again" style="width:100%;margin-top:8px">Thử ảnh khác</button>
+  <div id="log2"></div>
+</main>
+<script type="module" src="/phone.ts"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+node_modules/
+dist/
+# Điểm chấm và đường chuẩn trên ảnh tay thật: giữ trên máy, không đưa lên repo công khai
+truth/
+public/sample.jpg
+# WASM lấy từ gói @mediapipe/tasks-vision khi build
+public/mp/vision_wasm_internal.*
+# Mô hình: chưa xác nhận giấy phép, bản đăng tải trực tiếp từ Google
+public/mp/hand_landmarker.task
+# Trang chấm chỉ dùng trên máy
+index.html
+main.ts
