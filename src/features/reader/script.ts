@@ -65,8 +65,7 @@ export function buildScript(tool: ReaderTool, who: Who, input: ScriptInput, seed
     ...(input.cells?.length ? [...say(fill(pick(lines.cells, seed), vars)), ...proseCues(cellsSpeech(input.cells), who.goi)] : []),
     ...(input.leads ?? []).flatMap((l) => say(fill(pick(l.lines, seed), { ...vars, ...l.vars }), l.focus, 'point')),
     ...(input.prose ?? []).flatMap((p) => proseCues(p, who.goi)),
-    ...say(fill(pick(lines.sections, seed), vars), undefined, 'turnPage'),
-    ...proseCues(sectionsSpeech(input.sections), who.goi),
+    ...(input.sections.length ? [...say(fill(pick(lines.sections, seed), vars), undefined, 'turnPage'), ...proseCues(sectionsSpeech(input.sections), who.goi)] : []),
     ...say(fill(pick(lines.close, seed), vars), undefined, 'nod'),
   ];
   return draft.map((c, i) => ({ ...c, id: `${tool}-${i}` }));
@@ -77,4 +76,5 @@ export const tuViLead = (menhChi: number, chiName: string, stars: readonly strin
 });
 export const batTuLead = (pillar: number, nhatChu: string): Lead => ({ lines: LEADS.battuNhatChu, vars: { nhatChu }, focus: { pillar } });
 export const lucHaoLead = (hao: number, shown: number): Lead => ({ lines: LEADS.luchaoThe, vars: { hao: shown }, focus: { hao } });
+export const laBanLead = (huong: Huong): Lead => ({ lines: LEADS.labanHuong, vars: { huong }, focus: { huong } });
 export const batTrachLead = (huong: Huong, sao: string): Lead => ({ lines: LEADS.battrachHuong, vars: { huong, sao }, focus: { huong } });

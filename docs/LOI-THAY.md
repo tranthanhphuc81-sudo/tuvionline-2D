@@ -83,6 +83,22 @@
 - Thầy đọc xong các hướng rồi. Thoáng và sáng vẫn là tốt nhất. Số là tham khảo, đức năng thắng số.
 - Đọc đến đây thôi. Ở sao cho an là được. Số là tham khảo, đức năng thắng số.
 
+## La Bàn
+
+**Câu mở**
+- Thầy chào {goi}. Mình cùng xem hướng trên la bàn. Số là tham khảo, đức năng thắng số.
+- {goi} giữ máy cho phẳng, thầy đọc hướng đang chỉ. Số là tham khảo, đức năng thắng số.
+- La bàn đã chỉ hướng rồi. Mình xem hướng này ra sao. Số là tham khảo, đức năng thắng số.
+
+**Câu dẫn chỉ số**
+- Trước hết là hướng và quẻ của nó.
+- Mình nhìn hướng đang chỉ đã.
+
+**Câu kết**
+- Hướng này thầy đọc đến đây. Muốn xem hướng khác thì xoay máy rồi gọi thầy. Số là tham khảo, đức năng thắng số.
+- Thầy đọc xong rồi. Thoáng và sáng vẫn là tốt nhất. Số là tham khảo, đức năng thắng số.
+- Đọc đến đây thôi. Hướng chỉ là một phần, ở sao cho an mới là chính. Số là tham khảo, đức năng thắng số.
+
 ## Nạp Âm
 
 **Câu mở**

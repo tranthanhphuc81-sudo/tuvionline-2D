@@ -15,7 +15,9 @@ import { useApp, useAppCtx } from '../../../app/context';
 import { SectionView } from '../../../ui/components/SectionView';
 import { Segmented } from '../../../ui/components/Segmented';
 import { SpeakButton } from '../../../ui/components/SpeakButton';
-import { cellsSpeech, richSpeech, speechOf } from '../../../content/speech';
+import { richSpeech } from '../../../content/speech';
+import { buildScript, laBanLead } from '../../reader/script';
+import { useCueFocus, useWho } from '../../reader/hooks';
 import { ShareButton } from '../../share/ShareButton';
 import { plain } from '../../share/card';
 import ui from '../../../ui/components/ui.module.css';
@@ -32,6 +34,8 @@ const angleGap = (a: number, b: number) => { const d = Math.abs(a - b) % 360; re
 export function LaBanScreen({ active }: { active: boolean }) {
   const { store } = useAppCtx();
   const profile = useApp(selectActiveProfile);
+  const who = useWho();
+  const cueFocus = useCueFocus('laban');
   const calib = useApp((x) => x.tools.laBanCalib ?? 0);
   const [mode, setMode] = useState<Mode>('sensor');
   const [heading, setHeading] = useState(0);
@@ -90,7 +94,7 @@ export function LaBanScreen({ active }: { active: boolean }) {
     <div className={ui.stack}>
       <p className={ui.muted}>{LABAN_INTRO}</p>
       <Dial
-        sectors={sectors} heading={heading} onDrag={mode === 'manual' ? setManual : undefined}
+        sectors={sectors} heading={heading} onDrag={mode === 'manual' ? setManual : undefined} focus={cueFocus}
         label={`La bàn: ${deg} độ, hướng ${cur.huong}, quẻ ${cur.quai}${cur.star ? ', sao ' + cur.star.star : ''}`}
       />
       <div className={s.readout} data-dim={trust !== 'ok'}>
@@ -137,7 +141,7 @@ export function LaBanScreen({ active }: { active: boolean }) {
         ? <Banner id="laban.verdict" tone={cur.star.good ? 'ok' : 'warn'} html={laBanVerdict(cur)} />
         : !(birth && !birth.ok) && <p className={ui.info}>{LABAN_NO_PROFILE}</p>}
 
-      <SpeakButton id="laban" getText={() => speechOf(cellsSpeech(laBanCells(cur, reading?.quai ?? null)), cur.star ? richSpeech(laBanVerdict(cur)) : '')} />
+      <SpeakButton id="laban" getCues={() => buildScript('laban', who, { cells: laBanCells(cur, reading?.quai ?? null), leads: [laBanLead(cur.huong)], prose: cur.star ? [richSpeech(laBanVerdict(cur))] : [], sections: [] })} />
       <ShareButton getCard={() => ({ slug: 'la-ban', title: 'La Bàn phong thủy', groups: [{ cells: [['Số độ', deg + '°'], ...laBanCells(cur, reading?.quai ?? null)] }], verdict: cur.star ? plain(laBanVerdict(cur)) : undefined })} />
 
       <details className={s.fold}>

@@ -3,7 +3,7 @@
    Biến: {goi} tiếng gọi người xem · {cuaAi} "của con" hoặc "của Lan" · {cung} {sao} {nhatChu} {hao} {huong}. */
 export const CULTURE_LINE = 'Số là tham khảo, đức năng thắng số.';
 
-export type ReaderTool = 'tuvi' | 'battu' | 'luchao' | 'battrach' | 'napam' | 'tonghop';
+export type ReaderTool = 'tuvi' | 'battu' | 'luchao' | 'battrach' | 'laban' | 'napam' | 'tonghop';
 
 const C = CULTURE_LINE;
 
@@ -64,6 +64,21 @@ export const TOOL_LINES: Record<ReaderTool, { open: readonly string[]; close: re
     cells: ['Trước hết là Mệnh Quái và nhóm mệnh.', 'Mình nhìn các chỉ số chính đã.'],
     sections: ['Giờ thầy đọc về từng hướng.', 'Thầy gom lại cách dùng các hướng này.'],
   },
+  laban: {
+    open: [
+      `Thầy chào {goi}. Mình cùng xem hướng trên la bàn. ${C}`,
+      `{goi} giữ máy cho phẳng, thầy đọc hướng đang chỉ. ${C}`,
+      `La bàn đã chỉ hướng rồi. Mình xem hướng này ra sao. ${C}`,
+    ],
+    close: [
+      `Hướng này thầy đọc đến đây. Muốn xem hướng khác thì xoay máy rồi gọi thầy. ${C}`,
+      `Thầy đọc xong rồi. Thoáng và sáng vẫn là tốt nhất. ${C}`,
+      `Đọc đến đây thôi. Hướng chỉ là một phần, ở sao cho an mới là chính. ${C}`,
+    ],
+    cells: ['Trước hết là hướng và quẻ của nó.', 'Mình nhìn hướng đang chỉ đã.'],
+    // La Bàn không có phần Tổng kết nên không cần câu dẫn
+    sections: [],
+  },
   napam: {
     open: [
       `Thầy chào {goi}. Mình xem Nạp Âm. ${C}`,
@@ -100,6 +115,7 @@ export const LEADS = {
   battuNhatChu: ['{goi} xem trụ ngày, Nhật Chủ là {nhatChu}.', 'Chữ chính là Nhật Chủ {nhatChu}, nằm ở trụ ngày.'],
   luchaoThe: ['{goi} xem hào {hao}, đó là hào Thế.', 'Hào Thế nằm ở hào {hao}.'],
   battrachHuong: ['{goi} xem hướng {huong}, sao {sao}, là hướng tốt nhất.', 'Hướng hợp nhất là {huong}, ứng với sao {sao}.'],
+  labanHuong: ['Hướng {huong} thầy tô sáng trên vòng la bàn đây.', '{goi} nhìn trên vòng la bàn, hướng {huong} đang sáng lên.'],
 } as const;
 
 export const NO_SPEECH_LINE = '(Phần này {goi} xem chữ trên màn hình)';

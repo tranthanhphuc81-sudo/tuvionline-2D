@@ -735,12 +735,13 @@ Bổ sung so với brief: `focus` có thêm `hao`, `pillar`, `huong` vì Lục H
 | Lục Hào | `lucHaoVerdict`, `lucHaoTongKet` | hào Thế, Dụng Thần |
 | Bát Trạch | `batTrachSummary`, `batTrachTongKet` | 4 hướng tốt |
 | Nạp Âm | `napAmPersonCells`, `napAmTongKet` | không |
+| La Bàn | `laBanCells`, `laBanVerdict` (không có Tổng kết, không đọc câu dẫn phần này) | hướng đang chỉ |
 
 KHÔNG đọc phần "Giải thích chỉ số": quá dài cho lời nói, vẫn xem được trên màn hình. Lời dẫn là bộ mẫu câu có biến, KHÔNG sinh tự do. Câu luận giải dùng lại nguyên `Section[]`, chia bằng `chunkSpeech`.
 
 **Trình phát `CuePlayer`:** chuyển cue khi `speak()` resolve. Đọc/Dừng, ⏮/⏭ đổi cue ngay. "Nói chậm lại" nhân tốc độ với 0,85 từ cue kế tiếp. Cue im lặng dừng theo độ dài chữ (khoảng 15 ký tự/giây, tối thiểu 3 giây) và ⏭ qua được. Dừng khi rời màn hình hoặc app vào nền, dùng chung `stopReading`.
 
-**Lưu ý:** bản giữ chỗ dùng được ngay, nhưng phải thử trên máy thật: nếu `speak()` im lặng lâu khi thiếu gói giọng (PROGRESS, Phase 5.1) thì `CuePlayer` phải có thời gian chờ, không được treo.
+**Thời gian chờ:** trên Android, `say()` trong `tts.ts` coi một đoạn là treo nếu quá 8 giây + độ dài ÷ (6 ký tự/giây × tốc độ), lấy danh sách giọng quá 5 giây cũng vậy; khi đó dừng bộ đọc và báo lỗi thay vì đứng im. Trình duyệt dùng giới hạn riêng trong `webSpeech.ts`.
 
 **Phương án bị loại:** *AI sinh lời dẫn:* cần mạng, và không kiểm soát được câu chữ. *Viết lại luận giải cho hợp giọng thầy:* phá nguyên tắc nguyên văn, và test đối chiếu mất tác dụng.
 

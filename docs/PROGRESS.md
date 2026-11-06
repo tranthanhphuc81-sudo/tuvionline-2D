@@ -26,7 +26,7 @@
 | 6.6 — Nhân vật, nghi thức | XONG phần code — CHƯA ĐẠT nghiệm thu: chủ dự án đồng ý đo fps trên máy tầm thấp sau; chưa thử lắc máy trên máy thật |
 | 6.7 — Lời thầy, đạo đồng | XONG bản nháp — chờ chủ dự án đọc duyệt `docs/LOI-THAY.md` |
 | 6.8 — Đặt hàng tranh, nhân vật, âm thanh | XONG tài liệu → `docs/ART-BRIEF.md`; chưa đặt hàng |
-| 7.1 — Lưu và chia sẻ | XONG phần code — 590 test xanh, build OK, thử trên trình duyệt 360px. CHƯA thử trên máy thật, cần cài APK mới vì thêm plugin |
+| 7.1 — Lưu và chia sẻ | XONG phần code — 599 test xanh, build OK, thử trên trình duyệt 360px. CHƯA thử trên máy thật, cần cài APK mới vì thêm plugin |
 | 8 đến 9 | CHƯA LÀM |
 | Tranh hành trình | XONG bản tự vẽ — 26 SVG sơn mài, thuỷ mặc ở `src/assets/journey/art/`, sinh bằng `node scripts/build-journey-art.mjs`. Nhẹ, không dùng blur. Vẫn thay được bằng tranh hoạ sĩ. Chưa đo fps trên máy thật |
 
@@ -77,8 +77,8 @@ APK từ GitHub Actions đặt `LYSO_LIVE_URL` (`capacitor.config.ts`) nên tả
 - Cài đặt: chọn giọng (`settings.ttsVoice`, tuỳ chọn, không tăng version), nghe thử giọng thầy, "Thầy gọi bạn là". Mục chọn giọng chỉ hiện khi máy có từ 2 giọng trở lên.
 
 ### Chưa làm hoặc chưa kiểm
-- Chưa có thời gian chờ khi `speak()` treo (lưu ý ở 12.7); lần thử S25 Ultra không gặp, cần xem trên máy thiếu gói giọng.
-- La Bàn vẫn đọc bằng nút thường, chưa có kịch bản thầy.
+- ~~Chưa có thời gian chờ khi `speak()` treo~~ XONG 06/11/2026 (ARCHITECTURE 12.7), đã test bằng plugin giả; chưa gặp ca treo thật trên máy.
+- ~~La Bàn chưa có kịch bản thầy~~ XONG 06/11/2026: 'laban' trong `TOOL_LINES`, tô sáng hướng trên vòng la bàn. Lời mới ở `docs/LOI-THAY.md`, chờ duyệt cùng 6.7.
 - Chưa nghe giọng thầy, chưa xem tô sáng khi đang đọc trên máy thật. Bộ mẫu đầy đủ ở 6.7.
 
 ## Phase 6.4 — Tĩnh thất — XONG PHẦN CODE

@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 const plugin = vi.hoisted(() => ({
   speak: vi.fn(),
@@ -46,6 +46,61 @@ describe('speak', () => {
     plugin.getSupportedVoices.mockResolvedValue({ voices: [V('vi-vn-x-gft-network', false)] });
     await expect(tts.speak('Chào')).rejects.toThrow('no-local-voice');
     expect(plugin.speak).not.toHaveBeenCalled();
+  });
+});
+
+describe('giới hạn chờ khi plugin treo', () => {
+  beforeEach(() => { vi.useFakeTimers(); });
+  afterEach(() => { vi.useRealTimers(); });
+  const hang = () => plugin.speak.mockImplementation(() => new Promise(() => {}));
+
+  it('giới hạn đủ rộng cho đoạn dài nhất ở tốc độ chậm nhất, ngắn với đoạn ngắn', () => {
+    expect(tts.speakLimitMs('x'.repeat(180), 0.65)).toBeGreaterThan(50_000);
+    expect(tts.speakLimitMs('Chào', 1)).toBeLessThan(10_000);
+  });
+
+  it('speak quá giờ thì báo lỗi và dừng bộ đọc', async () => {
+    hang();
+    const done = expect(tts.speak('Chào')).rejects.toThrow('speech-timeout');
+    await vi.advanceTimersByTimeAsync(tts.speakLimitMs('Chào') + 1);
+    await done;
+    expect(plugin.stop).toHaveBeenCalled();
+    expect(tts.lastSpeechError()).toBe('speech-timeout');
+  });
+
+  it('đọc xong đúng giờ thì không dừng bộ đọc', async () => {
+    plugin.speak.mockResolvedValue(undefined);
+    await tts.speak('Chào');
+    await vi.advanceTimersByTimeAsync(60_000);
+    expect(plugin.stop).not.toHaveBeenCalled();
+  });
+
+  it('đọc nối tiếp bị treo thì kết thúc với lỗi, không kẹt ở trạng thái đang đọc', async () => {
+    hang();
+    const ok = tts.readAloud('x', ['Một', 'Hai'], {});
+    await vi.advanceTimersByTimeAsync(tts.speakLimitMs('Một') + 1);
+    expect(await ok).toBe(false);
+    expect(tts.readingOwner()).toBeNull();
+  });
+
+  it('đoạn cũ hết giờ sau khi đã lùi sang đoạn mới thì không ngắt đoạn mới', async () => {
+    hang();
+    void tts.readAloud('x', ['Một', 'y'.repeat(150)], {});
+    await vi.advanceTimersByTimeAsync(1000);
+    await tts.skipReading(1);
+    await vi.advanceTimersByTimeAsync(1000);
+    plugin.stop.mockClear();
+    await vi.advanceTimersByTimeAsync(tts.speakLimitMs('Một'));
+    expect(plugin.stop).not.toHaveBeenCalled();
+    expect(tts.readingOwner()).toBe('x');
+    tts.stopReading();
+  });
+
+  it('dịch vụ giọng đọc treo: báo thiếu giọng, không đứng im', async () => {
+    plugin.getSupportedVoices.mockImplementation(() => new Promise(() => {}));
+    const r = tts.vietnameseVoice();
+    await vi.advanceTimersByTimeAsync(5001);
+    expect(await r).toBe('missing');
   });
 });
 

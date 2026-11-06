@@ -8,7 +8,7 @@ import { batTrachTongKet } from '../src/content/battrach/tongket';
 import { batTuTongKet } from '../src/content/battu/tongket';
 import { lucHaoTongKet } from '../src/content/luchao/tongket';
 import { tuViTongKet } from '../src/content/tuvi/tongket';
-import { buildScript, xungHo, type Cue, type Who } from '../src/features/reader/script';
+import { buildScript, laBanLead, xungHo, type Cue, type Who } from '../src/features/reader/script';
 
 const YEAR = 2026;
 const who: Who = { goi: 'con', third: false, name: 'An' };
@@ -70,12 +70,12 @@ describe('kịch bản đọc', () => {
   });
 
   it('mỗi công cụ có 3 câu mở, 3 câu kết đều có lời nhắc, ít nhất 2 lời dẫn', () => {
-    for (const t of Object.values(TOOL_LINES)) {
+    for (const [tool, t] of Object.entries(TOOL_LINES)) {
       expect(t.open).toHaveLength(3);
       expect(t.close).toHaveLength(3);
       for (const l of [...t.open, ...t.close]) expect(l).toContain(CULTURE_LINE);
       expect(t.cells.length).toBeGreaterThanOrEqual(2);
-      expect(t.sections.length).toBeGreaterThanOrEqual(2);
+      if (tool !== 'laban') expect(t.sections.length).toBeGreaterThanOrEqual(2);
     }
     for (const l of Object.values(LEADS)) expect(l.length).toBeGreaterThanOrEqual(2);
     for (const k of ['gate', 'corridor', 'intro', 'name', 'gender', 'date', 'hour'] as const) expect(DONG_LINES[k].length).toBeGreaterThan(0);
@@ -158,5 +158,26 @@ describe('từ cấm đọc', () => {
   });
   it('nút Đọc kết quả cũng bỏ câu dính từ cấm', () => {
     expect(speechOf('Đầu năm thuận. Đề phòng tai nạn. Cuối năm tốt.')).toBe('Đầu năm thuận. Cuối năm tốt.');
+  });
+});
+
+describe('Kịch bản La Bàn', () => {
+  const who = { goi: 'con', third: false, name: '' };
+  const cells = [['Hướng gần nhất', 'Bắc'], ['Quẻ Hậu Thiên', 'Khảm']] as const;
+  const cues = buildScript('laban', who, { cells, leads: [laBanLead('Bắc')], prose: ['Hướng Bắc ứng với sao Sinh Khí.'], sections: [] }, 0);
+
+  it('mở và kết có lời nhắc văn hoá, không có câu dẫn phần tổng kết', () => {
+    expect(cues[0].caption).toContain(CULTURE_LINE);
+    expect(cues.at(-1)!.caption).toContain(CULTURE_LINE);
+    expect(cues.some((c) => c.gesture === 'turnPage')).toBe(false);
+  });
+
+  it('tô sáng đúng hướng khi thầy chỉ', () => {
+    expect(cues.find((c) => c.focus)?.focus).toEqual({ huong: 'Bắc' });
+  });
+
+  it('câu dính từ cấm đọc thì chỉ hiện chữ', () => {
+    const s = buildScript('laban', who, { prose: ['Hướng này dễ gặp tai nạn.'], sections: [] }, 0);
+    expect(s.find((c) => c.caption?.includes('tai nạn'))?.text).toBe('');
   });
 });

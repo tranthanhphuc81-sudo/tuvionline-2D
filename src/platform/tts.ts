@@ -21,9 +21,23 @@ export function pickLocalVoice(voices: readonly VoiceInfo[], preferred: string |
   return (vi.find((x) => /-local$/i.test(x.v.voiceURI)) ?? (isNative() ? undefined : vi[0]))?.i ?? null;
 }
 
+/* Plugin không có giới hạn chờ: dịch vụ giọng đọc kẹt (máy thiếu gói giọng) thì promise không bao giờ xong và app đứng im.
+   Giới hạn rộng gấp đôi tốc độ đọc thường, để câu dài trên máy chậm không bị cắt oan. Trình duyệt đã có giới hạn trong webSpeech.ts. */
+const SPEAK_TIMEOUT = 'speech-timeout';
+const VOICES_LIMIT_MS = 5000, SPEAK_BASE_MS = 8000, MIN_CHARS_PER_SEC = 6;
+/** Quá thời gian này mà plugin chưa báo xong thì coi là treo. */
+export const speakLimitMs = (text: string, rate = 1): number => SPEAK_BASE_MS + (text.length / (MIN_CHARS_PER_SEC * rate)) * 1000;
+
+function withLimit<T>(p: Promise<T>, ms: number, code: string): Promise<T> {
+  let timer: ReturnType<typeof setTimeout>;
+  const expired = new Promise<never>((_, reject) => { timer = setTimeout(() => reject(new Error(code)), ms); });
+  return Promise.race([p, expired]).finally(() => clearTimeout(timer));
+}
+
 let voiceIndex: number | null = null;
 let preferredVoice: string | null = null;
 let lastError: string | null = null;
+let sayCount = 0;
 
 /** Mã lỗi của lần đọc hỏng gần nhất, để hiện cho người dùng và báo lại khi cần dò lỗi. */
 export const lastSpeechError = (): string | null => lastError;
@@ -48,7 +62,7 @@ export async function localVietnameseVoices(): Promise<string[]> {
 async function loadVoice(): Promise<number | null> {
   if (voiceIndex !== null) return voiceIndex;
   for (let attempt = 0; attempt < 2; attempt++) {
-    const { voices } = await engine().getSupportedVoices();
+    const { voices } = await withLimit(engine().getSupportedVoices(), VOICES_LIMIT_MS, 'voices-timeout');
     if (voices.length) return (voiceIndex = pickLocalVoice(voices, preferredVoice));
     await new Promise((r) => setTimeout(r, 600)); // dịch vụ giọng nói chưa sẵn sàng
   }
@@ -57,10 +71,15 @@ async function loadVoice(): Promise<number | null> {
 
 async function say(text: string, voice: number | null, { rate = 1, pitch = 1 }: SpeakOptions): Promise<void> {
   if (voice === null && isNative()) throw new Error('no-local-voice');
+  const mine = ++sayCount;
   try {
-    await engine().speak({ text, lang: LANG, rate, pitch, volume: 1, ...(voice === null ? {} : { voice }) });
+    const spoken = engine().speak({ text, lang: LANG, rate, pitch, volume: 1, ...(voice === null ? {} : { voice }) });
+    await (isNative() ? withLimit(spoken, speakLimitMs(text, rate), SPEAK_TIMEOUT) : spoken);
   } catch (e) {
+    // Lượt đọc cũ hết giờ sau khi đoạn mới đã bắt đầu thì bỏ qua, không được ngắt đoạn mới.
+    if (mine !== sayCount) throw e;
     lastError = e instanceof Error ? e.message : String(e);
+    if (lastError === SPEAK_TIMEOUT) void haltSpeech();
     throw e;
   }
 }
