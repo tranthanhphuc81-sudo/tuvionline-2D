@@ -132,7 +132,7 @@ function TabBar() {
 /** `journey` chỉ bật ở main.tsx; test khung app không chạy hành trình. */
 export function App({ journey = false }: { journey?: boolean }) {
   const nav = useNav();
-  const { store } = useAppCtx();
+  const { store, epoch } = useAppCtx();
   const journeySound = useApp((x) => x.settings.journeySound);
   const [entry, setEntry] = useState<TodayEntry>(() => (journey ? todayEntry(store) : { plan: 'none', today: '' }));
   useEffect(() => recordEntry(store, entry), [store, entry]);
@@ -146,7 +146,7 @@ export function App({ journey = false }: { journey?: boolean }) {
   return (
     <div className={s.shell}>
       <TopBar />
-      <main className={s.content}>
+      <main key={epoch} className={s.content}>
         {TABS.map((t) => <TabPanel key={t.id} tab={t.id} active={nav.tab === t.id} />)}
       </main>
       <ReadingBar />

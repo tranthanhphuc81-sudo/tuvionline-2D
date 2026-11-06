@@ -17,6 +17,16 @@ export const migrations: Record<number, (old: Record<string, unknown>) => Record
   },
 };
 
+/** Chạy tuần tự các migration tới version hiện tại; dùng chung cho khởi động và khôi phục sao lưu. */
+export function upgradeDoc(doc: Record<string, unknown>): Record<string, unknown> {
+  let v = typeof doc?.version === 'number' ? doc.version : NaN;
+  while (Number.isInteger(v) && v < SCHEMA_VERSION && migrations[v]) {
+    doc = migrations[v](doc);
+    v = doc.version as number;
+  }
+  return doc;
+}
+
 export type BootNotice =
   | { kind: 'corrupt'; backupKey: string; error: string }
   | { kind: 'imported-legacy' };
@@ -67,13 +77,7 @@ export async function loadState(kv: KV, legacy: LegacySources, now: () => Date =
   }
   let error: string;
   try {
-    let doc = JSON.parse(raw) as Record<string, unknown>;
-    let v = typeof doc?.version === 'number' ? doc.version : NaN;
-    while (Number.isInteger(v) && v < SCHEMA_VERSION && migrations[v]) {
-      doc = migrations[v](doc);
-      v = doc.version as number;
-    }
-    const r = parsePersisted(doc);
+    const r = parsePersisted(upgradeDoc(JSON.parse(raw) as Record<string, unknown>));
     if (r.ok) return { state: r.state, fromStorage: true };
     error = r.error;
   } catch (e) {

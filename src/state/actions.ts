@@ -104,6 +104,11 @@ export function setLaBanCalib(store: AppStore, deg: number): void {
   store.setState((s) => ({ ...s, tools: { ...s.tools, laBanCalib: deg } }));
 }
 
+/** Thay toàn bộ dữ liệu bằng tài liệu đã kiểm tra (khôi phục sao lưu, xoá toàn bộ). */
+export function replaceState(store: AppStore, next: PersistedState): void {
+  store.setState(next);
+}
+
 export function selectActiveProfile(s: PersistedState): Profile | null {
   return s.profiles.find((p) => p.id === s.activeProfileId) ?? null;
 }

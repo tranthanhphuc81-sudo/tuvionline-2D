@@ -10,6 +10,8 @@ import { SectionView } from '../../ui/components/SectionView';
 import { SpeakButton } from '../../ui/components/SpeakButton';
 import { useWho } from '../reader/hooks';
 import { buildScript } from '../reader/script';
+import { ShareButton } from '../share/ShareButton';
+import { cardWho } from '../share/card';
 import ui from '../../ui/components/ui.module.css';
 import { birthLine } from '../profiles/format';
 import s from './home.module.css';
@@ -115,6 +117,12 @@ export function HomeScreen() {
       </section>
 
       {parts.length > 0 && <SpeakButton id="tonghop" getCues={() => buildScript('tonghop', who, { sections: parts.flatMap((part) => part.sections) })} />}
+      {profile && res?.ok && parts.length > 0 && <ShareButton getCard={() => ({ slug: 'tong-hop', title: 'Tổng hợp lý số', ...cardWho(profile), groups: [{ cells: [
+        ['Cung Mệnh', res.summary.tuvi.menhChi + ' — ' + (res.summary.tuvi.menhStars.join(', ') || 'Vô Chính Diệu')], ['Cục', res.summary.tuvi.cucTen],
+        ['Bát Tự', res.summary.battu.pillars.join(' · ')], ['Nhật Chủ', res.summary.battu.nhatChu + ' (hành ' + res.summary.battu.nhatChuHanh + ')'],
+        ['Mệnh Quái', res.summary.battrach.quai + ' (hành ' + res.summary.battrach.hanh + ') · ' + res.summary.battrach.nhom],
+        ['Nạp Âm', res.summary.napam.ten + ' — ' + res.summary.napam.canChiTen],
+      ] }] })} />}
       {parts.map((part) => (
         <section key={part.id} className={ui.stack} aria-labelledby={`home-${part.id}`}>
           <h2 id={`home-${part.id}`} className={ui.sectionTitle}>{part.title}</h2>

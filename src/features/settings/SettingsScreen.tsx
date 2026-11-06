@@ -8,6 +8,8 @@ import { lastSpeechError, localVietnameseVoices, speak } from '../../platform/tt
 import { thayVoice } from '../reader/hooks';
 import { useApp, useAppCtx } from '../../app/context';
 import { Segmented } from '../../ui/components/Segmented';
+import { PRIVACY_POINTS } from '../../content/common/about';
+import { DataSection } from './DataSection';
 import ui from '../../ui/components/ui.module.css';
 
 const VOICE_SAMPLE = 'Thầy chào bạn. Số là tham khảo, đức năng thắng số.';
@@ -88,11 +90,19 @@ export function SettingsScreen() {
           </select>
         </label>
       </section>
+      <DataSection />
       <section className={ui.card}>
         <h2>Về ứng dụng</h2>
         <p>Lý Số Trọn Bộ · phiên bản {__APP_VERSION__}</p>
+        <p>Bảy công cụ lý số phương Đông bằng tiếng Việt: Tử Vi, Bát Tự, Lục Hào, Bát Trạch, Nạp Âm, Tổng hợp và La Bàn phong thủy.</p>
         <p className={ui.muted}>Mọi phép tính chạy ngay trên máy. Hồ sơ chỉ lưu trên máy này, ứng dụng không gửi dữ liệu của bạn đi đâu.</p>
         <p className={ui.muted}>{CULTURAL_NOTE}</p>
+        <details>
+          <summary className={ui.foldTitle}>Chính sách quyền riêng tư</summary>
+          <ul className={ui.privacyList}>
+            {PRIVACY_POINTS.map((x) => <li key={x}>{x}</li>)}
+          </ul>
+        </details>
       </section>
     </div>
   );

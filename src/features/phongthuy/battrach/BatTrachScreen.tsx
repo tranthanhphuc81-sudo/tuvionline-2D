@@ -17,6 +17,8 @@ import { SpeakButton } from '../../../ui/components/SpeakButton';
 import { buildScript, batTrachLead } from '../../reader/script';
 import { useCueFocus, useWho } from '../../reader/hooks';
 import { cellsSpeech, richSpeech, sectionsSpeech, speechOf } from '../../../content/speech';
+import { ShareButton } from '../../share/ShareButton';
+import { cardWho } from '../../share/card';
 import ui from '../../../ui/components/ui.module.css';
 import { Banner } from '../Banner';
 import s from '../phongthuy.module.css';
@@ -54,6 +56,7 @@ export function BatTrachScreen() {
         {batTrachSummary(r).map(([k, v]) => <div key={k} className={s.cell}><dt>{k}</dt><dd>{v}</dd></div>)}
       </dl>
       <SpeakButton id="battrach" getCues={() => buildScript('battrach', who, { cells: batTrachSummary(r), leads: r.goods[0] ? [batTrachLead(r.goods[0].huong, r.goods[0].star)] : [], prose: r.house ? [richSpeech(batTrachHouseBanner(r.house))] : [], sections: [batTrachHanhCard(r), ...batTrachTongKet(r)] })} />
+      <ShareButton getCard={() => ({ slug: 'bat-trach', title: 'Bát Trạch', ...cardWho(profile), groups: [{ cells: batTrachSummary(r) }, { title: 'Bốn hướng tốt', cells: r.goods.map((g) => [g.huong, g.star] as const) }] })} />
 
       <section className={ui.card} aria-labelledby="pt-house-title">
         <h2 id="pt-house-title" className={ui.sectionTitle}>Căn nhà đang xét</h2>

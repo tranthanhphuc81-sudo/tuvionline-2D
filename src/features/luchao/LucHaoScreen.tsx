@@ -17,6 +17,7 @@ import { SpeakButton } from '../../ui/components/SpeakButton';
 import { buildScript, lucHaoLead } from '../reader/script';
 import { useCueFocus, useWho } from '../reader/hooks';
 import { cellsSpeech, sectionsSpeech, speechOf } from '../../content/speech';
+import { ShareButton } from '../share/ShareButton';
 import ui from '../../ui/components/ui.module.css';
 import { BienCard, HaoList, HexagramDiagram } from './Hexagram';
 import s from './luchao.module.css';
@@ -116,6 +117,7 @@ export function LucHaoScreen() {
             {summary.map(([k, v]) => <div key={k} className={s.cell} data-wide={k === 'Nguyệt lệnh (tháng xem)'}><dt>{k}</dt><dd>{v}</dd></div>)}
           </dl>
           {result && <SpeakButton id="luchao" getCues={() => buildScript('luchao', who, { cells: summary, leads: theHao ? [lucHaoLead(theHao.idx, result.r.theHao)] : [], sections: [lucHaoVerdict(result.r, result.ctx, key), ...lucHaoTongKet(result.r, result.ctx, key)] })} />}
+          {result && <ShareButton getCard={() => ({ slug: 'luc-hao', title: 'Quẻ Lục Hào', personLine: 'Ngày xem ' + date.join('/'), groups: [{ cells: summary }] })} />}
           {cast.method === 'random' && <p className={ui.info}><RichText nodes={parseRich(lucHaoTossBanner(cast.tosses))} /></p>}
 
           <h2 className={ui.sectionTitle}>Quẻ chủ</h2>

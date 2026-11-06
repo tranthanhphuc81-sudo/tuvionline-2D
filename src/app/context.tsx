@@ -1,5 +1,5 @@
 /* Ngữ cảnh app: store dữ liệu (hồ sơ, cài đặt) + store điều hướng. Component đọc bằng useApp/useNav. */
-import { createContext, useContext, useMemo, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
 import { createStore, useStore, type Store } from '../state/store';
 import type { PersistedState } from '../state/schema';
 import type { BootNotice } from '../state/migrations';
@@ -10,13 +10,19 @@ export interface AppCtx {
   store: Store<PersistedState>;
   nav: Store<RouterState>;
   notice: BootNotice | undefined;
+  /** tăng mỗi lần thay toàn bộ dữ liệu; App dùng làm key để dựng lại mọi màn hình */
+  epoch: number;
+  /** về màn hình đầu, bỏ mọi ô nhập và trạng thái tạm của dữ liệu cũ */
+  resetScreens(): void;
 }
 
 const Ctx = createContext<AppCtx | null>(null);
 
 export function AppProvider({ store, nav, notice, children }: { store: Store<PersistedState>; nav?: Store<RouterState>; notice?: BootNotice; children: ReactNode }) {
   const navStore = useMemo(() => nav ?? createStore(initialRouter()), [nav]);
-  const value = useMemo(() => ({ store, nav: navStore, notice }), [store, navStore, notice]);
+  const [epoch, setEpoch] = useState(0);
+  const resetScreens = useCallback(() => { navStore.setState(initialRouter()); setEpoch((e) => e + 1); }, [navStore]);
+  const value = useMemo(() => ({ store, nav: navStore, notice, epoch, resetScreens }), [store, navStore, notice, epoch, resetScreens]);
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
 

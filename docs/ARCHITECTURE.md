@@ -180,7 +180,7 @@ Phase 3.5: `batTrachHuongCua` bỏ khỏi `tools` khi chọn "Chưa xét căn nh
 - **Migration 0 → 1:** nếu chưa có `lyso.state` mà `localStorage` có `lyso-shared-v1` (người dùng bản 0.1 đã nhập ở trang
   legacy chạy trong app, cùng origin), tạo hồ sơ đầu tiên từ dữ liệu đó.
 - **Ghi:** gộp các lần ghi trong 300ms, và ghi ngay khi app vào nền (`App` sự kiện `pause`).
-- **Sao lưu/khôi phục (Phase 7)** xuất và nhập đúng tài liệu này. Khôi phục cũng chạy qua `migrations`.
+- **Sao lưu/khôi phục (Phase 7)** xuất và nhập đúng tài liệu này, gửi đi qua bảng chia sẻ của Android, chọn file bằng `<input type="file">` (không lọc loại file vì Android đổi tên loại tuỳ nơi lưu). Khôi phục cũng chạy qua `migrations`, kiểm thêm ngày có thật của từng hồ sơ, hỏi lại rồi THAY toàn bộ dữ liệu, không gộp.
 
 **Lý do:** dữ liệu chỉ vài KB. Preferences trên Android là SharedPreferences native, không bị dọn khi hệ thống xoá bộ nhớ
 WebView, API đơn giản, và có bản web dùng `localStorage` để chạy `npm run dev`. Một tài liệu duy nhất thì ghi trọn vẹn,
@@ -346,7 +346,7 @@ Chỉ cài khi phase cần, không cài sẵn. Phiên bản lấy từ npm ngày
 | Lưu cục bộ | `@capacitor/preferences` | 8.0.x | 2.1 | |
 | Đọc thành lời (vi-VN) | `@capacitor-community/text-to-speech` | 8.0.x | 5.1 | WebView không có `speechSynthesis`. Trên web dùng `speechSynthesis`. |
 | Rung nhẹ | `@capacitor/haptics` | 8.0.x | 3.4 | `impact({ style: Light })` khi gieo xong. Trên web không làm gì. |
-| Chia sẻ ảnh kết quả | `@capacitor/share` + `@capacitor/filesystem` | 8.0.x + 8.1.x | 7.1 | Ghi PNG vào thư mục `Cache` rồi chia sẻ URI. Ảnh tạo bằng `html-to-image` (1.11.x, thư viện JS). Phase 7.1 chốt lại sau khi thử font offline. |
+| Chia sẻ ảnh kết quả, file sao lưu | `@capacitor/share` + `@capacitor/filesystem` | 8.0.x + 8.1.x | 7.1 | Ghi file vào `Cache/share` rồi chia sẻ URI; lần chia sẻ sau và "Xoá toàn bộ dữ liệu" dọn thư mục này. Ảnh vẽ bằng Canvas 2D (`src/features/share/`), không dùng `html-to-image`: thẻ chỉ có chữ, khỏi nhúng font vào SVG, không thêm thư viện, tính bố cục test được. |
 | Giữ màn hình sáng khi đo la bàn | `@capacitor-community/keep-awake` | 8.0.x | 4.2 | |
 | Cảm biến la bàn | Plugin nội bộ `LySoDevice` trong `android/`, không thêm gói npm | | 4.2 | Quyết định ở mục 11. |
 | Biểu tượng và màn hình chờ | `@capacitor/assets` (dev) | 4.0.x | 8.2 | |

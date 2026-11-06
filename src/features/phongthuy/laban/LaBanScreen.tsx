@@ -16,6 +16,8 @@ import { SectionView } from '../../../ui/components/SectionView';
 import { Segmented } from '../../../ui/components/Segmented';
 import { SpeakButton } from '../../../ui/components/SpeakButton';
 import { cellsSpeech, richSpeech, speechOf } from '../../../content/speech';
+import { ShareButton } from '../../share/ShareButton';
+import { plain } from '../../share/card';
 import ui from '../../../ui/components/ui.module.css';
 import { Banner } from '../Banner';
 import s from '../phongthuy.module.css';
@@ -136,6 +138,7 @@ export function LaBanScreen({ active }: { active: boolean }) {
         : !(birth && !birth.ok) && <p className={ui.info}>{LABAN_NO_PROFILE}</p>}
 
       <SpeakButton id="laban" getText={() => speechOf(cellsSpeech(laBanCells(cur, reading?.quai ?? null)), cur.star ? richSpeech(laBanVerdict(cur)) : '')} />
+      <ShareButton getCard={() => ({ slug: 'la-ban', title: 'La Bàn phong thủy', groups: [{ cells: [['Số độ', deg + '°'], ...laBanCells(cur, reading?.quai ?? null)] }], verdict: cur.star ? plain(laBanVerdict(cur)) : undefined })} />
 
       <details className={s.fold}>
         <summary><h2 className={ui.sectionTitle}>Cách đọc la bàn này</h2><span className={ui.muted}>4 bài học nhỏ</span></summary>

@@ -25,9 +25,29 @@
 | 6.5 — Thầy đọc | XONG phần code — 520 test xanh, build OK. Chưa nghe trên máy thật |
 | 6.6 — Nhân vật, nghi thức | XONG phần code — CHƯA ĐẠT nghiệm thu: chủ dự án đồng ý đo fps trên máy tầm thấp sau; chưa thử lắc máy trên máy thật |
 | 6.7 — Lời thầy, đạo đồng | XONG bản nháp — chờ chủ dự án đọc duyệt `docs/LOI-THAY.md` |
-| 6.8 | CHƯA LÀM |
-| 7 đến 9 | CHƯA LÀM |
+| 6.8 — Đặt hàng tranh, nhân vật, âm thanh | XONG tài liệu → `docs/ART-BRIEF.md`; chưa đặt hàng |
+| 7.1 — Lưu và chia sẻ | XONG phần code — 574 test xanh, build OK, thử trên trình duyệt 360px. CHƯA thử trên máy thật, cần cài APK mới vì thêm plugin |
+| 8 đến 9 | CHƯA LÀM |
 | Tranh hành trình | XONG bản tự vẽ — 26 SVG sơn mài, thuỷ mặc ở `src/assets/journey/art/`, sinh bằng `node scripts/build-journey-art.mjs`. Nhẹ, không dùng blur. Vẫn thay được bằng tranh hoạ sĩ. Chưa đo fps trên máy thật |
+
+## Phase 7.1 — Lưu và chia sẻ — XONG PHẦN CODE, CHƯA THỬ MÁY THẬT
+
+### Đã xong
+- **Chia sẻ ảnh:** nút "Chia sẻ ảnh" ở Tử Vi, Bát Tự, Lục Hào, Bát Trạch, La Bàn, Nạp Âm, Tổng hợp. `src/features/share/`: `card.ts` tính bố cục (test được), `render.ts` vẽ Canvas 2D, thẻ rộng 1080px, nền tối cố định, luôn có dòng lưu ý văn hoá. Không dùng `html-to-image` (ARCHITECTURE mục 6). La Bàn và Lục Hào không in hồ sơ; các thẻ theo hồ sơ có tên và ngày sinh.
+- **`src/platform/share.ts`:** Android ghi `Cache/share` rồi mở bảng chia sẻ; trình duyệt dùng Web Share hoặc tải file.
+- **Sao lưu, khôi phục:** `src/state/backup.ts`, `src/features/settings/DataSection.tsx`. File là đúng tài liệu `lyso.state`, gửi qua bảng chia sẻ. Khôi phục chạy migration (`upgradeDoc`, dùng chung với lúc khởi động), kiểm ngày có thật, hỏi lại rồi thay toàn bộ.
+- **Xoá toàn bộ:** đưa về `emptyState`, xoá `lyso.state.corrupt-*`, dữ liệu bản 0.1 trong localStorage và `Cache/share`.
+- `resetScreens` trong `context.tsx` dựng lại mọi màn hình sau khôi phục hoặc xoá, để không còn ô nhập của dữ liệu cũ.
+- **Cài đặt:** thêm mục "Dữ liệu của bạn", phần giới thiệu, chính sách quyền riêng tư (`src/content/common/about.ts`).
+- Thử trên trình duyệt: cả 7 thẻ tạo được PNG; sao lưu, khôi phục, xoá toàn bộ chạy đúng; 360px không cuộn ngang; không lỗi console.
+
+### Chưa kiểm
+- Bảng chia sẻ thật, gửi qua Zalo và Messenger, chọn file khôi phục bằng trình chọn file của Android. Java của 2 plugin mới chưa biên dịch trên máy này: chờ GitHub Actions.
+- APK thử cũ mở giao diện mới sẽ báo lỗi ở nút chia sẻ, sao lưu cho tới khi cài APK mới.
+
+### Cần quyết ở Phase 8.1
+- `AndroidManifest.xml` đang để `android:allowBackup="true"`: Android có thể tự sao lưu dữ liệu app lên Google Drive của người dùng, trái với câu "không gửi dữ liệu đi đâu". Cần quyết tắt hẳn hoặc khai báo.
+- Chính sách quyền riêng tư trong app chưa có thông tin liên hệ; Google Play cần thêm bản đặt trên một đường dẫn công khai.
 
 ## APK thử tự cập nhật
 
