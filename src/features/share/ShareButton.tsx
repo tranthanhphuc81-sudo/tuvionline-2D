@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { SHARE_FAILED, SHARE_SAVED } from '../../content/common/about';
-import { shareFile } from '../../platform/share';
+import { shareFiles } from '../../platform/share';
 import ui from '../../ui/components/ui.module.css';
 import type { ShareCard } from './card';
-import { renderCard } from './render';
+import { renderCards } from './render';
 
 /** Nút Chia sẻ ảnh. `getCard` chỉ chạy khi bấm nên màn hình không tốn công dựng thẻ khi chưa cần. */
 export function ShareButton({ getCard }: { getCard(): ShareCard }) {
@@ -15,7 +15,9 @@ export function ShareButton({ getCard }: { getCard(): ShareCard }) {
     setNote(null);
     try {
       const card = getCard();
-      const outcome = await shareFile(await renderCard(card), `ly-so-${card.slug}.png`, card.title);
+      const blobs = await renderCards(card);
+      const files = blobs.map((blob, i) => ({ blob, name: blobs.length > 1 ? `ly-so-${card.slug}-${i + 1}.png` : `ly-so-${card.slug}.png` }));
+      const outcome = await shareFiles(files, card.title);
       if (outcome === 'saved') setNote(SHARE_SAVED);
     } catch {
       setNote(SHARE_FAILED);

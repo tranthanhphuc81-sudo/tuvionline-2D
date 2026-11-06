@@ -6,7 +6,7 @@ import { replaceState } from '../../state/actions';
 import { BACKUP_MAX_BYTES, backupFileName, backupText, parseBackup } from '../../state/backup';
 import { LEGACY_SHARED_KEY, LEGACY_THEME_KEY } from '../../state/migrations';
 import { emptyState, STATE_KEY, type PersistedState } from '../../state/schema';
-import { clearShareCache, shareFile } from '../../platform/share';
+import { clearShareCache, shareFiles } from '../../platform/share';
 import { preferencesKV, removeLocalStorage, type KV } from '../../platform/storage';
 import { stopReading } from '../../platform/tts';
 import { Sheet } from '../../ui/components/Sheet';
@@ -33,7 +33,7 @@ export function DataSection() {
     setNote(null);
     try {
       const blob = new Blob([backupText(store.getState())], { type: 'application/json' });
-      const outcome = await shareFile(blob, backupFileName(new Date()), 'Sao lưu Lý Số Trọn Bộ');
+      const outcome = await shareFiles([{ blob, name: backupFileName(new Date()) }], 'Sao lưu Lý Số Trọn Bộ');
       if (outcome === 'saved') setNote({ text: BACKUP_SAVED, error: false });
     } catch {
       setNote({ text: BACKUP_FAILED, error: true });

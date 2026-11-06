@@ -1,25 +1,20 @@
 /* Vẽ thẻ chia sẻ ra PNG bằng Canvas 2D (ARCHITECTURE.md mục 6). Chạy offline, font lấy từ gói font của app. */
-import { CARD_COLOR, CARD_FONT, CARD_W, layoutCard, type ShareCard } from './card';
+import { CARD_COLOR, CARD_FONT, CARD_W, layoutPages, type CardPage, type ShareCard } from './card';
 
 function allText(card: ShareCard): string {
-  return [card.title, card.person, card.personLine, card.verdict, ...card.groups.flatMap((g) => [g.title, ...g.cells.flat()]), ...(card.reading ?? []).flatMap((s) => [s.title, ...s.lines.map((l) => l.text)])].filter(Boolean).join(' ') + ' LÝ SỐ TRỌN BỘ';
+  return [card.title, card.person, card.personLine, card.verdict, ...card.groups.flatMap((g) => [g.title, ...g.cells.flat()]), ...(card.reading ?? []).flatMap((s) => [s.title, ...s.lines.map((l) => l.text)])].filter(Boolean).join(' ') + ' LÝ SỐ TRỌN BỘ Ảnh 0123456789/';
 }
 
-export async function renderCard(card: ShareCard): Promise<Blob> {
-  // Font chia theo vùng ký tự và chỉ tải khi cần: phải nạp đủ cho chính nội dung thẻ, không thì canvas vẽ bằng font hệ thống.
-  const sample = allText(card);
-  await Promise.all(Object.values(CARD_FONT).map((f) => document.fonts.load(f, sample)));
+function drawPage(page: CardPage): Promise<Blob> {
   const canvas = document.createElement('canvas');
+  canvas.width = CARD_W;
+  canvas.height = page.height;
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error('Máy không vẽ được ảnh');
-  const measure = (t: string, font: string) => { ctx.font = font; return ctx.measureText(t).width; };
-  const { height, ops } = layoutCard(card, measure);
-  canvas.width = CARD_W;
-  canvas.height = height;
   ctx.textBaseline = 'top';
   ctx.fillStyle = CARD_COLOR.bg;
-  ctx.fillRect(0, 0, CARD_W, height);
-  for (const op of ops) {
+  ctx.fillRect(0, 0, CARD_W, page.height);
+  for (const op of page.ops) {
     if (op.kind === 'text') {
       ctx.font = op.font;
       ctx.fillStyle = op.color;
@@ -32,4 +27,17 @@ export async function renderCard(card: ShareCard): Promise<Blob> {
     }
   }
   return new Promise((resolve, reject) => canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('Máy không tạo được ảnh'))), 'image/png'));
+}
+
+/** Vẽ thẻ ra một hoặc nhiều ảnh PNG. */
+export async function renderCards(card: ShareCard): Promise<Blob[]> {
+  // Font chia theo vùng ký tự và chỉ tải khi cần: phải nạp đủ cho chính nội dung thẻ, không thì canvas vẽ bằng font hệ thống.
+  const sample = allText(card);
+  await Promise.all(Object.values(CARD_FONT).map((f) => document.fonts.load(f, sample)));
+  const ctx = document.createElement('canvas').getContext('2d');
+  if (!ctx) throw new Error('Máy không vẽ được ảnh');
+  const measure = (t: string, font: string) => { ctx.font = font; return ctx.measureText(t).width; };
+  const blobs: Blob[] = [];
+  for (const page of layoutPages(card, measure)) blobs.push(await drawPage(page));
+  return blobs;
 }

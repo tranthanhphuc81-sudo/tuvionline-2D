@@ -11,10 +11,10 @@ import { createMemoryKV } from '../../platform/storage';
 import { ShareButton } from '../share/ShareButton';
 import { DataSection, wipeExtras } from './DataSection';
 
-const shareFile = vi.hoisted(() => vi.fn());
-vi.mock('../../platform/share', () => ({ shareFile, clearShareCache: vi.fn(async () => undefined) }));
-const renderCard = vi.hoisted(() => vi.fn());
-vi.mock('../share/render', () => ({ renderCard }));
+const shareFiles = vi.hoisted(() => vi.fn());
+vi.mock('../../platform/share', () => ({ shareFiles, clearShareCache: vi.fn(async () => undefined) }));
+const renderCards = vi.hoisted(() => vi.fn());
+vi.mock('../share/render', () => ({ renderCards }));
 
 const person = (id: string, name: string): Profile => ({
   id, name, gender: 'M', calendar: 'solar', day: 15, month: 6, year: 1996, leapMonth: false, hourIdx: 6, lateTy: false, createdAt: 't', updatedAt: 't',
@@ -35,12 +35,12 @@ afterEach(() => { cleanup(); vi.clearAllMocks(); localStorage.clear(); });
 
 describe('Dữ liệu của bạn', () => {
   it('sao lưu gửi đúng tài liệu lyso.state ra bảng chia sẻ', async () => {
-    shareFile.mockResolvedValue('shared');
+    shareFiles.mockResolvedValue('shared');
     const s = state(person('a', 'An'));
     setup(s);
     fireEvent.click(screen.getByRole('button', { name: 'Sao lưu ra file' }));
-    await waitFor(() => expect(shareFile).toHaveBeenCalled());
-    const [blob, name] = shareFile.mock.calls[0];
+    await waitFor(() => expect(shareFiles).toHaveBeenCalled());
+    const [{ blob, name }] = shareFiles.mock.calls[0][0];
     expect(name).toMatch(/^ly-so-sao-luu-\d{4}-\d{2}-\d{2}\.json$/);
     expect(JSON.parse(await (blob as Blob).text())).toEqual(s);
   });
@@ -90,16 +90,25 @@ describe('Dữ liệu của bạn', () => {
 
 describe('Nút Chia sẻ ảnh', () => {
   it('tạo ảnh rồi chia sẻ với tên file theo công cụ', async () => {
-    renderCard.mockResolvedValue(new Blob(['png']));
-    shareFile.mockResolvedValue('shared');
+    renderCards.mockResolvedValue([new Blob(['png'])]);
+    shareFiles.mockResolvedValue('shared');
     render(<ShareButton getCard={() => ({ slug: 'tu-vi', title: 'Lá số Tử Vi', groups: [] })} />);
     fireEvent.click(screen.getByRole('button', { name: /Chia sẻ ảnh/ }));
-    await waitFor(() => expect(shareFile).toHaveBeenCalledWith(expect.any(Blob), 'ly-so-tu-vi.png', 'Lá số Tử Vi'));
+    await waitFor(() => expect(shareFiles).toHaveBeenCalledWith([{ blob: expect.any(Blob), name: 'ly-so-tu-vi.png' }], 'Lá số Tử Vi'));
+  });
+
+  it('nhiều ảnh thì gửi cùng lúc, tên file đánh số', async () => {
+    renderCards.mockResolvedValue([new Blob(['1']), new Blob(['2'])]);
+    shareFiles.mockResolvedValue('shared');
+    render(<ShareButton getCard={() => ({ slug: 'tu-vi', title: 'Lá số Tử Vi', groups: [] })} />);
+    fireEvent.click(screen.getByRole('button', { name: /Chia sẻ ảnh/ }));
+    await waitFor(() => expect(shareFiles).toHaveBeenCalled());
+    expect(shareFiles.mock.calls[0][0].map((f: { name: string }) => f.name)).toEqual(['ly-so-tu-vi-1.png', 'ly-so-tu-vi-2.png']);
   });
 
   it('plugin thiếu hoặc lỗi thì báo rõ, nút dùng lại được', async () => {
-    renderCard.mockResolvedValue(new Blob(['png']));
-    shareFile.mockRejectedValue(new Error('not implemented'));
+    renderCards.mockResolvedValue([new Blob(['png'])]);
+    shareFiles.mockRejectedValue(new Error('not implemented'));
     const { container } = render(<ShareButton getCard={() => ({ slug: 'x', title: 'T', groups: [] })} />);
     fireEvent.click(screen.getByRole('button', { name: /Chia sẻ ảnh/ }));
     expect((await screen.findByRole('status')).textContent).toBe(SHARE_FAILED);

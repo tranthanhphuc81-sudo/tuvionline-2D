@@ -23,11 +23,17 @@ export async function clearShareCache(): Promise<void> {
   await Filesystem.rmdir({ path: SHARE_DIR, directory: Directory.Cache, recursive: true }).catch(() => undefined);
 }
 
-async function shareNative(blob: Blob, name: string, title: string): Promise<ShareOutcome> {
+export interface ShareItem { blob: Blob; name: string }
+
+async function shareNative(files: readonly ShareItem[], title: string): Promise<ShareOutcome> {
   await clearShareCache();
-  const { uri } = await Filesystem.writeFile({ path: `${SHARE_DIR}/${name}`, data: await blobToBase64(blob), directory: Directory.Cache, recursive: true });
+  const uris: string[] = [];
+  for (const f of files) {
+    const { uri } = await Filesystem.writeFile({ path: `${SHARE_DIR}/${f.name}`, data: await blobToBase64(f.blob), directory: Directory.Cache, recursive: true });
+    uris.push(uri);
+  }
   try {
-    await Share.share({ title, files: [uri], dialogTitle: title });
+    await Share.share({ title, files: uris, dialogTitle: title });
     return 'shared';
   } catch (e) {
     if (/cancel/i.test(String((e as Error)?.message ?? e))) return 'cancelled';
@@ -35,26 +41,28 @@ async function shareNative(blob: Blob, name: string, title: string): Promise<Sha
   }
 }
 
-async function shareWeb(blob: Blob, name: string, title: string): Promise<ShareOutcome> {
-  const file = new File([blob], name, { type: blob.type });
-  if (navigator.canShare?.({ files: [file] })) {
+async function shareWeb(items: readonly ShareItem[], title: string): Promise<ShareOutcome> {
+  const files = items.map((f) => new File([f.blob], f.name, { type: f.blob.type }));
+  if (navigator.canShare?.({ files })) {
     try {
-      await navigator.share({ title, files: [file] });
+      await navigator.share({ title, files });
       return 'shared';
     } catch (e) {
       if ((e as Error)?.name === 'AbortError') return 'cancelled';
       // Trình duyệt từ chối chia sẻ thì tải file về
     }
   }
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = name;
-  a.click();
-  setTimeout(() => URL.revokeObjectURL(url), 10_000);
+  for (const f of items) {
+    const url = URL.createObjectURL(f.blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = f.name;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 10_000);
+  }
   return 'saved';
 }
 
-export function shareFile(blob: Blob, name: string, title: string): Promise<ShareOutcome> {
-  return isNative() ? shareNative(blob, name, title) : shareWeb(blob, name, title);
+export function shareFiles(files: readonly ShareItem[], title: string): Promise<ShareOutcome> {
+  return isNative() ? shareNative(files, title) : shareWeb(files, title);
 }
