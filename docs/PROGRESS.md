@@ -26,14 +26,14 @@
 | 6.6 — Nhân vật, nghi thức | XONG phần code — CHƯA ĐẠT nghiệm thu: chủ dự án đồng ý đo fps trên máy tầm thấp sau; chưa thử lắc máy trên máy thật |
 | 6.7 — Lời thầy, đạo đồng | XONG bản nháp — chờ chủ dự án đọc duyệt `docs/LOI-THAY.md` |
 | 6.8 — Đặt hàng tranh, nhân vật, âm thanh | XONG tài liệu → `docs/ART-BRIEF.md`; chưa đặt hàng |
-| 7.1 — Lưu và chia sẻ | XONG phần code — 574 test xanh, build OK, thử trên trình duyệt 360px. CHƯA thử trên máy thật, cần cài APK mới vì thêm plugin |
+| 7.1 — Lưu và chia sẻ | XONG phần code — 583 test xanh, build OK, thử trên trình duyệt 360px. CHƯA thử trên máy thật, cần cài APK mới vì thêm plugin |
 | 8 đến 9 | CHƯA LÀM |
 | Tranh hành trình | XONG bản tự vẽ — 26 SVG sơn mài, thuỷ mặc ở `src/assets/journey/art/`, sinh bằng `node scripts/build-journey-art.mjs`. Nhẹ, không dùng blur. Vẫn thay được bằng tranh hoạ sĩ. Chưa đo fps trên máy thật |
 
 ## Phase 7.1 — Lưu và chia sẻ — XONG PHẦN CODE, CHƯA THỬ MÁY THẬT
 
 ### Đã xong
-- **Chia sẻ ảnh:** nút "Chia sẻ ảnh" ở Tử Vi, Bát Tự, Lục Hào, Bát Trạch, La Bàn, Nạp Âm, Tổng hợp. `src/features/share/`: `card.ts` tính bố cục (test được), `render.ts` vẽ Canvas 2D, thẻ rộng 1080px, nền tối cố định, luôn có dòng lưu ý văn hoá. Không dùng `html-to-image` (ARCHITECTURE mục 6). La Bàn và Lục Hào không in hồ sơ; các thẻ theo hồ sơ có tên và ngày sinh.
+- **Chia sẻ ảnh:** nút "Chia sẻ ảnh" ở Tử Vi, Bát Tự, Lục Hào, Bát Trạch, La Bàn, Nạp Âm, Tổng hợp. `src/features/share/`: `card.ts` tính bố cục (test được), `render.ts` vẽ Canvas 2D, thẻ rộng 1080px, nền tối cố định, luôn có dòng lưu ý văn hoá. Không dùng `html-to-image` (ARCHITECTURE mục 6). Sau góp ý của chủ dự án, thẻ thêm phần giải nghĩa từ Tổng kết, nguyên văn: Tóm lại, Điểm mạnh, Điểm cần lưu ý, Lời khuyên thực tế (`cardReading`). Bỏ từng mảng cuộc sống, giai đoạn hiện tại, ví dụ vì Tổng kết đủ dài tới 6.000 ký tự, ảnh sẽ bị nén khi gửi. Thẻ Tử Vi mẫu cao 3.420px. La Bàn và Lục Hào không in hồ sơ; các thẻ theo hồ sơ có tên và ngày sinh.
 - **`src/platform/share.ts`:** Android ghi `Cache/share` rồi mở bảng chia sẻ; trình duyệt dùng Web Share hoặc tải file.
 - **Sao lưu, khôi phục:** `src/state/backup.ts`, `src/features/settings/DataSection.tsx`. File là đúng tài liệu `lyso.state`, gửi qua bảng chia sẻ. Khôi phục chạy migration (`upgradeDoc`, dùng chung với lúc khởi động), kiểm ngày có thật, hỏi lại rồi thay toàn bộ.
 - **Xoá toàn bộ:** đưa về `emptyState`, xoá `lyso.state.corrupt-*`, dữ liệu bản 0.1 trong localStorage và `Cache/share`.

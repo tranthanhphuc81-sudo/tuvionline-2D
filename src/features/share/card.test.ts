@@ -1,6 +1,14 @@
 import { describe, it, expect } from 'vitest';
+import { batTrachReading, castContext, castHexagram, napAmPersonOfDate, profileSummary, tongHopOf } from '../../core';
+import { batTrachTongKet } from '../../content/battrach/tongket';
+import { batTuTongKet } from '../../content/battu/tongket';
 import { CULTURAL_NOTE } from '../../content/common/notes';
-import { CARD_W, layoutCard, plain, wrapText, type DrawOp, type Measure, type ShareCard } from './card';
+import { lucHaoTongKet } from '../../content/luchao/tongket';
+import { napAmTongKet } from '../../content/napam/tongket';
+import { list, note, p, parseRich, type Section } from '../../content/rich';
+import { tongHopParts } from '../../content/tonghop/explain';
+import { tuViTongKet } from '../../content/tuvi/tongket';
+import { CARD_W, cardReading, layoutCard, plain, wrapText, type DrawOp, type Measure, type ShareCard } from './card';
 
 /** Đo giả: mỗi ký tự rộng 16px. */
 const measure: Measure = (t) => t.length * 16;
@@ -56,6 +64,60 @@ describe('Bố cục thẻ', () => {
     const a = layoutCard(card(), measure), b = layoutCard(card({ verdict: 'Hướng Bắc ứng với sao Sinh Khí.' }), measure);
     expect(b.height).toBeGreaterThan(a.height);
     expect(b.ops.filter((o) => o.kind === 'rect')).toHaveLength(2);
+  });
+});
+
+describe('Phần tổng kết trên thẻ', () => {
+  const secs: Section[] = [
+    { id: 'x.tongket', title: 'Tóm lại: bạn', blocks: [
+      { id: 'v', kind: 'verdict', tone: 'mid', rich: parseRich('<b>Mức khá.</b>'), how: 'Do công cụ tự chấm.' },
+      p('p1', 'Dòng một<br>Dòng hai'),
+    ] },
+    { id: 'x.tongket.manh', title: '✅ Điểm mạnh', blocks: [list('l', ['Có <b>uy</b>'])] },
+    { id: 'x.tongket.areas', title: '🧭 Từng mảng cuộc sống', blocks: [p('a', 'Dài')] },
+    { id: 'x.tongket.khuyen', title: '🎯 Lời khuyên thực tế', blocks: [list('k', ['Nên nghỉ'])] },
+    { id: 'x.tongket.note', title: '', blocks: [note('n', 'Ghi chú')] },
+  ];
+
+  it('giữ phần tóm lại và 3 mục chính, bỏ biểu tượng ở tiêu đề, không dùng thẻ định dạng', () => {
+    expect(cardReading(secs)).toEqual([
+      { title: 'Tóm lại: bạn', lines: [{ kind: 'p', text: 'Mức khá.' }, { kind: 'small', text: 'Do công cụ tự chấm.' }, { kind: 'p', text: 'Dòng một' }, { kind: 'p', text: 'Dòng hai' }] },
+      { title: 'Điểm mạnh', lines: [{ kind: 'bullet', text: 'Có uy' }] },
+      { title: 'Lời khuyên thực tế', lines: [{ kind: 'bullet', text: 'Nên nghỉ' }] },
+    ]);
+  });
+
+  it('phần tóm lại không có tiêu đề (Tổng hợp) thì dùng "Tóm lại"', () => {
+    expect(cardReading([{ id: 'tonghop.tomlai', title: '', blocks: [p('a', 'Nội dung')] }])[0].title).toBe('Tóm lại');
+  });
+
+  it('mục tổng kết nằm trước dòng lưu ý, chữ gạch đầu dòng lùi vào và không tràn ảnh', () => {
+    const long = 'Lời khuyên rất dài '.repeat(20);
+    const { ops } = layoutCard(card({ reading: [{ title: 'Điểm mạnh', lines: [{ kind: 'bullet', text: long }] }] }), measure);
+    const t = texts(ops);
+    const body = t.filter((o) => o.text.startsWith('Lời khuyên'));
+    expect(new Set(body.map((o) => o.x)).size).toBe(1);
+    expect(body[0].x).toBeGreaterThan(t.find((o) => o.text === '•')!.x);
+    for (const o of t) expect(o.x + measure(o.text, o.font)).toBeLessThanOrEqual(CARD_W);
+    expect(body.at(-1)!.y).toBeLessThan(t.find((o) => CULTURAL_NOTE.startsWith(o.text))!.y);
+  });
+});
+
+describe('Mọi công cụ có đủ phần tổng kết trên thẻ', () => {
+  const res = profileSummary({ gender: 'M', calendar: 'solar', day: 15, month: 6, year: 1996, leapMonth: false, hourIdx: 6, lateTy: false });
+  if (!res.ok) throw new Error('hồ sơ mẫu lỗi');
+  const cast = castHexagram([7, 8, 9, 6, 7, 8]);
+    it.each([
+    ['Tử Vi', () => tuViTongKet(res.summary.tuvi.chart, 2026)],
+    ['Bát Tự', () => batTuTongKet(res.summary.battu.chart, 2026)],
+    ['Lục Hào', () => lucHaoTongKet(cast, castContext(6, 11, 2026), 'the')],
+    ['Bát Trạch', () => batTrachTongKet(batTrachReading({ dd: 15, mm: 6, yy: 1996 }, 'M'))],
+    ['Nạp Âm', () => napAmTongKet(napAmPersonOfDate(15, 6, 1996).res, null)],
+    ['Tổng hợp', () => tongHopParts(tongHopOf(res.birth))[0].sections],
+  ] as const)('%s', (_n, get) => {
+    const r = cardReading(get());
+    expect(r.length).toBeGreaterThanOrEqual(2);
+    expect(r[0].lines.length).toBeGreaterThan(0);
   });
 });
 

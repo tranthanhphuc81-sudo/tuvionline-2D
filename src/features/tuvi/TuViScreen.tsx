@@ -14,7 +14,7 @@ import { SpeakButton } from '../../ui/components/SpeakButton';
 import { buildScript, tuViLead } from '../reader/script';
 import { useCueFocus, useWho } from '../reader/hooks';
 import { ShareButton } from '../share/ShareButton';
-import { cardWho } from '../share/card';
+import { cardReading, cardWho } from '../share/card';
 import ui from '../../ui/components/ui.module.css';
 import { ChartGrid, HOA_LABEL } from './ChartGrid';
 import { PalaceDetail, PalaceList } from './PalaceDetail';
@@ -85,7 +85,7 @@ export function TuViScreen() {
         {summary.map(([k, v]) => <div key={k} className={s.cell}><dt>{k}</dt><dd>{v}</dd></div>)}
       </dl>
       <SpeakButton id="tuvi" getCues={() => buildScript('tuvi', who, { cells: summary, leads: [tuViLead(ch.menhChi, CHI[ch.menhChi], res.summary.tuvi.menhStars)], sections: tuViTongKet(ch, thisYear()) })} />
-      <ShareButton getCard={() => ({ slug: 'tu-vi', title: 'Lá số Tử Vi', ...cardWho(profile), groups: [{ cells: [...summary, ['Chính tinh cung Mệnh', res.summary.tuvi.menhStars.join(', ') || 'Vô Chính Diệu']] }] })} />
+      <ShareButton getCard={() => ({ slug: 'tu-vi', title: 'Lá số Tử Vi', ...cardWho(profile), groups: [{ cells: [...summary, ['Chính tinh cung Mệnh', res.summary.tuvi.menhStars.join(', ') || 'Vô Chính Diệu']] }], reading: cardReading(tuViTongKet(ch, thisYear())) })} />
 
       <h2 className={ui.sectionTitle}>Lá số 12 cung</h2>
       <Segmented<"chart" | "list"> label="Cách xem lá số" hideLabel value={mode} onChange={setMode} options={[{ value: 'chart', label: 'Lá số' }, { value: 'list', label: 'Danh sách' }]} />

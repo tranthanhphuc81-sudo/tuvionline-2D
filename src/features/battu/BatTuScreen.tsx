@@ -15,7 +15,7 @@ import { buildScript, batTuLead } from '../reader/script';
 import { useCueFocus, useWho } from '../reader/hooks';
 import { cellsSpeech, sectionsSpeech, speechOf } from '../../content/speech';
 import { ShareButton } from '../share/ShareButton';
-import { cardWho } from '../share/card';
+import { cardReading, cardWho } from '../share/card';
 import ui from '../../ui/components/ui.module.css';
 import { Pillars, hanhAmDuong } from './Pillars';
 import s from './battu.module.css';
@@ -67,7 +67,7 @@ export function BatTuScreen() {
         {summary.map(([k, v]) => <div key={k} className={s.cell} data-wide={k === 'Bát Tự' || k === 'Âm/Dương Nam Nữ'}><dt>{k}</dt><dd>{v}</dd></div>)}
       </dl>
       <SpeakButton id="battu" getCues={() => buildScript('battu', who, { cells: summary, leads: [batTuLead(ch.pillars.findIndex((p) => p.isNhatChu), res.summary.battu.nhatChu)], sections: batTuTongKet(ch, thisYear()) })} />
-      <ShareButton getCard={() => ({ slug: 'bat-tu', title: 'Bát Tự Tứ Trụ', ...cardWho(profile), groups: [{ cells: summary }] })} />
+      <ShareButton getCard={() => ({ slug: 'bat-tu', title: 'Bát Tự Tứ Trụ', ...cardWho(profile), groups: [{ cells: summary }], reading: cardReading(batTuTongKet(ch, thisYear())) })} />
       {lx && <p className={ui.info} role="note"><RichText nodes={parseRich(lx)} /></p>}
 
       <h2 className={ui.sectionTitle}>Tứ Trụ hoàn chỉnh</h2>

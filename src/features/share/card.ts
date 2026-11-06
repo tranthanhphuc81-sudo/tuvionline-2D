@@ -1,6 +1,6 @@
 /* Thẻ ảnh chia sẻ: dữ liệu và tính bố cục, không đụng canvas nên test được. Mỗi thẻ LUÔN có dòng lưu ý văn hoá. */
 import { CULTURAL_NOTE } from '../../content/common/notes';
-import { parseRich, toPlainText } from '../../content/rich';
+import { parseRich, toPlainText, type Section } from '../../content/rich';
 import { birthLine } from '../profiles/format';
 import type { Profile } from '../../state/schema';
 
@@ -15,6 +15,30 @@ export interface ShareCard {
   groups: readonly { title?: string; cells: ShareCells }[];
   /** nhận định chính, chữ thường (đã bỏ thẻ) */
   verdict?: string;
+  /** phần giải nghĩa cho người đọc ảnh, lấy từ Tổng kết */
+  reading?: readonly CardSection[];
+}
+
+export interface CardLine { kind: 'p' | 'bullet' | 'small'; text: string }
+export interface CardSection { title: string; lines: readonly CardLine[] }
+
+/* Tổng kết đầy đủ có thể tới 6.000 ký tự, ảnh sẽ quá dài và bị nén khi gửi. Thẻ giữ phần tóm lại và 3 mục dùng được ngay;
+   chi tiết còn lại (từng mảng cuộc sống, giai đoạn hiện tại, ví dụ) xem trong app. */
+const KEPT = /\.(manh|luuy|khuyen)$/;
+const plainLines = (nodes: Parameters<typeof toPlainText>[0], kind: CardLine['kind']): CardLine[] =>
+  toPlainText(nodes).split('\n').map((t) => t.trim()).filter(Boolean).map((text) => ({ kind, text }));
+
+/** Rút Tổng kết (Section đầu là phần tóm lại) thành các mục in trên thẻ, câu chữ giữ nguyên văn. */
+export function cardReading(sections: readonly Section[]): CardSection[] {
+  return sections.filter((s, i) => i === 0 || KEPT.test(s.id)).map((s) => ({
+    title: s.title.replace(/^[^\p{L}]+/u, '') || 'Tóm lại',
+    lines: s.blocks.flatMap((b): CardLine[] => {
+      if (b.kind === 'list') return b.items.flatMap((x) => plainLines(x, 'bullet'));
+      if (b.kind === 'p') return plainLines(b.rich, 'p');
+      if (b.kind === 'verdict') return [...plainLines(b.rich, 'p'), ...(b.how ? [{ kind: 'small' as const, text: b.how }] : [])];
+      return [];
+    }),
+  })).filter((s) => s.lines.length > 0);
 }
 
 /** Tên và ngày sinh của hồ sơ trên thẻ. */
@@ -29,6 +53,7 @@ export const CARD_W = 1080;
 const PAD = 72;
 const LABEL_W = 340;
 const GAP = 28;
+const BULLET = 34;
 
 /* Thẻ giữ một bảng màu tối cố định theo tokens.css, để ảnh gửi đi giống nhau dù máy đang ở chế độ nào. */
 export const CARD_COLOR = { bg: '#0b0f1a', panel: '#121a2c', ink: '#ece6d6', dim: '#c9c3ae', muted: '#8b93af', gold: '#d7b571' } as const;
@@ -37,6 +62,7 @@ const SERIF = '"Noto Serif", Georgia, serif';
 export const CARD_FONT = {
   brand: `600 28px ${SANS}`, title: `700 62px ${SERIF}`, person: `600 38px ${SANS}`, line: `400 29px ${SANS}`,
   group: `600 30px ${SANS}`, label: `500 30px ${SANS}`, value: `600 32px ${SANS}`, verdict: `400 32px ${SANS}`, note: `400 26px ${SANS}`,
+  heading: `700 36px ${SERIF}`, body: `400 31px ${SANS}`, small: `400 26px ${SANS}`,
 } as const;
 
 export type DrawOp =
@@ -103,6 +129,23 @@ export function layoutCard(card: ShareCard, measure: Measure): { height: number;
     y += 22;
     for (const l of lines) text(l, PAD + 28, CARD_FONT.verdict, CARD_COLOR.dim, 46);
     y = top + h + 36;
+  }
+
+  for (const sec of card.reading ?? []) {
+    para(sec.title, PAD, inner, CARD_FONT.heading, CARD_COLOR.gold, 54);
+    y += 4;
+    for (const l of sec.lines) {
+      if (l.kind === 'small') {
+        para(l.text, PAD, inner, CARD_FONT.small, CARD_COLOR.muted, 38);
+      } else if (l.kind === 'bullet') {
+        text('•', PAD, CARD_FONT.body, CARD_COLOR.gold, 0);
+        para(l.text, PAD + BULLET, inner - BULLET, CARD_FONT.body, CARD_COLOR.dim, 44);
+      } else {
+        para(l.text, PAD, inner, CARD_FONT.body, CARD_COLOR.dim, 44);
+      }
+      y += 10;
+    }
+    y += 22;
   }
 
   para(CULTURAL_NOTE, PAD, inner, CARD_FONT.note, CARD_COLOR.muted, 38);

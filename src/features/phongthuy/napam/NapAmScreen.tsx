@@ -18,7 +18,7 @@ import { buildScript } from '../../reader/script';
 import { useWho } from '../../reader/hooks';
 import { cellsSpeech, richSpeech, sectionsSpeech, speechOf } from '../../../content/speech';
 import { ShareButton } from '../../share/ShareButton';
-import { plain } from '../../share/card';
+import { cardReading, plain } from '../../share/card';
 import ui from '../../../ui/components/ui.module.css';
 import { Banner } from '../Banner';
 import s from '../phongthuy.module.css';
@@ -147,6 +147,7 @@ export function NapAmScreen() {
             slug: 'nap-am', title: x2 ? 'Nạp Âm và hợp hôn' : 'Nạp Âm',
             groups: [{ title: nameOf('Người 1', prof1), cells: napAmPersonCells(x1) }, ...(x2 ? [{ title: nameOf('Người 2', p2), cells: napAmPersonCells(x2) }] : [])],
             verdict: x2 && compat ? plain(napAmRelationText(compat.rel, x1.res, x2.res)) : undefined,
+            reading: cardReading(napAmTongKet(x1.res, x2 && compat ? { r2: x2.res, compat } : null)),
           })} />
           <PersonSummary title={nameOf('Người 1', prof1)} person={x1} />
           {x2 && <PersonSummary title={nameOf('Người 2', p2)} person={x2} />}

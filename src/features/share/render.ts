@@ -2,7 +2,7 @@
 import { CARD_COLOR, CARD_FONT, CARD_W, layoutCard, type ShareCard } from './card';
 
 function allText(card: ShareCard): string {
-  return [card.title, card.person, card.personLine, card.verdict, ...card.groups.flatMap((g) => [g.title, ...g.cells.flat()])].filter(Boolean).join(' ') + ' LÝ SỐ TRỌN BỘ';
+  return [card.title, card.person, card.personLine, card.verdict, ...card.groups.flatMap((g) => [g.title, ...g.cells.flat()]), ...(card.reading ?? []).flatMap((s) => [s.title, ...s.lines.map((l) => l.text)])].filter(Boolean).join(' ') + ' LÝ SỐ TRỌN BỘ';
 }
 
 export async function renderCard(card: ShareCard): Promise<Blob> {
