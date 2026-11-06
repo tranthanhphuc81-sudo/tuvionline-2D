@@ -435,7 +435,7 @@ Không sửa công thức trong Phase 1.2. Mỗi điểm dưới đây cần đ�
 (theo `CLAUDE.md`):
 
 - Tiết khí của Bát Tự dùng UTC+7 cả với năm trước 1968 (mục 5.3, điểm 3).
-- `appId` hiện là `vn.lyso.app` tạm thời, chốt ở Phase 8.1. Chú thích trong `capacitor.config.ts` còn ghi "Phase 7", sẽ sửa
+- `appId` hiện là `vn.lyso.app` tạm thời, phương án và đề xuất ở `docs/RELEASE.md` mục 1, chờ chủ dự án chốt. Chú thích trong `capacitor.config.ts` còn ghi "Phase 7", sẽ sửa
   khi đụng tới file này ở Phase 8.2.
 
 ---

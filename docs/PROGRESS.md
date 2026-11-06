@@ -27,7 +27,9 @@
 | 6.7 — Lời thầy, đạo đồng | XONG bản nháp — chờ chủ dự án đọc duyệt `docs/LOI-THAY.md` |
 | 6.8 — Đặt hàng tranh, nhân vật, âm thanh | XONG tài liệu → `docs/ART-BRIEF.md`; chưa đặt hàng |
 | 7.1 — Lưu và chia sẻ | XONG phần code — 599 test xanh, build OK, thử trên trình duyệt 360px. CHƯA thử trên máy thật, cần cài APK mới vì thêm plugin |
-| 8 đến 9 | CHƯA LÀM |
+| 8.1 — Kế hoạch phát hành | XONG tài liệu → `docs/RELEASE.md`. TẠM HOÃN phát hành từ 06/11/2026 vì chủ dự án còn chỉnh và thêm tính năng; 5 điểm đầu tài liệu chưa chốt |
+| 8.2, 8.3 | TẠM HOÃN cùng việc phát hành |
+| 9 | CHƯA LÀM |
 | Tranh hành trình | XONG bản tự vẽ — 26 SVG sơn mài, thuỷ mặc ở `src/assets/journey/art/`, sinh bằng `node scripts/build-journey-art.mjs`. Nhẹ, không dùng blur. Vẫn thay được bằng tranh hoạ sĩ. Chưa đo fps trên máy thật |
 
 ## Phase 7.1 — Lưu và chia sẻ — XONG PHẦN CODE, CHƯA THỬ MÁY THẬT
@@ -45,9 +47,9 @@
 - Bảng chia sẻ thật, gửi qua Zalo và Messenger, chọn file khôi phục bằng trình chọn file của Android. Java của 2 plugin mới chưa biên dịch trên máy này: chờ GitHub Actions.
 - APK thử cũ mở giao diện mới sẽ báo lỗi ở nút chia sẻ, sao lưu cho tới khi cài APK mới.
 
-### Cần quyết ở Phase 8.1
-- `AndroidManifest.xml` đang để `android:allowBackup="true"`: Android có thể tự sao lưu dữ liệu app lên Google Drive của người dùng, trái với câu "không gửi dữ liệu đi đâu". Cần quyết tắt hẳn hoặc khai báo.
-- Chính sách quyền riêng tư trong app chưa có thông tin liên hệ; Google Play cần thêm bản đặt trên một đường dẫn công khai.
+### Đã quyết ở Phase 8.1, làm ở 8.2 (`docs/RELEASE.md`)
+- Đổi `android:allowBackup` thành `false`.
+- Thêm email liên hệ vào chính sách quyền riêng tư và đăng bản công khai trên Cloudflare.
 
 ## APK thử tự cập nhật
 

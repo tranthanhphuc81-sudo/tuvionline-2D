@@ -11,7 +11,7 @@ App tiếng Việt gồm 7 công cụ: Tử Vi Đẩu Số, Bát Tự, Lục Hà
 - GitHub Actions (`.github/workflows/android-debug.yml`) — mỗi lần đẩy lên `main` tự chạy test và build APK debug; lấy ở tab Actions, mục Artifacts `lyso-debug-apk`. Dùng khi máy không có Android SDK.
 - Cloudflare Pages (`.github/workflows/deploy-pages.yml`, dự án `lyso-tron-bo`) — bản xem trên trình duyệt, tự đăng khi đẩy lên `main`, cần secret `CLOUDFLARE_API_TOKEN`. Rung, la bàn thật và giọng đọc của app vẫn phải thử bằng APK.
 - APK thử từ GitHub Actions đặt `LYSO_LIVE_URL`, tải giao diện từ Cloudflare nên sửa web không phải cài lại; chỉ đổi plugin hoặc Java mới cần cài lại. Bản phát hành không được đặt biến này.
-- `npm run android:release` — build AAB để đưa lên Google Play (cần cấu hình ký ở Phase 8).
+- `npm run android:release` — build AAB để đưa lên Google Play (cần cấu hình ký ở Phase 8.2, xem `docs/RELEASE.md`).
 
 ## Cấu trúc
 
@@ -34,5 +34,5 @@ App tiếng Việt gồm 7 công cụ: Tử Vi Đẩu Số, Bát Tự, Lục Hà
 - Kiểm tra ngày nhập (`LySoUtil.validSolar`, âm lịch thì đổi qua lại để kiểm tra) trước khi tính; không được âm thầm "cuộn" 31/2 thành 3/3.
 - Android WebView KHÔNG có `speechSynthesis` → đọc thành lời phải dùng plugin native `@capacitor-community/text-to-speech` (lang `vi-VN`), chia văn bản thành đoạn ngắn.
 - La bàn: chỉ hoạt động trên máy thật có cảm biến từ trường; luôn có chế độ xoay tay dự phòng và thông báo chẩn đoán rõ ràng (ARCHITECTURE mục 11, plugin nội bộ `android/app/src/main/java/vn/lyso/app/LySoDevicePlugin.java`; `src/platform/compass.ts`).
-- Không commit khoá ký (`*.jks`, `*.keystore`, `keystore.properties`). Mật khẩu ký để trong Codespaces Secrets.
+- Không commit khoá ký (`*.jks`, `*.keystore`, `keystore.properties`). Mật khẩu ký để trong GitHub Secrets, xem `docs/RELEASE.md` mục 2.
 - Mobile-first: vùng chạm tối thiểu 44px, chạy tốt ở chiều rộng 360px, hỗ trợ chế độ sáng/tối, có nhãn truy cập (aria) cho nút chỉ có biểu tượng.
