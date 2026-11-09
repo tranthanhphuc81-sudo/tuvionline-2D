@@ -1,15 +1,16 @@
-/* Thử trên điện thoại: một ảnh, chỉnh lần lượt từng đường bằng ngón tay, đo thời gian. Ảnh không rời máy và không được lưu. */
+/* Thử trên điện thoại: một ảnh, chạm vài điểm trên từng đường để máy bám theo rãnh, đo thời gian. Ảnh không rời máy và không được lưu. */
 import { FilesetResolver, HandLandmarker } from '@mediapipe/tasks-vision';
 import { classify } from './classify';
-import { deviation, mountEditor, startingHandles, wholeLine, type EditState, type Editor } from './editor';
+import { deviation, mountEditor, setRouter, wholeLine, type EditState, type Editor } from './editor';
+import { makeRouter, viewRidge } from './livewire';
 import { SIZE, analyze, type Analysis, type LineId, type Pt } from './lines';
 import { INDEX, PINKY, WRIST, affine, apply, invert, loadBitmap, palmMask, viewMatrix } from './pipeline';
 
 const $ = (id: string) => document.getElementById(id)!;
 const STEPS: { id: LineId; title: string; hint: string; none?: string }[] = [
-  { id: 'sinh', title: 'Sinh đạo', hint: 'Đường vòng quanh gò ngón cái, từ mép tay xuống cổ tay. Kéo các vòng tròn lên đúng đường thật.' },
-  { id: 'tri', title: 'Trí đạo', hint: 'Đường đi ngang lòng bàn tay, bắt đầu gần Sinh đạo.', none: 'Không thấy đường' },
-  { id: 'tam', title: 'Tâm đạo', hint: 'Đường nằm trên cùng, từ mép dưới ngón út chạy về phía ngón trỏ.' },
+  { id: 'sinh', title: 'Sinh đạo', hint: 'Đường vòng quanh gò ngón cái xuống cổ tay. Chạm vào đầu đường, cuối đường, rồi chạm thêm 1–2 điểm ở chỗ cong nhất.' },
+  { id: 'tri', title: 'Trí đạo', hint: 'Đường đi ngang lòng bàn tay, bắt đầu gần Sinh đạo. Chạm đầu rồi chạm cuối đường.', none: 'Không thấy đường' },
+  { id: 'tam', title: 'Tâm đạo', hint: 'Đường trên cùng, từ mép dưới ngón út về phía ngón trỏ. Chạm đầu rồi chạm cuối đường.' },
   { id: 'dinh', title: 'Định mạng', hint: 'Đường dọc giữa bàn tay, từ cổ tay lên ngón giữa. Có người không có.', none: 'Không có đường này' },
 ];
 const LOG_KEY = 'chitay-phone-log';
@@ -93,11 +94,13 @@ async function start(): Promise<void> {
 function begin(a: Analysis, clean: HTMLCanvasElement, toView: (p: Pt) => Pt, viewLm: Pt[], info: { modelMs: number; detectMs: number; size: string }): void {
   const machine = Object.fromEntries(a.lines.map((l) => [l.id, l.points.map(toView)])) as Record<LineId, Pt[]>;
   const state: EditState = { lines: {} as EditState['lines'], breaks: {} as EditState['breaks'], extra: {} as EditState['extra'], off: {} };
+  // Bắt đầu trống: người dùng chạm điểm, nét máy dò chỉ hiện mờ làm gợi ý
   for (const l of a.lines) {
-    state.lines[l.id] = startingHandles(l.id, machine[l.id], toView);
-    state.breaks[l.id] = l.breaks.map(toView);
+    state.lines[l.id] = [];
+    state.breaks[l.id] = [];
     state.extra[l.id] = [];
   }
+  setRouter(makeRouter(viewRidge(clean)));
 
   // Thay canvas để bỏ các bộ lắng nghe của ảnh trước
   const old = $('canvas') as HTMLCanvasElement;
@@ -113,6 +116,8 @@ function begin(a: Analysis, clean: HTMLCanvasElement, toView: (p: Pt) => Pt, vie
   });
   editor.setMounds(false);
   editor.setHandleSize(11);
+  editor.setTapMode(true);
+  editor.setHints(machine);
 
   const show = () => {
     const s = STEPS[step];
@@ -151,12 +156,14 @@ function begin(a: Analysis, clean: HTMLCanvasElement, toView: (p: Pt) => Pt, vie
     $('log2').innerHTML = logHtml();
   };
 
-  $('ok').onclick = () => { leave(); if (step === STEPS.length - 1) finish(); else { step++; show(); } };
+  $('ok').onclick = () => {
+    if (state.lines[STEPS[step].id].length < 2) { $('hint').textContent = 'Chạm vào đầu đường và cuối đường trước đã. Không có đường này thì bấm nút bên cạnh.'; return; }
+    leave(); if (step === STEPS.length - 1) finish(); else { step++; show(); }
+  };
   $('back').onclick = () => { if (step) { leave(); step--; show(); } };
   $('none').onclick = () => { state.off[STEPS[step].id] = true; leave(); if (step === STEPS.length - 1) finish(); else { step++; show(); } };
   $('undo').onclick = () => { editor.undo(); };
-  $('point').onclick = () => editor.setMode('add');
-  $('segment').onclick = () => editor.addSegment(STEPS[step].id);
+  $('point').onclick = () => { state.lines[STEPS[step].id].length = 0; moves++; editor.redraw(); };
   const plain = $('plain');
   plain.onpointerdown = (e) => { e.preventDefault(); editor.setPlain(true); };
   plain.onpointerup = plain.onpointercancel = plain.onpointerleave = () => editor.setPlain(false);

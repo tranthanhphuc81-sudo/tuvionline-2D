@@ -41,7 +41,7 @@ function percentile(values: number[], p: number): number {
 }
 
 /** Đường chỉ là rãnh tối: đo độ cong lớn nhất của độ sáng ở nhiều bề rộng. Kênh xanh lá cho rãnh tương phản tốt nhất trên da. */
-function ridgeMap(gray: Float32Array, mask: Uint8Array, n: number): { ridge: Float32Array; dir: Direction } {
+export function ridgeMap(gray: Float32Array, mask: Uint8Array, n: number): { ridge: Float32Array; dir: Direction } {
   const out = new Float32Array(n * n);
   const dir: Direction = { x: new Float32Array(n * n), y: new Float32Array(n * n) };
   const scales: readonly (readonly [number, number])[] = TUNE.bigScale ? [[2, 3], [3, 5], [4, 7]] : [[2, 3], [3, 5]];

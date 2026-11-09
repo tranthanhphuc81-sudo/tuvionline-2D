@@ -74,11 +74,21 @@ const MIN_HANDLES = 2;
 const NEW_SEGMENT_AT = [26, 60, 94];
 const MAX_UNDO = 100;
 
+/* Bộ bám rãnh (chế độ chạm): có thì nét đi theo rãnh giữa các điểm, không có thì là đường cong qua các điểm. */
+let router: ((a: Pt, b: Pt) => Pt[]) | null = null;
+export function setRouter(r: ((a: Pt, b: Pt) => Pt[]) | null): void { router = r; }
+/** Nét của một dãy điểm điều khiển. `quick`: đang kéo thì vẽ đường cong cho mượt, thả tay mới bám rãnh. */
+export function curvePath(ctrl: Pt[], quick = false): Pt[] {
+  if (ctrl.length < 2) return ctrl.slice();
+  if (!router || quick) return spline(ctrl);
+  return ctrl.slice(1).flatMap((b, i) => { const r = router!(ctrl[i], b); return i ? r.slice(1) : r; });
+}
+
 /** Đường hoàn chỉnh: nét kéo chỉnh và các đoạn vẽ thêm, xếp theo chiều đường. Trả cả các đoạn để biết chỗ đứt. */
 export function wholeLine(state: EditState, id: LineId): { points: Pt[]; segments: Pt[][]; breaks: Pt[] } {
   const along = (p: Pt) => (id === 'sinh' || id === 'dinh' ? p.y : p.x);
   const facing = (s: Pt[]) => (along(s[0]) <= along(s[s.length - 1]) ? s : s.slice().reverse());
-  const segments = [state.lines[id], ...state.extra[id]].map((c) => spline(c)).map(facing).sort((a, b) => along(a[0]) - along(b[0]));
+  const segments = [state.lines[id], ...state.extra[id]].filter((c) => c.length > 0).map((c) => curvePath(c)).map(facing).sort((a, b) => along(a[0]) - along(b[0]));
   const breaks = [...state.breaks[id]];
   for (let i = 1; i < segments.length; i++) {
     const a = segments[i - 1][segments[i - 1].length - 1], b = segments[i][0];
@@ -90,7 +100,7 @@ export function wholeLine(state: EditState, id: LineId): { points: Pt[]; segment
 
 export interface Guide { a: Pt; b: Pt; label: string }
 export interface Mound { c: Pt; rx: number; ry: number; label: string }
-export interface Editor { setHidden(v: boolean): void; setMode(m: Mode): void; redraw(): void; setGuides(v: boolean): void; setFocus(id: LineId | null): void; setHandleSize(r: number): void; addSegment(id: LineId): void; undoSegment(): void; setMounds(v: boolean): void; undo(): boolean; setPlain(v: boolean): void }
+export interface Editor { setHidden(v: boolean): void; setMode(m: Mode): void; redraw(): void; setGuides(v: boolean): void; setFocus(id: LineId | null): void; setHandleSize(r: number): void; setTapMode(v: boolean): void; setHints(h: Partial<Record<LineId, Pt[]>>): void; addSegment(id: LineId): void; undoSegment(): void; setMounds(v: boolean): void; undo(): boolean; setPlain(v: boolean): void }
 
 export function mountEditor(canvas: HTMLCanvasElement, clean: HTMLCanvasElement, state: EditState, guides: Guide[], mounds: Mound[], on: { touched(): void; changed(): void }): Editor {
   const g = canvas.getContext('2d')!;
@@ -99,7 +109,8 @@ export function mountEditor(canvas: HTMLCanvasElement, clean: HTMLCanvasElement,
   let hidden = false, showGuides = false, showMounds = true, plain = false;
   let mode: Mode | null = null;
   const shown = () => IDS.filter((id) => !state.off[id]);
-  let focusId: LineId | null = null, handleR = 6;
+  let focusId: LineId | null = null, handleR = 6, tapMode = false;
+  let hints: Partial<Record<LineId, Pt[]>> = {};
   /** Chỉ đường đang làm mới kéo được, để ngón tay không chạm nhầm đường khác. */
   const grabbable = () => (focusId ? [focusId] : shown());
   let drag: { id: LineId; curve: Pt[]; i: number } | null = null;
@@ -142,10 +153,19 @@ export function mountEditor(canvas: HTMLCanvasElement, clean: HTMLCanvasElement,
       g.strokeStyle = COLORS[id];
       g.lineWidth = 1.5; g.lineCap = 'round'; g.lineJoin = 'round';
       const dim = focusId !== null && focusId !== id;
+      const hint = hints[id];
+      if (!dim && hint && hint.length > 1 && state.lines[id].length < 2) {
+        // Gợi ý của máy: nét đứt mờ, chỉ để biết đường nằm khoảng đâu
+        g.globalAlpha = 0.5; g.setLineDash([5, 6]);
+        g.beginPath();
+        hint.forEach((p, i) => (i ? g.lineTo(p.x, p.y) : g.moveTo(p.x, p.y)));
+        g.stroke();
+        g.setLineDash([]);
+      }
       for (const ctrl of curves(id)) {
         g.globalAlpha = dim ? 0.35 : 0.85;
         g.beginPath();
-        spline(ctrl).forEach((p, i) => (i ? g.lineTo(p.x, p.y) : g.moveTo(p.x, p.y)));
+        curvePath(ctrl, drag?.curve === ctrl).forEach((p, i) => (i ? g.lineTo(p.x, p.y) : g.moveTo(p.x, p.y)));
         g.stroke();
         g.globalAlpha = 1;
         if (!dim) for (const p of ctrl) { g.beginPath(); g.arc(p.x, p.y, handleR, 0, Math.PI * 2); g.stroke(); }
@@ -218,6 +238,31 @@ export function mountEditor(canvas: HTMLCanvasElement, clean: HTMLCanvasElement,
       const d = dist(p, q);
       if (d <= reach && (!found || d < found.d)) found = { id, curve, i, d };
     });
+    if (!found && tapMode && focusId) {
+      // Chạm chỗ trống: thêm điểm. Gần nét thì chèn vào giữa, xa thì nối vào đầu gần hơn.
+      const before = snapshot();
+      const ctrl = state.lines[focusId];
+      if (ctrl.length < 2) ctrl.push(p);
+      else {
+        // Đoạn nào gần chỗ chạm nhất thì chèn vào đoạn đó; chạm gần hai đầu đường thì nối dài
+        let best = { k: 0, d: Infinity, end: false };
+        for (let k = 0; k + 1 < ctrl.length; k++) {
+          const seg = curvePath([ctrl[k], ctrl[k + 1]]);
+          seg.forEach((q, qi) => {
+            const d = dist(q, p);
+            if (d < best.d) best = { k, d, end: (k === 0 && qi === 0) || (k === ctrl.length - 2 && qi === seg.length - 1) };
+          });
+        }
+        if (best.d <= reach * 2 && !best.end) ctrl.splice(best.k + 1, 0, p);
+        else if (dist(p, ctrl[0]) < dist(p, ctrl[ctrl.length - 1])) ctrl.unshift(p);
+        else ctrl.push(p);
+      }
+      remember(before);
+      on.touched();
+      on.changed();
+      render();
+      return;
+    }
     if (!found) return;
     dragStart = snapshot();
     drag = found;
@@ -253,6 +298,8 @@ export function mountEditor(canvas: HTMLCanvasElement, clean: HTMLCanvasElement,
     setMounds(v) { showMounds = v; render(); },
     setFocus(id) { focusId = id; render(); },
     setHandleSize(r) { handleR = r; render(); },
+    setTapMode(v) { tapMode = v; },
+    setHints(h) { hints = h; render(); },
     setPlain(v) { plain = v; render(); },
     addSegment(id) {
       // Đặt nối tiếp đuôi đường theo hướng đang đi; hết chỗ thì đặt phía đầu đường
