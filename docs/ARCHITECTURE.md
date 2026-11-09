@@ -856,6 +856,102 @@ Căn cứ nội dung: `docs/CHI-TAY.md`, `docs/palm-content.vi.json`. Thứ tự
 
 **Còn phải quyết trước khi làm (bước 3B.1):** vị trí trong điều hướng, bố cục 360px, lưu kết quả và ảnh, câu hỏi vẫn phải hỏi (ngón tay, nét đứt, nhánh, gò), xác nhận giấy phép file mô hình trước khi đóng gói vào APK. Trang thử: `spike/chitay/phone.html`, đăng ở `/chitay-thu/phone.html` trên Cloudflare, không vào APK. Điểm chấm và đường chuẩn trên ảnh thật giữ ở `spike/chitay/truth/`, không đưa lên repo.
 
-**Ảnh tay:** bản đầu đề xuất không lưu ảnh, chỉ lưu kết quả; chủ dự án chưa chốt.
+**Ảnh tay:** xem mục 13.1 phần 6.
 
 **Mã nguồn và nội dung:** dùng tên `palm` (`src/core/palm`, `src/content/palm`). Câu chữ chỉ tay là nội dung mới, không chép nguyên văn sách. `V19`, `V26`, `N04` ẩn cho tới khi đối chiếu xong với sách.
+
+### 13.1 Thiết kế bước 3B.1 (09/11/2026)
+
+Dựa trên bản thử đã đạt (mục trên). Chủ dự án đã chốt ngày 09/11/2026: không lưu ảnh tay, mở từ Tĩnh thất và Tổng hợp, hoãn vân tay, móng và dấu đặc biệt sang bản sau.
+
+#### 1. Cách nhập liệu
+
+Luồng: **tay nào → chụp → chạm 4 đường → xác nhận số đo → câu hỏi ngắn (tuỳ chọn) → kết quả.**
+
+| Nhóm | Câu (CHI-TAY §11) | Cách lấy |
+|---|---|---|
+| Hỏi trước khi chụp | Q01 tay thuận, và tay đang chụp là tay nào | Hai câu chọn nhanh. Không đoán từ ảnh vì camera trước có thể đã lật ảnh |
+| Đo từ nét đã chạm | Q17, Q20, Q21, Q23, Q25 | Tự điền sau bước chạm, hiện trên một màn tóm tắt để sửa |
+| Đo từ khớp tay | Q04, Q09, Q10, Q11, Q12 | Tự điền, cùng màn tóm tắt, có "Không rõ" khi ảnh không thấy đủ ngón |
+| Phần cơ bản phải hỏi | Q02 hình bàn tay, Q14 đầu ngón | Hai câu có hình minh hoạ |
+| "Xem kỹ hơn" (tuỳ chọn) | Q03, Q05–Q08, Q13, Q18, Q19, Q22, Q24, Q26–Q30, Q32 | Câu có hình, bỏ qua được cả nhóm |
+| Hoãn sang bản sau | Q15 vân tay, Q16 móng, Q31 dấu đặc biệt | Ảnh lòng bàn tay không thấy rõ; dấu đặc biệt dễ đọc sai và cần hình minh hoạ riêng |
+
+- **Lựa chọn:** người dùng chạm điểm cho 4 đường, máy bám rãnh; câu nào máy tự điền đều sửa được và có "Không rõ".
+- **Lý do:** đây là cách duy nhất đạt cửa kiểm chứng; hỏi lần lượt 32 câu thì quá dài, và nhiều người không tự tin so hình (lý do chọn nhận diện từ đầu).
+- **Phương án bị loại:** (a) chỉ hỏi theo hình mẫu; (b) ảnh làm nền rồi tự so; (c) máy tự đo hết không cần người xác nhận: đã đo, không đủ đúng (2/15 ảnh ở mức 12px).
+
+**Camera:** dùng ô chọn tệp của WebView với `capture`, mở ứng dụng camera của máy, không khai báo quyền `CAMERA` cho app. Phải thử trên APK ở bước 3B.3; nếu Capacitor buộc xin quyền thì cập nhật mục này và `docs/RELEASE.md` mục 3 trước khi làm tiếp.
+
+**Hướng dẫn chụp** hiện trước khi chụp: nền thoáng, đủ sáng, xoè tay tự nhiên, thấy cả ngón, **tháo nhẫn** (thẻ mô hình ghi rõ đồ trang sức, hình xăm làm giảm độ đúng).
+
+#### 2. Vị trí trong điều hướng
+
+- **Lựa chọn (đã chốt):** không thêm tab. Mở từ **đồ vật mới trên án thư Tĩnh thất** ("đèn dầu soi tay", CHI-TAY §13) và từ ô **Chỉ tay** trong lưới Công cụ của phần Tổng hợp. Route `palm` thuộc ngăn xếp tab Tĩnh thất, kết quả cũ mở bằng `palm.result`.
+- **Back trong luồng nhiều bước:** lùi một bước; ở bước chạm đường thì lùi một đường; đang ở bước đầu thì thoát. Đã chạm điểm mà thoát thì hỏi lại "Bỏ dở lần xem này?". Không lưu nháp, vì ảnh không được lưu (mục 6).
+- **Phương án bị loại:** tab thứ 6 (thanh dưới đã tối đa 5); gộp vào tab Phong thủy (khác bản chất, Phong thủy là nhà cửa và hướng).
+
+#### 3. Bố cục 360px
+
+```
+(i) Chạm đường                 (ii) Xác nhận số đo           (iii) Kết quả
+┌──────────────────────┐      ┌──────────────────────┐      ┌──────────────────────┐
+│ 2/4 Trí đạo          │      │ Máy đo được           │      │ [Sơ đồ bàn tay   ]   │
+│ Chạm đầu rồi cuối    │      │ Sinh đạo: cong vừa  ✎│      │ [ nét đã chạm    ]   │
+│┌────────────────────┐│      │ Trí đạo: cong nhẹ   ✎│      │ [ gò, Cửu cung ◐ ]   │
+││  ảnh lòng bàn tay  ││      │ Ngón út: ngang      ✎│      │ Lời nhắc văn hoá     │
+││  nét bám rãnh      ││      │ ...                   │      │ ▸ Tổng quan          │
+│└────────────────────┘│      │ [Xem kỹ hơn]  [Xong ›]│      │ ▸ Ba đường chính     │
+│ ↶ Lùi  Giữ xem gốc   │      └──────────────────────┘      │ ▸ Gò, ngón tay       │
+│ Xoá đường            │                                    │ ▸ Tổng kết theo chủ đề│
+│ ‹ Trước  [Đúng rồi ›]│      (iv) Hai tay: dải chọn         │ Xem lại sau 6–12 tháng│
+└──────────────────────┘      Tay hiện tại | Tay bẩm sinh   └──────────────────────┘
+```
+
+- Mỗi câu luận có chip chủ đề và nút "Vì sao?" mở đặc điểm, nguồn sách (DVT, HCM, TCT, JDJ).
+- **Hai tay:** dải chọn trên sơ đồ, phần "So sánh hai tay" chỉ hiện khi đã xem đủ hai tay.
+- **Lớp Cửu cung:** nút bật tắt trên sơ đồ, màu ngũ hành dùng chung với Bát Trạch, chạm cung hiện tên cung, gò, ngũ hành (CHI-TAY §13). Không luận riêng theo cung.
+
+#### 4. Component `PalmDiagram`
+
+- SVG một nét theo design tokens, **không dùng ảnh tay** (ảnh không được lưu).
+- Hệ toạ độ chuẩn hoá 0…1 của khung xem trong bản thử: cổ tay ở dưới, ngón cái bên trái. Tay trái thật thì lật gương khi vẽ, để sơ đồ trùng hướng tay người dùng.
+- Vẽ các nét đã chạm (toạ độ chuẩn hoá), gò (vùng ước lượng từ khớp tay như `mounds()` của bản thử), lớp Cửu cung.
+- Prop `focus?: { zones?: MountId[]; lines?: LineId[]; marks?: string[] }` cho Thầy đọc tô sáng, phần còn lại mờ đi. Mỗi vùng và nét có nhãn truy cập.
+
+#### 5. Engine
+
+- **`src/core/palm/` (thuần TS, không đụng canvas):** `measurePalm(lines, landmarks)` đổi nét đã xác nhận và 21 điểm khớp chuẩn hoá thành ID đặc điểm (chuyển từ `spike/chitay/classify.ts`, giữ các đường đo ảo); `analyzePalm(input: PalmInput): PalmResult` theo CHI-TAY §14.2: ánh xạ câu trả lời sang ID, tra V01–V30 khi có vân tay, gom theo mục, tổng kết theo chủ đề với ngưỡng `xu-huong` / `ro`, so sánh hai tay, câu kết cố định. Kiểu `PalmInput`, `PalmResult` giữ như CHI-TAY §14.1, thêm `measured: Record<string, string | null>` cho phần máy đo.
+- **`src/features/palm/vision/` (phụ thuộc trình duyệt):** nạp MediaPipe lười, dò khớp, bản đồ rãnh, bám rãnh (`livewire.ts`), khung xem. Đây là UI, không vào `src/core` vì cần canvas và WASM.
+- **Ngưỡng tạm** (ví dụ gò Thái Âm 0,5, ngưỡng chạm 0,032) chuyển nguyên từ bản thử, ghi chú là chưa kiểm chứng trên nhiều tay.
+
+#### 6. Lưu trữ
+
+- **Phiên xem** gắn với hồ sơ và ngày, để so theo thời gian (tướng tay thay đổi): `{ id, profileId, date, hand: 'left' | 'right', role: 'current' | 'innate', lines (toạ độ chuẩn hoá), landmarks (21 điểm chuẩn hoá), answers, measured, version }`.
+- Lược đồ `lyso.state` lên version 3: thêm `palmSessions: PalmSession[]`, migration 2 → 3 thêm mảng rỗng. Xoá hồ sơ thì xoá phiên của hồ sơ đó; "Xoá toàn bộ dữ liệu" và sao lưu, khôi phục JSON bao gồm luôn.
+- **Ảnh tay (đã chốt):** **không lưu ảnh**, chỉ lưu nét và điểm khớp đã chuẩn hoá. Lý do: quyền riêng tư (ảnh lòng bàn tay là dữ liệu cá nhân), dung lượng, và sơ đồ vẽ lại được từ nét. Đánh đổi: không xem lại ảnh cũ, thoát giữa chừng phải chụp lại. Thay thế cho mục "Ảnh tay" phía trên.
+
+#### 7. Chính sách nội dung
+
+- Giữ nguyên danh mục loại bỏ CHI-TAY §12. Câu `tts: false` vẫn hiện chữ bình thường, Thầy không đọc.
+- Lời nhắc cố định ở đầu kết quả (văn hoá, tham khảo, tướng tay thay đổi) và cuối kết quả (xem lại sau 6–12 tháng, "Số là tham khảo, đức năng thắng số").
+- V19, V26, N04 ẩn cho tới khi đối chiếu xong với sách (đã quyết từ 05/11).
+- **Không luận từ nét chưa được người dùng xác nhận**, không có nút bỏ qua bước chạm.
+- Câu luận giải chỉ tay là nội dung mới: chủ dự án đọc duyệt trước khi phát hành (CHI-TAY §15).
+
+#### 8. Ảnh hưởng tới các phase khác
+
+- **Phase 6:** `Cue.focus.palm`; đồ vật mới ở Tĩnh thất cần tranh (bổ sung `docs/ART-BRIEF.md`); câu mở, kết riêng của Thầy cho chỉ tay (3B.8, cần duyệt cùng `docs/LOI-THAY.md`).
+- **Phase 7:** ảnh chia sẻ dùng sơ đồ và tóm tắt, không dùng ảnh tay; sao lưu JSON gồm phiên chỉ tay.
+- **Phase 8.1:** ảnh chỉ xử lý trên máy và không lưu nên không phải khai thu thập; nếu cần quyền `CAMERA` thì khai lý do. Mô hình Hand Landmarker là **Apache 2.0** (thẻ mô hình "Hand Tracking (Lite/Full)", tháng 10/2021), WASM của `@mediapipe/tasks-vision` cũng Apache 2.0: cần ghi công trong màn Giới thiệu. Thẻ mô hình loại trừ giám sát và nhận dạng danh tính, không áp dụng cho app.
+- **Dung lượng APK** tăng khoảng 23MB (mô hình 7,8MB, WASM 14,6MB). Đóng gói trong app vì app phải chạy offline; nạp lười khi mở chỉ tay. Nếu muốn nhẹ hơn thì cân nhắc ở 3B.3: bản WASM nhỏ hơn hoặc tải mô hình lần đầu, nhưng tải về thì phá cam kết offline.
+
+#### Thứ tự triển khai
+
+| Bước | Việc | Xong khi |
+|---|---|---|
+| 3B.2 | `src/content/palm` (nạp JSON, câu hỏi), `src/core/palm` (`measurePalm`, `analyzePalm`) | Test (a)–(i) của kit chính và test đo hình học từ nét mẫu; `npm test`, `npm run build` xanh |
+| 3B.3 | `src/features/palm`: chụp, chạm 4 đường, xác nhận số đo, câu hỏi, kết quả, `PalmDiagram`, lưu phiên, lược đồ v3 | Chạy đủ luồng ở 360px sáng, tối; APK chụp được bằng camera; S25 Ultra chỉnh một bàn tay dưới khoảng 1 phút |
+| 3B.4 | Đặt hàng hình minh hoạ câu hỏi và đồ vật Tĩnh thất vào `docs/ART-BRIEF.md` | Danh sách hình có kích thước và tên file |
+| 3B.5 | Script sinh `palm-content.vi.json` từ CHI-TAY | Chạy lại ra đúng file hiện có |
+| 3B.6–3B.9 | Thầy đọc chỉ tay, đồ vật Tĩnh thất, lời dẫn, rà chính sách | Theo kit |

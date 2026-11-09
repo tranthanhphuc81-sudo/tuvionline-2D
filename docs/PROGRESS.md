@@ -30,7 +30,7 @@
 | 8.1 — Kế hoạch phát hành | XONG tài liệu → `docs/RELEASE.md`. TẠM HOÃN phát hành từ 06/11/2026 vì chủ dự án còn chỉnh và thêm tính năng; 5 điểm đầu tài liệu chưa chốt |
 | 8.2, 8.3 | TẠM HOÃN cùng việc phát hành |
 | 9 | CHƯA LÀM |
-| Xem chỉ tay | ĐẠT bản thử 09/11/2026, chưa vào app — người dùng chạm điểm, máy bám rãnh; 39–68 giây một bàn tay trên S25 Ultra. Tiếp theo là bước 3B.1, xem ARCHITECTURE mục 13 |
+| Xem chỉ tay | 3B.1 XONG tài liệu → ARCHITECTURE mục 13.1. Đã chốt: không lưu ảnh tay, mở từ Tĩnh thất và Tổng hợp, bản đầu hoãn vân tay, móng, dấu đặc biệt. Tiếp theo là 3B.2. Bản thử 09/11/2026: 39–68 giây một bàn tay trên S25 Ultra |
 | Tranh hành trình | XONG bản tự vẽ — 26 SVG sơn mài, thuỷ mặc ở `src/assets/journey/art/`, sinh bằng `node scripts/build-journey-art.mjs`. Nhẹ, không dùng blur. Vẫn thay được bằng tranh hoạ sĩ. Chưa đo fps trên máy thật |
 
 ## Phase 7.1 — Lưu và chia sẻ — XONG PHẦN CODE, CHƯA THỬ MÁY THẬT
