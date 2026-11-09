@@ -100,7 +100,7 @@ export function wholeLine(state: EditState, id: LineId): { points: Pt[]; segment
 
 export interface Guide { a: Pt; b: Pt; label: string }
 export interface Mound { c: Pt; rx: number; ry: number; label: string }
-export interface Editor { setHidden(v: boolean): void; setMode(m: Mode): void; redraw(): void; setGuides(v: boolean): void; setFocus(id: LineId | null): void; setHandleSize(r: number): void; setTapMode(v: boolean): void; setHints(h: Partial<Record<LineId, Pt[]>>): void; addSegment(id: LineId): void; undoSegment(): void; setMounds(v: boolean): void; undo(): boolean; setPlain(v: boolean): void }
+export interface Editor { setHidden(v: boolean): void; setMode(m: Mode): void; redraw(): void; setGuides(v: boolean): void; setFocus(id: LineId | null): void; setHandleSize(r: number): void; setTapMode(v: boolean): void; setHints(h: Partial<Record<LineId, Pt[]>>): void; addSegment(id: LineId): void; undoSegment(): void; setMounds(v: boolean): void; undo(): boolean; setPlain(v: boolean): void; newSegment(): void }
 
 export function mountEditor(canvas: HTMLCanvasElement, clean: HTMLCanvasElement, state: EditState, guides: Guide[], mounds: Mound[], on: { touched(): void; changed(): void }): Editor {
   const g = canvas.getContext('2d')!;
@@ -110,6 +110,8 @@ export function mountEditor(canvas: HTMLCanvasElement, clean: HTMLCanvasElement,
   let mode: Mode | null = null;
   const shown = () => IDS.filter((id) => !state.off[id]);
   let focusId: LineId | null = null, handleR = 6, tapMode = false;
+  /** Đoạn đang chạm tiếp (chế độ chạm). `null` là nét chính; bấm Đoạn mới thì chạm tiếp vào một đoạn riêng, không nối qua chỗ đứt. */
+  let active: Pt[] | null = null;
   let hints: Partial<Record<LineId, Pt[]>> = {};
   /** Chỉ đường đang làm mới kéo được, để ngón tay không chạm nhầm đường khác. */
   const grabbable = () => (focusId ? [focusId] : shown());
@@ -170,7 +172,8 @@ export function mountEditor(canvas: HTMLCanvasElement, clean: HTMLCanvasElement,
         g.globalAlpha = 1;
         if (!dim) for (const p of ctrl) { g.beginPath(); g.arc(p.x, p.y, handleR, 0, Math.PI * 2); g.stroke(); }
       }
-      for (const p of state.breaks[id]) { g.lineWidth = 2; g.beginPath(); g.arc(p.x, p.y, 13, 0, Math.PI * 2); g.stroke(); }
+      // Gồm cả chỗ đứt tự nhận giữa các đoạn, để người dùng thấy máy đã hiểu là đường đứt
+      for (const p of dim ? state.breaks[id] : wholeLine(state, id).breaks) { g.lineWidth = 2; g.beginPath(); g.arc(p.x, p.y, 13, 0, Math.PI * 2); g.stroke(); }
     }
     const focus = drag?.id;
     if (focus && pointer) {
@@ -241,7 +244,7 @@ export function mountEditor(canvas: HTMLCanvasElement, clean: HTMLCanvasElement,
     if (!found && tapMode && focusId) {
       // Chạm chỗ trống: thêm điểm. Gần nét thì chèn vào giữa, xa thì nối vào đầu gần hơn.
       const before = snapshot();
-      const ctrl = state.lines[focusId];
+      const ctrl = active && state.extra[focusId].includes(active) ? active : state.lines[focusId];
       if (ctrl.length < 2) ctrl.push(p);
       else {
         // Đoạn nào gần chỗ chạm nhất thì chèn vào đoạn đó; chạm gần hai đầu đường thì nối dài
@@ -296,7 +299,7 @@ export function mountEditor(canvas: HTMLCanvasElement, clean: HTMLCanvasElement,
     redraw: render,
     setGuides(v) { showGuides = v; render(); },
     setMounds(v) { showMounds = v; render(); },
-    setFocus(id) { focusId = id; render(); },
+    setFocus(id) { focusId = id; active = null; render(); },
     setHandleSize(r) { handleR = r; render(); },
     setTapMode(v) { tapMode = v; },
     setHints(h) { hints = h; render(); },
@@ -332,10 +335,20 @@ export function mountEditor(canvas: HTMLCanvasElement, clean: HTMLCanvasElement,
       if (!last) return false;
       const was = JSON.parse(last) as Pick<EditState, 'lines' | 'breaks' | 'extra'>;
       state.lines = was.lines; state.breaks = was.breaks; state.extra = was.extra;
+      active = null;
       on.changed();
       render();
       return true;
     },
     setMode(m) { mode = m; canvas.style.cursor = 'crosshair'; },
+    newSegment() {
+      if (!focusId) return;
+      // Đoạn đang làm dở còn trống thì dùng lại, không tạo đoạn rỗng chồng lên nhau
+      if (active && active.length === 0 && state.extra[focusId].includes(active)) return;
+      remember(snapshot());
+      active = [];
+      state.extra[focusId].push(active);
+      render();
+    },
   };
 }

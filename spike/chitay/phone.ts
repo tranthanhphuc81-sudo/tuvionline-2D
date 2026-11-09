@@ -163,7 +163,12 @@ function begin(a: Analysis, clean: HTMLCanvasElement, toView: (p: Pt) => Pt, vie
   $('back').onclick = () => { if (step) { leave(); step--; show(); } };
   $('none').onclick = () => { state.off[STEPS[step].id] = true; leave(); if (step === STEPS.length - 1) finish(); else { step++; show(); } };
   $('undo').onclick = () => { editor.undo(); };
-  $('point').onclick = () => { state.lines[STEPS[step].id].length = 0; moves++; editor.redraw(); };
+  $('point').onclick = () => { state.lines[STEPS[step].id].length = 0; state.extra[STEPS[step].id].length = 0; moves++; editor.setFocus(STEPS[step].id); };
+  $('cut').onclick = () => {
+    if (state.lines[STEPS[step].id].length < 2) { $('hint').textContent = 'Chạm đầu và cuối đoạn đầu tiên trước, rồi mới bấm Đoạn mới.'; return; }
+    editor.newSegment();
+    $('hint').textContent = 'Chạm đầu rồi cuối đoạn tiếp theo. Hai đoạn cách nhau thì máy tự ghi nhận chỗ đứt.';
+  };
   const plain = $('plain');
   plain.onpointerdown = (e) => { e.preventDefault(); editor.setPlain(true); };
   plain.onpointerup = plain.onpointercancel = plain.onpointerleave = () => editor.setPlain(false);
