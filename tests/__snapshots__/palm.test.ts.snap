@@ -1,0 +1,694 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Luận giải > (i) 5 bàn tay mẫu cho ra kết quả không đổi 1`] = `
+{
+  "name": "Tay vuông, đường rõ, một tay",
+  "res": {
+    "byTopic": {
+      "sn": {
+        "confidence": "ro",
+        "ids": [
+          "DM01",
+          "H01",
+          "F08",
+        ],
+      },
+      "ss": {
+        "confidence": "ro",
+        "ids": [
+          "SD01",
+          "SD02",
+        ],
+      },
+      "tc": {
+        "confidence": "ro",
+        "ids": [
+          "H01",
+          "F08",
+          "T01",
+        ],
+      },
+      "tcm": {
+        "confidence": "xu-huong",
+        "ids": [
+          "TAM01",
+        ],
+      },
+      "tt": {
+        "confidence": "ro",
+        "ids": [
+          "TD02",
+          "TD05",
+        ],
+      },
+    },
+    "sections": [
+      {
+        "ids": [
+          "H01",
+        ],
+        "key": "tong-quan",
+      },
+      {
+        "ids": [
+          "F08",
+          "T01",
+        ],
+        "key": "ngon",
+      },
+      {
+        "ids": [
+          "DM01",
+          "SD01",
+          "SD02",
+          "TD02",
+          "TD05",
+          "TD16",
+          "TAM01",
+          "DM02",
+        ],
+        "key": "duong-chinh",
+      },
+    ],
+  },
+  "topics": [
+    [
+      "tc",
+      "ro",
+      [
+        "Thực tế, ngăn nắp, làm đâu chắc đó. Hợp với việc cần quy trình rõ ràng.",
+        "Tự tin, tự chủ, không dễ bỏ cuộc, được người khác tin tưởng.",
+        "Thực tế, chọn việc thiết thực, dễ thành công trong công việc cụ thể.",
+      ],
+    ],
+    [
+      "tt",
+      "ro",
+      [
+        "Nhìn sự việc thực tế, logic, làm nhanh và gọn, hợp công việc chuyên môn.",
+        "Trực giác nhạy bén, có thể thành công ở nhiều lĩnh vực.",
+      ],
+    ],
+    [
+      "tcm",
+      "xu-huong",
+      [
+        "Có xu hướng chu đáo, nhã nhặn, ghét tranh chấp, biết nhường nhịn và vun vén hạnh phúc.",
+      ],
+    ],
+    [
+      "sn",
+      "ro",
+      [
+        "Định hướng rõ, trung thực, giỏi tính đường dài; sự nghiệp phát triển vững.",
+        "Thực tế, ngăn nắp, làm đâu chắc đó. Hợp với việc cần quy trình rõ ràng.",
+        "Tự tin, tự chủ, không dễ bỏ cuộc, được người khác tin tưởng.",
+      ],
+    ],
+    [
+      "ss",
+      "ro",
+      [
+        "Sức bền tốt, hồi phục nhanh, nhiệt thành và lạc quan.",
+        "Năng lượng dồi dào, mệt mấy cũng mau lấy lại sức, hướng ngoại.",
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Luận giải > (i) 5 bàn tay mẫu cho ra kết quả không đổi 2`] = `
+{
+  "name": "Tay thon, nhiều câu Không rõ",
+  "res": {
+    "byTopic": {
+      "gt": {
+        "confidence": "ro",
+        "ids": [
+          "F09",
+          "TD06",
+          "T02",
+        ],
+      },
+      "sn": {
+        "confidence": "xu-huong",
+        "ids": [
+          "DM15",
+        ],
+      },
+      "st": {
+        "confidence": "ro",
+        "ids": [
+          "H03",
+          "TD04",
+        ],
+      },
+      "tc": {
+        "confidence": "ro",
+        "ids": [
+          "H03",
+          "F09",
+          "F16",
+        ],
+      },
+      "tt": {
+        "confidence": "xu-huong",
+        "ids": [
+          "TD06",
+        ],
+      },
+    },
+    "sections": [
+      {
+        "ids": [
+          "H03",
+          "H10",
+        ],
+        "key": "tong-quan",
+      },
+      {
+        "ids": [
+          "F09",
+          "F16",
+          "T02",
+        ],
+        "key": "ngon",
+      },
+      {
+        "ids": [
+          "TD04",
+          "TD06",
+          "TD15",
+          "DM15",
+        ],
+        "key": "duong-chinh",
+      },
+    ],
+  },
+  "topics": [
+    [
+      "tc",
+      "ro",
+      [
+        "Nhạy cảm, trực giác tốt, thiên về văn hoá nghệ thuật. Nên biến ý tưởng thành kế hoạch cụ thể.",
+        "Hoà nhã, dĩ hoà vi quý, thích nghi tốt với nhiều hoàn cảnh.",
+        "Tỉ mỉ, ngăn nắp, bền chí nên thường thành công chắc chắn.",
+      ],
+    ],
+    [
+      "tt",
+      "xu-huong",
+      [
+        "Có xu hướng dễ thích nghi, hoà hợp với nhiều kiểu người.",
+      ],
+    ],
+    [
+      "sn",
+      "xu-huong",
+      [
+        "Có xu hướng tự do, không theo khuôn mẫu; tự vạch đường đi và dấn thân đúng lúc sẽ thành.",
+      ],
+    ],
+    [
+      "gt",
+      "ro",
+      [
+        "Hoà nhã, dĩ hoà vi quý, thích nghi tốt với nhiều hoàn cảnh.",
+        "Dễ thích nghi, hoà hợp với nhiều kiểu người.",
+        "Nhiều mơ ước, giỏi tạo thiện cảm. Cần một người bạn thực tế đồng hành.",
+      ],
+    ],
+    [
+      "st",
+      "ro",
+      [
+        "Nhạy cảm, trực giác tốt, thiên về văn hoá nghệ thuật. Nên biến ý tưởng thành kế hoạch cụ thể.",
+        "Lãng mạn, nghệ sĩ tính, trực giác mạnh. Neo ý tưởng vào việc cụ thể để thành quả.",
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Luận giải > (i) 5 bàn tay mẫu cho ra kết quả không đổi 3`] = `
+{
+  "name": "Bàn tay chữ nhất, có gò và đường phụ",
+  "res": {
+    "byTopic": {
+      "dx": {
+        "confidence": "xu-huong",
+        "ids": [
+          "M14",
+        ],
+      },
+      "sn": {
+        "confidence": "ro",
+        "ids": [
+          "TDU01",
+          "H11",
+          "M04",
+        ],
+      },
+      "ss": {
+        "confidence": "xu-huong",
+        "ids": [
+          "SD03",
+          "M02",
+        ],
+      },
+      "st": {
+        "confidence": "ro",
+        "ids": [
+          "TDU01",
+          "M14",
+        ],
+      },
+      "tc": {
+        "confidence": "ro",
+        "ids": [
+          "C05",
+          "H11",
+          "M04",
+        ],
+      },
+      "tcm": {
+        "confidence": "xu-huong",
+        "ids": [
+          "C05",
+          "HN01",
+          "M02",
+        ],
+      },
+    },
+    "sections": [
+      {
+        "ids": [
+          "C05",
+          "H04",
+          "H11",
+          "C02",
+          "C06",
+        ],
+        "key": "tong-quan",
+      },
+      {
+        "ids": [
+          "T04",
+        ],
+        "key": "ngon",
+      },
+      {
+        "ids": [
+          "SD03",
+          "DM03",
+        ],
+        "key": "duong-chinh",
+      },
+      {
+        "ids": [
+          "TDU01",
+          "HN01",
+        ],
+        "key": "duong-phu",
+      },
+      {
+        "ids": [
+          "M02",
+          "M04",
+          "M14",
+        ],
+        "key": "go-dau",
+      },
+    ],
+  },
+  "topics": [
+    [
+      "tc",
+      "ro",
+      [
+        "Tập trung cao độ, làm gì cũng hết mình, yêu ghét rõ ràng.",
+        "Hướng ngoại, nhiều hoài bão, thích mở rộng phạm vi hoạt động.",
+        "Tự tin, có chí tiến thủ và tài điều khiển, thích đứng ra dẫn dắt.",
+      ],
+    ],
+    [
+      "tcm",
+      "xu-huong",
+      [
+        "Có xu hướng tập trung cao độ, làm gì cũng hết mình, yêu ghét rõ ràng.",
+        "Có xu hướng coi trọng sự gắn bó lâu dài, chân thành và chung thuỷ.",
+        "Có xu hướng tiết chế, ít bộc lộ cảm xúc. Chăm sóc năng lượng bản thân đều đặn.",
+      ],
+    ],
+    [
+      "sn",
+      "ro",
+      [
+        "Có tài năng riêng và dễ được công nhận.",
+        "Hướng ngoại, nhiều hoài bão, thích mở rộng phạm vi hoạt động.",
+        "Tự tin, có chí tiến thủ và tài điều khiển, thích đứng ra dẫn dắt.",
+      ],
+    ],
+    [
+      "ss",
+      "xu-huong",
+      [
+        "Có xu hướng tiết chế, thận trọng, thích ổn định. Vận động và mở lòng nhiều hơn sẽ thêm sinh khí.",
+        "Có xu hướng tiết chế, ít bộc lộ cảm xúc. Chăm sóc năng lượng bản thân đều đặn.",
+      ],
+    ],
+    [
+      "st",
+      "ro",
+      [
+        "Có tài năng riêng và dễ được công nhận.",
+        "Giàu tưởng tượng và sáng tạo, thích khám phá, có duyên đi xa.",
+      ],
+    ],
+    [
+      "dx",
+      "xu-huong",
+      [
+        "Có xu hướng giàu tưởng tượng và sáng tạo, thích khám phá, có duyên đi xa.",
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Luận giải > (i) 5 bàn tay mẫu cho ra kết quả không đổi 4`] = `
+{
+  "name": "Hai tay, có vân tay và dấu trên gò",
+  "res": {
+    "byTopic": {
+      "gt": {
+        "confidence": "xu-huong",
+        "ids": [
+          "TD06",
+        ],
+      },
+      "sn": {
+        "confidence": "ro",
+        "ids": [
+          "V16",
+          "SD09",
+          "SD10",
+        ],
+      },
+      "st": {
+        "confidence": "ro",
+        "ids": [
+          "TD03",
+          "DM06",
+        ],
+      },
+      "tc": {
+        "confidence": "ro",
+        "ids": [
+          "H02",
+          "TD16",
+          "F10",
+        ],
+      },
+      "tcm": {
+        "confidence": "xu-huong",
+        "ids": [
+          "TAM02",
+        ],
+      },
+      "tt": {
+        "confidence": "ro",
+        "ids": [
+          "H02",
+          "TD03",
+          "TD06",
+        ],
+      },
+    },
+    "compare": {
+      "growing": [
+        "V16",
+        "SD09",
+        "SD10",
+        "TD06",
+        "TD16",
+        "DM06",
+        "G-moc.star",
+      ],
+      "latent": [
+        "P01",
+        "SD02",
+        "TD05",
+        "TAM01",
+        "DM02",
+      ],
+      "steady": [
+        "H02",
+        "TD03",
+      ],
+    },
+    "sections": [
+      {
+        "ids": [
+          "H02",
+        ],
+        "key": "tong-quan",
+      },
+      {
+        "ids": [
+          "F10",
+          "T03",
+          "V16",
+        ],
+        "key": "ngon",
+      },
+      {
+        "ids": [
+          "SD09",
+          "SD10",
+          "TD03",
+          "TD06",
+          "TD16",
+          "TAM02",
+          "DM06",
+        ],
+        "key": "duong-chinh",
+      },
+      {
+        "ids": [
+          "G-moc.star",
+        ],
+        "key": "go-dau",
+      },
+    ],
+  },
+  "topics": [
+    [
+      "tc",
+      "ro",
+      [
+        "Có nghị lực và óc khoa học kỹ thuật, thích hiểu tận gốc vấn đề trước khi làm.",
+        "Độc lập, tự tin, tự quyết, dám nghĩ dám làm.",
+        "Độc lập, có chính kiến, nội tâm sâu nên người khác cần thời gian để hiểu.",
+      ],
+    ],
+    [
+      "tt",
+      "ro",
+      [
+        "Có nghị lực và óc khoa học kỹ thuật, thích hiểu tận gốc vấn đề trước khi làm.",
+        "Sáng tạo, giàu tưởng tượng.",
+        "Dễ thích nghi, hoà hợp với nhiều kiểu người.",
+      ],
+    ],
+    [
+      "tcm",
+      "xu-huong",
+      [
+        "Có xu hướng điềm tĩnh, tự trọng, lý tưởng cao trong tình cảm; chậm bộc lộ nên dễ bị hiểu là lạnh.",
+      ],
+    ],
+    [
+      "sn",
+      "ro",
+      [
+        "Thời trẻ nhiều thử thách nhưng không bi quan; công sức bỏ ra càng nhiều, thành quả về sau càng lớn.",
+        "Cầu tiến, chăm chỉ, nỗ lực được cấp trên ghi nhận; mọi việc dễ suôn sẻ.",
+        "Nỗ lực bền bỉ đem lại danh dự.",
+      ],
+    ],
+    [
+      "gt",
+      "xu-huong",
+      [
+        "Có xu hướng dễ thích nghi, hoà hợp với nhiều kiểu người.",
+      ],
+    ],
+    [
+      "st",
+      "ro",
+      [
+        "Sáng tạo, giàu tưởng tượng.",
+        "Thành quả đến nhờ nỗ lực bản thân, thuận với lĩnh vực sáng tạo, văn chương.",
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Luận giải > (i) 5 bàn tay mẫu cho ra kết quả không đổi 5`] = `
+{
+  "name": "Nhiều điểm cần lưu ý",
+  "res": {
+    "byTopic": {
+      "gt": {
+        "confidence": "xu-huong",
+        "ids": [
+          "T02",
+        ],
+      },
+      "sn": {
+        "confidence": "xu-huong",
+        "ids": [
+          "H07",
+          "TD19",
+          "DM09",
+        ],
+      },
+      "ss": {
+        "confidence": "xu-huong",
+        "ids": [
+          "SD05",
+        ],
+      },
+      "st": {
+        "confidence": "xu-huong",
+        "ids": [
+          "M15",
+        ],
+      },
+      "tc": {
+        "confidence": "xu-huong",
+        "ids": [
+          "H07",
+          "T02",
+        ],
+      },
+      "tcm": {
+        "confidence": "ro",
+        "ids": [
+          "TAM09",
+          "TAM10",
+          "TAM11",
+        ],
+      },
+      "tt": {
+        "confidence": "ro",
+        "ids": [
+          "TD19",
+          "TD12",
+          "TD13",
+        ],
+      },
+    },
+    "sections": [
+      {
+        "ids": [
+          "H07",
+        ],
+        "key": "tong-quan",
+      },
+      {
+        "ids": [
+          "T02",
+        ],
+        "key": "ngon",
+      },
+      {
+        "ids": [
+          "SD05",
+          "TD12",
+          "TD13",
+          "TD19",
+          "TAM09",
+          "TAM10",
+          "TAM11",
+          "DM09",
+        ],
+        "key": "duong-chinh",
+      },
+      {
+        "ids": [
+          "HN09",
+        ],
+        "key": "duong-phu",
+      },
+      {
+        "ids": [
+          "M05",
+          "M15",
+        ],
+        "key": "go-dau",
+      },
+    ],
+  },
+  "topics": [
+    [
+      "tc",
+      "xu-huong",
+      [
+        "Có xu hướng đa năng, linh hoạt, làm được nhiều việc. Chọn một hướng chính sẽ phát huy tốt nhất.",
+        "Có xu hướng nhiều mơ ước, giỏi tạo thiện cảm. Cần một người bạn thực tế đồng hành.",
+      ],
+    ],
+    [
+      "tt",
+      "ro",
+      [
+        "Giai đoạn đổi cách nghĩ, đổi hướng học tập hoặc nghề nghiệp.",
+        "Dễ phân tán khi áp lực. Cho trí óc nghỉ ngơi định kỳ.",
+        "Giai đoạn suy nghĩ nhiều, căng thẳng; sẽ nhẹ đi khi bớt ôm việc.",
+      ],
+    ],
+    [
+      "tcm",
+      "ro",
+      [
+        "Tận tâm với người mình thương nhưng dễ cả tin; giữ chút tỉnh táo.",
+        "Cảm xúc nhiều thăng trầm. Tập gọi tên cảm xúc trước khi phản ứng.",
+        "Một giai đoạn tình cảm vướng mắc hoặc chưa được ủng hộ; thường qua đi.",
+      ],
+    ],
+    [
+      "sn",
+      "xu-huong",
+      [
+        "Có xu hướng đa năng, linh hoạt, làm được nhiều việc. Chọn một hướng chính sẽ phát huy tốt nhất.",
+        "Có xu hướng giai đoạn đổi cách nghĩ, đổi hướng học tập hoặc nghề nghiệp.",
+        "Có xu hướng đa năng, nhiều lần đổi việc hoặc đổi hướng.",
+      ],
+    ],
+    [
+      "ss",
+      "xu-huong",
+      [
+        "Có xu hướng giai đoạn hay lo nghĩ, năng lượng lúc lên lúc xuống. Ưu tiên chăm sóc bản thân.",
+      ],
+    ],
+    [
+      "gt",
+      "xu-huong",
+      [
+        "Có xu hướng nhiều mơ ước, giỏi tạo thiện cảm. Cần một người bạn thực tế đồng hành.",
+      ],
+    ],
+    [
+      "st",
+      "xu-huong",
+      [
+        "Có xu hướng dễ mơ mộng xa thực tế; ghi lại ý tưởng và chọn một cái để làm.",
+      ],
+    ],
+  ],
+}
+`;

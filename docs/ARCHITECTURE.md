@@ -829,7 +829,7 @@ Câu dính từ cấm: `text` rỗng, `caption` là chữ gốc kèm lời "(Ph�
 
 ## 13. Xem chỉ tay (chốt cách nhập liệu 05/11/2026)
 
-Căn cứ nội dung: `docs/CHI-TAY.md`, `docs/palm-content.vi.json`. Thứ tự bước: `docs/PROMPT-KIT-CHI-TAY.md`. Mục này là quyết định cho bước 3B.1, các ý còn lại của 3B.1 sẽ bổ sung khi có số đo.
+Căn cứ nội dung: `docs/CHI-TAY.md`, `src/content/palm/palm-content.vi.json`. Thứ tự bước: `docs/PROMPT-KIT-CHI-TAY.md`. Mục này là quyết định cho bước 3B.1, các ý còn lại của 3B.1 sẽ bổ sung khi có số đo.
 
 **Cách nhập liệu: máy đo trước, phần còn lại hỏi bằng câu ngắn** (phương án (c) của kit, có giới hạn).
 - **Người dùng chạm điểm, máy bám rãnh (chủ dự án quyết 09/11/2026, thay cho cách kéo vòng tròn ngày 06/11):** với mỗi đường, người dùng chạm đầu và cuối đường, Sinh đạo chạm thêm 1–2 điểm ở chỗ cong; máy tìm đường rẻ nhất theo rãnh chỉ tay giữa các điểm (`spike/chitay/livewire.ts`). Lệch chỗ nào thì chạm thêm điểm ở đó; có Lùi, Xoá đường, giữ để xem ảnh gốc. Nét máy tự dò chỉ hiện mờ làm gợi ý. Độ dài, độ cong, nơi dừng đo từ nét đã xác nhận. Lý do: máy tự dò không đủ đúng, còn kéo 6 vòng tròn mỗi đường mất 1,5–3 phút một ảnh.
@@ -924,6 +924,7 @@ Luồng: **tay nào → chụp → chạm 4 đường → xác nhận số đo �
 - **`src/core/palm/` (thuần TS, không đụng canvas):** `measurePalm(lines, landmarks)` đổi nét đã xác nhận và 21 điểm khớp chuẩn hoá thành ID đặc điểm (chuyển từ `spike/chitay/classify.ts`, giữ các đường đo ảo); `analyzePalm(input: PalmInput): PalmResult` theo CHI-TAY §14.2: ánh xạ câu trả lời sang ID, tra V01–V30 khi có vân tay, gom theo mục, tổng kết theo chủ đề với ngưỡng `xu-huong` / `ro`, so sánh hai tay, câu kết cố định. Kiểu `PalmInput`, `PalmResult` giữ như CHI-TAY §14.1, thêm `measured: Record<string, string | null>` cho phần máy đo.
 - **`src/features/palm/vision/` (phụ thuộc trình duyệt):** nạp MediaPipe lười, dò khớp, bản đồ rãnh, bám rãnh (`livewire.ts`), khung xem. Đây là UI, không vào `src/core` vì cần canvas và WASM.
 - **Ngưỡng tạm** (ví dụ gò Thái Âm 0,5, ngưỡng chạm 0,032) chuyển nguyên từ bản thử, ghi chú là chưa kiểm chứng trên nhiều tay.
+- **Đã làm ở 3B.2:** engine nhận phần mô tả đặc điểm (`PalmMeta`: nhóm, chủ đề, mức, trọng số) do content truyền vào, nên `src/core` không phụ thuộc câu chữ. Q21 tách thành `Q21-huong` và `Q21-dai`. Ô ma trận gò × dấu không có dữ liệu thì bỏ qua, chưa dùng câu chung §9.1 vì dấu đặc biệt để bản sau.
 
 #### 6. Lưu trữ
 

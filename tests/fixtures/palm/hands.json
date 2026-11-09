@@ -1,0 +1,45 @@
+[
+  {
+    "name": "Tay vuông, đường rõ, một tay",
+    "input": {
+      "dominant": "right", "method": "dominant",
+      "current": { "answers": { "Q02": "H01", "Q04": "can-doi", "Q09": "vua", "Q10": "F08", "Q11": "ngang", "Q12": "can-doi", "Q14": "T01", "Q17": "SD02", "Q18": "SD01", "Q20": "TD16", "Q21-huong": "TD02", "Q21-dai": "TD05", "Q23": "TAM01", "Q25": "DM02", "Q26": "DM01" } }
+    }
+  },
+  {
+    "name": "Tay thon, nhiều câu Không rõ",
+    "input": {
+      "dominant": "left", "method": "dominant",
+      "current": { "answers": { "Q02": "H03", "Q04": "H10", "Q09": null, "Q10": "F09", "Q11": null, "Q12": "F16", "Q14": "T02", "Q17": "vua", "Q20": "TD15", "Q21-huong": "TD04", "Q21-dai": "TD06", "Q23": null, "Q25": "DM15" } }
+    }
+  },
+  {
+    "name": "Bàn tay chữ nhất, có gò và đường phụ",
+    "input": {
+      "dominant": "right", "method": "dominant",
+      "current": { "answers": { "Q02": "H04", "Q04": "H11", "Q14": "T04", "Q17": "SD03", "Q20": "C02", "Q23": "C05", "Q25": "DM03", "Q27": "TDU01", "Q28": "HN01", "Q30": ["M04", "M14", "M02"], "Q32": "C06" } }
+    }
+  },
+  {
+    "name": "Hai tay, có vân tay và dấu trên gò",
+    "input": {
+      "dominant": "right", "method": "dominant",
+      "current": {
+        "answers": { "Q02": "H02", "Q04": "can-doi", "Q10": "F10", "Q14": "T03", "Q17": "vua", "Q20": "TD16", "Q21-huong": "TD03", "Q21-dai": "TD06", "Q23": "TAM02", "Q25": "DM06", "Q19": ["SD09", "SD10"] },
+        "prints": ["whorl", "loop", "loop", "loop", "loop"],
+        "marks": [{ "mount": "moc", "type": "star" }, { "mount": "kham", "type": "star" }]
+      },
+      "innate": {
+        "answers": { "Q02": "H02", "Q17": "SD02", "Q20": "TD15", "Q21-huong": "TD03", "Q21-dai": "TD05", "Q23": "TAM01", "Q25": "DM02" },
+        "prints": ["loop", "loop", "loop", "loop", "loop"]
+      }
+    }
+  },
+  {
+    "name": "Nhiều điểm cần lưu ý",
+    "input": {
+      "dominant": "right", "method": "dominant",
+      "current": { "answers": { "Q02": "H07", "Q14": "T02", "Q18": "SD05", "Q22": ["TD12", "TD13", "TD19"], "Q24": ["TAM09", "TAM10", "TAM11"], "Q26": "DM09", "Q28": "HN09", "Q30": ["M15", "M05"] } }
+    }
+  }
+]

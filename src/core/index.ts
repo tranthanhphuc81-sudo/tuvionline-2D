@@ -176,3 +176,6 @@ function summarize(solar: SolarDate, input: BirthCalcInput): QuickProfile {
     napam: na,
   };
 }
+
+// Xem chỉ tay (ARCHITECTURE mục 13.1): đo từ nét đã xác nhận và luận theo mã đặc điểm
+export * from './palm';
