@@ -832,7 +832,7 @@ Câu dính từ cấm: `text` rỗng, `caption` là chữ gốc kèm lời "(Ph�
 Căn cứ nội dung: `docs/CHI-TAY.md`, `docs/palm-content.vi.json`. Thứ tự bước: `docs/PROMPT-KIT-CHI-TAY.md`. Mục này là quyết định cho bước 3B.1, các ý còn lại của 3B.1 sẽ bổ sung khi có số đo.
 
 **Cách nhập liệu: máy đo trước, phần còn lại hỏi bằng câu ngắn** (phương án (c) của kit, có giới hạn).
-- **Người dùng chỉnh được đường (chủ dự án quyết 06/11/2026):** máy vẽ 3 đường bằng vài điểm kéo được, có khung phóng to, xem được ảnh gốc, đánh dấu chỗ đứt, có nút Giữ nguyên. Độ dài, độ cong, nơi dừng được đo lại từ đường đã chỉnh rồi mới luận. Lý do: ảnh thật có đường đứt, lệch, nét mờ mà máy khó đúng tuyệt đối; sửa trực tiếp trên ảnh của chính mình dễ hơn so với hình mẫu.
+- **Người dùng chạm điểm, máy bám rãnh (chủ dự án quyết 09/11/2026, thay cho cách kéo vòng tròn ngày 06/11):** với mỗi đường, người dùng chạm đầu và cuối đường, Sinh đạo chạm thêm 1–2 điểm ở chỗ cong; máy tìm đường rẻ nhất theo rãnh chỉ tay giữa các điểm (`spike/chitay/livewire.ts`). Lệch chỗ nào thì chạm thêm điểm ở đó; có Lùi, Xoá đường, giữ để xem ảnh gốc. Nét máy tự dò chỉ hiện mờ làm gợi ý. Độ dài, độ cong, nơi dừng đo từ nét đã xác nhận. Lý do: máy tự dò không đủ đúng, còn kéo 6 vòng tròn mỗi đường mất 1,5–3 phút một ảnh.
 - Lý do: nhiều người không tự tin khi tự so với hình mẫu, nên bỏ phương án (a), (b). Nhưng ảnh lòng bàn tay không trả lời được hết 32 câu ở CHI-TAY §11, nên không thể tự động hoàn toàn.
 - Máy đo được khá chắc: Q04, Q08–Q12. Cần số đo mới biết: Q17, Q20, Q21, Q23. Định mạng (Q25) máy vẽ gợi ý, người dùng chỉnh và trả lời nơi bắt đầu, có lựa chọn "Không có". Khó, chưa làm ở bản đầu: Q18, Q19, Q22, Q24, Q26–Q29, Q32. Phải hỏi: Q01–Q03, Q05–Q07, Q13–Q16, Q30, Q31.
 - Máy vẽ đường và đặc điểm đã đo lên ảnh để người dùng xác nhận. Không chắc thì để trống, không đoán.
@@ -847,7 +847,14 @@ Căn cứ nội dung: `docs/CHI-TAY.md`, `docs/palm-content.vi.json`. Thứ tự
 - Sau khi chỉnh đường, gần như không phải sửa dòng đo nào (có thể đẹp hơn thực tế vì đáp án điền sẵn).
 - Tín hiệu "máy chắc" không phân biệt được đúng sai, không dùng.
 
-**Hệ quả:** không luận từ nét chưa được người dùng xác nhận; kéo chỉnh là bắt buộc, không có lựa chọn bỏ qua. Làm vào app chỉ khi thử trên điện thoại đạt: thao tác bằng ngón tay được, chỉnh xong trong khoảng 2–3 phút, tốc độ dưới 5 giây trên S25 Ultra. Trang thử: `spike/chitay/phone.html`, đăng ở `/chitay-thu/phone.html` trên Cloudflare, không vào APK. Điểm chấm và đường chuẩn trên ảnh thật giữ ở `spike/chitay/truth/`, không đưa lên repo.
+**Hệ quả:** không luận từ nét chưa được người dùng xác nhận, không có lựa chọn bỏ qua bước chạm.
+
+**Kết quả cách chạm điểm (09/11/2026), đạt cửa kiểm chứng mới:**
+- Giả lập trên 15 đường chuẩn, mỗi lần chạm lệch tới 10px: chạm 3 điểm thì lệch trung vị Tâm 3,3, Trí 2,6, Sinh 4,7, Định 2,9 px, cả 3 đường chính tới 12px ở 9/15 ảnh; chạm 4 điểm thì 13/15. Sinh đạo cần 4 điểm, chạm 2 điểm thì nét đi tắt.
+- Chủ dự án thử trên Samsung Galaxy S25 Ultra: máy xử lý ảnh 0,2–0,3 giây; 3 lần dùng cách chạm mất 68, 48, 39 giây một ảnh (12–15 lần chạm), nhanh dần khi quen tay. Hai lần còn lại (226 và 122 giây, 80 và 47 lần thao tác) nhiều khả năng là bản kéo vòng tròn trước đó, vì nhật ký trên máy lưu chung.
+- Tiêu chí mới: chỉnh xong một bàn tay dưới khoảng 1 phút với người đã quen, máy xử lý dưới 5 giây trên S25 Ultra, nét bám đúng sau vài lần chạm. Chưa thử với người dùng mới và máy Android tầm thấp.
+
+**Còn phải quyết trước khi làm (bước 3B.1):** vị trí trong điều hướng, bố cục 360px, lưu kết quả và ảnh, câu hỏi vẫn phải hỏi (ngón tay, nét đứt, nhánh, gò), xác nhận giấy phép file mô hình trước khi đóng gói vào APK. Trang thử: `spike/chitay/phone.html`, đăng ở `/chitay-thu/phone.html` trên Cloudflare, không vào APK. Điểm chấm và đường chuẩn trên ảnh thật giữ ở `spike/chitay/truth/`, không đưa lên repo.
 
 **Ảnh tay:** bản đầu đề xuất không lưu ảnh, chỉ lưu kết quả; chủ dự án chưa chốt.
 
