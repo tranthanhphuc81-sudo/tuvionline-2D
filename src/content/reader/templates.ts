@@ -1,6 +1,6 @@
 /* Lời của thầy và đạo đồng (ARCHITECTURE.md mục 12.6–12.8). Mẫu câu có biến, KHÔNG sinh tự do.
    Giọng mộc, từ tốn, câu ngắn. Không hù doạ, không hứa hẹn, không phán quyết, không gợi ý lễ bái hay mua bán.
-   Biến: {goi} tiếng gọi người xem · {cuaAi} "của con" hoặc "của Lan" · {cung} {sao} {nhatChu} {hao} {huong} {duong}. */
+   Biến: {goi} tiếng gọi người xem · {ta}/{Ta} người đọc tự xưng (theo nhân vật đã chọn) · {cuaAi} "của con" hoặc "của Lan" · {cung} {sao} {nhatChu} {hao} {huong} {duong}. */
 export const CULTURE_LINE = 'Số là tham khảo, đức năng thắng số.';
 
 export type ReaderTool = 'tuvi' | 'battu' | 'luchao' | 'battrach' | 'laban' | 'napam' | 'tonghop' | 'chitay';
@@ -10,69 +10,69 @@ const C = CULTURE_LINE;
 export const TOOL_LINES: Record<ReaderTool, { open: readonly string[]; close: readonly string[]; cells: readonly string[]; sections: readonly string[] }> = {
   tuvi: {
     open: [
-      `Thầy chào {goi}. Mình cùng xem lá số Tử Vi {cuaAi}. ${C}`,
-      `{goi} ngồi xuống đây, thầy mở lá số Tử Vi {cuaAi}. ${C}`,
+      `{Ta} chào {goi}. Mình cùng xem lá số Tử Vi {cuaAi}. ${C}`,
+      `{goi} ngồi xuống đây, {ta} mở lá số Tử Vi {cuaAi}. ${C}`,
       `Lá số Tử Vi {cuaAi} đây rồi. Mình xem từ tốn thôi. ${C}`,
     ],
     close: [
-      `Lá số thầy đọc đến đây. Chỗ nào chưa rõ thì mở lại xem từng cung. ${C}`,
-      `Thầy đọc xong lá số rồi. Xem để hiểu mình hơn, không phải để lo. ${C}`,
+      `Lá số {ta} đọc đến đây. Chỗ nào chưa rõ thì mở lại xem từng cung. ${C}`,
+      `{Ta} đọc xong lá số rồi. Xem để hiểu mình hơn, không phải để lo. ${C}`,
       `Đọc đến đây là đủ cho hôm nay. Nhớ lấy một câu thôi: ${C}`,
     ],
-    cells: ['Trước hết, thầy điểm qua các chỉ số trên lá số.', 'Mình nhìn các chỉ số chính đã.'],
-    sections: ['Giờ thầy gom lại thành mấy ý chính.', 'Nhìn chung cả lá số, thầy đọc phần tổng kết.'],
+    cells: ['Trước hết, {ta} điểm qua các chỉ số trên lá số.', 'Mình nhìn các chỉ số chính đã.'],
+    sections: ['Giờ {ta} gom lại thành mấy ý chính.', 'Nhìn chung cả lá số, {ta} đọc phần tổng kết.'],
   },
   battu: {
     open: [
-      `Thầy chào {goi}. Mình xem bốn trụ Bát Tự {cuaAi}. ${C}`,
-      `Bốn trụ năm, tháng, ngày, giờ {cuaAi} thầy đã xếp xong. ${C}`,
+      `{Ta} chào {goi}. Mình xem bốn trụ Bát Tự {cuaAi}. ${C}`,
+      `Bốn trụ năm, tháng, ngày, giờ {cuaAi} {ta} đã xếp xong. ${C}`,
       `{goi} xem đây, Bát Tự {cuaAi} có tám chữ. Mình đọc từng chữ một. ${C}`,
     ],
     close: [
-      `Bát Tự thầy đọc đến đây. Tám chữ chỉ là một cách nhìn. ${C}`,
-      `Thầy đọc xong bốn trụ rồi. Hành nào thiếu thì mình bồi dần trong nếp sống. ${C}`,
+      `Bát Tự {ta} đọc đến đây. Tám chữ chỉ là một cách nhìn. ${C}`,
+      `{Ta} đọc xong bốn trụ rồi. Hành nào thiếu thì mình bồi dần trong nếp sống. ${C}`,
       `Đọc đến đây thôi. Giữ lòng cho yên là được. ${C}`,
     ],
     cells: ['Trước hết là mấy chỉ số của bốn trụ.', 'Mình nhìn tóm tắt bốn trụ đã.'],
-    sections: ['Giờ thầy nói về vượng suy và cách cân bằng.', 'Gom cả tám chữ lại, thầy đọc phần tổng kết.'],
+    sections: ['Giờ {ta} nói về vượng suy và cách cân bằng.', 'Gom cả tám chữ lại, {ta} đọc phần tổng kết.'],
   },
   luchao: {
     open: [
-      `Thầy chào {goi}. Quẻ gieo xong rồi, mình cùng đọc. ${C}`,
+      `{Ta} chào {goi}. Quẻ gieo xong rồi, mình cùng đọc. ${C}`,
       `Quẻ này ứng với việc {goi} đang hỏi. Mình xem từng hào. ${C}`,
-      `Sáu hào đã đủ. {goi} lắng lòng, thầy đọc quẻ. ${C}`,
+      `Sáu hào đã đủ. {goi} lắng lòng, {ta} đọc quẻ. ${C}`,
     ],
     close: [
-      `Quẻ thầy đọc đến đây. Quẻ chỉ gợi ý, việc vẫn do mình quyết. ${C}`,
+      `Quẻ {ta} đọc đến đây. Quẻ chỉ gợi ý, việc vẫn do mình quyết. ${C}`,
       `Đọc xong quẻ rồi. Cân nhắc kỹ rồi hãy làm. ${C}`,
-      `Thầy dừng ở đây. Một quẻ chỉ soi được một lúc thôi. ${C}`,
+      `{Ta} dừng ở đây. Một quẻ chỉ soi được một lúc thôi. ${C}`,
     ],
     cells: ['Trước hết là tên quẻ và ngày xem.', 'Mình nhìn thông tin của quẻ đã.'],
-    sections: ['Giờ thầy luận theo việc {goi} hỏi.', 'Xem hào Dụng Thần và sự vượng suy, thầy đọc phần luận.'],
+    sections: ['Giờ {ta} luận theo việc {goi} hỏi.', 'Xem hào Dụng Thần và sự vượng suy, {ta} đọc phần luận.'],
   },
   battrach: {
     open: [
-      `Thầy chào {goi}. Mình xem Bát Trạch {cuaAi}. ${C}`,
-      `Mệnh Quái {cuaAi} thầy đã tính xong. Mình xem hướng hợp. ${C}`,
-      `{goi} ngồi đây, thầy chỉ cho các hướng theo Bát Trạch. ${C}`,
+      `{Ta} chào {goi}. Mình xem Bát Trạch {cuaAi}. ${C}`,
+      `Mệnh Quái {cuaAi} {ta} đã tính xong. Mình xem hướng hợp. ${C}`,
+      `{goi} ngồi đây, {ta} chỉ cho các hướng theo Bát Trạch. ${C}`,
     ],
     close: [
       `Phần Bát Trạch đến đây. Nhà cửa đổi được gì thì đổi, đừng quá bận lòng. ${C}`,
-      `Thầy đọc xong các hướng rồi. Thoáng và sáng vẫn là tốt nhất. ${C}`,
+      `{Ta} đọc xong các hướng rồi. Thoáng và sáng vẫn là tốt nhất. ${C}`,
       `Đọc đến đây thôi. Ở sao cho an là được. ${C}`,
     ],
     cells: ['Trước hết là Mệnh Quái và nhóm mệnh.', 'Mình nhìn các chỉ số chính đã.'],
-    sections: ['Giờ thầy đọc về từng hướng.', 'Thầy gom lại cách dùng các hướng này.'],
+    sections: ['Giờ {ta} đọc về từng hướng.', '{Ta} gom lại cách dùng các hướng này.'],
   },
   laban: {
     open: [
-      `Thầy chào {goi}. Mình cùng xem hướng trên la bàn. ${C}`,
-      `{goi} giữ máy cho phẳng, thầy đọc hướng đang chỉ. ${C}`,
+      `{Ta} chào {goi}. Mình cùng xem hướng trên la bàn. ${C}`,
+      `{goi} giữ máy cho phẳng, {ta} đọc hướng đang chỉ. ${C}`,
       `La bàn đã chỉ hướng rồi. Mình xem hướng này ra sao. ${C}`,
     ],
     close: [
-      `Hướng này thầy đọc đến đây. Muốn xem hướng khác thì xoay máy rồi gọi thầy. ${C}`,
-      `Thầy đọc xong rồi. Thoáng và sáng vẫn là tốt nhất. ${C}`,
+      `Hướng này {ta} đọc đến đây. Muốn xem hướng khác thì xoay máy rồi gọi {ta}. ${C}`,
+      `{Ta} đọc xong rồi. Thoáng và sáng vẫn là tốt nhất. ${C}`,
       `Đọc đến đây thôi. Hướng chỉ là một phần, ở sao cho an mới là chính. ${C}`,
     ],
     cells: ['Trước hết là hướng và quẻ của nó.', 'Mình nhìn hướng đang chỉ đã.'],
@@ -81,45 +81,45 @@ export const TOOL_LINES: Record<ReaderTool, { open: readonly string[]; close: re
   },
   napam: {
     open: [
-      `Thầy chào {goi}. Mình xem Nạp Âm. ${C}`,
+      `{Ta} chào {goi}. Mình xem Nạp Âm. ${C}`,
       `Nạp Âm là một cách gọi năm sinh qua Ngũ hành. Mình cùng xem. ${C}`,
-      `Thầy đọc phần Nạp Âm cho {goi} nghe. ${C}`,
+      `{Ta} đọc phần Nạp Âm cho {goi} nghe. ${C}`,
     ],
     close: [
-      `Nạp Âm thầy đọc đến đây. Chuyện hợp nhau cốt ở lòng người. ${C}`,
+      `Nạp Âm {ta} đọc đến đây. Chuyện hợp nhau cốt ở lòng người. ${C}`,
       `Đọc xong rồi. Tuổi chỉ là một phần, cách sống mới là chính. ${C}`,
-      `Thầy dừng ở đây. Xem để hiểu nhau hơn thôi. ${C}`,
+      `{Ta} dừng ở đây. Xem để hiểu nhau hơn thôi. ${C}`,
     ],
     cells: ['Trước hết là tên Nạp Âm và năm sinh.', 'Mình nhìn tóm tắt đã.'],
-    sections: ['Giờ thầy đọc phần giải thích.', 'Thầy gom lại mấy ý chính.'],
+    sections: ['Giờ {ta} đọc phần giải thích.', '{Ta} gom lại mấy ý chính.'],
   },
   tonghop: {
     open: [
-      `Thầy chào {goi}. Mình gom cả bốn hệ thống lại xem {cuaAi}. ${C}`,
-      `Thầy đọc phần tổng hợp {cuaAi}. Mỗi hệ thống một góc nhìn. ${C}`,
-      `{goi} ngồi đây, thầy đọc sổ tổng hợp {cuaAi}. ${C}`,
+      `{Ta} chào {goi}. Mình gom cả bốn hệ thống lại xem {cuaAi}. ${C}`,
+      `{Ta} đọc phần tổng hợp {cuaAi}. Mỗi hệ thống một góc nhìn. ${C}`,
+      `{goi} ngồi đây, {ta} đọc sổ tổng hợp {cuaAi}. ${C}`,
     ],
     close: [
-      `Sổ tổng hợp thầy đọc đến đây. Chỗ nào muốn rõ hơn thì mở từng món trên án thư. ${C}`,
-      `Thầy đọc xong rồi. Giữ điều hay, bỏ điều chưa hợp. ${C}`,
+      `Sổ tổng hợp {ta} đọc đến đây. Chỗ nào muốn rõ hơn thì mở từng món trên án thư. ${C}`,
+      `{Ta} đọc xong rồi. Giữ điều hay, bỏ điều chưa hợp. ${C}`,
       `Đọc đến đây là đủ. Ngày mai vẫn do mình làm ra. ${C}`,
     ],
-    cells: ['Trước hết, thầy điểm qua các chỉ số.', 'Mình nhìn tóm tắt đã.'],
-    sections: ['Giờ thầy đọc từng phần.', 'Thầy đọc tiếp phần tổng hợp.'],
+    cells: ['Trước hết, {ta} điểm qua các chỉ số.', 'Mình nhìn tóm tắt đã.'],
+    sections: ['Giờ {ta} đọc từng phần.', '{Ta} đọc tiếp phần tổng hợp.'],
   },
   chitay: {
     open: [
-      `Thầy chào {goi}. Mình cùng xem bàn tay {cuaAi}. ${C}`,
-      `Bàn tay là tấm gương soi lại mình. Thầy đọc tay {cuaAi}. ${C}`,
-      `Thầy thấy các đường chỉ {cuaAi} rồi. Mình đọc từ từ nhé. ${C}`,
+      `{Ta} chào {goi}. Mình cùng xem bàn tay {cuaAi}. ${C}`,
+      `Bàn tay là tấm gương soi lại mình. {Ta} đọc tay {cuaAi}. ${C}`,
+      `{Ta} thấy các đường chỉ {cuaAi} rồi. Mình đọc từ từ nhé. ${C}`,
     ],
     close: [
-      `Tay thầy đọc đến đây. Đường chỉ đổi theo cách mình sống, sáu tháng một năm xem lại cũng được. ${C}`,
-      `Thầy đọc xong rồi. Giữ điều hay, sửa điều chưa hợp, tay cũng đổi theo. ${C}`,
+      `Tay {ta} đọc đến đây. Đường chỉ đổi theo cách mình sống, sáu tháng một năm xem lại cũng được. ${C}`,
+      `{Ta} đọc xong rồi. Giữ điều hay, sửa điều chưa hợp, tay cũng đổi theo. ${C}`,
       `Đọc đến đây thôi. Tay là của mình, đường đi cũng do mình. ${C}`,
     ],
-    cells: ['Trước hết thầy tóm lại mấy ý chính.', 'Mình nghe phần tóm tắt đã.'],
-    sections: ['Giờ thầy đọc kỹ từng phần.', 'Thầy đọc tiếp từng phần trên tay.'],
+    cells: ['Trước hết {ta} tóm lại mấy ý chính.', 'Mình nghe phần tóm tắt đã.'],
+    sections: ['Giờ {ta} đọc kỹ từng phần.', '{Ta} đọc tiếp từng phần trên tay.'],
   },
 };
 
@@ -129,8 +129,8 @@ export const LEADS = {
   battuNhatChu: ['{goi} xem trụ ngày, Nhật Chủ là {nhatChu}.', 'Chữ chính là Nhật Chủ {nhatChu}, nằm ở trụ ngày.'],
   luchaoThe: ['{goi} xem hào {hao}, đó là hào Thế.', 'Hào Thế nằm ở hào {hao}.'],
   battrachHuong: ['{goi} xem hướng {huong}, sao {sao}, là hướng tốt nhất.', 'Hướng hợp nhất là {huong}, ứng với sao {sao}.'],
-  labanHuong: ['Hướng {huong} thầy tô sáng trên vòng la bàn đây.', '{goi} nhìn trên vòng la bàn, hướng {huong} đang sáng lên.'],
-  chitayDuong: ['{goi} xem {duong}, thầy tô sáng trên tay đây.', 'Đây là {duong}.'],
+  labanHuong: ['Hướng {huong} {ta} tô sáng trên vòng la bàn đây.', '{goi} nhìn trên vòng la bàn, hướng {huong} đang sáng lên.'],
+  chitayDuong: ['{goi} xem {duong}, {ta} tô sáng trên tay đây.', 'Đây là {duong}.'],
 } as const;
 
 export const NO_SPEECH_LINE = '(Phần này {goi} xem chữ trên màn hình)';
@@ -138,8 +138,8 @@ export const NO_SPEECH_LINE = '(Phần này {goi} xem chữ trên màn hình)';
 /** Lời đạo đồng. Đạo đồng xưng "con", gọi người vào là "khách". */
 export const DONG_LINES = {
   gate: ['Con chào khách. Mời khách vào.', 'Khách đến rồi ạ. Mời khách đi lối này.', 'Con mở cổng rồi, mời khách vào ạ.'],
-  corridor: ['Thầy đang đợi trong tĩnh thất, mời khách.', 'Qua hành lang này là tới chỗ thầy ạ.', 'Mời khách vào, thầy ở trong ạ.'],
-  intro: ['Con chào khách. Thầy nhờ con hỏi vài điều để lập hồ sơ. Mọi thứ chỉ lưu trên máy này ạ.'],
+  corridor: ['{Ta} đang đợi trong tĩnh thất, mời khách.', 'Qua hành lang này là tới chỗ {ta} ạ.', 'Mời khách vào, {ta} ở trong ạ.'],
+  intro: ['Con chào khách. {Ta} nhờ con hỏi vài điều để lập hồ sơ. Mọi thứ chỉ lưu trên máy này ạ.'],
   name: ['Dạ, con xin hỏi họ tên hoặc biệt danh ạ?'],
   gender: ['Dạ, hồ sơ này là của nam hay nữ ạ?'],
   date: ['Dạ, ngày tháng năm sinh là khi nào ạ?'],
@@ -149,12 +149,12 @@ export const DONG_LINES = {
 /** Lời chào ở Tĩnh thất khi chưa đọc gì. */
 export const STUDY_LINES = {
   self: [
-    'Thầy chào {goi}. Mời {goi} chọn một món trên án thư, hoặc bấm "Thầy đọc" để nghe phần tổng hợp.',
-    '{goi} đến rồi đấy à. Muốn xem gì thì chạm vào món đó, hoặc bấm "Thầy đọc".',
+    '{Ta} chào {goi}. Mời {goi} chọn một món trên án thư, hoặc bấm "{Ta} đọc" để nghe phần tổng hợp.',
+    '{goi} đến rồi đấy à. Muốn xem gì thì chạm vào món đó, hoặc bấm "{Ta} đọc".',
   ],
   other: [
-    'Thầy chào {goi}. Hồ sơ của {ten} đây. Chọn một món trên án thư, hoặc bấm "Thầy đọc".',
-    'Mình đang xem hồ sơ của {ten}. Chạm vào món muốn xem, hoặc bấm "Thầy đọc".',
+    '{Ta} chào {goi}. Hồ sơ của {ten} đây. Chọn một món trên án thư, hoặc bấm "{Ta} đọc".',
+    'Mình đang xem hồ sơ của {ten}. Chạm vào món muốn xem, hoặc bấm "{Ta} đọc".',
   ],
 } as const;
 
@@ -162,7 +162,9 @@ export const pick = <T,>(list: readonly T[], seed: number): T => list[Math.abs(s
 
 /** Thay biến. Viết hoa chữ đầu câu vì {goi} có thể đứng đầu câu ("Con xem…"). */
 export function fill(t: string, vars: Record<string, string | number>): string {
-  return t.replace(/\{(\w+)\}/g, (_, k: string) => String(vars[k] ?? '')).replace(/(^|[.!?]\s+)(\p{Ll})/gu, (_, a: string, b: string) => a + b.toUpperCase());
+  // {ta}: tiếng người đọc tự xưng (thầy, cô, bà…), {Ta} viết hoa; không truyền thì là "thầy"
+  const ta = String(vars.ta ?? 'thầy'), all: Record<string, string | number> = { ...vars, ta, Ta: ta.charAt(0).toLocaleUpperCase('vi') + ta.slice(1) };
+  return t.replace(/\{(\w+)\}/g, (_, k: string) => String(all[k] ?? '')).replace(/(^|[.!?]\s+)(\p{Ll})/gu, (_, a: string, b: string) => a + b.toUpperCase());
 }
 
 /** Mọi mẫu câu, để test quét. */

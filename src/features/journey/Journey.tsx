@@ -10,7 +10,8 @@ import { SceneView } from './SceneEngine';
 import { SCENES, preloadScene } from './scenes';
 import { IncenseControl } from './incense';
 import { Character } from '../reader/Character';
-import { DONG_LINES, pick } from '../../content/reader/templates';
+import { DONG_LINES, fill, pick } from '../../content/reader/templates';
+import { useReader } from '../reader/hooks';
 import s from './journey.module.css';
 
 const FADE_MS = 400;
@@ -18,6 +19,7 @@ const SWIPE_PX = 40;
 const COUNT = SCENES.length;
 
 export function Journey({ plan, sound = false, onDone }: { plan: Exclude<EntryPlan, 'none'>; sound?: boolean; onDone(): void }) {
+  const { persona } = useReader();
   const [st, setSt] = useState(() => startJourney(plan, COUNT));
   const startY = useRef<number | null>(null);
   const audio = useRef<AmbientPlayer | null>(null);
@@ -71,7 +73,7 @@ export function Journey({ plan, sound = false, onDone }: { plan: Exclude<EntryPl
       <SceneView key={scene.id} scene={scene} ambience={ambience} durationMs={durationMs} animate={animate} />
       <button type="button" className={s.skip} onPointerUp={(e) => e.stopPropagation()} onClick={() => setSt((x) => skipJourney(x, COUNT))}>Bỏ qua</button>
       {plan === 'full' && (scene.id === 'gate' || scene.id === 'corridor') && <Character name="daodong" state={scene.id === 'gate' ? 'nod' : 'point'} className={s.dong} />}
-      {plan === 'full' && (scene.id === 'gate' || scene.id === 'corridor') && <p className={s.speech}>{pick(DONG_LINES[scene.id], new Date().getDate())}</p>}
+      {plan === 'full' && (scene.id === 'gate' || scene.id === 'corridor') && <p className={s.speech}>{fill(pick(DONG_LINES[scene.id], new Date().getDate()), { ta: persona.ta })}</p>}
       <div className={s.foot} onPointerUp={(e) => e.stopPropagation()}>
         {scene.interaction === 'incense' && plan === 'full' && <IncenseControl />}
         {scene.interaction === 'incense' && <button type="button" className={s.action} onClick={step}>Đi tiếp</button>}

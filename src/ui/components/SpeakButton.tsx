@@ -1,5 +1,5 @@
 import { useState, useSyncExternalStore } from 'react';
-import { thayVoice } from '../../features/reader/hooks';
+import { thayVoice, useReader } from '../../features/reader/hooks';
 import type { Cue } from '../../features/reader/script';
 import { SPEECH_NO_VOICE, chunkSpeech, speechFailedText } from '../../content/speech';
 import { isNative } from '../../platform/native';
@@ -13,6 +13,7 @@ export function SpeakButton({ id, getText, getCues }: { id: string; getText?(): 
   const pitch = useApp((x) => x.settings.ttsPitch);
   const speaking = useSyncExternalStore(subscribeReading, readingOwner) === id;
   const [note, setNote] = useState<'voice' | 'failed' | null>(null);
+  const { Ta } = useReader();
 
   const toggle = async () => {
     if (speaking) { stopReading(); return; }
@@ -25,7 +26,7 @@ export function SpeakButton({ id, getText, getCues }: { id: string; getText?(): 
   return (
     <div className={ui.stack}>
       <button type="button" className={`${ui.btn} ${ui.block}`} aria-pressed={speaking} onClick={() => void toggle()}>
-        {speaking ? '⏹ Dừng đọc' : getCues ? '🔊 Thầy đọc' : '🔊 Đọc kết quả'}
+        {speaking ? '⏹ Dừng đọc' : getCues ? `🔊 ${Ta} đọc` : '🔊 Đọc kết quả'}
       </button>
       {note && (
         <div className={ui.info} role="status">

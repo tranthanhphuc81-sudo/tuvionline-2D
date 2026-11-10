@@ -3,6 +3,8 @@
 > Chủ dự án đọc duyệt. Muốn sửa câu nào, ghi lại rồi báo; câu thật nằm ở `src/content/reader/templates.ts`.
 > `{goi}` là tiếng thầy gọi người xem (con, anh, chị, chú, cô, bạn). `{cuaAi}` là "của con" hoặc "của Lan". Phần luận giải giữ nguyên văn, không nằm ở đây.
 
+
+> Từ 10/11/2026 người dùng chọn được người đọc (Cài đặt → Người đọc: Thầy, Thầy trung niên, Thầy trẻ, Ông đồ, Đạo sĩ, Sư thầy, Cô đồ, Bà cụ, Sư cô, Cô gái trẻ, hoặc ảnh của chính mình). Trong mã, chữ "thầy" ở các câu dưới đây là biến `{ta}` (`{Ta}` khi viết hoa) và đổi theo nhân vật: thầy, cô, ông, bà, chị…
 ## Tử Vi
 
 **Câu mở**

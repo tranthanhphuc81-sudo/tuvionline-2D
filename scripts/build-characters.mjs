@@ -3,6 +3,7 @@
    Kiểu vẽ: nét cong mềm, mắt nhắm hiền, cùng bảng màu với tranh. KHÔNG cho miệng mấp máy và KHÔNG xoay tay quanh khớp: thử trên máy thật
    trông như con rối. Chuyển động chỉ là thở, nghiêng đầu nhẹ, tay áo đưa nhẹ. Chạy: node scripts/build-characters.mjs */
 import { mkdirSync, writeFileSync } from 'node:fs';
+import { personaArt } from './characters-personas.mjs';
 
 const OUT = 'src/assets/journey/character';
 const SEG = { idle: [0, 120], talk: [120, 180], point: [180, 240], turnPage: [240, 300], nod: [300, 360] };
@@ -105,7 +106,10 @@ const pack = (layers) => ({
 });
 
 mkdirSync(OUT, { recursive: true });
-for (const [name, layers] of [['thay', thay()], ['daodong', dong()]]) {
+// Người đọc: nhiều nhân vật cùng khung (characters-personas.mjs); `thay()` cũ giữ lại làm mẫu tham khảo, file thay.json giờ sinh từ bộ khung chung
+const personas = personaArt({ fixed, fill, stroke, tr, curve, pen, dot, layer, sleeve, tilt, breathe });
+void thay;
+for (const [name, layers] of [...personas, ['daodong', dong()]]) {
   const json = JSON.stringify(pack(layers));
   writeFileSync(`${OUT}/${name}.json`, json);
   console.log(name, json.length, 'byte');

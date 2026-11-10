@@ -32,7 +32,16 @@ export type Theme = 'system' | 'light' | 'dark';
 /** Lối vào đạo quán (ARCHITECTURE.md mục 12.2). `auto` = lần đầu và ngày rằm, mùng 1, Tết thì đầy đủ, còn lại rút gọn. */
 export type EntryMode = 'auto' | 'full' | 'short' | 'none';
 export type XungHoSetting = 'tu-dong' | 'con' | 'anh' | 'chi' | 'co' | 'chu' | 'ban';
-export interface Settings { theme: Theme; ttsRate: number; ttsPitch: number; /** giọng người dùng chọn, tuỳ chọn; không có = tự chọn */ ttsVoice?: string; entryMode: EntryMode; journeySound: boolean; xungHo: XungHoSetting }
+/** Người đọc tự tạo từ ảnh của người dùng (ảnh lưu riêng ở khoá `lyso.reader.photo`, không nằm trong tài liệu này). */
+export interface CustomReader { name: string; ta: string; voice: 'nam' | 'nu' }
+export interface Settings {
+  theme: Theme; ttsRate: number; ttsPitch: number; /** giọng người dùng chọn, tuỳ chọn; không có = tự chọn */ ttsVoice?: string; entryMode: EntryMode; journeySound: boolean; xungHo: XungHoSetting;
+  /** người đọc ở Tĩnh thất (content/reader/personas.ts) hoặc 'custom'; mã lạ thì dùng Thầy */
+  reader?: string;
+  /** màu áo người đọc; không có = màu mặc định của nhân vật */
+  readerRobe?: string;
+  readerCustom?: CustomReader;
+}
 
 export interface LucHaoCast {
   tosses: number[];
@@ -167,6 +176,11 @@ export function parsePersisted(raw: unknown): ParseResult {
   if (!['auto', 'full', 'short', 'none'].includes(s.entryMode as string)) return { ok: false, error: 'settings.entryMode không hợp lệ' };
   if (typeof s.journeySound !== 'boolean') return { ok: false, error: 'settings.journeySound không phải boolean' };
   if (!['tu-dong', 'con', 'anh', 'chi', 'co', 'chu', 'ban'].includes(s.xungHo as string)) return { ok: false, error: 'settings.xungHo không hợp lệ' };
+  if ((s.reader !== undefined && !isStr(s.reader)) || (s.readerRobe !== undefined && !isStr(s.readerRobe))) return { ok: false, error: 'settings.reader không hợp lệ' };
+  if (s.readerCustom !== undefined) {
+    const c = s.readerCustom;
+    if (!isObj(c) || !isStr(c.name) || !isStr(c.ta) || (c.voice !== 'nam' && c.voice !== 'nu')) return { ok: false, error: 'settings.readerCustom không hợp lệ' };
+  }
   const t = raw.tools;
   if (!isObj(t)) return { ok: false, error: 'tools không phải object' };
   if (t.lucHaoLastCast !== undefined) {

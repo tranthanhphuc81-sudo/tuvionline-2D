@@ -93,7 +93,7 @@ export function TuViScreen() {
         <>
           <div ref={chartBox} className={ui.stack} onClickCapture={() => setRevealing(false)}>
             <ChartGrid ch={ch} name={profile.name} gender={profile.gender} selected={sel} onSelect={setPicked} focus={cueFocus} reveal={revealing} />
-            {revealing && <p className={ui.muted}>Thầy đang an sao. Chạm vào lá số để bỏ qua.</p>}
+            {revealing && <p className={ui.muted}>Đang an sao. Chạm vào lá số để bỏ qua.</p>}
           </div>
           <PalaceDetail ch={ch} chi={sel} onSelect={setPicked} />
         </>

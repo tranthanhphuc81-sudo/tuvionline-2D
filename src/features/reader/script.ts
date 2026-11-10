@@ -12,19 +12,21 @@ export type CueGesture = 'point' | 'turnPage' | 'nod';
 export interface Cue extends SpeechItem { id: string; focus?: CueFocus; gesture?: CueGesture }
 
 /** Người được đọc cho. `third` = hồ sơ của người khác: thầy nói ngôi thứ ba, không gọi hồ sơ đó là "con". */
-export interface Who { goi: string; third: boolean; name: string }
+export interface Who { goi: string; third: boolean; name: string; /** người đọc tự xưng (thầy, cô, bà…); không có = thầy */ ta?: string }
 
 const WORD: Record<Exclude<XungHoSetting, 'tu-dong'>, string> = { con: 'con', anh: 'anh', chi: 'chị', co: 'cô', chu: 'chú', ban: 'bạn' };
 
-export function xungHo(profile: { name: string; gender: 'M' | 'F'; year: number; relation?: Relation } | null, setting: XungHoSetting, nowYear: number): Who {
+/** `reader`: người đọc đã chọn; người đọc trẻ (`elder` false) thì tự động gọi người xem là "bạn" chứ không gọi "con". */
+export function xungHo(profile: { name: string; gender: 'M' | 'F'; year: number; relation?: Relation } | null, setting: XungHoSetting, nowYear: number, reader: { ta: string; elder: boolean } = { ta: 'thầy', elder: true }): Who {
   const forced = setting === 'tu-dong' ? null : WORD[setting];
-  if (!profile) return { goi: forced ?? 'bạn', third: false, name: '' };
+  const ta = reader.ta;
+  if (!profile) return { goi: forced ?? 'bạn', third: false, name: '', ta };
   const third = !!profile.relation && profile.relation !== 'self';
-  if (forced) return { goi: forced, third, name: profile.name };
-  if (third) return { goi: 'bạn', third, name: profile.name };
+  if (forced) return { goi: forced, third, name: profile.name, ta };
+  if (third || !reader.elder) return { goi: 'bạn', third, name: profile.name, ta };
   const age = nowYear - profile.year;
   const goi = age < 40 ? 'con' : age < 55 ? (profile.gender === 'M' ? 'anh' : 'chị') : profile.gender === 'M' ? 'chú' : 'cô';
-  return { goi, third, name: profile.name };
+  return { goi, third, name: profile.name, ta };
 }
 
 /** Câu luận giải thành cue: phụ đề giữ chữ gốc, tiếng đọc đã chuẩn hoá. Câu dính từ cấm đọc thì im lặng, chỉ hiện chữ. */
@@ -58,7 +60,7 @@ export interface ScriptInput {
 export function buildScript(tool: ReaderTool, who: Who, input: ScriptInput, seed = new Date().getDate()): Cue[] {
   const lines = TOOL_LINES[tool];
   const cuaAi = who.third ? 'của ' + who.name : 'của ' + who.goi;
-  const vars = { goi: who.goi, cuaAi, ten: who.name };
+  const vars = { goi: who.goi, cuaAi, ten: who.name, ta: who.ta ?? 'thầy' };
   const say = (text: string, focus?: CueFocus, gesture?: CueGesture): SpeechItemDraft[] => chunkSpeech(normalizeForSpeech(text)).map((t) => ({ text: t, caption: text, focus, gesture }));
   const draft: SpeechItemDraft[] = [
     ...say(fill(pick(lines.open, seed), vars)),
@@ -93,7 +95,7 @@ export interface PalmScriptInput {
 /** Kịch bản thầy đọc chỉ tay: câu mở → tóm tắt → từng đường chính (có tô sáng) → các mục còn lại → câu kết. */
 export function buildPalmScript(who: Who, input: PalmScriptInput, seed = new Date().getDate()): Cue[] {
   const lines = TOOL_LINES.chitay;
-  const vars = { goi: who.goi, cuaAi: who.third ? 'của ' + who.name : 'của ' + who.goi, ten: who.name };
+  const vars = { goi: who.goi, cuaAi: who.third ? 'của ' + who.name : 'của ' + who.goi, ten: who.name, ta: who.ta ?? 'thầy' };
   const say = (text: string, focus?: CueFocus, gesture?: CueGesture): SpeechItemDraft[] => chunkSpeech(normalizeForSpeech(text)).map((t) => ({ text: t, caption: text, focus, gesture }));
   const read = (items: readonly PalmSpoken[], focus?: CueFocus) => items.flatMap((it) => (it.speak ? proseCues(it.text, who.goi, focus) : [{ text: '', caption: it.text + ' ' + fill(NO_SPEECH_LINE, { goi: who.goi }), focus }]));
   const draft: SpeechItemDraft[] = [

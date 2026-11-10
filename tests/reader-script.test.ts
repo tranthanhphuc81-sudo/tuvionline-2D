@@ -143,7 +143,18 @@ describe('xưng hô', () => {
     expect(w).toMatchObject({ third: true, goi: 'bạn' });
     expect(xungHo(p(2010, 'M', 'self'), 'tu-dong', YEAR)).toMatchObject({ third: false, goi: 'con' });
   });
-  it('chưa có hồ sơ', () => { expect(xungHo(null, 'tu-dong', YEAR)).toEqual({ goi: 'bạn', third: false, name: '' }); });
+  it('chưa có hồ sơ', () => { expect(xungHo(null, 'tu-dong', YEAR)).toEqual({ goi: 'bạn', third: false, name: '', ta: 'thầy' }); });
+  it('người đọc tự xưng theo nhân vật; người đọc trẻ gọi người xem là "bạn"', () => {
+    expect(xungHo(p(2010, 'M', 'self'), 'tu-dong', YEAR, { ta: 'cô', elder: true })).toMatchObject({ goi: 'con', ta: 'cô' });
+    expect(xungHo(p(2010, 'M', 'self'), 'tu-dong', YEAR, { ta: 'chị', elder: false })).toMatchObject({ goi: 'bạn', ta: 'chị' });
+    expect(xungHo(p(2010, 'M', 'self'), 'anh', YEAR, { ta: 'chị', elder: false })).toMatchObject({ goi: 'anh' });
+  });
+  it('mẫu câu đổi tiếng tự xưng, viết hoa đầu câu và trong ngoặc', () => {
+    expect(fill('{ta} chào {goi}. Bấm "{Ta} đọc" nhé.', { goi: 'con', ta: 'cô' })).toBe('Cô chào con. Bấm "Cô đọc" nhé.');
+    expect(fill('{Ta} đọc', { goi: 'con' })).toBe('Thầy đọc');
+    const s = buildScript('tonghop', { goi: 'con', third: false, name: 'An', ta: 'bà' }, { sections: [] }, 0);
+    expect(s.map((c) => c.caption).join(' ')).not.toMatch(/thầy/i);
+  });
 });
 
 describe('từ cấm đọc', () => {

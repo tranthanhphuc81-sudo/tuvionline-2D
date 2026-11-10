@@ -1,0 +1,26 @@
+.photoWrap { display: flex; align-items: flex-end; justify-content: center; }
+.photo {
+  width: 72%; aspect-ratio: 1; border-radius: 50%; object-fit: cover; border: 3px solid #d7b571;
+  box-shadow: 0 0 0 5px rgba(42, 26, 20, .7), 0 0 24px rgba(255, 200, 110, .35); animation: breathe 4s ease-in-out infinite; margin-bottom: 8%;
+}
+.photo[data-state='talk'], .photo[data-state='point'], .photo[data-state='turnPage'] { box-shadow: 0 0 0 5px rgba(42, 26, 20, .7), 0 0 34px rgba(255, 200, 110, .7); }
+@keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.015); } }
+@media (prefers-reduced-motion: reduce) { .photo { animation: none; } }
+
+/* Cài đặt: chọn người đọc */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: var(--space-2); }
+.card {
+  display: grid; justify-items: center; gap: 2px; min-height: var(--tap); padding: var(--space-2) var(--space-1); border: 1px solid var(--line-strong); border-radius: var(--radius);
+  background: var(--surface2); color: var(--ink); font: inherit; font-size: var(--fs-sm); text-align: center;
+}
+.card[aria-checked='true'] { border-color: var(--gold); box-shadow: 0 0 0 2px var(--gold) inset; background: var(--surface3); }
+.preview { width: 72px; height: 80px; pointer-events: none; }
+.previewPhoto { width: 64px; height: 64px; margin: 8px 0; border-radius: 50%; object-fit: cover; border: 2px solid #d7b571; }
+.previewEmpty { width: 64px; height: 64px; margin: 8px 0; border-radius: 50%; border: 2px dashed var(--line-strong); display: grid; place-items: center; font-size: 26px; }
+.cardName { font-weight: 700; }
+.cardNote { color: var(--muted); font-size: 12px; line-height: 1.25; }
+.robes { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.robe { width: var(--tap); height: var(--tap); border-radius: 50%; border: 2px solid var(--line-strong); }
+.robe[aria-checked='true'] { border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold); }
+.voiceRow { display: flex; align-items: center; gap: var(--space-2); min-height: var(--tap); }
+.voiceRow > span { flex: 1; }

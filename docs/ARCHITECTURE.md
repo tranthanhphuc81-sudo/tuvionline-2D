@@ -657,6 +657,8 @@ Lưu ý: `seasonOfMonthChi` của Lục Hào trả cả `tuquy` nên KHÔNG dùn
 
 **Lý do:** nhân vật chỉ có 5 trạng thái rời (idle, talk, point, turnPage, nod) và không cần lip-sync, nên state machine của Rive chưa đáng so với runtime lớn gấp nhiều lần. Điểm yếu của `lottie_light` là vẽ SVG: file nhiều nét sẽ nặng trên máy yếu. Vì vậy giới hạn 400 nét mỗi nhân vật, và 6.6 phải đo trên máy thật; không đạt thì đổi sang Rive mà không đổi `Cue`.
 
+**Người đọc chọn được (10/11/2026):** 10 nhân vật cùng một khung Lottie (`scripts/characters-personas.mjs`, khoảng 15 KB mỗi file, chỉ nạp file đang dùng), màu áo đổi lúc chạy theo tên lớp `robe`/`robeHi`/`robeFold` (không sinh mỗi màu một file), hoặc ảnh người dùng tự chọn (thu về 320 px, lưu ở khoá `lyso.reader.photo` ngoài `lyso.state` nên không vào file sao lưu). Cài đặt lưu `reader`, `readerRobe`, `readerCustom` (tuỳ chọn, không cần migration; mã lạ thì dùng Thầy). Lời đọc tự xưng qua biến `{ta}`; người đọc trẻ tự động gọi người xem là "bạn".
+
 **Ngân sách tối đa 3 MB (ảnh + âm thanh):**
 
 | Hạng mục | Tính toán | Dung lượng |

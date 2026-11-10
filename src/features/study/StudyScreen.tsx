@@ -14,6 +14,8 @@ import ui from '../../ui/components/ui.module.css';
 import { thayVoice, useWho } from '../reader/hooks';
 import { buildScript } from '../reader/script';
 import { Character } from '../reader/Character';
+import { ReaderFigure } from '../reader/ReaderFigure';
+import { useReader } from '../reader/hooks';
 import type { Cue } from '../reader/script';
 import { IncenseStick, useIncense } from '../journey/incense';
 import { requestStarReveal } from '../tuvi/reveal';
@@ -46,6 +48,7 @@ export function StudyScreen() {
   const [slow, setSlow] = useState(false);
   const [note, setNote] = useState<string | null>(null);
   const who = useWho();
+  const { Ta } = useReader();
 
   const incense = useIncense();
   const cue = mine?.cue as Cue | undefined;
@@ -74,7 +77,7 @@ export function StudyScreen() {
       <div className={s.room}>
         <img className={s.art} src={file('room')} alt="" draggable={false} />
         <div className={s.glow} aria-hidden="true" />
-        {profile ? <Character name="thay" state={pose} className={s.thay} /> : <Character name="daodong" state="nod" className={s.dong} />}
+        {profile ? <ReaderFigure state={pose} className={s.thay} /> : <Character name="daodong" state="nod" className={s.dong} />}
         {incense.kind !== 'none' && <div className={s.incense}><IncenseStick state={incense} /></div>}
         {profile && (
           <nav className={s.desk} aria-label="Đồ vật trên án thư">
@@ -91,11 +94,11 @@ export function StudyScreen() {
       <BootNoticeBanner />
       {profile ? (
         <div className={s.panel}>
-          <p className={s.subtitle} data-speaking={!!mine}>{note ?? mine?.text ?? (invalid ? STUDY_INVALID : studyGreeting(who.goi, who.name, who.third, new Date().getDate()))}</p>
-          <div className={s.controls} role="group" aria-label="Điều khiển Thầy đọc">
+          <p className={s.subtitle} data-speaking={!!mine}>{note ?? mine?.text ?? (invalid ? STUDY_INVALID : studyGreeting(who.goi, who.name, who.third, new Date().getDate(), who.ta))}</p>
+          <div className={s.controls} role="group" aria-label={`Điều khiển ${Ta} đọc`}>
             <button type="button" className={s.ctl} aria-label="Nghe lại đoạn trước" disabled={!mine} onClick={() => void skipReading(-1)}>⏮</button>
             <button type="button" className={s.main} disabled={invalid} onClick={() => void main()}>
-              <span aria-hidden="true">{mine && !mine.paused ? '⏸' : '▶'}</span> {mine ? (mine.paused ? 'Đọc tiếp' : 'Tạm dừng') : 'Thầy đọc'}
+              <span aria-hidden="true">{mine && !mine.paused ? '⏸' : '▶'}</span> {mine ? (mine.paused ? 'Đọc tiếp' : 'Tạm dừng') : `${Ta} đọc`}
             </button>
             <button type="button" className={s.ctl} aria-label="Đoạn sau" disabled={!mine || mine.index >= mine.total - 1} onClick={() => void skipReading(1)}>⏭</button>
             <button type="button" className={s.ctl} aria-label="Nói chậm" aria-pressed={slow} onClick={toggleSlow}>🐢</button>

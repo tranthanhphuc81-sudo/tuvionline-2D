@@ -13,10 +13,10 @@ export function studyTitle(now: Date): string {
 export const STUDY_READING_ID = 'thay';
 
 /** Lời chào khi chưa đọc gì, đổi theo ngày cho đỡ lặp. */
-export function studyGreeting(goi: string, ten: string, third: boolean, seed: number): string {
-  return fill(pick(third ? STUDY_LINES.other : STUDY_LINES.self, seed), { goi, ten });
+export function studyGreeting(goi: string, ten: string, third: boolean, seed: number, ta = 'thầy'): string {
+  return fill(pick(third ? STUDY_LINES.other : STUDY_LINES.self, seed), { goi, ten, ta });
 }
-export const STUDY_INVALID = 'Hồ sơ này có ngày sinh chưa đúng nên thầy chưa đọc được. Hãy sửa lại trong mục Quản lý hồ sơ.';
+export const STUDY_INVALID = 'Hồ sơ này có ngày sinh chưa đúng nên chưa đọc được. Hãy sửa lại trong mục Quản lý hồ sơ.';
 
 export const INCENSE_TEXT = {
   hold: 'Chạm giữ để thắp hương',

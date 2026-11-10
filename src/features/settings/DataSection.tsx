@@ -8,6 +8,7 @@ import { LEGACY_SHARED_KEY, LEGACY_THEME_KEY } from '../../state/migrations';
 import { emptyState, STATE_KEY, type PersistedState } from '../../state/schema';
 import { clearShareCache, shareFiles } from '../../platform/share';
 import { preferencesKV, removeLocalStorage, type KV } from '../../platform/storage';
+import { READER_PHOTO_KEY, removeReaderPhoto } from '../reader/customPhoto';
 import { stopReading } from '../../platform/tts';
 import { Sheet } from '../../ui/components/Sheet';
 import ui from '../../ui/components/ui.module.css';
@@ -15,7 +16,7 @@ import ui from '../../ui/components/ui.module.css';
 /** Xoá những gì nằm ngoài `lyso.state`: bản sao dữ liệu hỏng, dữ liệu bản 0.1, file chia sẻ tạm. */
 export async function wipeExtras(kv: KV): Promise<void> {
   const keys = await kv.keys();
-  await Promise.all(keys.filter((k) => k.startsWith(`${STATE_KEY}.corrupt-`)).map((k) => kv.remove(k)));
+  await Promise.all(keys.filter((k) => k.startsWith(`${STATE_KEY}.corrupt-`) || k === READER_PHOTO_KEY).map((k) => kv.remove(k)));
   removeLocalStorage(LEGACY_SHARED_KEY);
   removeLocalStorage(LEGACY_THEME_KEY);
   await clearShareCache();
@@ -86,7 +87,7 @@ export function DataSection() {
         <p>{WIPE_CONFIRM}</p>
         <div className={ui.row}>
           <button type="button" className={ui.btn} style={{ flex: 1 }} onClick={() => setWipe(false)}>Huỷ</button>
-          <button type="button" className={`${ui.btn} ${ui.danger}`} style={{ flex: 1 }} onClick={() => { setWipe(false); applyState(emptyState()); void wipeExtras(preferencesKV); }}>Xoá hết</button>
+          <button type="button" className={`${ui.btn} ${ui.danger}`} style={{ flex: 1 }} onClick={() => { setWipe(false); applyState(emptyState()); void wipeExtras(preferencesKV).then(() => removeReaderPhoto()); }}>Xoá hết</button>
         </div>
       </Sheet>
     </section>

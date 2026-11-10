@@ -8,7 +8,7 @@ export const SPEECH_MAX_CHUNK = 180;
 export const SPEECH_NO_VOICE = 'Máy chưa có giọng đọc tiếng Việt chạy ngay trên máy. Hãy cài ứng dụng "Dịch vụ giọng nói của Google" (Google Text-to-speech), rồi tải gói tiếng Việt trong Cài đặt của máy, mục Ngôn ngữ, Đầu ra chuyển văn bản thành giọng nói. App không dùng giọng đọc qua mạng để nội dung không rời khỏi máy.';
 export const SPEECH_FAILED = 'Không đọc được trên máy này. Có thể gói giọng tiếng Việt chưa được tải về máy: hãy mở cài đặt giọng đọc, tải gói tiếng Việt rồi thử lại.';
 
-export const SPEECH_WEB_UNSUPPORTED = 'Trình duyệt này không có giọng đọc nên thầy chưa đọc được ở đây. Nếu đang mở link trong Zalo hoặc Facebook, hãy chọn mở bằng Chrome. Chữ trên màn hình vẫn xem được bình thường.';
+export const SPEECH_WEB_UNSUPPORTED = 'Trình duyệt này không có giọng đọc nên chưa đọc thành lời được ở đây. Nếu đang mở link trong Zalo hoặc Facebook, hãy chọn mở bằng Chrome. Chữ trên màn hình vẫn xem được bình thường.';
 const SPEECH_WEB_FAILED = 'Trình duyệt chưa phát được giọng đọc. Hãy kiểm tra âm lượng của máy, rồi thử mở bằng Chrome. Chrome dùng giọng đọc của điện thoại nên máy cần có gói giọng tiếng Việt.';
 
 /** Câu báo khi không đọc được. Trên trình duyệt kèm mã lỗi để biết nguyên nhân khi người dùng báo lại. */

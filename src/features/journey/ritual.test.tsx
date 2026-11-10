@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 /* Thắp hương, lắc máy, gieo xu, an sao (Phase 6.6). */
+import { PERSONAS } from '../../content/reader/personas';
 import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import { act, render, screen, fireEvent, cleanup } from '@testing-library/react';
 import { readFileSync, readdirSync } from 'node:fs';
@@ -122,9 +123,10 @@ describe('an sao', () => {
 });
 
 describe('file nhân vật', () => {
-  it('thầy và đạo đồng có đủ 5 trạng thái, không quá 400 nét', () => {
+  it('mỗi người đọc và đạo đồng có đủ 5 trạng thái, không quá 400 nét, màu áo đổi được', () => {
     const dir = 'src/assets/journey/character';
-    expect(readdirSync(dir).sort()).toEqual(['daodong.json', 'thay.json']);
+    expect(readdirSync(dir).sort()).toEqual([...PERSONAS.map((p) => p.id + '.json'), 'daodong.json'].sort());
+    for (const p of PERSONAS) expect(readFileSync(`${dir}/${p.id}.json`, 'utf8')).toContain('"nm":"robe"');
     for (const f of readdirSync(dir)) {
       const raw = readFileSync(`${dir}/${f}`, 'utf8');
       expect(JSON.parse(raw).markers.map((m: { cm: string }) => m.cm)).toEqual(['idle', 'talk', 'point', 'turnPage', 'nod']);

@@ -21,7 +21,7 @@ export function restoreConfirmText(incoming: number, current: number): string {
   return `File có ${incoming} hồ sơ. Khôi phục sẽ thay toàn bộ dữ liệu đang có trên máy (${current} hồ sơ và các cài đặt), không gộp lại với nhau.`;
 }
 
-export const WIPE_CONFIRM = 'Mọi hồ sơ, cài đặt, quẻ đã gieo, kết quả xem chỉ tay và file tạm trên máy này sẽ bị xoá và không lấy lại được, trừ khi bạn đã có file sao lưu.';
+export const WIPE_CONFIRM = 'Mọi hồ sơ, cài đặt, quẻ đã gieo, kết quả xem chỉ tay, ảnh người đọc tự chọn và file tạm trên máy này sẽ bị xoá và không lấy lại được, trừ khi bạn đã có file sao lưu.';
 
 /** Ghi công mô hình nhận diện bàn tay (Apache 2.0 yêu cầu giữ ghi công). */
 export const THIRD_PARTY_CREDIT = 'Nhận diện bàn tay: MediaPipe Hand Landmarker của Google, giấy phép Apache 2.0, chạy hoàn toàn trên máy.';
@@ -31,6 +31,7 @@ export const PRIVACY_POINTS: readonly string[] = [
   'Tên, giới tính và ngày giờ sinh bạn nhập chỉ lưu trên máy này, chỉ dùng để tính kết quả ngay trên máy.',
   'Cảm biến la bàn chỉ dùng khi bạn mở La Bàn. Số đo không được lưu, trừ độ hiệu chỉnh bạn tự đặt.',
   'Xem chỉ tay: ảnh lòng bàn tay chỉ xử lý ngay trên máy, không gửi đi đâu và không được lưu lại. App chỉ giữ các nét bạn đã chạm cùng 21 điểm khớp bàn tay, và xoá chúng khi bạn xoá kết quả hoặc hồ sơ.',
+  'Ảnh người đọc bạn tự chọn trong Cài đặt chỉ lưu trên máy này, không gửi đi đâu và không nằm trong file sao lưu.',
   'Giọng đọc dùng bộ đọc tiếng Việt có sẵn trên máy, nội dung đọc không gửi ra ngoài.',
   'Ảnh chia sẻ và file sao lưu chỉ rời khỏi app khi bạn bấm chia sẻ và tự chọn nơi nhận. Ảnh có tên và ngày sinh của hồ sơ, bạn xem kỹ trước khi gửi cho người khác.',
   'Bạn có thể xoá toàn bộ dữ liệu bất cứ lúc nào ngay trong Cài đặt.',
