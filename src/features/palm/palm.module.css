@@ -61,3 +61,10 @@
 .viewSwitch { margin-bottom: var(--space-2); }
 .photo { width: min(100%, 360px); margin: 0 auto; display: block; border-radius: var(--radius); }
 .historyItem { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); width: 100%; min-height: var(--tap); padding: 0; border: 0; background: transparent; color: var(--ink); font: inherit; text-align: left; }
+
+/* Hướng dẫn chạm đường */
+.guide { margin: 0; padding-left: 1.3em; display: grid; gap: var(--space-2); font-size: var(--fs-sm); color: var(--ink-dim); line-height: 1.45; }
+.guide b { color: var(--ink); }
+.sheetScroll { max-height: 60dvh; overflow-y: auto; }
+
+.traceTop { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); }

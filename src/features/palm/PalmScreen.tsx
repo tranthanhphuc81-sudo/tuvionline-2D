@@ -5,7 +5,7 @@ import { measureHand, measureLines, measuresToAnswers, type MountId } from '../.
 import { mountAnswer, PALM_QUESTIONS, questionsAt, type PalmQuestion } from '../../content/palm/questions';
 import {
   PALM_CONFIRM_HINT, PALM_CONFIRM_TITLE, PALM_FIRST_TIME, PALM_HAND_HINT, PALM_HAND_Q, PALM_INTRO, PALM_MODEL_FAILED, PALM_MORE_HINT, PALM_MORE_TITLE,
-  PALM_MOUNT_LABEL, PALM_NO_HAND, PALM_NOTE, PALM_PHOTO_TIPS, PALM_Q30_GROUPS, PALM_QUESTIONS_TITLE, PALM_SAVED_HINT, PALM_UNREADABLE,
+  PALM_GUIDE_TITLE, PALM_MOUNT_LABEL, PALM_BLURRY, PALM_NO_HAND, PALM_NOTE, PALM_PHOTO_TIPS, PALM_Q30_GROUPS, PALM_QUESTIONS_TITLE, PALM_SAVED_HINT, PALM_UNREADABLE,
 } from '../../content/palm/ui';
 import { useApp, useAppCtx, useNav } from '../../app/context';
 import { useBackHandler } from '../../app/hooks';
@@ -13,6 +13,7 @@ import { savePalmSession, selectActiveProfile } from '../../state/actions';
 import ui from '../../ui/components/ui.module.css';
 import { QuestionField, type PalmAnswer } from './QuestionField';
 import { MachineAnswers } from './MachineAnswers';
+import { PalmGuideSteps } from './PalmGuide';
 import { holdPhoto } from './photoMemory';
 import { TraceStep, type TraceResult } from './TraceStep';
 import type { PreparedPhoto } from './vision/photo';
@@ -59,6 +60,7 @@ export function PalmScreen() {
       const r = await preparePhoto(file);
       if (r === 'no-hand') setError(PALM_NO_HAND);
       else if (r === 'unreadable') setError(PALM_UNREADABLE);
+      else if (r === 'blurry') setError(PALM_BLURRY);
       else { setPhoto(r); setStep('trace'); }
     } catch {
       setError(PALM_MODEL_FAILED);
@@ -127,6 +129,11 @@ export function PalmScreen() {
             <p className={ui.muted}>{PALM_HAND_HINT}</p>
           </section>
           <p>{PALM_PHOTO_TIPS}</p>
+          <details className={s.more}>
+            <summary>{PALM_GUIDE_TITLE}</summary>
+            <PalmGuideSteps />
+            <p />
+          </details>
           <input ref={camera} className={s.fileInput} type="file" accept="image/*" capture="environment" onChange={(e) => { void pick(e.target.files?.[0]); e.target.value = ''; }} />
           <input ref={library} className={s.fileInput} type="file" accept="image/*" onChange={(e) => { void pick(e.target.files?.[0]); e.target.value = ''; }} />
           <button type="button" className={`${ui.btn} ${ui.primary} ${ui.block}`} disabled={busy} onClick={() => camera.current?.click()}>📷 Chụp ảnh lòng bàn tay</button>

@@ -2,8 +2,11 @@
    Chép từ trang thử trên điện thoại (spike/chitay/phone.ts), đã đo 39–68 giây mỗi bàn tay trên Galaxy S25 Ultra. */
 import { useEffect, useRef, useState } from 'react';
 import type { PalmPt } from '../../core';
-import { PALM_TRACE_HINT_NOTE, PALM_LEAVE_TEXT, PALM_LEAVE_TITLE, PALM_LINE_STEPS, PALM_TRACE_CUT_FIRST, PALM_TRACE_CUT_HINT, PALM_TRACE_NEED_POINTS } from '../../content/palm/ui';
+import { PALM_GUIDE_OK, PALM_GUIDE_OPEN, PALM_GUIDE_TITLE, PALM_TRACE_HINT_NOTE, PALM_LEAVE_TEXT, PALM_LEAVE_TITLE, PALM_LINE_STEPS, PALM_TRACE_CUT_FIRST, PALM_TRACE_CUT_HINT, PALM_TRACE_NEED_POINTS } from '../../content/palm/ui';
 import { useBackHandler } from '../../app/hooks';
+import { useApp, useAppCtx } from '../../app/context';
+import { markPalmGuideSeen } from '../../state/actions';
+import { PalmGuideSteps } from './PalmGuide';
 import { Sheet } from '../../ui/components/Sheet';
 import type { PalmLineKey } from '../../state/schema';
 import ui from '../../ui/components/ui.module.css';
@@ -40,6 +43,11 @@ export function TraceStep({ photo, active, onDone, onExit }: { photo: PreparedPh
   const [step, setStep] = useState(0);
   const [hint, setHint] = useState<string>(PALM_LINE_STEPS[0].hint);
   const [leave, setLeave] = useState(false);
+  const { store } = useAppCtx();
+  const seen = useApp((x) => !!x.tools.palmGuideSeen);
+  // Lần đầu chạm đường: tự mở hướng dẫn, nhất là chuyện nét gợi ý có thể lệch
+  const [guide, setGuide] = useState(!seen);
+  const closeGuide = () => { setGuide(false); markPalmGuideSeen(store); };
   const cur = PALM_LINE_STEPS[step];
 
   useEffect(() => {
@@ -93,7 +101,7 @@ export function TraceStep({ photo, active, onDone, onExit }: { photo: PreparedPh
     if (touched.current) setLeave(true); else onExit();
     return true;
   };
-  useBackHandler(() => (leave ? (setLeave(false), true) : goBack()), active);
+  useBackHandler(() => (leave ? (setLeave(false), true) : guide ? (closeGuide(), true) : goBack()), active);
 
   const ok = () => {
     if (state.current.lines[cur.id].length < 2) { setHint(PALM_TRACE_NEED_POINTS); return; }
@@ -111,7 +119,10 @@ export function TraceStep({ photo, active, onDone, onExit }: { photo: PreparedPh
   return (
     <div className={s.trace}>
       <div className={s.traceHead}>
-        <h2 className={s.traceTitle}>{step + 1}/{PALM_LINE_STEPS.length}. {cur.title}</h2>
+        <div className={s.traceTop}>
+          <h2 className={s.traceTitle}>{step + 1}/{PALM_LINE_STEPS.length}. {cur.title}</h2>
+          <button type="button" className={s.edit} aria-label="Xem cách chạm đường cho đúng" onClick={() => setGuide(true)}>❓ {PALM_GUIDE_OPEN}</button>
+        </div>
         <p className={s.traceHint} role="status">{hint}</p>
         <p className={s.qhint}>{PALM_TRACE_HINT_NOTE}</p>
       </div>
@@ -132,6 +143,10 @@ export function TraceStep({ photo, active, onDone, onExit }: { photo: PreparedPh
         </button>
       </div>
       {'none' in cur && <button type="button" className={`${ui.btn} ${ui.ghost} ${ui.block}`} onClick={none}>{cur.none}</button>}
+      <Sheet open={guide && active} title={PALM_GUIDE_TITLE} onClose={closeGuide}>
+        <div className={s.sheetScroll}><PalmGuideSteps /></div>
+        <button type="button" className={`${ui.btn} ${ui.primary} ${ui.block}`} onClick={closeGuide}>{PALM_GUIDE_OK}</button>
+      </Sheet>
       <Sheet open={leave} title={PALM_LEAVE_TITLE} onClose={() => setLeave(false)}>
         <p>{PALM_LEAVE_TEXT}</p>
         <div className={s.nav}>

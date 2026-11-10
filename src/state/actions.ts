@@ -99,6 +99,11 @@ export function markJourney(store: AppStore, today: string, full: boolean): void
   store.setState((s) => ({ ...s, tools: { ...s.tools, journey: { firstDone: true, lastFullDate: full ? today : s.tools.journey?.lastFullDate } } }));
 }
 
+/** Ghi nhận đã xem hướng dẫn chạm đường chỉ tay, để lần sau không tự mở nữa. */
+export function markPalmGuideSeen(store: AppStore): void {
+  store.setState((s) => (s.tools.palmGuideSeen ? s : { ...s, tools: { ...s.tools, palmGuideSeen: true } }));
+}
+
 /** Lưu độ lệch hiệu chỉnh của La Bàn (−45…45). */
 export function setLaBanCalib(store: AppStore, deg: number): void {
   store.setState((s) => ({ ...s, tools: { ...s.tools, laBanCalib: deg } }));

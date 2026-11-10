@@ -68,6 +68,8 @@ export interface Tools {
   journey?: JourneyHistory;
   /** lúc thắp hương, ISO (Phase 6.6) */
   incenseLitAt?: string;
+  /** đã xem hướng dẫn chạm đường chỉ tay (tự mở lần đầu) */
+  palmGuideSeen?: boolean;
 }
 
 /** Một lần xem chỉ tay (ARCHITECTURE mục 13.1). KHÔNG lưu ảnh: chỉ các nét đã chuẩn hoá và 21 điểm khớp bàn tay. */
@@ -202,6 +204,7 @@ export function parsePersisted(raw: unknown): ParseResult {
     if (!isObj(j) || typeof j.firstDone !== 'boolean' || (j.lastFullDate !== undefined && !isStr(j.lastFullDate))) return { ok: false, error: 'tools.journey không hợp lệ' };
   }
   if (t.incenseLitAt !== undefined && !isStr(t.incenseLitAt)) return { ok: false, error: 'tools.incenseLitAt không hợp lệ' };
+  if (t.palmGuideSeen !== undefined && typeof t.palmGuideSeen !== 'boolean') return { ok: false, error: 'tools.palmGuideSeen không hợp lệ' };
   if (t.laBanCalib !== undefined && !isInt(t.laBanCalib, -45, 45)) return { ok: false, error: 'tools.laBanCalib không hợp lệ' };
   if (!Array.isArray(raw.palmSessions)) return { ok: false, error: 'palmSessions không phải mảng' };
   for (let i = 0; i < raw.palmSessions.length; i++) {

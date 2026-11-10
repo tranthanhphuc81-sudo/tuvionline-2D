@@ -79,3 +79,14 @@ describe('Lần xem chỉ tay (lược đồ 3)', () => {
     expect(r).toEqual({ ok: true, state: s.getState() });
   });
 });
+
+describe('Hướng dẫn chỉ tay', () => {
+  it('ghi nhận đã xem, lưu được và kiểm tra kiểu', async () => {
+    const { markPalmGuideSeen } = await import('./actions');
+    const s = createStore(emptyState());
+    markPalmGuideSeen(s);
+    expect(s.getState().tools.palmGuideSeen).toBe(true);
+    expect(parsePersisted(JSON.parse(JSON.stringify(s.getState()))).ok).toBe(true);
+    expect(parsePersisted({ ...s.getState(), tools: { palmGuideSeen: 'co' } }).ok).toBe(false);
+  });
+});

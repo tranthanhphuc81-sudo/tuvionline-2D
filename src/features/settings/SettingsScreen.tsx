@@ -6,6 +6,7 @@ import { localVietnameseVoices } from '../../platform/tts';
 import { useApp, useAppCtx } from '../../app/context';
 import { Segmented } from '../../ui/components/Segmented';
 import { PRIVACY_POINTS, THIRD_PARTY_CREDIT } from '../../content/common/about';
+import { GUIDE_INTRO, GUIDE_SECTIONS } from '../../content/common/guide';
 import { DataSection } from './DataSection';
 import { ReaderSection } from './ReaderSection';
 import ui from '../../ui/components/ui.module.css';
@@ -74,6 +75,16 @@ export function SettingsScreen() {
             {XUNG_HO.map((x) => <option key={x.value} value={x.value}>{x.label}</option>)}
           </select>
         </label>
+      </section>
+      <section className={ui.card} aria-labelledby="guide-title">
+        <h2 id="guide-title">Hướng dẫn sử dụng</h2>
+        <p className={ui.muted}>{GUIDE_INTRO}</p>
+        {GUIDE_SECTIONS.map((g) => (
+          <details key={g.title}>
+            <summary className={ui.foldTitle}>{g.title}</summary>
+            <ul className={ui.privacyList}>{g.items.map((x) => <li key={x}>{x}</li>)}</ul>
+          </details>
+        ))}
       </section>
       <DataSection />
       <section className={ui.card}>

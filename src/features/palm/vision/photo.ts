@@ -3,7 +3,7 @@
 import { detectHand } from './detect';
 import { viewRidge } from './livewire';
 import { TEMPLATE } from './editor';
-import { analyze } from './lines';
+import { analyze, type Quality } from './lines';
 import { INDEX, PINKY, WRIST, affine, apply, invert, loadBitmap, palmMask, viewMatrix } from './pipeline';
 import { SIZE, type LineId, type Pt } from './types';
 
@@ -18,7 +18,7 @@ export interface PreparedPhoto {
 }
 
 /** Máy tự dò 4 đường trên khung chuẩn (ép 3 mốc về chỗ cố định, như trang thử đã kiểm chứng) rồi đổi về khung xem. Lỗi thì không có gợi ý. */
-function machineHints(bmp: ImageBitmap, px: (i: number) => Pt, toViewFromImage: (p: Pt) => Pt): Partial<Record<LineId, Pt[]>> {
+function machineHints(bmp: ImageBitmap, px: (i: number) => Pt, toViewFromImage: (p: Pt) => Pt): { hints: Partial<Record<LineId, Pt[]>>; quality: Quality | null } {
   try {
     const scaled = (p: Pt) => ({ x: p.x * SIZE, y: p.y * SIZE });
     const m = affine([px(0), px(5), px(17)], [WRIST, INDEX, PINKY].map(scaled));
@@ -41,13 +41,14 @@ function machineHints(bmp: ImageBitmap, px: (i: number) => Pt, toViewFromImage: 
       // Máy dò được đủ dài thì gợi ý theo nét máy; ảnh mờ hay máy dò hụt thì gợi ý chỗ đường thường nằm
       out[id] = (found.length > 1 && len(found) >= 0.4 * len(typical) ? found : typical).map(toView);
     }
-    return out;
+    return { hints: out, quality: a.quality };
   } catch {
-    return {};
+    return { hints: {}, quality: null };
   }
 }
 
-export type PhotoError = 'no-hand' | 'unreadable';
+/** `blurry`: ảnh mờ, nhoè (độ nét của lòng bàn tay dưới ngưỡng đã chỉnh trên 32 ảnh thật ở bản thử) → bắt chụp lại. */
+export type PhotoError = 'no-hand' | 'unreadable' | 'blurry';
 
 export async function preparePhoto(file: Blob): Promise<PreparedPhoto | PhotoError> {
   let bmp: ImageBitmap;
@@ -66,7 +67,9 @@ export async function preparePhoto(file: Blob): Promise<PreparedPhoto | PhotoErr
     pen.imageSmoothingQuality = 'high';
     pen.drawImage(bmp, 0, 0);
     pen.setTransform(1, 0, 0, 1, 0, 0);
-    const hints = machineHints(bmp, px, (p) => apply(vm, p));
+    const { hints, quality } = machineHints(bmp, px, (p) => apply(vm, p));
+    // Ảnh mờ thì đường chỉ không rõ, đo ra sai: không dùng ảnh này, bắt chụp lại
+    if (quality?.issues.includes('mờ')) return 'blurry';
     return { view, landmarks: lm.map((_, i) => apply(vm, px(i))), ridge: viewRidge(view), hints };
   } finally {
     bmp.close();

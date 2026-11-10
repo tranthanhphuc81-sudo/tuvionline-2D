@@ -10,6 +10,7 @@ export const PALM_PHOTO_TIPS = 'Chụp lòng bàn tay trên nền thoáng, đủ
 export const PALM_NOTE = 'Nội dung mang tính văn hoá, tham khảo, không phải căn cứ để quyết định việc quan trọng.';
 
 export const PALM_NO_HAND = 'Không thấy bàn tay trong ảnh. Bạn chụp lại, thấy rõ cả lòng bàn tay và các ngón nhé.';
+export const PALM_BLURRY = 'Ảnh bị mờ hoặc nhoè nên không thấy rõ đường chỉ, app không dùng ảnh này. Bạn chụp lại nhé: giữ máy thật yên, đủ sáng, chạm vào lòng bàn tay trên màn hình để máy lấy nét rồi mới bấm chụp.';
 export const PALM_UNREADABLE = 'Không đọc được ảnh này. Bạn thử chụp hoặc chọn ảnh khác nhé.';
 export const PALM_MODEL_FAILED = 'Chưa nạp được mô hình nhận diện bàn tay. Bạn thử lại; nếu vẫn lỗi thì cài lại app.';
 
@@ -68,3 +69,18 @@ export const PALM_DIFF_SAME = 'Các đặc điểm vẫn như lần trước.';
 export const PALM_DIFF_HINT = 'Khác đi có thể do tay đổi thật, cũng có thể do ảnh chụp hay cách chạm điểm khác lần trước. Hãy xem như gợi ý để soi lại mình.';
 export const palmOldNote = (iso: string) => `Đây là kết quả lần xem ngày ${palmDate(iso)}. Kết quả mới nhất ở màn hình trước.`;
 export const PALM_DELETE_ONE_CONFIRM = 'Xoá lần xem này? Việc này không lấy lại được.';
+
+/* Hướng dẫn xem chỉ tay: hiện ở màn bắt đầu, tự mở lần đầu chạm đường, và ở nút "Cách chạm" khi đang chạm. */
+export const PALM_GUIDE_TITLE = 'Cách chạm đường cho đúng';
+export const PALM_GUIDE_STEPS: readonly { title: string; text: string }[] = [
+  { title: 'Chụp cho rõ', text: 'Đủ sáng, bàn tay duỗi thẳng, thấy cả năm ngón, giữ máy yên và chạm vào lòng bàn tay trên màn hình để lấy nét. Tháo nhẫn, đừng để bóng che lòng bàn tay. Ảnh mờ, nhoè thì app báo chụp lại.' },
+  { title: 'Nét đứt chỉ là gợi ý', text: 'Mỗi bước app làm sáng một đường. Nét đứt mờ là máy đoán chỗ đường thường nằm, không phải đường của bạn và không được dùng để đo.' },
+  { title: 'Gợi ý lệch thì chạm theo đường thật', text: 'Nhìn kỹ đường thật trên tay (bấm giữ "Giữ xem gốc" để xem ảnh không có nét vẽ). Nét gợi ý lệch thì đừng chạm theo nó: chạm vào đầu và cuối của đường thật trên tay.' },
+  { title: 'Nét lệch thì chạm thêm điểm', text: 'Máy tự bám theo rãnh giữa các điểm bạn chạm. Nét đi tắt hay lệch khỏi rãnh thì chạm thêm 1–2 điểm đúng chỗ đó, máy sẽ uốn theo. Sinh đạo cong nên thường cần 1–2 điểm ở chỗ cong nhất.' },
+  { title: 'Chạm nhầm thì làm lại', text: 'Bấm "Lùi" để bỏ thao tác vừa rồi, hoặc "Xoá đường" để chạm lại cả đường đó từ đầu. Kéo một điểm đã chạm để dời nó.' },
+  { title: 'Đường đứt quãng', text: 'Chạm xong đoạn đầu, bấm "Đoạn mới" rồi chạm đầu và cuối đoạn sau. Hai đoạn cách nhau thì app tự ghi nhận chỗ đứt.' },
+  { title: 'Không thấy đường', text: 'Trí đạo và Định mạng có người không có hoặc rất mờ: bấm "Không thấy đường" hay "Không có đường này", đừng chạm đại.' },
+  { title: 'Xem lại số đo', text: 'Xong bốn đường, bảng "Máy đo được" hiện các điều máy suy ra. Chỗ nào chưa đúng với tay bạn thì bấm "Sửa"; chưa chắc thì chọn "Không rõ".' },
+];
+export const PALM_GUIDE_OPEN = 'Cách chạm';
+export const PALM_GUIDE_OK = 'Đã hiểu, bắt đầu chạm';

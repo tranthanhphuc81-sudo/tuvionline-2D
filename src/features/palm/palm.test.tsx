@@ -278,3 +278,12 @@ describe('Thầy đọc chỉ tay', () => {
     expect(screen.getByRole('button', { name: /Thầy đọc/ })).toBeTruthy();
   });
 });
+
+describe('Hướng dẫn chạm đường', () => {
+  it('màn bắt đầu có phần hướng dẫn, nói rõ nét gợi ý lệch thì chạm theo đường thật', () => {
+    setup(withState(), <PalmScreen />);
+    expect(screen.getByText('Cách chạm đường cho đúng')).toBeTruthy();
+    expect(screen.getByText(/Gợi ý lệch thì chạm theo đường thật/)).toBeTruthy();
+    expect(screen.getByText(/Chạm nhầm thì làm lại/)).toBeTruthy();
+  });
+});
