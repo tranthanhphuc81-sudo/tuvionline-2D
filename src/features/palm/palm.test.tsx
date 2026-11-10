@@ -6,6 +6,11 @@ import { initialRouter } from '../../app/router';
 import { createStore } from '../../state/store';
 import { emptyState, type PalmSession, type PersistedState, type Profile } from '../../state/schema';
 import { PALM_QUESTIONS } from '../../content/palm/questions';
+import { getReading, palmMetas, palmView } from '../../content/palm/index';
+import { CULTURE_LINE } from '../../content/reader/templates';
+import { analyzePalm } from '../../core';
+import { buildPalmScript } from '../reader/script';
+import { palmScriptInput } from './script';
 import { handWarp, PalmDiagram } from './PalmDiagram';
 import { PalmResultScreen } from './PalmResultScreen';
 import { PalmScreen } from './PalmScreen';
@@ -244,5 +249,32 @@ describe('Co giãn tranh theo tỉ lệ tay thật', () => {
   it('mỗi ngón vẽ riêng để co giãn', () => {
     const { container } = render(<PalmDiagram session={session()} />);
     expect(container.querySelectorAll('[data-finger]')).toHaveLength(5);
+  });
+});
+
+describe('Thầy đọc chỉ tay', () => {
+  const view = palmView(analyzePalm({ dominant: 'right', method: 'dominant', current: { answers: { Q02: 'H01', Q14: 'T01', Q17: 'SD02', Q20: 'TD16', 'Q21-dai': 'TD05', Q23: 'TAM02', Q28: 'HN09' } } }, palmMetas()));
+  const who = { goi: 'con', third: false, name: 'An' };
+  const cues = buildPalmScript(who, palmScriptInput(view), 0);
+
+  it('mở và kết có lời nhắc văn hoá, mỗi đường chính được tô sáng khi đọc tới', () => {
+    expect(cues[0].caption).toContain(CULTURE_LINE);
+    expect(cues.at(-1)!.caption).toContain(CULTURE_LINE);
+    const lines = new Set(cues.map((c) => c.focus?.line).filter(Boolean));
+    expect([...lines]).toEqual(expect.arrayContaining(['sinh', 'tri', 'tam']));
+    expect(cues.some((c) => c.gesture === 'point' && !!c.caption?.includes('Sinh đạo'))).toBe(true);
+    expect(new Set(cues.map((c) => c.id)).size).toBe(cues.length);
+  });
+
+  it('câu dữ liệu đánh dấu không đọc chỉ hiện chữ', () => {
+    const hn09 = getReading('HN09')!;
+    const cue = cues.find((c) => !!c.caption?.includes(hn09.text));
+    expect(cue?.text).toBe('');
+    expect(cue?.caption).toContain('xem chữ trên màn hình');
+  });
+
+  it('màn kết quả có nút Thầy đọc', () => {
+    setup(withState({ palmSessions: [session()] }), <PalmResultScreen />);
+    expect(screen.getByRole('button', { name: /Thầy đọc/ })).toBeTruthy();
   });
 });

@@ -7,7 +7,7 @@ import type { SpeechItem } from '../../platform/tts';
 import type { Huong } from '../../core';
 import type { Relation, XungHoSetting } from '../../state/schema';
 
-export interface CueFocus { palace?: number; hao?: number; pillar?: number; huong?: Huong }
+export interface CueFocus { palace?: number; hao?: number; pillar?: number; huong?: Huong; line?: 'sinh' | 'tri' | 'tam' | 'dinh' }
 export type CueGesture = 'point' | 'turnPage' | 'nod';
 export interface Cue extends SpeechItem { id: string; focus?: CueFocus; gesture?: CueGesture }
 
@@ -78,3 +78,31 @@ export const batTuLead = (pillar: number, nhatChu: string): Lead => ({ lines: LE
 export const lucHaoLead = (hao: number, shown: number): Lead => ({ lines: LEADS.luchaoThe, vars: { hao: shown }, focus: { hao } });
 export const laBanLead = (huong: Huong): Lead => ({ lines: LEADS.labanHuong, vars: { huong }, focus: { huong } });
 export const batTrachLead = (huong: Huong, sao: string): Lead => ({ lines: LEADS.battrachHuong, vars: { huong, sao }, focus: { huong } });
+
+/** Một câu luận chỉ tay: `speak` false thì chỉ hiện chữ (câu nhạy cảm hoặc dữ liệu đánh dấu không đọc). */
+export interface PalmSpoken { text: string; speak: boolean }
+export interface PalmScriptInput {
+  /** tóm tắt theo chủ đề */
+  summary: readonly { title: string; items: readonly PalmSpoken[] }[];
+  /** bốn đường chính theo thứ tự đọc: tô sáng đường trên sơ đồ rồi đọc các câu của đường đó */
+  lines: readonly { line: NonNullable<CueFocus['line']>; name: string; items: readonly PalmSpoken[] }[];
+  /** các mục còn lại: tổng quan bàn tay, ngón, đường phụ, gò */
+  sections: readonly { title: string; items: readonly PalmSpoken[] }[];
+}
+
+/** Kịch bản thầy đọc chỉ tay: câu mở → tóm tắt → từng đường chính (có tô sáng) → các mục còn lại → câu kết. */
+export function buildPalmScript(who: Who, input: PalmScriptInput, seed = new Date().getDate()): Cue[] {
+  const lines = TOOL_LINES.chitay;
+  const vars = { goi: who.goi, cuaAi: who.third ? 'của ' + who.name : 'của ' + who.goi, ten: who.name };
+  const say = (text: string, focus?: CueFocus, gesture?: CueGesture): SpeechItemDraft[] => chunkSpeech(normalizeForSpeech(text)).map((t) => ({ text: t, caption: text, focus, gesture }));
+  const read = (items: readonly PalmSpoken[], focus?: CueFocus) => items.flatMap((it) => (it.speak ? proseCues(it.text, who.goi, focus) : [{ text: '', caption: it.text + ' ' + fill(NO_SPEECH_LINE, { goi: who.goi }), focus }]));
+  const draft: SpeechItemDraft[] = [
+    ...say(fill(pick(lines.open, seed), vars)),
+    ...(input.summary.length ? [...say(fill(pick(lines.cells, seed), vars)), ...input.summary.flatMap((x) => [...say(x.title + '.'), ...read(x.items)])] : []),
+    ...input.lines.flatMap((l) => (l.items.length ? [...say(fill(pick(LEADS.chitayDuong, seed), { ...vars, duong: l.name }), { line: l.line }, 'point'), ...read(l.items, { line: l.line })] : [])),
+    ...(input.sections.some((x) => x.items.length) ? say(fill(pick(lines.sections, seed), vars), undefined, 'turnPage') : []),
+    ...input.sections.flatMap((x) => (x.items.length ? [...say(x.title + '.'), ...read(x.items)] : [])),
+    ...say(fill(pick(lines.close, seed), vars), undefined, 'nod'),
+  ];
+  return draft.map((c, i) => ({ ...c, id: `chitay-${i}` }));
+}

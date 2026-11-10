@@ -1,9 +1,9 @@
 /* Lời của thầy và đạo đồng (ARCHITECTURE.md mục 12.6–12.8). Mẫu câu có biến, KHÔNG sinh tự do.
    Giọng mộc, từ tốn, câu ngắn. Không hù doạ, không hứa hẹn, không phán quyết, không gợi ý lễ bái hay mua bán.
-   Biến: {goi} tiếng gọi người xem · {cuaAi} "của con" hoặc "của Lan" · {cung} {sao} {nhatChu} {hao} {huong}. */
+   Biến: {goi} tiếng gọi người xem · {cuaAi} "của con" hoặc "của Lan" · {cung} {sao} {nhatChu} {hao} {huong} {duong}. */
 export const CULTURE_LINE = 'Số là tham khảo, đức năng thắng số.';
 
-export type ReaderTool = 'tuvi' | 'battu' | 'luchao' | 'battrach' | 'laban' | 'napam' | 'tonghop';
+export type ReaderTool = 'tuvi' | 'battu' | 'luchao' | 'battrach' | 'laban' | 'napam' | 'tonghop' | 'chitay';
 
 const C = CULTURE_LINE;
 
@@ -107,6 +107,20 @@ export const TOOL_LINES: Record<ReaderTool, { open: readonly string[]; close: re
     cells: ['Trước hết, thầy điểm qua các chỉ số.', 'Mình nhìn tóm tắt đã.'],
     sections: ['Giờ thầy đọc từng phần.', 'Thầy đọc tiếp phần tổng hợp.'],
   },
+  chitay: {
+    open: [
+      `Thầy chào {goi}. Mình cùng xem bàn tay {cuaAi}. ${C}`,
+      `Bàn tay là tấm gương soi lại mình. Thầy đọc tay {cuaAi}. ${C}`,
+      `Thầy thấy các đường chỉ {cuaAi} rồi. Mình đọc từ từ nhé. ${C}`,
+    ],
+    close: [
+      `Tay thầy đọc đến đây. Đường chỉ đổi theo cách mình sống, sáu tháng một năm xem lại cũng được. ${C}`,
+      `Thầy đọc xong rồi. Giữ điều hay, sửa điều chưa hợp, tay cũng đổi theo. ${C}`,
+      `Đọc đến đây thôi. Tay là của mình, đường đi cũng do mình. ${C}`,
+    ],
+    cells: ['Trước hết thầy tóm lại mấy ý chính.', 'Mình nghe phần tóm tắt đã.'],
+    sections: ['Giờ thầy đọc kỹ từng phần.', 'Thầy đọc tiếp từng phần trên tay.'],
+  },
 };
 
 /** Lời dẫn tô sáng trên lá số. */
@@ -116,6 +130,7 @@ export const LEADS = {
   luchaoThe: ['{goi} xem hào {hao}, đó là hào Thế.', 'Hào Thế nằm ở hào {hao}.'],
   battrachHuong: ['{goi} xem hướng {huong}, sao {sao}, là hướng tốt nhất.', 'Hướng hợp nhất là {huong}, ứng với sao {sao}.'],
   labanHuong: ['Hướng {huong} thầy tô sáng trên vòng la bàn đây.', '{goi} nhìn trên vòng la bàn, hướng {huong} đang sáng lên.'],
+  chitayDuong: ['{goi} xem {duong}, thầy tô sáng trên tay đây.', 'Đây là {duong}.'],
 } as const;
 
 export const NO_SPEECH_LINE = '(Phần này {goi} xem chữ trên màn hình)';

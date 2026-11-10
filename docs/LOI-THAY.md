@@ -139,6 +139,32 @@
 - Thầy đọc xong rồi. Giữ điều hay, bỏ điều chưa hợp. Số là tham khảo, đức năng thắng số.
 - Đọc đến đây là đủ. Ngày mai vẫn do mình làm ra. Số là tham khảo, đức năng thắng số.
 
+## Chỉ tay
+
+**Câu mở**
+- Thầy chào {goi}. Mình cùng xem bàn tay {cuaAi}. Số là tham khảo, đức năng thắng số.
+- Bàn tay là tấm gương soi lại mình. Thầy đọc tay {cuaAi}. Số là tham khảo, đức năng thắng số.
+- Thầy thấy các đường chỉ {cuaAi} rồi. Mình đọc từ từ nhé. Số là tham khảo, đức năng thắng số.
+
+**Trước phần tóm tắt theo chủ đề**
+- Trước hết thầy tóm lại mấy ý chính.
+- Mình nghe phần tóm tắt đã.
+
+**Chỉ vào từng đường chính (đường đó sáng lên trên ảnh hoặc sơ đồ)**
+- {goi} xem {duong}, thầy tô sáng trên tay đây.
+- Đây là {duong}.
+
+**Trước các mục còn lại (tổng quan bàn tay, ngón, đường phụ, gò)**
+- Giờ thầy đọc kỹ từng phần.
+- Thầy đọc tiếp từng phần trên tay.
+
+**Câu kết**
+- Tay thầy đọc đến đây. Đường chỉ đổi theo cách mình sống, sáu tháng một năm xem lại cũng được. Số là tham khảo, đức năng thắng số.
+- Thầy đọc xong rồi. Giữ điều hay, sửa điều chưa hợp, tay cũng đổi theo. Số là tham khảo, đức năng thắng số.
+- Đọc đến đây thôi. Tay là của mình, đường đi cũng do mình. Số là tham khảo, đức năng thắng số.
+
+Câu luận đọc nguyên văn từ `palm-content.vi.json`. Câu đánh dấu không đọc (`tts: false`, hiện là HN09, HN10) hoặc dính từ cấm đọc thì chỉ hiện chữ.
+
 ## Lời chỉ vào lá số
 
 - {goi} xem ở đây, cung Mệnh ở {cung}{sao}.

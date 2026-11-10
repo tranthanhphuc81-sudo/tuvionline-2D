@@ -82,7 +82,7 @@ describe('kịch bản đọc', () => {
   });
 
   it('mẫu câu không dính từ cấm đọc, không còn biến chưa thay, không quá dài', () => {
-    const vars = { goi: 'con', cuaAi: 'của con', ten: 'Lan', cung: 'Hợi', sao: ', có Tử Vi', nhatChu: 'Quý', hao: 3, huong: 'Đông Nam', sao2: '' };
+    const vars = { goi: 'con', cuaAi: 'của con', ten: 'Lan', cung: 'Hợi', sao: ', có Tử Vi', nhatChu: 'Quý', hao: 3, huong: 'Đông Nam', sao2: '', duong: 'Sinh đạo' };
     for (const l of allLines()) {
       const s = fill(l, vars);
       expect(hasNoSpeech(s)).toBe(false);

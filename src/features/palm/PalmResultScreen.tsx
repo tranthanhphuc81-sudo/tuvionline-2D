@@ -14,6 +14,10 @@ import { Segmented } from '../../ui/components/Segmented';
 import ui from '../../ui/components/ui.module.css';
 import { PALM_LINE_COLOR, PalmDiagram, smoothPath } from './PalmDiagram';
 import { dropPhoto, heldPhoto } from './photoMemory';
+import { palmScriptInput } from './script';
+import { SpeakButton } from '../../ui/components/SpeakButton';
+import { useCueFocus, useWho } from '../reader/hooks';
+import { buildPalmScript } from '../reader/script';
 import s from './palm.module.css';
 
 const handInput = (p: PalmSession): PalmHandInput => ({ answers: p.answers });
@@ -31,7 +35,7 @@ function Reading({ r }: { r: PalmReading }) {
 }
 
 /** Đường chỉ vẽ lên chính ảnh tay vừa chụp (chỉ có ngay sau khi xem, ảnh không được lưu). */
-function PalmPhoto({ session, url }: { session: PalmSession; url: string }) {
+function PalmPhoto({ session, url, focus }: { session: PalmSession; url: string; focus?: PalmLineKey }) {
   const keys = Object.keys(session.lines) as PalmLineKey[];
   const K = 512;
   return (
@@ -41,9 +45,9 @@ function PalmPhoto({ session, url }: { session: PalmSession; url: string }) {
         {keys.map((k) => (session.lines[k] ?? []).map((seg, i) => {
           const d = smoothPath(seg.map((p) => ({ x: p.x * K, y: p.y * K })));
           return (
-            <g key={k + i}>
-              <path d={d} stroke="#fff" strokeWidth={7} opacity={0.55} />
-              <path d={d} stroke={PALM_LINE_COLOR[k]} strokeWidth={4} />
+            <g key={k + i} opacity={focus && focus !== k ? 0.3 : 1}>
+              <path d={d} stroke="#fff" strokeWidth={focus === k ? 10 : 7} opacity={0.55} />
+              <path d={d} stroke={PALM_LINE_COLOR[k]} strokeWidth={focus === k ? 6 : 4} />
             </g>
           );
         }))}
@@ -65,6 +69,10 @@ export function PalmResultScreen({ id }: { id?: string }) {
   const shown = old ?? current ?? innate;
   const photo = shown && !old ? heldPhoto(shown.id) : null;
   const [look, setLook] = useState<'photo' | 'art'>('photo');
+  const who = useWho();
+  const readId = old ? 'chitay-' + old.id : 'chitay';
+  // Thầy đọc tới đường nào thì đường đó sáng lên trên ảnh hoặc sơ đồ
+  const focus = useCueFocus(readId)?.line;
   // Rời màn kết quả mới nhất là bỏ ảnh khỏi bộ nhớ (màn xem lại lần cũ không giữ ảnh nên không đụng tới)
   useEffect(() => (id ? undefined : dropPhoto), [id]);
 
@@ -120,10 +128,12 @@ export function PalmResultScreen({ id }: { id?: string }) {
             <Segmented<'photo' | 'art'> label="Cách xem" hideLabel value={look} onChange={setLook} options={[{ value: 'photo', label: 'Ảnh tay của bạn' }, { value: 'art', label: 'Tranh sơ đồ' }]} />
           </div>
         )}
-        {photo && look === 'photo' ? <PalmPhoto session={shown} url={photo} /> : <PalmDiagram session={shown} />}
+        {photo && look === 'photo' ? <PalmPhoto session={shown} url={photo} focus={focus} /> : <PalmDiagram session={shown} focus={focus} />}
         {photo && look === 'photo' && <p className={ui.muted}>Ảnh chỉ hiện lúc này và không được lưu. Mở lại kết quả sau sẽ thấy tranh sơ đồ.</p>}
         {current && innate && <p className={ui.muted}>Có cả hai tay nên phần so sánh nằm ở cuối kết quả.</p>}
       </section>
+
+      <SpeakButton id={readId} getCues={() => buildPalmScript(who, palmScriptInput(view))} />
 
       {view.topics.length > 0 && (
         <section className={ui.stack} aria-label="Tổng kết theo chủ đề">
