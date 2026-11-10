@@ -65,11 +65,11 @@ describe('PalmDiagram', () => {
   it('vẽ từng đoạn của mỗi đường, đọc được bằng trình đọc màn hình, tay trái được lật', () => {
     const { container, rerender } = render(<PalmDiagram session={session()} />);
     expect(screen.getByRole('img').getAttribute('aria-label')).toContain('Sinh đạo, Tâm đạo');
-    // 5 ngón + 1 đoạn Sinh đạo + 2 đoạn Tâm đạo
-    expect(container.querySelectorAll('polyline')).toHaveLength(5 + 3);
-    expect(container.querySelector('g')!.getAttribute('transform')).toBeNull();
+    // 1 đoạn Sinh đạo + 2 đoạn Tâm đạo
+    expect(container.querySelectorAll('[data-line]')).toHaveLength(3);
+    expect(container.querySelector('[data-hand]')!.getAttribute('transform')).toBeNull();
     rerender(<PalmDiagram session={session({ hand: 'left' })} />);
-    expect(container.querySelector('g')!.getAttribute('transform')).toContain('scale(-1 1)');
+    expect(container.querySelector('[data-hand]')!.getAttribute('transform')).toContain('scale(-1 1)');
   });
 });
 

@@ -79,6 +79,17 @@ Các lớp `xuan`, `ha`, `thu`, `dong` phải khớp vị trí hồ và bờ đ�
 - `room`: ảnh được neo theo cạnh dưới, nên có thể bị cắt ở trên và hai bên. Thầy ngồi ở giữa, phía sau án thư. Sáu đồ vật hiện trên mặt án, nên mặt án cần trống và đủ rộng. Góc phải dưới là ánh đèn dầu.
 - Đồ vật: nền trong suốt, hiển thị nhỏ cỡ 72 × 54 px trên màn hình, nên phải nhận ra được ngay bằng hình khối. Các đồ vật này là nút bấm mở từng công cụ.
 
+### 6b. Xem chỉ tay: 2 file (thêm 10/11/2026)
+
+| File | Kích thước | Nội dung |
+|---|---|---|
+| `obj-chitay.webp` | 288 × 216 px | Đèn dầu soi một bàn tay ngửa, cùng bộ với các đồ vật trên án thư |
+| `palm-hand.webp` | 720 × 1080 px | Bàn tay phải ngửa, vẽ bút mực nâu kiểu tranh sách tướng tay xưa. ĐÃ CÓ bản tạm của chủ dự án (10/11/2026, 687 × 1024, nền trắng) ở `src/assets/palm/`; thay tranh thì đo lại các mốc trong `PalmDiagram.tsx` |
+
+- `palm-hand`: tay PHẢI, lòng bàn tay hướng ra, ngón chỉ thẳng lên trên, ngón cái bên trái, các ngón hơi xoè và không chạm nhau, cổ tay ở mép dưới. Nét mực nâu sẫm đậm nhạt, gạch bóng nhẹ ở mép tay và gò Kim Tinh, có ngấn đốt ngón và nếp gò ngón cái.
+- KHÔNG vẽ bốn đường chỉ chính (Sinh đạo, Trí đạo, Tâm đạo, Định mạng): app tự vẽ đường của người dùng lên trên. KHÔNG có chữ, khung, trăng sao: app tự thêm. Nền trong suốt.
+- Gửi kèm toạ độ điểm ảnh của ba mốc: giữa nếp cổ tay, gốc ngón trỏ và gốc ngón út (chỗ ngón nối lòng bàn tay), để app đặt đường cho khớp.
+
 ## 7. Nhân vật: 2 file Lottie
 
 | File | Nhân vật |
