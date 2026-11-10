@@ -36,7 +36,7 @@ export const PALM_QUESTIONS: readonly PalmQuestion[] = [
   { id: 'Q05', text: 'Khi nắm thử, tay bạn…', stage: 'more', multi: false, options: [o('H12', 'Cứng'), o('vua', 'Vừa'), o('H13', 'Mềm')] },
   { id: 'Q06', text: 'Tay bạn thường…', stage: 'more', multi: false, options: [o('H14', 'Ấm'), o('binh-thuong', 'Bình thường'), o('H15', 'Mát')] },
   { id: 'Q07', text: 'Lòng bàn tay', stage: 'more', multi: false, options: [o('H16', 'Đầy đặn'), o('H17', 'Trũng giữa'), o('H18', 'Mỏng, phẳng')] },
-  { id: 'Q08', text: 'Áp ngón cái vào cạnh ngón trỏ, đầu ngón cái tới đâu?', stage: 'more', multi: false, hint: 'Tới khớp giữa đốt giữa và đốt gốc ngón trỏ là dài, khoảng 1/3 đốt gốc là trung bình.', options: [o('F01', 'Dài'), o('trung-binh', 'Trung bình'), o('F02', 'Ngắn')] },
+  { id: 'Q08', text: 'Áp ngón cái vào cạnh ngón trỏ, đầu ngón cái tới đâu?', stage: 'measured', multi: false, hint: 'Tới khớp giữa đốt giữa và đốt gốc ngón trỏ là dài, khoảng 1/3 đốt gốc là trung bình.', options: [o('F01', 'Dài'), o('trung-binh', 'Trung bình'), o('F02', 'Ngắn')] },
   { id: 'Q09', text: 'Xoè tay tự nhiên, ngón cái…', stage: 'measured', multi: false, options: [o('F03', 'Dang xa'), o('vua', 'Bình thường'), o('F04', 'Khép sát')] },
   { id: 'Q10', text: 'Ngón trỏ so với ngón áp út', stage: 'measured', multi: false, options: [o('F08', 'Dài hơn'), o('F09', 'Ngắn hơn'), o('F10', 'Gần bằng')] },
   { id: 'Q11', text: 'Ngón út so với ngấn đốt trên ngón áp út', stage: 'measured', multi: false, options: [o('F14', 'Vượt'), o('ngang', 'Ngang'), o('F15', 'Thấp hơn')] },

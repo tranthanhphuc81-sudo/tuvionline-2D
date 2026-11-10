@@ -55,3 +55,15 @@ export const PALM_WHY = 'Vì sao?';
 export const PALM_DELETE_CONFIRM = 'Xoá kết quả xem chỉ tay của hồ sơ này? Việc này không lấy lại được.';
 export const PALM_TONE_LABEL = { '+': 'Điểm thuận', '=': 'Trung tính', '!': 'Cần lưu ý' } as const;
 
+
+/* Lịch sử và so sánh qua thời gian (CHI-TAY §13: tướng tay đổi theo cách mình sống, xem lại sau 6–12 tháng) */
+export const palmDate = (iso: string) => { const d = new Date(iso); return `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`; };
+export const PALM_HISTORY_TITLE = 'Các lần xem trước';
+export const PALM_HISTORY_HINT = 'App giữ tối đa 12 lần cho mỗi tay. Chạm một lần để xem lại kết quả hôm đó.';
+export const palmDiffTitle = (iso: string) => `So với lần xem ngày ${palmDate(iso)}`;
+export const PALM_DIFF_ADDED = 'Mới thấy ở lần này';
+export const PALM_DIFF_REMOVED = 'Không còn thấy so với lần trước';
+export const PALM_DIFF_SAME = 'Các đặc điểm vẫn như lần trước.';
+export const PALM_DIFF_HINT = 'Khác đi có thể do tay đổi thật, cũng có thể do ảnh chụp hay cách chạm điểm khác lần trước. Hãy xem như gợi ý để soi lại mình.';
+export const palmOldNote = (iso: string) => `Đây là kết quả lần xem ngày ${palmDate(iso)}. Kết quả mới nhất ở màn hình trước.`;
+export const PALM_DELETE_ONE_CONFIRM = 'Xoá lần xem này? Việc này không lấy lại được.';

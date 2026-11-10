@@ -1,6 +1,6 @@
 /* Xem chỉ tay (ARCHITECTURE mục 13.1): chọn tay → chụp → chạm 4 đường → xác nhận số đo → vài câu hỏi → kết quả.
    Ảnh chỉ nằm trong bộ nhớ khi đang xem, không được lưu; chỉ lưu các nét đã chạm và 21 điểm khớp. */
-import { useMemo, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { measureHand, measureLines, measuresToAnswers, type MountId } from '../../core';
 import { mountAnswer, PALM_QUESTIONS, questionsAt, type PalmQuestion } from '../../content/palm/questions';
 import {
@@ -12,6 +12,8 @@ import { useBackHandler } from '../../app/hooks';
 import { savePalmSession, selectActiveProfile } from '../../state/actions';
 import ui from '../../ui/components/ui.module.css';
 import { QuestionField, type PalmAnswer } from './QuestionField';
+import { MachineAnswers } from './MachineAnswers';
+import { holdPhoto } from './photoMemory';
 import { TraceStep, type TraceResult } from './TraceStep';
 import type { PreparedPhoto } from './vision/photo';
 import { SIZE } from './vision/types';
@@ -24,12 +26,6 @@ type Hand = 'left' | 'right';
 const Q = (id: string) => PALM_QUESTIONS.find((q) => q.id === id)!;
 const HAND_Q: PalmQuestion = { id: 'hand', text: PALM_HAND_Q, stage: 'before', multi: false, options: [{ value: 'right', label: 'Tay phải' }, { value: 'left', label: 'Tay trái' }] };
 const MORE_QS = questionsAt('more').filter((q) => q.id !== 'Q30');
-
-/** Câu trả lời đang đúng với điều máy đã chọn sẵn (để hiện nhãn "Máy đã chọn sẵn"). */
-const sameAsMachine = (q: PalmQuestion, now: PalmAnswer, auto: string | null | undefined): boolean => {
-  if (auto == null) return false;
-  return JSON.stringify(now) === JSON.stringify(q.multi ? [auto] : auto);
-};
 
 export function PalmScreen() {
   const nav = useNav();
@@ -45,7 +41,7 @@ export function PalmScreen() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [answers, setAnswers] = useState<Answers>({});
-  const [machine, setMachine] = useState<Record<string, string | null>>({});
+  const [machine, setMachine] = useState<Record<string, string | string[] | null>>({});
   const [traced, setTraced] = useState<TraceResult | null>(null);
   const [moreOpen, setMoreOpen] = useState(false);
   const [mounts, setMounts] = useState<Record<'noi' | 'phang', MountId[]>>({ noi: [], phang: [] });
@@ -75,24 +71,26 @@ export function PalmScreen() {
     if (!photo) return;
     const landmarks = photo.landmarks.map((p) => ({ x: p.x / SIZE, y: p.y / SIZE }));
     const flat = (k: keyof TraceResult['lines']) => t.lines[k]?.flat();
-    const ms = [...measureHand(landmarks), ...measureLines({ landmarks, lines: { sinh: flat('sinh'), tri: flat('tri'), tam: flat('tam'), dinh: flat('dinh') }, breaks: t.breaks })];
-    const auto: Record<string, string | null> = measuresToAnswers(ms);
+    const ms = [...measureHand(landmarks), ...measureLines({ landmarks, lines: { sinh: flat('sinh'), tri: flat('tri'), tam: flat('tam'), dinh: flat('dinh') }, breaks: t.breaks, strength: t.strength, minor: t.minor })];
+    const auto = measuresToAnswers(ms);
     // Người dùng nói không có Định mạng thì đó là câu trả lời, không phải "không rõ"
     if (!t.lines.dinh) auto.Q25 = 'DM15';
-    const next: Answers = { ...auto };
-    if (typeof next.Q22 === 'string') next.Q22 = [next.Q22];
+    // Câu chọn nhiều mà máy chỉ thấy một mã thì vẫn là mảng
+    for (const q of PALM_QUESTIONS) if (q.multi && typeof auto[q.id] === 'string') auto[q.id] = [auto[q.id] as string];
     setTraced(t);
     setMachine(auto);
-    setAnswers((old) => ({ ...old, ...next }));
-    setMoreOpen(['Q18', 'Q22', 'Q26'].some((q) => auto[q]));
+    setAnswers((old) => ({ ...old, ...auto }));
     setStep('confirm');
   };
 
   const set = (id: string) => (v: string | string[] | null) => setAnswers((a) => ({ ...a, [id]: v }));
   const toggleMount = (level: 'noi' | 'phang', m: MountId) => setMounts((x) => ({ ...x, [level]: x[level].includes(m) ? x[level].filter((y) => y !== m) : [...x[level], m] }));
 
-  const measuredQs = useMemo(() => questionsAt('measured'), []);
-  const basicQs = useMemo(() => questionsAt('basic'), []);
+  /** Câu máy đã trả lời: mọi câu đo được, cộng các câu "Xem kỹ hơn" mà máy thấy rõ đặc điểm. Những câu này không hỏi lại. */
+  const byMachine = PALM_QUESTIONS.filter((q) => q.stage === 'measured' || (machine[q.id] !== undefined && machine[q.id] !== null));
+  const asked = (q: PalmQuestion) => !byMachine.includes(q);
+  const basicQs = questionsAt('basic').filter(asked);
+  const moreQs = MORE_QS.filter(asked);
 
   const finish = () => {
     if (!profile || !photo || !traced) return;
@@ -100,10 +98,11 @@ export function PalmScreen() {
     const all: Record<string, string | string[] | null> = { Q01: dominant };
     for (const [k, v] of Object.entries(answers)) if (v !== undefined) all[k] = v;
     if (codes.length) all.Q30 = codes;
-    savePalmSession(store, {
+    const id = savePalmSession(store, {
       profileId: profile.id, hand, role: hand === dominant ? 'current' : 'innate',
       landmarks: photo.landmarks.map((p) => ({ x: p.x / SIZE, y: p.y / SIZE })), lines: traced.lines, answers: all, measured: machine,
     });
+    holdPhoto(id, photo.view);
     nav.replace({ name: 'palm.result' });
   };
 
@@ -152,7 +151,7 @@ export function PalmScreen() {
           <h2 className={ui.sectionTitle}>{PALM_CONFIRM_TITLE}</h2>
           <p className={ui.muted}>{PALM_CONFIRM_HINT}</p>
           <section className={ui.card}>
-            {measuredQs.map((q) => <QuestionField key={q.id} q={q} value={answers[q.id]} onChange={set(q.id)} fromMachine={sameAsMachine(q, answers[q.id], machine[q.id])} />)}
+            <MachineAnswers questions={byMachine} answers={answers} machine={machine} onChange={(id, v) => set(id)(v)} />
           </section>
           <button type="button" className={`${ui.btn} ${ui.primary} ${ui.block}`} onClick={() => setStep('questions')}>Tiếp ›</button>
         </>
@@ -167,7 +166,7 @@ export function PalmScreen() {
           <details className={s.more} open={moreOpen} onToggle={(e) => setMoreOpen(e.currentTarget.open)}>
             <summary>{PALM_MORE_TITLE}</summary>
             <p className={ui.muted}>{PALM_MORE_HINT}</p>
-            {MORE_QS.map((q) => <QuestionField key={q.id} q={q} value={answers[q.id]} onChange={set(q.id)} fromMachine={sameAsMachine(q, answers[q.id], machine[q.id])} />)}
+            {moreQs.map((q) => <QuestionField key={q.id} q={q} value={answers[q.id]} onChange={set(q.id)} />)}
             {PALM_Q30_GROUPS.map((g) => (
               <div key={g.level} className={s.question} role="group" aria-label={g.title}>
                 <p className={s.qtext}>{g.title}</p>

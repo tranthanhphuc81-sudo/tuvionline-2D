@@ -19,7 +19,7 @@ export type Route =
   | { name: 'luchao' }
   | { name: 'phongthuy'; sub?: PhongThuySub }
   | { name: 'palm' }
-  | { name: 'palm.result' }
+  | { name: 'palm.result'; id?: string }
   | { name: 'profiles' }
   | { name: 'profiles.edit'; id?: string }
   | { name: 'settings' };

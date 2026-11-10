@@ -930,7 +930,7 @@ Luồng: **tay nào → chụp → chạm 4 đường → xác nhận số đo �
 
 - **Phiên xem** gắn với hồ sơ và ngày, để so theo thời gian (tướng tay thay đổi): `{ id, profileId, date, hand: 'left' | 'right', role: 'current' | 'innate', lines (toạ độ chuẩn hoá), landmarks (21 điểm chuẩn hoá), answers, measured, version }`.
 - Lược đồ `lyso.state` lên version 3: thêm `palmSessions: PalmSession[]`, migration 2 → 3 thêm mảng rỗng. Xoá hồ sơ thì xoá phiên của hồ sơ đó; "Xoá toàn bộ dữ liệu" và sao lưu, khôi phục JSON bao gồm luôn.
-- **Ảnh tay (đã chốt):** **không lưu ảnh**, chỉ lưu nét và điểm khớp đã chuẩn hoá. Lý do: quyền riêng tư (ảnh lòng bàn tay là dữ liệu cá nhân), dung lượng, và sơ đồ vẽ lại được từ nét. Đánh đổi: không xem lại ảnh cũ, thoát giữa chừng phải chụp lại. Thay thế cho mục "Ảnh tay" phía trên.
+- **Ảnh tay (đã chốt):** **không lưu ảnh**, chỉ lưu nét và điểm khớp đã chuẩn hoá. Lý do: quyền riêng tư (ảnh lòng bàn tay là dữ liệu cá nhân), dung lượng, và sơ đồ vẽ lại được từ nét. Đánh đổi: không xem lại ảnh cũ, thoát giữa chừng phải chụp lại. Thay thế cho mục "Ảnh tay" phía trên. Bổ sung 10/11/2026: ngay sau khi xem, màn kết quả vẽ đường lên ảnh thật (ảnh chỉ giữ trong bộ nhớ, `src/features/palm/photoMemory.ts`), rời màn kết quả là bỏ; mở lại thì dùng tranh sơ đồ. Cùng ngày: thay quyết định "lần mới thay lần cũ" bằng lịch sử tối đa 12 lần mỗi tay mỗi hồ sơ để so qua thời gian (CHI-TAY §13).
 
 #### 7. Chính sách nội dung
 

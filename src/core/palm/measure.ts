@@ -29,11 +29,53 @@ export const PALM_THRESHOLDS = {
   touch: 0.032,
   /** Trí đạo thẳng ngang nếu đuôi thấp hơn đầu chưa tới tỉ lệ này */
   triFlat: 0.08,
+  /** đường coi là thẳng nếu chỗ lệch xa nhất khỏi dây cung chưa tới tỉ lệ này của dây cung */
+  straight: 0.05,
+  /** Định mạng coi là hơi cong từ mức lệch này */
+  curved: 0.07,
+  /** đường uốn lượn: số lần đổi chiều cong từ mức này */
+  waves: 3,
+  /** độ đậm rãnh Sinh đạo so với mức rãnh rõ của chính lòng bàn tay đó: từ mức này là rõ, dưới mức kia là mờ */
+  deep: 1.5, faint: 0.7,
+  /** mật độ chỉ nhỏ: dưới mức này là ít chỉ, trên mức kia là nhiều chỉ nhỏ */
+  fewLines: 0.05, manyLines: 0.14,
 } as const;
 
 const pick = (q: string, id: string | null, value?: number): PalmMeasure => (value === undefined ? { q, id } : { q, id, value });
 
-/** Các phép đo chỉ cần khớp tay: Q04, Q09, Q10, Q11, Q12. */
+/** Độ lệch xa nhất khỏi dây cung nối hai đầu, chia cho độ dài dây cung. */
+function bend(pts: readonly PalmPt[]): number {
+  const a = pts[0], b = pts[pts.length - 1], l = dist(a, b) || 1;
+  return Math.max(...pts.map((p) => Math.abs((b.x - a.x) * (a.y - p.y) - (a.x - p.x) * (b.y - a.y)) / l)) / l;
+}
+
+/** Số lần đường đổi chiều cong (trái ↔ phải). Lấy 12 điểm cách đều theo chiều dài rồi làm mượt, để nét bám rãnh hơi răng cưa không bị tính là uốn lượn. */
+function waves(pts: readonly PalmPt[]): number {
+  const cum = [0];
+  for (let i = 1; i < pts.length; i++) cum.push(cum[i - 1] + dist(pts[i - 1], pts[i]));
+  const total = cum[cum.length - 1];
+  if (total <= 0 || pts.length < 3) return 0;
+  const N = 12, rs: PalmPt[] = [];
+  for (let k = 0, i = 1; k <= N; k++) {
+    const at = (total * k) / N;
+    while (i < pts.length - 1 && cum[i] < at) i++;
+    const u = (at - cum[i - 1]) / Math.max(1e-9, cum[i] - cum[i - 1]);
+    rs.push({ x: pts[i - 1].x + u * (pts[i].x - pts[i - 1].x), y: pts[i - 1].y + u * (pts[i].y - pts[i - 1].y) });
+  }
+  const sm = rs.map((p, i) => (i === 0 || i === N ? p : { x: (rs[i - 1].x + 2 * p.x + rs[i + 1].x) / 4, y: (rs[i - 1].y + 2 * p.y + rs[i + 1].y) / 4 }));
+  let last = 0, flips = 0;
+  for (let i = 1; i < N; i++) {
+    const ax = sm[i].x - sm[i - 1].x, ay = sm[i].y - sm[i - 1].y, bx = sm[i + 1].x - sm[i].x, by = sm[i + 1].y - sm[i].y;
+    const turn = Math.atan2(ax * by - ay * bx, ax * bx + ay * by);
+    if (Math.abs(turn) < 0.2) continue; // dưới khoảng 11 độ coi như đi thẳng
+    const sg = Math.sign(turn);
+    if (last && sg !== last) flips++;
+    last = sg;
+  }
+  return flips;
+}
+
+/** Các phép đo chỉ cần khớp tay: Q04, Q08, Q09, Q10, Q11, Q12. */
 export function measureHand(lm: readonly PalmPt[]): PalmMeasure[] {
   if (lm.length < 21) return [];
   const palm = dist(lm[0], lm[9]);
@@ -58,10 +100,17 @@ export function measureHand(lm: readonly PalmPt[]): PalmMeasure[] {
 
   const fingers = chain(lm, [9, 10, 11, 12]) / palm;
   out.push(pick('Q12', fingers > 1.1 ? 'F16' : fingers < 0.9 ? 'F17' : 'can-doi', fingers));
+
+  // Ngón cái áp dọc ngón trỏ: dựng thẳng ngón cái từ khớp gốc (2) lên theo trục bàn tay rồi xem đầu ngón tới đâu trên đốt gốc ngón trỏ (5 → 6).
+  // 1 là tới khớp giữa đốt gốc và đốt giữa (dài), khoảng 1/3 là trung bình (CHI-TAY Q08).
+  const reach = height(lm, lm[2]) + chain(lm, [2, 3, 4]) / palm;
+  const thumb = (reach - height(lm, lm[5])) / (height(lm, lm[6]) - height(lm, lm[5]));
+  out.push(pick('Q08', thumb >= 0.8 ? 'F01' : thumb < 0.1 ? 'F02' : 'trung-binh', thumb));
   return out;
 }
 
-/** Các phép đo từ nét đã xác nhận: Q17, Q20, Q21 (hướng, độ dài), Q23, Q25. Nét thiếu thì câu đó trả null. */
+/** Các phép đo từ nét đã xác nhận: Q17, Q20, Q21 (hướng, độ dài), Q23, Q25 luôn có (nét thiếu thì null);
+    Q18, Q22, Q24, Q26, Q32 chỉ có khi thấy rõ đặc điểm, không thì để người dùng tự chọn. */
 export function measureLines(t: PalmTrace): PalmMeasure[] {
   const lm = t.landmarks;
   if (lm.length < 21) return [];
@@ -117,11 +166,32 @@ export function measureLines(t: PalmTrace): PalmMeasure[] {
   const cut = (k: keyof PalmTrace['lines']) => (t.breaks?.[k] ?? 0) > 0;
   if (sinh && cut('sinh')) out.push(pick('Q18', 'SD06', t.breaks!.sinh));
   if (tri && cut('tri')) out.push(pick('Q22', 'TD19', t.breaks!.tri));
-  if (dinh && cut('dinh')) out.push(pick('Q26', 'DM09', t.breaks!.dinh));
+
+  // Độ đậm của rãnh Sinh đạo (khi không đứt)
+  const st = t.strength?.sinh;
+  if (sinh && !cut('sinh') && st !== undefined && (st >= T.deep || st < T.faint)) out.push(pick('Q18', st >= T.deep ? 'SD01' : 'SD04', st));
+  // Trí đạo uốn lượn
+  if (tri) { const w = waves(tri); if (w >= T.waves) out.push(pick('Q22', 'TD11', w)); }
+  // Tâm đạo gần như thẳng
+  if (tam) { const b = bend(tam); if (b < T.straight) out.push(pick('Q24', 'TAM06', b)); }
+  // Định mạng: đứt, thẳng dài lên tới ngón giữa, chạy hết lên gò Thổ, hay hơi cong
+  if (dinh) {
+    const b = bend(dinh), top = Math.max(...dinh.map((p) => height(lm, p))), foot = Math.min(...dinh.map((p) => height(lm, p)));
+    const id = cut('dinh') ? 'DM09' : top >= 0.9 && foot < 0.15 && b < T.straight ? 'DM01' : top >= 0.9 ? 'DM12' : b >= T.curved ? 'DM11' : null;
+    if (id) out.push(pick('Q26', id, cut('dinh') ? t.breaks!.dinh : b));
+  }
+  // Số chỉ nhỏ trên bàn tay
+  if (t.minor !== undefined) out.push(pick('Q32', t.minor < T.fewLines ? 'C06' : t.minor > T.manyLines ? 'C07' : 'vua', t.minor));
   return out;
 }
 
-/** Đổi kết quả đo thành câu trả lời cho `analyzePalm`. */
-export function measuresToAnswers(ms: readonly PalmMeasure[]): Record<string, string | null> {
-  return Object.fromEntries(ms.map((m) => [m.q, m.id]));
+/** Đổi kết quả đo thành câu trả lời cho `analyzePalm`. Câu chọn nhiều có thể có vài mã (Q22: đứt và uốn lượn) thì gộp thành mảng. */
+export function measuresToAnswers(ms: readonly PalmMeasure[]): Record<string, string | string[] | null> {
+  const out: Record<string, string | string[] | null> = {};
+  for (const m of ms) {
+    const old = out[m.q];
+    if (old === undefined || old === null || m.id === null) out[m.q] = old ?? m.id;
+    else out[m.q] = [...(Array.isArray(old) ? old : [old]), m.id];
+  }
+  return out;
 }

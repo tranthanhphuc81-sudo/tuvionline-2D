@@ -1,6 +1,6 @@
 /* Xem chỉ tay: dữ liệu câu chữ, bộ câu hỏi, phép đo từ nét và luận giải (PROMPT-KIT-CHI-TAY 3B.2, mục (a)–(i)). */
 import { describe, expect, it } from 'vitest';
-import { analyzePalm, measureHand, measureLines, measuresToAnswers, printReading, TOPIC_MAX, type FingerPrint, type PalmInput, type PalmMeta, type PalmPt } from '../src/core';
+import { analyzePalm, diffHands, measureHand, measureLines, measuresToAnswers, printReading, TOPIC_MAX, type FingerPrint, type PalmInput, type PalmMeta, type PalmPt } from '../src/core';
 import { NEUTRAL_VALUES, PALM_QUESTIONS, mountAnswer } from '../src/content/palm/questions';
 import { PALM_READINGS, PALM_TTS_FORBIDDEN, getReading, palmMetas, palmView, topicLine } from '../src/content/palm';
 import handsJson from './fixtures/palm/hands.json';
@@ -40,8 +40,9 @@ describe('Dữ liệu câu chữ và câu hỏi', () => {
 
   it('câu hỏi nào cũng có mã riêng; câu do máy đo có đủ lựa chọn cho mọi kết quả đo', () => {
     expect(new Set(PALM_QUESTIONS.map((q) => q.id)).size).toBe(PALM_QUESTIONS.length);
-    const measured = new Map(PALM_QUESTIONS.filter((q) => q.stage === 'measured').map((q) => [q.id, new Set(q.options.map((o) => o.value))]));
-    for (const m of [...measureHand(HAND), ...measureLines({ landmarks: HAND, lines: { sinh: SINH, tri: TRI, tam: TAM, dinh: DINH } })]) {
+    const measured = new Map(PALM_QUESTIONS.map((q) => [q.id, new Set(q.options.map((o) => o.value))]));
+    const all = { landmarks: HAND, lines: { sinh: SINH, tri: TRI, tam: TAM, dinh: DINH }, breaks: { sinh: 1, tri: 1, dinh: 1 }, minor: 0.2 };
+    for (const m of [...measureHand(HAND), ...measureLines(all), ...measureLines({ ...all, breaks: {}, strength: { sinh: 0.3 }, minor: 0 })]) {
       expect(measured.has(m.q), m.q).toBe(true);
       if (m.id) expect(measured.get(m.q)!.has(m.id), `${m.q} → ${m.id}`).toBe(true);
     }
@@ -208,17 +209,64 @@ describe('Đo từ nét đã xác nhận', () => {
     for (const q of ['Q18', 'Q22', 'Q26']) expect(a[q]).toBeUndefined();
     const cut = measuresToAnswers(measureLines({ landmarks: HAND, lines: { sinh: SINH, tri: TRI, tam: TAM, dinh: DINH }, breaks: { sinh: 1, tri: 2, tam: 1, dinh: 1 } }));
     expect([cut.Q18, cut.Q22, cut.Q26]).toEqual(['SD06', 'TD19', 'DM09']);
-    // Tâm đạo đứt chưa có câu riêng; không có đường thì không điền; số chỗ đứt 0 thì không điền
-    expect(cut.Q24).toBeUndefined();
+    // không có đường thì không điền; số chỗ đứt 0 thì không điền
+    expect(cut.Q24).toBe('TAM06'); // Tâm đạo đứt chưa có câu riêng, ở đây chỉ là "gần như thẳng"
     const none = measuresToAnswers(measureLines({ landmarks: HAND, lines: { sinh: SINH }, breaks: { sinh: 0, tri: 1 } }));
     expect([none.Q18, none.Q22]).toEqual([undefined, undefined]);
+  });
+
+  it('độ đậm rãnh Sinh đạo: rõ, mờ, hoặc để người dùng chọn; đứt thì ưu tiên "Đứt"', () => {
+    const q18 = (strength: number, breaks = 0) => measuresToAnswers(measureLines({ landmarks: HAND, lines: { sinh: SINH }, strength: { sinh: strength }, breaks: { sinh: breaks } })).Q18;
+    expect(q18(1.8)).toBe('SD01');
+    expect(q18(0.4)).toBe('SD04');
+    expect(q18(1)).toBeUndefined();
+    expect(q18(1.8, 1)).toBe('SD06');
+  });
+
+  it('độ cong: Trí đạo uốn lượn, Tâm đạo thẳng, Định mạng thẳng dài, lên gò Thổ hay hơi cong', () => {
+    const wavy = line([0.28, 0.53], [0.33, 0.5], [0.38, 0.56], [0.43, 0.5], [0.48, 0.56], [0.53, 0.5], [0.58, 0.56], [0.63, 0.5], [0.68, 0.55]);
+    expect(measure({ tri: wavy }).Q22).toBe('TD11');
+    expect(measure({ tri: TRI }).Q22).toBeUndefined();
+    expect(measure({ tam: line([0.78, 0.5], [0.6, 0.48], [0.4, 0.46]) }).Q24).toBe('TAM06');
+    expect(measure({ tam: line([0.78, 0.52], [0.6, 0.42], [0.4, 0.5]) }).Q24).toBeUndefined();
+    // Định mạng: tính từ cổ tay (0) lên hàng gốc ngón (1) theo trục cổ tay → gốc ngón giữa
+    const up = (h: number, dx = 0) => P(HAND[0].x + (HAND[9].x - HAND[0].x) * h + dx, HAND[0].y + (HAND[9].y - HAND[0].y) * h);
+    expect(measure({ dinh: [up(0.05), up(0.5), up(0.95)] }).Q26).toBe('DM01');
+    expect(measure({ dinh: [up(0.4), up(0.7), up(0.95)] }).Q26).toBe('DM12');
+    expect(measure({ dinh: [up(0.1), up(0.4, 0.06), up(0.7)] }).Q26).toBe('DM11');
+    expect(measure({ dinh: [up(0.1), up(0.4), up(0.7)] }).Q26).toBeUndefined();
+  });
+
+  it('số chỉ nhỏ: ít, vừa, nhiều; không đo thì không điền', () => {
+    const q32 = (minor?: number) => measuresToAnswers(measureLines({ landmarks: HAND, lines: {}, minor })).Q32;
+    expect([q32(0.02), q32(0.08), q32(0.3), q32()]).toEqual(['C06', 'vua', 'C07', undefined]);
+  });
+
+  it('Q22 chọn nhiều: vừa đứt vừa uốn lượn thì gộp hai mã', () => {
+    const wavy = line([0.28, 0.53], [0.33, 0.5], [0.38, 0.56], [0.43, 0.5], [0.48, 0.56], [0.53, 0.5], [0.58, 0.56], [0.63, 0.5], [0.68, 0.55]);
+    expect(measuresToAnswers(measureLines({ landmarks: HAND, lines: { tri: wavy }, breaks: { tri: 1 } })).Q22).toEqual(['TD19', 'TD11']);
+  });
+
+  it('ngón cái dài, trung bình, ngắn theo đốt gốc ngón trỏ', () => {
+    const q08 = (k: number) => {
+      // Dời đầu ngón cái dọc trục bàn tay để chỗ "dựng thẳng" tới đúng tỉ lệ k trên đốt gốc ngón trỏ
+      const base = measureHand(HAND).find((m) => m.q === 'Q08')!.value!;
+      const palm = Math.hypot(HAND[9].x - HAND[0].x, HAND[9].y - HAND[0].y);
+      const seg = ((HAND[6].x - HAND[0].x) * (HAND[9].x - HAND[0].x) + (HAND[6].y - HAND[0].y) * (HAND[9].y - HAND[0].y)) / palm ** 2
+        - ((HAND[5].x - HAND[0].x) * (HAND[9].x - HAND[0].x) + (HAND[5].y - HAND[0].y) * (HAND[9].y - HAND[0].y)) / palm ** 2;
+      const extra = (k - base) * seg * palm;
+      const d = { x: HAND[4].x - HAND[3].x, y: HAND[4].y - HAND[3].y }, l = Math.hypot(d.x, d.y);
+      const hand = HAND.map((p, i) => (i === 4 ? P(p.x + (d.x / l) * extra, p.y + (d.y / l) * extra) : p));
+      return measureHand(hand).find((m) => m.q === 'Q08')!.id;
+    };
+    expect([q08(1), q08(0.4), q08(-0.2)]).toEqual(['F01', 'trung-binh', 'F02']);
   });
 
   it('nét thiếu thì không đoán; khớp tay đủ thì đo đủ 5 câu', () => {
     const none = measure({});
     for (const q of ['Q17', 'Q20', 'Q21-huong', 'Q21-dai', 'Q23', 'Q25']) expect(none[q]).toBeNull();
     expect(measureLines({ landmarks: HAND.slice(0, 10), lines: { sinh: SINH } })).toEqual([]);
-    expect(measureHand(HAND).map((m) => m.q)).toEqual(['Q04', 'Q09', 'Q10', 'Q11', 'Q12']);
+    expect(measureHand(HAND).map((m) => m.q)).toEqual(['Q04', 'Q09', 'Q10', 'Q11', 'Q12', 'Q08']);
     expect(measureHand(HAND).every((m) => m.id !== null)).toBe(true);
   });
 
@@ -228,5 +276,19 @@ describe('Đo từ nét đã xác nhận', () => {
     const small = measureLines({ landmarks: HAND, lines: { sinh: SINH, tri: TRI, tam: TAM, dinh: DINH } }).map((m) => m.id);
     expect(big).toEqual(small);
     expect(measureHand(k(HAND)).map((m) => m.id)).toEqual(measureHand(HAND).map((m) => m.id));
+  });
+});
+
+describe('So hai lần xem cùng một tay', () => {
+  it('đặc điểm mới có và không còn thấy, theo thứ tự dữ liệu; câu "Không rõ" và mã trung tính không tính', () => {
+    const metas = palmMetas();
+    const older = { answers: { Q02: 'H01', Q17: 'SD02', Q20: 'TD16', Q09: null } };
+    const newer = { answers: { Q02: 'H01', Q17: 'vua', Q20: 'TD15', Q23: 'TAM02' } };
+    const d = diffHands(newer, older, metas);
+    expect(d.removed).toEqual(['SD02', 'TD16'].filter((id) => metas.some((m) => m.id === id)));
+    expect(d.added).toContain('TD15');
+    expect(d.added).toContain('TAM02');
+    expect(d.added).not.toContain('H01');
+    expect(diffHands(older, older, metas)).toEqual({ added: [], removed: [] });
   });
 });

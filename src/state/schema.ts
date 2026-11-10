@@ -75,7 +75,7 @@ export interface PalmSession {
   lines: Partial<Record<PalmLineKey, PalmPt[][]>>;
   landmarks: PalmPt[];
   answers: Record<string, string | string[] | null>;
-  measured: Record<string, string | null>;
+  measured: Record<string, string | string[] | null>;
   version: number;
 }
 export const PALM_SESSION_VERSION = 1;
@@ -142,7 +142,7 @@ function checkPalmSession(p: unknown, i: number, profileIds: ReadonlySet<string>
   }
   if (!isObj(p.answers) || !isObj(p.measured)) return `${at}.answers/measured không phải object`;
   const okAns = (v: unknown) => v === null || isStr(v) || (Array.isArray(v) && v.every(isStr));
-  if (!Object.values(p.answers).every(okAns) || !Object.values(p.measured).every((v) => v === null || isStr(v))) return `${at}: câu trả lời không hợp lệ`;
+  if (!Object.values(p.answers).every(okAns) || !Object.values(p.measured).every(okAns)) return `${at}: câu trả lời không hợp lệ`;
   return null;
 }
 

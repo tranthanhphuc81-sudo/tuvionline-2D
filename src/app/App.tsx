@@ -51,7 +51,7 @@ function renderRoute(r: Route): ReactNode {
     case 'luchao': return <LucHaoScreen />;
     case 'phongthuy': return <PhongThuyScreen sub={r.sub} />;
     case 'palm': return <PalmScreen />;
-    case 'palm.result': return <PalmResultScreen />;
+    case 'palm.result': return <PalmResultScreen id={r.id} />;
     case 'profiles': return <ProfilesScreen />;
     case 'profiles.edit': return <ProfileEditScreen id={r.id} />;
     case 'settings': return <SettingsScreen />;

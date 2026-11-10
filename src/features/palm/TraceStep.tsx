@@ -9,6 +9,7 @@ import type { PalmLineKey } from '../../state/schema';
 import ui from '../../ui/components/ui.module.css';
 import { mountEditor, setRouter, wholeLine, type EditState, type Editor } from './vision/editor';
 import { makeRouter } from './vision/livewire';
+import { lineStrength, minorDensity, palmScale } from './vision/ridgeStats';
 import type { PreparedPhoto } from './vision/photo';
 import { SIZE, type LineId } from './vision/types';
 import s from './palm.module.css';
@@ -19,6 +20,10 @@ export interface TraceResult {
   lines: Partial<Record<PalmLineKey, PalmPt[][]>>;
   /** số chỗ đứt của mỗi đường */
   breaks: Partial<Record<PalmLineKey, number>>;
+  /** độ đậm rãnh dọc mỗi đường, 0…1 */
+  strength: Partial<Record<PalmLineKey, number>>;
+  /** mật độ chỉ nhỏ trong lòng bàn tay */
+  minor: number;
 }
 
 function freshState(): EditState {
@@ -60,14 +65,24 @@ export function TraceStep({ photo, active, onDone, onExit }: { photo: PreparedPh
   }, [cur]);
 
   const collect = (): TraceResult => {
-    const out: TraceResult = { lines: {}, breaks: {} };
+    const out: TraceResult = { lines: {}, breaks: {}, strength: {}, minor: 0 };
+    const every: { x: number; y: number }[] = [];
+    const scale = palmScale(photo.ridge, photo.landmarks);
+    const raw: number[] = [];
     for (const l of PALM_LINE_STEPS) {
       if (state.current.off[l.id]) continue;
       const segs = wholeLine(state.current, l.id).segments.filter((x) => x.length > 1);
       if (!segs.length) continue;
       out.lines[l.id] = segs.map((seg) => seg.map((p) => ({ x: p.x / SIZE, y: p.y / SIZE })));
       out.breaks[l.id] = segs.length - 1;
+      const st = lineStrength(photo.ridge, segs.flat());
+      raw.push(st);
+      out.strength[l.id] = st / scale;
+      every.push(...segs.flat());
     }
+    // Rãnh nhỏ: đậm từ nửa mức trung bình của các đường chính đã chạm trở lên
+    const level = 0.5 * (raw.length ? raw.reduce((a, b) => a + b, 0) / raw.length : scale);
+    out.minor = minorDensity(photo.ridge, photo.landmarks, every, SIZE, { level, around: 10, edge: 14 });
     return out;
   };
   const advance = () => { if (step === PALM_LINE_STEPS.length - 1) onDone(collect()); else setStep(step + 1); };

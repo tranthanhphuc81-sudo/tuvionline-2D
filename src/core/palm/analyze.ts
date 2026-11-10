@@ -99,3 +99,12 @@ export function analyzePalm(input: PalmInput, metas: readonly PalmMeta[]): PalmR
   if (input.innate) result.compare = compareHands(current, handIds(input.innate, catalog), catalog);
   return result;
 }
+
+/** So một tay giữa hai lần xem (CHI-TAY §13: tướng tay đổi theo thời gian, xem lại sau 6–12 tháng).
+    `added`: đặc điểm lần mới có mà lần trước không có; `removed`: ngược lại. Theo thứ tự trong dữ liệu. */
+export function diffHands(newer: PalmHandInput, older: PalmHandInput, metas: readonly PalmMeta[]): { added: string[]; removed: string[] } {
+  const catalog = new Map(metas.map((m) => [m.id, m]));
+  const a = handIds(newer, catalog), b = handIds(older, catalog);
+  const sa = new Set(a), sb = new Set(b);
+  return { added: a.filter((id) => !sb.has(id)), removed: b.filter((id) => !sa.has(id)) };
+}

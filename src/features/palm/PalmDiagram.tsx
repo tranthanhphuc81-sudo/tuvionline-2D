@@ -1,6 +1,7 @@
 /* Sơ đồ bàn tay kiểu tranh sách cổ: tờ giấy dó, tranh bàn tay vẽ bút mực (src/assets/palm/palm-hand.webp), tên gò ngoài lề,
    và các đường chỉ người dùng đã chạm. Nét chạm được đặt lên tranh theo tỉ lệ bàn tay thật qua ba mốc cổ tay, gốc ngón trỏ,
    gốc ngón út. Không dùng ảnh chụp. Tay trái được lật để nhìn như đang xem lòng bàn tay mình. */
+import { useId } from 'react';
 import type { PalmPt } from '../../core';
 import { PALM_LINE_NAME } from '../../content/palm/ui';
 import type { PalmLineKey, PalmSession } from '../../state/schema';
@@ -46,6 +47,40 @@ const MOUNTS: readonly { name: string; at: P; text: P }[] = [
   { name: 'Gò Thái Âm', at: img(440, 608), text: { x: 304, y: 326 } },
 ];
 
+/* ===== Co giãn tranh theo tỉ lệ tay thật =====
+   Mỗi ngón trên tranh là một vùng cắt riêng, kéo dài hoặc thu ngắn dọc trục ngón quanh gốc ngón; lòng bàn tay giãn theo bề ngang.
+   Tỉ lệ của tranh đo trên file ảnh: chiều dài ngón (khớp gốc → đầu ngón) chia chiều dài lòng bàn tay (cổ tay → khớp gốc ngón giữa, 325 px). */
+interface FingerArt { name: string; joints: readonly number[]; base: P; tip: P; ratio: number; clip: P[] }
+const FINGER_ART: readonly FingerArt[] = [
+  { name: 'cai', joints: [2, 3, 4], base: img(215, 455), tip: img(85, 352), ratio: 0.48, clip: [[70, 330], [150, 330], [240, 440], [232, 480], [150, 472], [95, 400]].map(([x, y]) => img(x, y)) },
+  { name: 'tro', joints: [5, 6, 7, 8], base: img(275, 355), tip: img(247, 95), ratio: 0.84, clip: [[210, 80], [285, 80], [318, 345], [316, 366], [232, 372]].map(([x, y]) => img(x, y)) },
+  { name: 'giua', joints: [9, 10, 11, 12], base: img(356, 350), tip: img(363, 55), ratio: 0.95, clip: [[322, 40], [395, 40], [396, 356], [392, 368], [320, 366], [318, 346]].map(([x, y]) => img(x, y)) },
+  { name: 'apu', joints: [13, 14, 15, 16], base: img(431, 360), tip: img(458, 110), ratio: 0.82, clip: [[420, 95], [492, 95], [470, 392], [458, 396], [398, 370], [398, 352]].map(([x, y]) => img(x, y)) },
+  { name: 'ut', joints: [17, 18, 19, 20], base: img(500, 400), tip: img(548, 210), ratio: 0.65, clip: [[518, 200], [578, 205], [548, 345], [532, 410], [478, 412], [466, 393]].map(([x, y]) => img(x, y)) },
+];
+/** Bề ngang lòng bàn tay (gốc ngón trỏ → gốc ngón út) chia chiều dài lòng bàn tay, đo trên tranh. */
+const ART_WIDTH_RATIO = 0.68;
+const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
+
+/** Hệ số co giãn từ 21 điểm khớp: `sx` giãn ngang lòng bàn tay, `k[i]` kéo dài ngón i (cái → út). Giới hạn trong khoảng vừa phải để tranh không méo. */
+export function handWarp(lm: readonly P[]): { sx: number; k: number[] } {
+  const palm = len(lm[0], lm[9]) || 1;
+  const chain = (ids: readonly number[]) => ids.slice(1).reduce((t, id, i) => t + len(lm[ids[i]], lm[id]), 0);
+  return {
+    sx: clamp(len(lm[5], lm[17]) / palm / ART_WIDTH_RATIO, 0.85, 1.15),
+    k: FINGER_ART.map((g) => clamp(chain(g.joints) / palm / g.ratio, 0.82, 1.2)),
+  };
+}
+
+/** Ma trận kéo giãn theo trục từ `base` tới `tip` với hệ số k, giữ nguyên gốc ngón. */
+function stretch(base: P, tip: P, k: number): string {
+  const l = len(base, tip) || 1, ux = (tip.x - base.x) / l, uy = (tip.y - base.y) / l, e = k - 1;
+  const a = 1 + e * ux * ux, b = e * ux * uy, d = 1 + e * uy * uy;
+  return `matrix(${a.toFixed(4)} ${b.toFixed(4)} ${b.toFixed(4)} ${d.toFixed(4)} ${(base.x - a * base.x - b * base.y).toFixed(2)} ${(base.y - b * base.x - d * base.y).toFixed(2)})`;
+}
+
+const ART_STYLE = { mixBlendMode: 'multiply', filter: 'saturate(0.55) sepia(0.25)' } as const;
+
 const star = (x: number, y: number, r: number) => `M${x} ${y - r}Q${x} ${y} ${x + r} ${y}Q${x} ${y} ${x} ${y + r}Q${x} ${y} ${x - r} ${y}Q${x} ${y} ${x} ${y - r}Z`;
 const sun = (x: number, y: number, k = 1) => Array.from({ length: 12 }, (_, i) => {
   const a = (i * Math.PI) / 6, r1 = 7.5 * k, r2 = (i % 2 ? 11 : 13) * k;
@@ -53,7 +88,7 @@ const sun = (x: number, y: number, k = 1) => Array.from({ length: 12 }, (_, i) =
 }).join('');
 
 /** Nét bám rãnh đi theo từng điểm ảnh nên răng cưa: lấy mẫu thưa, làm mượt, rồi vẽ bằng đường cong qua các điểm. */
-function smoothPath(raw: readonly P[]): string {
+export function smoothPath(raw: readonly P[]): string {
   if (raw.length < 2) return '';
   const step = 6, pts: P[] = [raw[0]];
   let acc = 0;
@@ -101,27 +136,36 @@ export function PalmDiagram({ session, focus }: { session: Pick<PalmSession, 'ha
   const anchor = (x: number): 'start' | 'end' => ((x < PAPER / 2) !== mirror ? 'start' : 'end');
   const dim = (k: PalmLineKey) => !!focus && focus !== k;
   const art = { tl: img(0, 0), w: ART.w * SCALE, h: ART.h * SCALE };
+  const warp = handWarp(lm);
+  /** Giãn ngang lòng bàn tay quanh giữa tờ giấy; nét chỉ và gò nằm trong cùng nhóm nên đi theo. */
+  const wx = (x: number) => PAPER / 2 + (x - PAPER / 2) * warp.sx;
+  // id riêng cho mỗi sơ đồ: màn kết quả cũ vẫn giữ trong ngăn xếp nên có thể có hai sơ đồ cùng lúc
+  const uid = 'p' + useId().replace(/[^a-zA-Z0-9]/g, '');
+  const ref = (name: string) => `url(#${uid}-${name})`;
   const fadeTop = img(0, CROP.y1 - 60).y, fadeBottom = img(0, CROP.y1).y;
   return (
     <figure style={{ margin: 0 }}>
       <svg className={s.diagram} viewBox={`0 30 ${PAPER} 340`} role="img" aria-label={`Sơ đồ bàn tay ${mirror ? 'trái' : 'phải'} với các đường ${shown.map((k) => PALM_LINE_NAME[k]).join(', ') || 'chưa có'}`}>
         <defs>
-          <radialGradient id="palm-paper" cx="0.5" cy="0.45" r="0.75">
+          <radialGradient id={`${uid}-paper`} cx="0.5" cy="0.45" r="0.75">
             <stop offset="0" stopColor="#f6ebcf" />
             <stop offset="0.7" stopColor="#ecdcb3" />
             <stop offset="1" stopColor="#dcc590" />
           </radialGradient>
           {/* Cổ tay mờ dần vào giấy */}
-          <linearGradient id="palm-fade" gradientUnits="userSpaceOnUse" x1="0" y1={fadeTop} x2="0" y2={fadeBottom}>
+          <linearGradient id={`${uid}-fade`} gradientUnits="userSpaceOnUse" x1="0" y1={fadeTop} x2="0" y2={fadeBottom}>
             <stop offset="0" stopColor="#fff" />
             <stop offset="1" stopColor="#000" />
           </linearGradient>
-          <mask id="palm-mask" maskUnits="userSpaceOnUse" x="0" y="30" width={PAPER} height="340">
-            <rect x="0" y="30" width={PAPER} height="340" fill="url(#palm-fade)" />
+          <mask id={`${uid}-mask`} maskUnits="userSpaceOnUse" x="0" y="30" width={PAPER} height="340">
+            <rect x="0" y="30" width={PAPER} height="340" fill={ref('fade')} />
+            {/* Lòng bàn tay không gồm các ngón: ngón vẽ riêng để co giãn */}
+            {FINGER_ART.map((g) => <polygon key={g.name} points={g.clip.map(f).join(' ')} fill="#000" />)}
           </mask>
-          <clipPath id="palm-clip"><polygon points={PALM_CLIP.map(f).join(' ')} /></clipPath>
+          {FINGER_ART.map((g) => <clipPath key={g.name} id={`${uid}-f-${g.name}`}><polygon points={g.clip.map(f).join(' ')} /></clipPath>)}
+          <clipPath id={`${uid}-clip`}><polygon points={PALM_CLIP.map(f).join(' ')} /></clipPath>
         </defs>
-        <rect x="2" y="32" width={PAPER - 4} height="336" rx="6" fill="url(#palm-paper)" />
+        <rect x="2" y="32" width={PAPER - 4} height="336" rx="6" fill={ref('paper')} />
         <rect x="8" y="38" width={PAPER - 16} height="324" rx="3" fill="none" stroke="#a07a3c" strokeWidth={0.8} />
         <rect x="11" y="41" width={PAPER - 22} height="318" rx="2" fill="none" stroke="#a07a3c" strokeWidth={0.4} />
         {/* Trang trí góc: trăng, mặt trời, sao nhỏ */}
@@ -133,11 +177,16 @@ export function PalmDiagram({ session, focus }: { session: Pick<PalmSession, 'ha
           <g fill="#8a6532" stroke="none"><path d={star(52, 76, 3)} /><path d={star(PAPER - 58, 80, 2.5)} /><path d={star(48, 318, 2.2)} /><path d={star(PAPER - 52, 300, 3)} /></g>
         </g>
         <text x={48} y={58} fontFamily="var(--font-serif)" fontStyle="italic" fontSize={12} fontWeight={600} fill={INK}>Lòng bàn tay</text>
-        <g data-hand transform={mirror ? `translate(${PAPER} 0) scale(-1 1)` : undefined} fill="none" strokeLinecap="round" strokeLinejoin="round">
+        <g data-hand transform={`${mirror ? `translate(${PAPER} 0) scale(-1 1) ` : ''}translate(${PAPER / 2} 0) scale(${warp.sx.toFixed(4)} 1) translate(${-PAPER / 2} 0)`} fill="none" strokeLinecap="round" strokeLinejoin="round">
           {/* Nền trắng của tranh hoà vào giấy nhờ chế độ nhân màu */}
-          <image href={handArt} x={art.tl.x} y={art.tl.y} width={art.w} height={art.h} mask="url(#palm-mask)" style={{ mixBlendMode: 'multiply', filter: 'saturate(0.55) sepia(0.25)' }} preserveAspectRatio="none" />
+          <image href={handArt} x={art.tl.x} y={art.tl.y} width={art.w} height={art.h} mask={ref('mask')} style={ART_STYLE} preserveAspectRatio="none" />
+          {FINGER_ART.map((g, i) => (
+            <g key={g.name} data-finger={g.name} transform={stretch(g.base, g.tip, warp.k[i])}>
+              <image href={handArt} x={art.tl.x} y={art.tl.y} width={art.w} height={art.h} clipPath={`url(#${uid}-f-${g.name})`} style={ART_STYLE} preserveAspectRatio="none" />
+            </g>
+          ))}
           {MOUNTS.map((mt) => <ellipse key={mt.name} cx={mt.at.x} cy={mt.at.y} rx={10} ry={6.5} stroke={INK} strokeWidth={0.5} strokeDasharray="1.5 3" opacity={0.45} />)}
-          <g clipPath="url(#palm-clip)">
+          <g clipPath={ref('clip')}>
             {lines.map(({ k, segs }) => segs.map((seg, i) => (
               <path key={k + i} data-line={k} d={smoothPath(seg)} stroke={PALM_LINE_COLOR[k]} strokeWidth={dim(k) ? 1.6 : 3} opacity={dim(k) ? 0.35 : 0.9} />
             )))}
@@ -145,7 +194,7 @@ export function PalmDiagram({ session, focus }: { session: Pick<PalmSession, 'ha
         </g>
         <g fontFamily="var(--font-serif)" fill="none">
           {MOUNTS.map((mt) => {
-            const a = { x: hx(mt.at.x), y: mt.at.y }, tx = hx(mt.text.x), left = mt.text.x < PAPER / 2;
+            const a = { x: hx(wx(mt.at.x)), y: mt.at.y }, tx = hx(mt.text.x), left = mt.text.x < PAPER / 2;
             const end = { x: hx(mt.text.x + (left ? 4 : -4)), y: mt.text.y - 3 };
             return (
               <g key={mt.name}>
@@ -162,7 +211,7 @@ export function PalmDiagram({ session, focus }: { session: Pick<PalmSession, 'ha
             return lines.map(({ k, segs }) => {
               const p = dim(k) ? null : labelAt(segs, taken);
               if (!p) return null;
-              return <text key={k} x={hx(p.x)} y={p.y} fontSize={8} fontStyle="italic" fontWeight={600} fill={PALM_LINE_COLOR[k]} stroke="#f3e5c2" strokeWidth={2.5} paintOrder="stroke">{PALM_LINE_NAME[k]}</text>;
+              return <text key={k} x={hx(wx(p.x))} y={p.y} fontSize={8} fontStyle="italic" fontWeight={600} fill={PALM_LINE_COLOR[k]} stroke="#f3e5c2" strokeWidth={2.5} paintOrder="stroke">{PALM_LINE_NAME[k]}</text>;
             });
           })()}
         </g>

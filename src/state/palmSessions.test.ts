@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { createStore } from './store';
-import { addProfile, removePalmSession, removeProfile, savePalmSession, type PalmSessionInput } from './actions';
+import { addProfile, palmHistory, PALM_HISTORY_MAX, removePalmSession, removeProfile, savePalmSession, type PalmSessionInput } from './actions';
 import { emptyState, parsePersisted } from './schema';
 import { upgradeDoc } from './migrations';
 import { backupText, parseBackup } from './backup';
@@ -14,17 +14,27 @@ const session = (profileId: string, over: Partial<PalmSessionInput> = {}): PalmS
 });
 
 describe('Lần xem chỉ tay (lược đồ 3)', () => {
-  it('lưu, rồi lần mới cùng hồ sơ và cùng vai thay lần cũ', () => {
+  it('giữ lịch sử các lần xem, mới nhất trước', () => {
     const s = createStore(emptyState());
     const id = addProfile(s, me);
     const a = savePalmSession(s, session(id), '2026-11-10T01:00:00Z');
     const b = savePalmSession(s, session(id, { hand: 'left' }), '2026-11-11T01:00:00Z');
-    savePalmSession(s, session(id, { role: 'innate' }));
-    const list = s.getState().palmSessions;
-    expect(list).toHaveLength(2);
-    expect(list.some((x) => x.id === a)).toBe(false);
-    expect(list.find((x) => x.id === b)?.hand).toBe('left');
+    const c = savePalmSession(s, session(id, { role: 'innate' }), '2026-11-12T01:00:00Z');
+    expect(palmHistory(s.getState().palmSessions, id).map((x) => x.id)).toEqual([c, b, a]);
     expect(parsePersisted(JSON.parse(JSON.stringify(s.getState())))).toMatchObject({ ok: true });
+  });
+
+  it('quá giới hạn thì bỏ lần cũ nhất của đúng vai đó', () => {
+    const s = createStore(emptyState());
+    const id = addProfile(s, me);
+    const innate = savePalmSession(s, session(id, { role: 'innate' }), '2026-01-01T00:00:00Z');
+    const ids = Array.from({ length: PALM_HISTORY_MAX + 2 }, (_, i) => savePalmSession(s, session(id), `2026-02-${String(i + 1).padStart(2, '0')}T00:00:00Z`));
+    const kept = palmHistory(s.getState().palmSessions, id).filter((x) => x.role === 'current').map((x) => x.id);
+    expect(kept).toHaveLength(PALM_HISTORY_MAX);
+    expect(kept).not.toContain(ids[0]);
+    expect(kept).not.toContain(ids[1]);
+    expect(kept[0]).toBe(ids[ids.length - 1]);
+    expect(palmHistory(s.getState().palmSessions, id).some((x) => x.id === innate)).toBe(true);
   });
 
   it('không lưu cho hồ sơ không tồn tại', () => {

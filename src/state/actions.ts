@@ -106,15 +106,24 @@ export function setLaBanCalib(store: AppStore, deg: number): void {
 
 export type PalmSessionInput = Omit<PalmSession, 'id' | 'date' | 'version'>;
 
-/** Lưu một lần xem chỉ tay. Mỗi hồ sơ giữ một lần cho mỗi vai (hiện tại, bẩm sinh): lần mới thay lần cũ. Trả id. */
+/** Số lần xem giữ lại cho mỗi hồ sơ và mỗi vai (tay hiện tại, tay bẩm sinh), để so sánh qua thời gian. Mỗi lần chỉ vài KB. */
+export const PALM_HISTORY_MAX = 12;
+
+/** Lưu một lần xem chỉ tay, giữ các lần trước làm lịch sử; quá PALM_HISTORY_MAX thì bỏ lần cũ nhất. Trả id. */
 export function savePalmSession(store: AppStore, input: PalmSessionInput, now = nowIso()): string {
   const id = newId();
   store.setState((s) => {
     if (!s.profiles.some((p) => p.id === input.profileId)) throw new Error('Hồ sơ không tồn tại');
-    const keep = s.palmSessions.filter((x) => !(x.profileId === input.profileId && x.role === input.role));
-    return { ...s, palmSessions: [...keep, { ...input, id, date: now, version: PALM_SESSION_VERSION }] };
+    const same = (x: PalmSession) => x.profileId === input.profileId && x.role === input.role;
+    const drop = new Set(s.palmSessions.filter(same).sort((a, b) => b.date.localeCompare(a.date)).slice(PALM_HISTORY_MAX - 1).map((x) => x.id));
+    return { ...s, palmSessions: [...s.palmSessions.filter((x) => !drop.has(x.id)), { ...input, id, date: now, version: PALM_SESSION_VERSION }] };
   });
   return id;
+}
+
+/** Các lần xem của một hồ sơ, mới nhất trước. */
+export function palmHistory(sessions: readonly PalmSession[], profileId: string): PalmSession[] {
+  return sessions.filter((x) => x.profileId === profileId).sort((a, b) => b.date.localeCompare(a.date));
 }
 
 export function removePalmSession(store: AppStore, id: string): void {

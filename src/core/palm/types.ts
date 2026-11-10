@@ -73,6 +73,10 @@ export interface PalmTrace {
   lines: Partial<Record<'sinh' | 'tri' | 'tam' | 'dinh', readonly PalmPt[]>>;
   /** số chỗ đứt của mỗi đường (các đoạn người dùng vẽ rời nhau). Có chỗ đứt thì Q18, Q22, Q26 được điền sẵn là "Đứt". */
   breaks?: Partial<Record<'sinh' | 'tri' | 'tam' | 'dinh', number>>;
+  /** độ đậm trung bình của rãnh dọc mỗi đường, so với mức rãnh rõ (phân vị 98) của chính lòng bàn tay đó; 1 là ngang mức ấy (đo ở bước nhìn ảnh) */
+  strength?: Partial<Record<'sinh' | 'tri' | 'tam' | 'dinh', number>>;
+  /** tỉ lệ diện tích lòng bàn tay có rãnh nhỏ, không tính quanh 4 đường chính (đo ở bước nhìn ảnh) */
+  minor?: number;
 }
 
 /** Kết quả một phép đo: mã đặc điểm (hoặc mã trung tính) và số đo gốc để kiểm tra. `null` là không đo được. */
