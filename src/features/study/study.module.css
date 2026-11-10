@@ -18,7 +18,7 @@
 @keyframes flicker { 0%, 100% { opacity: .75; } 40% { opacity: 1; } 70% { opacity: .85; } }
 @media (prefers-reduced-motion: reduce) { .glow { animation: none; } }
 
-.desk { position: absolute; left: var(--space-2); right: var(--space-2); bottom: var(--space-2); display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-1); max-width: 520px; margin: 0 auto; }
+.desk { position: absolute; left: var(--space-2); right: var(--space-2); bottom: var(--space-2); display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-1); max-width: 520px; margin: 0 auto; }
 .object {
   min-height: 84px; min-width: var(--tap); padding: 4px 2px; border: 1px solid transparent; border-radius: 10px; background: transparent;
   color: #f7ecd2; font-size: 12px; font-weight: 600; line-height: 1.2; text-shadow: 0 1px 3px #000; display: grid; justify-items: center; align-content: end; gap: 2px;

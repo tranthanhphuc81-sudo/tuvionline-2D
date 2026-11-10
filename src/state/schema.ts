@@ -1,8 +1,8 @@
 /* Lược đồ dữ liệu lưu trên máy — MỘT tài liệu JSON ở khoá `lyso.state` (ARCHITECTURE.md mục 3).
    Đổi lược đồ thì tăng SCHEMA_VERSION và thêm migration trong migrations.ts. */
-import type { Gender, Huong } from '../core';
+import type { Gender, Huong, PalmPt } from '../core';
 
-export const SCHEMA_VERSION = 2 as const;
+export const SCHEMA_VERSION = 3 as const;
 export const STATE_KEY = 'lyso.state';
 
 export type Relation = 'self' | 'spouse' | 'child' | 'parent' | 'sibling' | 'other';
@@ -61,18 +61,39 @@ export interface Tools {
   incenseLitAt?: string;
 }
 
+/** Một lần xem chỉ tay (ARCHITECTURE mục 13.1). KHÔNG lưu ảnh: chỉ các nét đã chuẩn hoá và 21 điểm khớp bàn tay. */
+export type PalmLineKey = 'sinh' | 'tri' | 'tam' | 'dinh';
+export const PALM_LINE_KEYS: readonly PalmLineKey[] = ['sinh', 'tri', 'tam', 'dinh'];
+export interface PalmSession {
+  id: string;
+  profileId: string;
+  date: string;
+  hand: 'left' | 'right';
+  /** tay hiện tại hay tay bẩm sinh */
+  role: 'current' | 'innate';
+  /** mỗi đường là một hay nhiều đoạn (đường đứt quãng có nhiều đoạn), toạ độ khung xem 0…1 */
+  lines: Partial<Record<PalmLineKey, PalmPt[][]>>;
+  landmarks: PalmPt[];
+  answers: Record<string, string | string[] | null>;
+  measured: Record<string, string | null>;
+  version: number;
+}
+export const PALM_SESSION_VERSION = 1;
+
 export interface PersistedState {
   version: typeof SCHEMA_VERSION;
   profiles: Profile[];
   activeProfileId: string | null;
   settings: Settings;
   tools: Tools;
+  /** các lần xem chỉ tay, thêm ở lược đồ 3 */
+  palmSessions: PalmSession[];
 }
 
 export const DEFAULT_SETTINGS: Settings = { theme: 'system', ttsRate: 1, ttsPitch: 1, entryMode: 'auto', journeySound: true, xungHo: 'tu-dong' };
 
 export function emptyState(): PersistedState {
-  return { version: SCHEMA_VERSION, profiles: [], activeProfileId: null, settings: { ...DEFAULT_SETTINGS }, tools: {} };
+  return { version: SCHEMA_VERSION, profiles: [], activeProfileId: null, settings: { ...DEFAULT_SETTINGS }, tools: {}, palmSessions: [] };
 }
 
 /* ===== Kiểm tra hình dạng dữ liệu (viết tay, báo lỗi rõ ràng) ===== */
@@ -99,6 +120,29 @@ function checkProfile(p: unknown, i: number): string | null {
   if (typeof p.lateTy !== 'boolean') return `${at}.lateTy không phải boolean`;
   if (p.relation !== undefined && !RELATIONS.includes(p.relation as Relation)) return `${at}.relation không hợp lệ`;
   if (!isStr(p.createdAt) || !isStr(p.updatedAt)) return `${at}.createdAt/updatedAt thiếu`;
+  return null;
+}
+
+const isPt = (v: unknown): boolean => isObj(v) && typeof v.x === 'number' && typeof v.y === 'number' && Number.isFinite(v.x) && Number.isFinite(v.y);
+
+function checkPalmSession(p: unknown, i: number, profileIds: ReadonlySet<string>): string | null {
+  const at = `palmSessions[${i}]`;
+  if (!isObj(p)) return `${at} không phải object`;
+  if (!isStr(p.id) || !p.id) return `${at}.id thiếu`;
+  if (!isStr(p.profileId) || !profileIds.has(p.profileId)) return `${at}.profileId không trỏ tới hồ sơ nào`;
+  if (!isStr(p.date)) return `${at}.date thiếu`;
+  if (p.hand !== 'left' && p.hand !== 'right') return `${at}.hand không hợp lệ`;
+  if (p.role !== 'current' && p.role !== 'innate') return `${at}.role không hợp lệ`;
+  if (!Number.isInteger(p.version)) return `${at}.version không hợp lệ`;
+  if (!Array.isArray(p.landmarks) || p.landmarks.length !== 21 || !p.landmarks.every(isPt)) return `${at}.landmarks phải có 21 điểm`;
+  if (!isObj(p.lines)) return `${at}.lines không phải object`;
+  for (const [k, segs] of Object.entries(p.lines)) {
+    if (!PALM_LINE_KEYS.includes(k as PalmLineKey)) return `${at}.lines có đường lạ`;
+    if (!Array.isArray(segs) || !segs.every((s) => Array.isArray(s) && s.every(isPt))) return `${at}.lines.${k} không hợp lệ`;
+  }
+  if (!isObj(p.answers) || !isObj(p.measured)) return `${at}.answers/measured không phải object`;
+  const okAns = (v: unknown) => v === null || isStr(v) || (Array.isArray(v) && v.every(isStr));
+  if (!Object.values(p.answers).every(okAns) || !Object.values(p.measured).every((v) => v === null || isStr(v))) return `${at}: câu trả lời không hợp lệ`;
   return null;
 }
 
@@ -145,5 +189,10 @@ export function parsePersisted(raw: unknown): ParseResult {
   }
   if (t.incenseLitAt !== undefined && !isStr(t.incenseLitAt)) return { ok: false, error: 'tools.incenseLitAt không hợp lệ' };
   if (t.laBanCalib !== undefined && !isInt(t.laBanCalib, -45, 45)) return { ok: false, error: 'tools.laBanCalib không hợp lệ' };
+  if (!Array.isArray(raw.palmSessions)) return { ok: false, error: 'palmSessions không phải mảng' };
+  for (let i = 0; i < raw.palmSessions.length; i++) {
+    const e = checkPalmSession(raw.palmSessions[i], i, ids);
+    if (e) return { ok: false, error: e };
+  }
   return { ok: true, state: raw as unknown as PersistedState };
 }

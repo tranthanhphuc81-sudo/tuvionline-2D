@@ -3,7 +3,7 @@ import { resolveBirth, type BirthError } from '../core';
 import type { Store } from './store';
 import type { Huong } from '../core';
 import { newId } from './ids';
-import type { PersistedState, Profile, Settings } from './schema';
+import { PALM_SESSION_VERSION, type PalmSession, type PersistedState, type Profile, type Settings } from './schema';
 
 export type AppStore = Store<PersistedState>;
 export type ProfileInput = Omit<Profile, 'id' | 'createdAt' | 'updatedAt'>;
@@ -46,7 +46,7 @@ export function removeProfile(store: AppStore, id: string): void {
     const activeProfileId = s.activeProfileId === id ? (profiles[0]?.id ?? null) : s.activeProfileId;
     const tools = { ...s.tools };
     if (tools.napAmPair?.includes(id)) delete tools.napAmPair;
-    return { ...s, profiles, activeProfileId, tools };
+    return { ...s, profiles, activeProfileId, tools, palmSessions: s.palmSessions.filter((x) => x.profileId !== id) };
   });
 }
 
@@ -102,6 +102,23 @@ export function markJourney(store: AppStore, today: string, full: boolean): void
 /** Lưu độ lệch hiệu chỉnh của La Bàn (−45…45). */
 export function setLaBanCalib(store: AppStore, deg: number): void {
   store.setState((s) => ({ ...s, tools: { ...s.tools, laBanCalib: deg } }));
+}
+
+export type PalmSessionInput = Omit<PalmSession, 'id' | 'date' | 'version'>;
+
+/** Lưu một lần xem chỉ tay. Mỗi hồ sơ giữ một lần cho mỗi vai (hiện tại, bẩm sinh): lần mới thay lần cũ. Trả id. */
+export function savePalmSession(store: AppStore, input: PalmSessionInput, now = nowIso()): string {
+  const id = newId();
+  store.setState((s) => {
+    if (!s.profiles.some((p) => p.id === input.profileId)) throw new Error('Hồ sơ không tồn tại');
+    const keep = s.palmSessions.filter((x) => !(x.profileId === input.profileId && x.role === input.role));
+    return { ...s, palmSessions: [...keep, { ...input, id, date: now, version: PALM_SESSION_VERSION }] };
+  });
+  return id;
+}
+
+export function removePalmSession(store: AppStore, id: string): void {
+  store.setState((s) => (s.palmSessions.some((x) => x.id === id) ? { ...s, palmSessions: s.palmSessions.filter((x) => x.id !== id) } : s));
 }
 
 /** Thay toàn bộ dữ liệu bằng tài liệu đã kiểm tra (khôi phục sao lưu, xoá toàn bộ). */

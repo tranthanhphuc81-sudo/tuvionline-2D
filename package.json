@@ -6,6 +6,7 @@
   "description": "App Lý Số Trọn Bộ (Tử Vi, Bát Tự, Lục Hào, Bát Trạch, Nạp Âm, Tổng Hợp, La bàn) — React + Vite + Capacitor (Android)",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
+    "predev": "node scripts/copy-palm-assets.mjs",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview --host 0.0.0.0",
     "test": "vitest run",
@@ -13,7 +14,8 @@
     "typecheck": "tsc --noEmit",
     "cap:sync": "npm run build && npx cap sync android",
     "android:debug": "npm run cap:sync && node scripts/gradle.mjs assembleDebug app/build/outputs/apk/debug/app-debug.apk",
-    "android:release": "npm run cap:sync && node scripts/gradle.mjs bundleRelease app/build/outputs/bundle/release/app-release.aab"
+    "android:release": "npm run cap:sync && node scripts/gradle.mjs bundleRelease app/build/outputs/bundle/release/app-release.aab",
+    "prebuild": "node scripts/copy-palm-assets.mjs"
   },
   "dependencies": {
     "@capacitor-community/text-to-speech": "~8.0.2",
@@ -26,6 +28,7 @@
     "@capacitor/share": "~8.0.3",
     "@fontsource/be-vietnam-pro": "~5.3.0",
     "@fontsource/noto-serif": "~5.3.0",
+    "@mediapipe/tasks-vision": "1.2.2",
     "lottie-web": "^5.13.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"

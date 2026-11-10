@@ -17,3 +17,6 @@ android/local.properties
 *.jks
 *.keystore
 keystore.properties
+
+# WASM của MediaPipe, chép từ node_modules bởi scripts/copy-palm-assets.mjs
+public/palm/vision_wasm_internal.*

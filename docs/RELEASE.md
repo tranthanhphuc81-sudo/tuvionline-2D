@@ -109,7 +109,7 @@ Hiện `android:allowBackup="true"`. Android có thể tự sao lưu dữ liệu
 
 Điều kiện để các câu trên đúng: đã tắt Auto Backup, bản phát hành không đặt `LYSO_LIVE_URL`, không thêm SDK nào. Thêm tính năng gửi dữ liệu hoặc SDK bất kỳ thì phải khai lại.
 
-**Chỉ tay không nằm trong bản đầu**, nên chưa có quyền `CAMERA` hay ảnh tay. Khi làm tính năng này (`docs/PROMPT-KIT-CHI-TAY.md`, 3B.9) phải cập nhật mục này trước.
+**Chỉ tay (3B.3, đã có trong code):** chụp ảnh bằng `<input type="file" accept="image/*" capture="environment">`, WebView giao việc cho app máy ảnh của hệ thống nên KHÔNG khai quyền `CAMERA`. CHƯA THỬ trên APK: nếu nút chụp không mở được máy ảnh thì phải thêm quyền `CAMERA` (và khai lại Data safety, chính sách quyền riêng tư) trước khi phát hành. Ảnh chỉ xử lý trên máy, không lưu; app lưu các nét đã chạm và 21 điểm khớp bàn tay, xoá cùng hồ sơ. Mô hình MediaPipe Hand Landmarker (Apache 2.0) đóng gói trong app (~22 MB gồm WASM), cần ghi công ở mục Giới thiệu.
 
 ### Chính sách quyền riêng tư
 

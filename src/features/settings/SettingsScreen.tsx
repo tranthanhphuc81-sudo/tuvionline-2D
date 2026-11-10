@@ -8,7 +8,7 @@ import { lastSpeechError, localVietnameseVoices, speak } from '../../platform/tt
 import { thayVoice } from '../reader/hooks';
 import { useApp, useAppCtx } from '../../app/context';
 import { Segmented } from '../../ui/components/Segmented';
-import { PRIVACY_POINTS } from '../../content/common/about';
+import { PRIVACY_POINTS, THIRD_PARTY_CREDIT } from '../../content/common/about';
 import { DataSection } from './DataSection';
 import ui from '../../ui/components/ui.module.css';
 
@@ -97,6 +97,7 @@ export function SettingsScreen() {
         <p>Bảy công cụ lý số phương Đông bằng tiếng Việt: Tử Vi, Bát Tự, Lục Hào, Bát Trạch, Nạp Âm, Tổng hợp và La Bàn phong thủy.</p>
         <p className={ui.muted}>Mọi phép tính chạy ngay trên máy. Hồ sơ chỉ lưu trên máy này, ứng dụng không gửi dữ liệu của bạn đi đâu.</p>
         <p className={ui.muted}>{CULTURAL_NOTE}</p>
+        <p className={ui.muted}>{THIRD_PARTY_CREDIT}</p>
         <details>
           <summary className={ui.foldTitle}>Chính sách quyền riêng tư</summary>
           <ul className={ui.privacyList}>

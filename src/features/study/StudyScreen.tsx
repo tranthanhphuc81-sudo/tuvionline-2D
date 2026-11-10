@@ -30,6 +30,7 @@ const OBJECTS: readonly { id: StudyObjectId; tab?: TabId; route?: Route }[] = [
   { id: 'laban', tab: 'phongthuy', route: { name: 'phongthuy', sub: 'laban' } },
   { id: 'sach', tab: 'phongthuy', route: { name: 'phongthuy', sub: 'napam' } },
   { id: 'so', route: { name: 'tonghop' } },
+  { id: 'chitay', route: { name: 'palm' } },
 ];
 
 

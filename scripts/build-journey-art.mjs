@@ -413,6 +413,16 @@ layers['obj-so'] = obj(
   + line('M18 22L42 24M18 30L42 32M18 38L42 40M54 24L78 20M54 32L78 28M54 40L78 36', '#8c7d62', 1, 'opacity=".6"') + rect(47, 16, 2, 44, C.gold) + path('M62 16V38L66 34L70 38V14Z', C.red),
 );
 
+layers['obj-chitay'] = obj(
+  lg('s', [[0, '#e9c9a0'], [1, '#b98b62']]) + rg('f', [[0, '#fff7d8', 1], [0.5, '#ffc05c', 0.85], [1, '#ff9d3a', 0]]) + lg('b', [[0, '#a5833f'], [1, '#4c3a1e']]),
+  shadow(44, 64, 38) + ell(66, 28, 22, 22, 'url(#f)', 'opacity=".55"')
+  // bàn tay ngửa: lòng bàn tay, năm ngón, ba nét chỉ
+  + path('M14 56C10 44 12 30 20 26L24 34L26 16C27 12 32 12 32 16L33 30L36 10C37 6 42 6 42 10L42 30L46 14C47 10 52 11 51 15L49 34L55 24C57 21 61 23 59 27L54 42C52 52 46 60 36 62C26 63 17 61 14 56Z', 'url(#s)', 'stroke="#6b4a2a" stroke-width="1"')
+  + line('M24 38C30 40 38 42 46 40M22 46C28 50 36 54 42 56M32 34C32 42 34 52 36 60', '#8a4a2a', 1.1, 'opacity=".75"')
+  // đèn dầu bên phải
+  + path('M62 56Q74 48 86 56L82 66H66Z', 'url(#b)') + rect(72, 40, 4, 16, 'url(#b)') + ell(74, 34, 6, 9, 'url(#f)') + ell(74, 36, 1.6, 4, '#fff9e2'),
+);
+
 rmSync(OUT, { recursive: true, force: true });
 mkdirSync(OUT, { recursive: true });
 let total = 0;

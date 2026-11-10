@@ -71,6 +71,8 @@ export interface PalmPt { x: number; y: number }
 export interface PalmTrace {
   landmarks: readonly PalmPt[];
   lines: Partial<Record<'sinh' | 'tri' | 'tam' | 'dinh', readonly PalmPt[]>>;
+  /** số chỗ đứt của mỗi đường (các đoạn người dùng vẽ rời nhau). Có chỗ đứt thì Q18, Q22, Q26 được điền sẵn là "Đứt". */
+  breaks?: Partial<Record<'sinh' | 'tri' | 'tam' | 'dinh', number>>;
 }
 
 /** Kết quả một phép đo: mã đặc điểm (hoặc mã trung tính) và số đo gốc để kiểm tra. `null` là không đo được. */

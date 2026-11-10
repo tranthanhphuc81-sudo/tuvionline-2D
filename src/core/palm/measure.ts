@@ -112,6 +112,12 @@ export function measureLines(t: PalmTrace): PalmMeasure[] {
     const h = height(lm, foot), ac = across(lm, foot);
     out.push(pick('Q25', near ? 'DM03' : h < 0.12 ? 'DM02' : h > 0.55 ? 'DM07' : ac >= fingerBounds(lm).ringPinky ? 'DM04' : ac < 0 ? 'DM05' : 'DM06', h));
   } else out.push(pick('Q25', null));
+
+  // Đường vẽ thành nhiều đoạn rời nhau là đường đứt quãng. Chỉ điền sẵn khi có; người dùng vẫn sửa được (ví dụ "Đứt có đoạn che chắn").
+  const cut = (k: keyof PalmTrace['lines']) => (t.breaks?.[k] ?? 0) > 0;
+  if (sinh && cut('sinh')) out.push(pick('Q18', 'SD06', t.breaks!.sinh));
+  if (tri && cut('tri')) out.push(pick('Q22', 'TD19', t.breaks!.tri));
+  if (dinh && cut('dinh')) out.push(pick('Q26', 'DM09', t.breaks!.dinh));
   return out;
 }
 

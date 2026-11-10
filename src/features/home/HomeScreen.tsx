@@ -23,6 +23,7 @@ const SHORTCUTS: readonly { icon: string; label: string; tab: TabId; route?: Rou
   { icon: '🏠', label: 'Bát Trạch', tab: 'phongthuy', route: { name: 'phongthuy', sub: 'battrach' } },
   { icon: '🧭', label: 'La Bàn', tab: 'phongthuy', route: { name: 'phongthuy', sub: 'laban' } },
   { icon: '🌙', label: 'Nạp Âm & hợp hôn', tab: 'phongthuy', route: { name: 'phongthuy', sub: 'napam' } },
+  { icon: '✋', label: 'Chỉ tay', tab: 'home', route: { name: 'palm' } },
 ];
 
 export function BootNoticeBanner() {
@@ -49,7 +50,9 @@ export function HomeScreen() {
   const parts = useMemo(() => (res?.ok ? tongHopParts(tongHopOf(res.birth)) : []), [res]);
 
   const go = (sc: (typeof SHORTCUTS)[number]) => {
-    if (sc.route) nav.goTo(sc.tab, sc.route);
+    // Tổng hợp nằm trong tab Tĩnh thất: mở chồng lên để Back về lại Tổng hợp (goTo sẽ thay mất gốc tab)
+    if (sc.route && sc.tab === 'home') nav.push(sc.route);
+    else if (sc.route) nav.goTo(sc.tab, sc.route);
     else nav.selectTab(sc.tab);
   };
 

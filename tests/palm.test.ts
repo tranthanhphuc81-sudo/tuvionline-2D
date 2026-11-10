@@ -203,6 +203,17 @@ describe('Đo từ nét đã xác nhận', () => {
     expect(measure({ dinh: line([0.4, 0.45], [0.25, 0.79]) }).Q25).toBe('DM05');
   });
 
+  it('đường vẽ thành nhiều đoạn rời thì điền sẵn "Đứt" cho Sinh đạo, Trí đạo, Định mạng', () => {
+    const a = measure({ sinh: SINH, tri: TRI, tam: TAM, dinh: DINH });
+    for (const q of ['Q18', 'Q22', 'Q26']) expect(a[q]).toBeUndefined();
+    const cut = measuresToAnswers(measureLines({ landmarks: HAND, lines: { sinh: SINH, tri: TRI, tam: TAM, dinh: DINH }, breaks: { sinh: 1, tri: 2, tam: 1, dinh: 1 } }));
+    expect([cut.Q18, cut.Q22, cut.Q26]).toEqual(['SD06', 'TD19', 'DM09']);
+    // Tâm đạo đứt chưa có câu riêng; không có đường thì không điền; số chỗ đứt 0 thì không điền
+    expect(cut.Q24).toBeUndefined();
+    const none = measuresToAnswers(measureLines({ landmarks: HAND, lines: { sinh: SINH }, breaks: { sinh: 0, tri: 1 } }));
+    expect([none.Q18, none.Q22]).toEqual([undefined, undefined]);
+  });
+
   it('nét thiếu thì không đoán; khớp tay đủ thì đo đủ 5 câu', () => {
     const none = measure({});
     for (const q of ['Q17', 'Q20', 'Q21-huong', 'Q21-dai', 'Q23', 'Q25']) expect(none[q]).toBeNull();

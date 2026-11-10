@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect, afterEach } from 'vitest';
-import { render, screen, cleanup } from '@testing-library/react';
+import { render, screen, cleanup, fireEvent } from '@testing-library/react';
+import { initialRouter, push } from '../../app/router';
 import { AppProvider } from '../../app/context';
 import { createStore } from '../../state/store';
 import { emptyState, type PersistedState, type Profile } from '../../state/schema';
@@ -33,5 +34,12 @@ describe('Màn hình Tổng hợp', () => {
     setup({ ...emptyState(), profiles: [{ ...person, day: 31, month: 2 }], activeProfileId: 'a' });
     expect(screen.getByRole('alert')).toBeTruthy();
     expect(screen.queryByRole('heading', { name: HEADINGS[0] })).toBeNull();
+  });
+
+  it('lối tắt Chỉ tay mở chồng lên Tổng hợp để Back về lại Tổng hợp', () => {
+    const nav = createStore(push(initialRouter(), { name: 'tonghop' }));
+    render(<AppProvider store={createStore<PersistedState>(emptyState())} nav={nav}><HomeScreen /></AppProvider>);
+    fireEvent.click(screen.getByRole('button', { name: /Chỉ tay/ }));
+    expect(nav.getState().stacks.home.map((r) => r.name)).toEqual(['home', 'tonghop', 'palm']);
   });
 });

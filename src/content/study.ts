@@ -32,5 +32,6 @@ export const STUDY_OBJECTS = {
   laban: { label: 'Bát Trạch, La Bàn', aria: 'La bàn gỗ: mở Bát Trạch và La Bàn' },
   sach: { label: 'Nạp Âm', aria: 'Sách cổ: mở Nạp Âm và hợp hôn' },
   so: { label: 'Tổng hợp', aria: 'Sổ tổng hợp: mở phần đọc tổng hợp' },
+  chitay: { label: 'Chỉ tay', aria: 'Đèn dầu soi bàn tay: mở xem chỉ tay' },
 } as const;
 export type StudyObjectId = keyof typeof STUDY_OBJECTS;
