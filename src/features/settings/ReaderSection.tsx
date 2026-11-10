@@ -13,9 +13,10 @@ import ui from '../../ui/components/ui.module.css';
 import { Character } from '../reader/Character';
 import { removeReaderPhoto, saveReaderPhoto } from '../reader/customPhoto';
 import { thayVoice, useReader } from '../reader/hooks';
-import { useReaderPhoto } from '../reader/ReaderFigure';
+import { useReaderPhoto, useStandingPhoto } from '../reader/ReaderFigure';
 import s from '../reader/reader.module.css';
 
+const CUTOUT_FAILED = 'Chưa tách được người ra khỏi nền ảnh này nên ảnh sẽ nằm trong khung tròn. Ảnh chân dung rõ mặt, nền đơn giản sẽ tách đẹp hơn.';
 const sample = (ta: string) => `${ta.charAt(0).toLocaleUpperCase('vi') + ta.slice(1)} chào bạn. Số là tham khảo, đức năng thắng số.`;
 
 export function ReaderSection({ voices }: { voices: readonly string[] }) {
@@ -27,9 +28,12 @@ export function ReaderSection({ voices }: { voices: readonly string[] }) {
   const rate = useApp((x) => x.settings.ttsRate);
   const pitch = useApp((x) => x.settings.ttsPitch);
   const { persona } = useReader();
-  const photo = useReaderPhoto();
+  const { photo, cutout } = useReaderPhoto();
+  const standing = useStandingPhoto();
   const file = useRef<HTMLInputElement>(null);
   const [note, setNote] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [photoNote, setPhotoNote] = useState<string | null>(null);
   const isCustom = reader === CUSTOM_READER;
   const current = isCustom ? CUSTOM_READER : persona.id;
 
@@ -42,7 +46,14 @@ export function ReaderSection({ voices }: { voices: readonly string[] }) {
   };
   const pickPhoto = async (f: File | undefined) => {
     if (!f) return;
-    try { await saveReaderPhoto(f); setSetting(store, 'reader', CUSTOM_READER); } catch { setNote('Không đọc được ảnh này. Bạn thử chọn ảnh khác nhé.'); }
+    setBusy(true); setPhotoNote(null); setNote(null);
+    try {
+      const r = await saveReaderPhoto(f);
+      setSetting(store, 'readerCustom', { ...custom, frame: undefined });
+      setSetting(store, 'reader', CUSTOM_READER);
+      if (!r.cutout) setPhotoNote(CUTOUT_FAILED);
+    } catch { setPhotoNote('Không đọc được ảnh này. Bạn thử chọn ảnh khác nhé.'); }
+    setBusy(false);
   };
 
   return (
@@ -59,7 +70,8 @@ export function ReaderSection({ voices }: { voices: readonly string[] }) {
         ))}
         <button type="button" role="radio" aria-checked={isCustom} aria-label="Ảnh của bạn: dùng ảnh tự chọn làm người đọc" className={s.card}
           onClick={() => (photo ? setSetting(store, 'reader', CUSTOM_READER) : file.current?.click())}>
-          {photo ? <img className={s.previewPhoto} src={photo} alt="" /> : <span className={s.previewEmpty} aria-hidden="true">＋</span>}
+          {standing ? <img className={s.previewStand} src={standing} alt="" />
+            : photo ? <img className={s.previewPhoto} src={photo} alt="" /> : <span className={s.previewEmpty} aria-hidden="true">＋</span>}
           <span className={s.cardName} aria-hidden="true">Ảnh của bạn</span>
           <span className={s.cardNote} aria-hidden="true">{photo ? custom.name : 'Chọn một ảnh'}</span>
         </button>
@@ -68,10 +80,21 @@ export function ReaderSection({ voices }: { voices: readonly string[] }) {
 
       {isCustom ? (
         <div className={ui.stack}>
-          <p className={ui.muted}>Ảnh chỉ lưu trên máy này, không gửi đi đâu và không nằm trong file sao lưu. Nên chọn ảnh chân dung, khuôn mặt ở giữa.</p>
+          <p className={ui.muted}>Ảnh chỉ lưu trên máy này, không gửi đi đâu và không nằm trong file sao lưu. App tự tách người ra khỏi nền ngay trên máy để người đứng trong Tĩnh thất như các nhân vật vẽ sẵn. Nên chọn ảnh chân dung rõ mặt, nền đơn giản.</p>
+          {photo && !busy && (
+            <div className={s.stage} aria-label="Xem trước người đọc ở Tĩnh thất" role="img">
+              {standing ? <img className={s.stagePerson} src={standing} alt="" /> : <img className={s.stagePhoto} src={photo} alt="" />}
+            </div>
+          )}
+          {busy && <p className={ui.info} role="status">Đang tách người ra khỏi nền ảnh…</p>}
+          {photoNote && <p className={ui.info} role="status">{photoNote}</p>}
+          {cutout && !busy && (
+            <Segmented<'stand' | 'frame'> label="Cách hiện ảnh" value={custom.frame ? 'frame' : 'stand'} onChange={(v) => setCustom({ frame: v === 'frame' ? true : undefined })}
+              options={[{ value: 'stand', label: 'Đứng tự do' }, { value: 'frame', label: 'Khung tròn' }]} />
+          )}
           <div className={ui.row}>
-            <button type="button" className={ui.btn} onClick={() => file.current?.click()}>{photo ? 'Đổi ảnh' : 'Chọn ảnh'}</button>
-            {photo && <button type="button" className={ui.btn} onClick={() => { void removeReaderPhoto(); setSetting(store, 'reader', undefined); }}>Bỏ ảnh</button>}
+            <button type="button" className={ui.btn} disabled={busy} onClick={() => file.current?.click()}>{photo ? 'Đổi ảnh' : 'Chọn ảnh'}</button>
+            {photo && <button type="button" className={ui.btn} disabled={busy} onClick={() => { void removeReaderPhoto(); setPhotoNote(null); setSetting(store, 'reader', undefined); }}>Bỏ ảnh</button>}
           </div>
           <label className={ui.field}>
             <span className={ui.label}>Tên người đọc</span>
