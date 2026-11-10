@@ -90,6 +90,9 @@ describe('Luận giải', () => {
     expect(one(cat, ['A', 'B']).confidence).toBe('ro');
     expect(one(cat, ['C', 'D']).confidence).toBe('ro');
     expect(topicLine('Thực tế, ngăn nắp.', 'xu-huong')).toBe('Có xu hướng thực tế, ngăn nắp.');
+    expect(topicLine('Thực tế, ngăn nắp.', 'xu-huong', 1)).toBe('Thường thực tế, ngăn nắp.');
+    expect(topicLine('Có nghị lực.', 'xu-huong', 0)).toBe('Thường có nghị lực.');
+    expect(topicLine('Thực tế.', 'ro', 3)).toBe('Thực tế.');
   });
 
   it('(f) chủ đề nào có câu thuận hoặc trung tính thì phần tổng kết có ít nhất một câu như thế, tối đa 3 câu', () => {
@@ -290,5 +293,17 @@ describe('So hai lần xem cùng một tay', () => {
     expect(d.added).toContain('TAM02');
     expect(d.added).not.toContain('H01');
     expect(diffHands(older, older, metas)).toEqual({ added: [], removed: [] });
+  });
+});
+
+describe('Tổng kết đỡ lặp', () => {
+  it('một câu luận chỉ hiện ở một chủ đề, các dòng không cùng mở đầu một kiểu', () => {
+    for (const h of hands) {
+      const view = palmView(analyzePalm(h.input, metas));
+      const lines = view.topics.flatMap((t) => t.lines);
+      expect(new Set(lines.map((l) => l.replace(/^(Có xu hướng|Thường|Nhiều khả năng|Phần nhiều|Dễ) /, ''))).size).toBe(lines.length);
+      const starts = lines.filter((_, i) => view.topics.flatMap((t) => t.lines.map(() => t.confidence))[i] === 'xu-huong').map((l) => l.split(' ')[0]);
+      if (starts.length >= 3) expect(new Set(starts).size).toBeGreaterThan(1);
+    }
   });
 });

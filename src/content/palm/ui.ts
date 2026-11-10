@@ -20,6 +20,7 @@ export const PALM_LINE_STEPS = [
   { id: 'dinh', title: 'Định mạng', hint: 'Đường dọc giữa bàn tay, từ cổ tay lên ngón giữa. Có người không có.', none: 'Không có đường này' },
 ] as const;
 
+export const PALM_TRACE_HINT_NOTE = 'Nét đứt mờ là máy gợi ý chỗ đường thường nằm. Hãy chạm theo đường thật trên tay bạn.';
 export const PALM_TRACE_NEED_POINTS = 'Chạm vào đầu đường và cuối đường trước đã. Không có đường này thì bấm nút bên cạnh.';
 export const PALM_TRACE_CUT_FIRST = 'Chạm đầu và cuối đoạn đầu tiên trước, rồi mới bấm Đoạn mới.';
 export const PALM_TRACE_CUT_HINT = 'Chạm đầu rồi cuối đoạn tiếp theo. Hai đoạn cách nhau thì máy tự ghi nhận chỗ đứt.';

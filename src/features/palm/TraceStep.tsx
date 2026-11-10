@@ -2,7 +2,7 @@
    Chép từ trang thử trên điện thoại (spike/chitay/phone.ts), đã đo 39–68 giây mỗi bàn tay trên Galaxy S25 Ultra. */
 import { useEffect, useRef, useState } from 'react';
 import type { PalmPt } from '../../core';
-import { PALM_LEAVE_TEXT, PALM_LEAVE_TITLE, PALM_LINE_STEPS, PALM_TRACE_CUT_FIRST, PALM_TRACE_CUT_HINT, PALM_TRACE_NEED_POINTS } from '../../content/palm/ui';
+import { PALM_TRACE_HINT_NOTE, PALM_LEAVE_TEXT, PALM_LEAVE_TITLE, PALM_LINE_STEPS, PALM_TRACE_CUT_FIRST, PALM_TRACE_CUT_HINT, PALM_TRACE_NEED_POINTS } from '../../content/palm/ui';
 import { useBackHandler } from '../../app/hooks';
 import { Sheet } from '../../ui/components/Sheet';
 import type { PalmLineKey } from '../../state/schema';
@@ -53,6 +53,8 @@ export function TraceStep({ photo, active, onDone, onExit }: { photo: PreparedPh
     ed.setMounds(false);
     ed.setHandleSize(11);
     ed.setTapMode(true);
+    // Đường máy dò hiện mờ làm gợi ý chỗ cần chạm (như trang thử trên điện thoại); chỉ nét người dùng chạm mới được đo
+    ed.setHints(photo.hints);
     ed.setFocus(PALM_LINE_STEPS[0].id);
     editor.current = ed;
     return () => { editor.current = null; setRouter(null); canvas.remove(); };
@@ -111,6 +113,7 @@ export function TraceStep({ photo, active, onDone, onExit }: { photo: PreparedPh
       <div className={s.traceHead}>
         <h2 className={s.traceTitle}>{step + 1}/{PALM_LINE_STEPS.length}. {cur.title}</h2>
         <p className={s.traceHint} role="status">{hint}</p>
+        <p className={s.qhint}>{PALM_TRACE_HINT_NOTE}</p>
       </div>
       <div className={s.stage}><div ref={holder} className={s.canvasHolder} /></div>
       <div className={s.tools}>

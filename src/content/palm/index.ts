@@ -51,10 +51,16 @@ export const PALM_SECTION_TITLE: Record<PalmResult['sections'][number]['key'], s
 export const PALM_OPENING = 'Xem tay là để soi lại mình. Đường chỉ thay đổi theo cách mình sống, nên đây chỉ là tham khảo mang tính văn hoá.';
 export const PALM_CLOSING = 'Tướng tay đổi theo thời gian, bạn có thể xem lại sau 6–12 tháng. Số là tham khảo, đức năng thắng số.';
 
-/** Chỉ một dấu hiệu thì nói giọng "có xu hướng" (CHI-TAY §1 điểm 5). */
-export function topicLine(text: string, confidence: 'xu-huong' | 'ro'): string {
+/** Các cách nói giọng chưa chắc, xoay vòng cho đỡ lặp "Có xu hướng" ở mọi dòng. */
+const HEDGES = ['Có xu hướng', 'Thường', 'Nhiều khả năng', 'Phần nhiều', 'Dễ'];
+
+/** Chỉ một dấu hiệu thì nói giọng chưa chắc (CHI-TAY §1 điểm 5). `n` chọn cách nói, đổi theo dòng để đỡ lặp.
+    Câu đã mở đầu bằng "Có …" thì không thêm "Có xu hướng" mà dùng "Thường" để khỏi thành "có xu hướng có". */
+export function topicLine(text: string, confidence: 'xu-huong' | 'ro', n = 0): string {
   if (confidence === 'ro') return text;
-  return 'Có xu hướng ' + text.charAt(0).toLocaleLowerCase('vi') + text.slice(1);
+  let hedge = HEDGES[Math.abs(n) % HEDGES.length];
+  if (/^Có\s/u.test(text) && hedge === 'Có xu hướng') hedge = 'Thường';
+  return hedge + ' ' + text.charAt(0).toLocaleLowerCase('vi') + text.slice(1);
 }
 
 export const PALM_COMPARE_LABEL = {
@@ -77,11 +83,18 @@ export function palmView(result: PalmResult): PalmView {
   const view: PalmView = {
     opening: PALM_OPENING,
     sections: result.sections.map((s) => ({ key: s.key, title: PALM_SECTION_TITLE[s.key], items: read(s.ids) })),
-    topics: (Object.entries(result.byTopic) as [PalmTopic, { ids: string[]; confidence: 'xu-huong' | 'ro' }][]).map(([topic, t]) => ({
-      topic, title: PALM_TOPIC_LABEL[topic], confidence: t.confidence, lines: read(t.ids).map((r) => topicLine(r.text, t.confidence)),
-    })),
+    topics: [],
     closing: PALM_CLOSING,
   };
+  // Một câu luận chỉ xuất hiện ở chủ đề đầu tiên có nó: câu nói về hai chủ đề không bị lặp lại ở phần tổng kết
+  const used = new Set<string>();
+  let n = 0;
+  for (const [topic, t] of Object.entries(result.byTopic) as [PalmTopic, { ids: string[]; confidence: 'xu-huong' | 'ro' }][]) {
+    const fresh = read(t.ids).filter((r) => !used.has(r.id));
+    if (!fresh.length) continue;
+    fresh.forEach((r) => used.add(r.id));
+    view.topics.push({ topic, title: PALM_TOPIC_LABEL[topic], confidence: t.confidence, lines: fresh.map((r) => topicLine(r.text, t.confidence, n++)) });
+  }
   if (result.compare) {
     view.compare = (['steady', 'growing', 'latent'] as const)
       .map((key) => ({ key, title: PALM_COMPARE_LABEL[key], items: read(result.compare![key]) }))

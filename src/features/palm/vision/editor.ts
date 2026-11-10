@@ -10,7 +10,7 @@ const IDS: LineId[] = ['tam', 'tri', 'sinh', 'dinh'];
 export interface EditState { lines: Record<LineId, Pt[]>; breaks: Record<LineId, Pt[]>; off: Partial<Record<LineId, boolean>>; extra: Record<LineId, Pt[][]> }
 
 /** Vị trí gợi ý khi máy không tìm được đường nào, để người dùng vẫn có nét mà kéo. Toạ độ theo tỉ lệ khung chuẩn, cùng chiều với đường máy tìm. */
-const TEMPLATE: Record<LineId, [number, number][]> = {
+export const TEMPLATE: Record<LineId, [number, number][]> = {
   tam: [[0.3, 0.2], [0.42, 0.2], [0.54, 0.21], [0.66, 0.23], [0.78, 0.24], [0.9, 0.22]],
   tri: [[0.14, 0.3], [0.25, 0.36], [0.38, 0.42], [0.5, 0.47], [0.62, 0.5], [0.72, 0.54]],
   sinh: [[0.12, 0.3], [0.2, 0.42], [0.27, 0.55], [0.33, 0.68], [0.4, 0.8], [0.45, 0.9]],
@@ -158,11 +158,12 @@ export function mountEditor(canvas: HTMLCanvasElement, clean: HTMLCanvasElement,
       const hint = hints[id];
       if (!dim && hint && hint.length > 1 && state.lines[id].length < 2) {
         // Gợi ý của máy: nét đứt mờ, chỉ để biết đường nằm khoảng đâu
-        g.globalAlpha = 0.5; g.setLineDash([5, 6]);
+        g.globalAlpha = 0.75; g.lineWidth = 3; g.setLineDash([6, 6]);
         g.beginPath();
         hint.forEach((p, i) => (i ? g.lineTo(p.x, p.y) : g.moveTo(p.x, p.y)));
         g.stroke();
         g.setLineDash([]);
+        g.lineWidth = 1.5;
       }
       for (const ctrl of curves(id)) {
         g.globalAlpha = dim ? 0.35 : 0.85;

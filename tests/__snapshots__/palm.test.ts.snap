@@ -101,8 +101,6 @@ exports[`Luận giải > (i) 5 bàn tay mẫu cho ra kết quả không đổi 1
       "ro",
       [
         "Định hướng rõ, trung thực, giỏi tính đường dài; sự nghiệp phát triển vững.",
-        "Thực tế, ngăn nắp, làm đâu chắc đó. Hợp với việc cần quy trình rõ ràng.",
-        "Tự tin, tự chủ, không dễ bỏ cuộc, được người khác tin tưởng.",
       ],
     ],
     [
@@ -199,22 +197,20 @@ exports[`Luận giải > (i) 5 bàn tay mẫu cho ra kết quả không đổi 2
       "tt",
       "xu-huong",
       [
-        "Có xu hướng dễ thích nghi, hoà hợp với nhiều kiểu người.",
+        "Phần nhiều dễ thích nghi, hoà hợp với nhiều kiểu người.",
       ],
     ],
     [
       "sn",
       "xu-huong",
       [
-        "Có xu hướng tự do, không theo khuôn mẫu; tự vạch đường đi và dấn thân đúng lúc sẽ thành.",
+        "Dễ tự do, không theo khuôn mẫu; tự vạch đường đi và dấn thân đúng lúc sẽ thành.",
       ],
     ],
     [
       "gt",
       "ro",
       [
-        "Hoà nhã, dĩ hoà vi quý, thích nghi tốt với nhiều hoàn cảnh.",
-        "Dễ thích nghi, hoà hợp với nhiều kiểu người.",
         "Nhiều mơ ước, giỏi tạo thiện cảm. Cần một người bạn thực tế đồng hành.",
       ],
     ],
@@ -222,7 +218,6 @@ exports[`Luận giải > (i) 5 bàn tay mẫu cho ra kết quả không đổi 2
       "st",
       "ro",
       [
-        "Nhạy cảm, trực giác tốt, thiên về văn hoá nghệ thuật. Nên biến ý tưởng thành kế hoạch cụ thể.",
         "Lãng mạn, nghệ sĩ tính, trực giác mạnh. Neo ý tưởng vào việc cụ thể để thành quả.",
       ],
     ],
@@ -335,9 +330,8 @@ exports[`Luận giải > (i) 5 bàn tay mẫu cho ra kết quả không đổi 3
       "tcm",
       "xu-huong",
       [
-        "Có xu hướng tập trung cao độ, làm gì cũng hết mình, yêu ghét rõ ràng.",
-        "Có xu hướng coi trọng sự gắn bó lâu dài, chân thành và chung thuỷ.",
-        "Có xu hướng tiết chế, ít bộc lộ cảm xúc. Chăm sóc năng lượng bản thân đều đặn.",
+        "Phần nhiều coi trọng sự gắn bó lâu dài, chân thành và chung thuỷ.",
+        "Dễ tiết chế, ít bộc lộ cảm xúc. Chăm sóc năng lượng bản thân đều đặn.",
       ],
     ],
     [
@@ -345,31 +339,20 @@ exports[`Luận giải > (i) 5 bàn tay mẫu cho ra kết quả không đổi 3
       "ro",
       [
         "Có tài năng riêng và dễ được công nhận.",
-        "Hướng ngoại, nhiều hoài bão, thích mở rộng phạm vi hoạt động.",
-        "Tự tin, có chí tiến thủ và tài điều khiển, thích đứng ra dẫn dắt.",
       ],
     ],
     [
       "ss",
       "xu-huong",
       [
-        "Có xu hướng tiết chế, thận trọng, thích ổn định. Vận động và mở lòng nhiều hơn sẽ thêm sinh khí.",
-        "Có xu hướng tiết chế, ít bộc lộ cảm xúc. Chăm sóc năng lượng bản thân đều đặn.",
+        "Thường tiết chế, thận trọng, thích ổn định. Vận động và mở lòng nhiều hơn sẽ thêm sinh khí.",
       ],
     ],
     [
       "st",
       "ro",
       [
-        "Có tài năng riêng và dễ được công nhận.",
         "Giàu tưởng tượng và sáng tạo, thích khám phá, có duyên đi xa.",
-      ],
-    ],
-    [
-      "dx",
-      "xu-huong",
-      [
-        "Có xu hướng giàu tưởng tượng và sáng tạo, thích khám phá, có duyên đi xa.",
       ],
     ],
   ],
@@ -496,7 +479,6 @@ exports[`Luận giải > (i) 5 bàn tay mẫu cho ra kết quả không đổi 4
       "tt",
       "ro",
       [
-        "Có nghị lực và óc khoa học kỹ thuật, thích hiểu tận gốc vấn đề trước khi làm.",
         "Sáng tạo, giàu tưởng tượng.",
         "Dễ thích nghi, hoà hợp với nhiều kiểu người.",
       ],
@@ -518,17 +500,9 @@ exports[`Luận giải > (i) 5 bàn tay mẫu cho ra kết quả không đổi 4
       ],
     ],
     [
-      "gt",
-      "xu-huong",
-      [
-        "Có xu hướng dễ thích nghi, hoà hợp với nhiều kiểu người.",
-      ],
-    ],
-    [
       "st",
       "ro",
       [
-        "Sáng tạo, giàu tưởng tượng.",
         "Thành quả đến nhờ nỗ lực bản thân, thuận với lĩnh vực sáng tạo, văn chương.",
       ],
     ],
@@ -638,7 +612,7 @@ exports[`Luận giải > (i) 5 bàn tay mẫu cho ra kết quả không đổi 5
       "xu-huong",
       [
         "Có xu hướng đa năng, linh hoạt, làm được nhiều việc. Chọn một hướng chính sẽ phát huy tốt nhất.",
-        "Có xu hướng nhiều mơ ước, giỏi tạo thiện cảm. Cần một người bạn thực tế đồng hành.",
+        "Thường nhiều mơ ước, giỏi tạo thiện cảm. Cần một người bạn thực tế đồng hành.",
       ],
     ],
     [
@@ -663,23 +637,14 @@ exports[`Luận giải > (i) 5 bàn tay mẫu cho ra kết quả không đổi 5
       "sn",
       "xu-huong",
       [
-        "Có xu hướng đa năng, linh hoạt, làm được nhiều việc. Chọn một hướng chính sẽ phát huy tốt nhất.",
-        "Có xu hướng giai đoạn đổi cách nghĩ, đổi hướng học tập hoặc nghề nghiệp.",
-        "Có xu hướng đa năng, nhiều lần đổi việc hoặc đổi hướng.",
+        "Phần nhiều đa năng, nhiều lần đổi việc hoặc đổi hướng.",
       ],
     ],
     [
       "ss",
       "xu-huong",
       [
-        "Có xu hướng giai đoạn hay lo nghĩ, năng lượng lúc lên lúc xuống. Ưu tiên chăm sóc bản thân.",
-      ],
-    ],
-    [
-      "gt",
-      "xu-huong",
-      [
-        "Có xu hướng nhiều mơ ước, giỏi tạo thiện cảm. Cần một người bạn thực tế đồng hành.",
+        "Dễ giai đoạn hay lo nghĩ, năng lượng lúc lên lúc xuống. Ưu tiên chăm sóc bản thân.",
       ],
     ],
     [
