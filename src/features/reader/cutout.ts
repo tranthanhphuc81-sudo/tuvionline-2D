@@ -1,27 +1,56 @@
-/* Tách người ra khỏi nền ảnh người đọc bằng MediaPipe Selfie Segmenter, chạy hoàn toàn trên máy (mô hình ~250 KB, Apache 2.0,
-   Google, nằm ở public/palm/ cạnh phần chạy WASM dùng chung với chỉ tay). Ra ảnh nền trong suốt để người đứng tự do ở Tĩnh thất
-   như nhân vật vẽ sẵn. Tách không được (không thấy người, lỗi nạp mô hình) thì trả null và app giữ khung tròn. */
-import type { ImageSegmenter } from '@mediapipe/tasks-vision';
+/* Tách người đọc ra khỏi ảnh người dùng, chạy hoàn toàn trên máy bằng MediaPipe (mô hình Apache 2.0 của Google nằm ở public/palm/,
+   dùng chung phần chạy WASM với chỉ tay):
+   - Selfie Segmenter (~250 KB) tách người khỏi nền → ảnh nền trong suốt để người đứng tự do ở Tĩnh thất như nhân vật vẽ sẵn;
+   - Face Detector (~230 KB) tìm khuôn mặt → cắt riêng cái đầu (mặt và tóc, bỏ cổ vai) để ghép lên thân nhân vật vẽ sẵn (Character.tsx).
+   Phần nào không làm được (không thấy người, không thấy mặt, lỗi nạp mô hình) thì trả null và app dùng cách hiện khác. */
+import type { FaceDetector, ImageSegmenter } from '@mediapipe/tasks-vision';
 
-/** Khung ảnh ra, cùng tỉ lệ ô nhân vật ở Tĩnh thất (180 × 198). */
+/** Khung ảnh đứng tự do, cùng tỉ lệ ô nhân vật ở Tĩnh thất (180 × 198). */
 export const CUT_W = 300;
 export const CUT_H = 330;
+/** Khung ảnh cái đầu: khuôn mặt luôn rộng HEAD_FACE px, cằm đặt ở (HEAD_CX, HEAD_CHIN), thẳng hàng hai mắt. */
+export const HEAD_W = 200;
+export const HEAD_H = 240;
+export const HEAD_FACE = 90;
+export const HEAD_CX = 100;
+export const HEAD_CHIN = 200;
 /** Ảnh đưa vào mô hình thu về cạnh dài này cho nhanh. */
 const WORK = 512;
 
-let loading: Promise<ImageSegmenter> | null = null;
+type Fileset = Parameters<typeof FaceDetector.createFromOptions>[0];
+let vision: Promise<{ dir: string; fileset: Fileset }> | null = null;
+let segLoading: Promise<ImageSegmenter> | null = null;
+let faceLoading: Promise<FaceDetector> | null = null;
+
+function loadVision() {
+  vision ??= (async () => {
+    const { FilesetResolver } = await import('@mediapipe/tasks-vision');
+    const dir = new URL('palm', document.baseURI).pathname.replace(/\/$/, '');
+    return { dir, fileset: await FilesetResolver.forVisionTasks(dir) };
+  })().catch((e) => { vision = null; throw e; });
+  return vision;
+}
 
 function loadSegmenter(): Promise<ImageSegmenter> {
-  loading ??= (async () => {
-    const { FilesetResolver, ImageSegmenter } = await import('@mediapipe/tasks-vision');
-    const dir = new URL('palm', document.baseURI).pathname.replace(/\/$/, '');
-    const vision = await FilesetResolver.forVisionTasks(dir);
-    return ImageSegmenter.createFromOptions(vision, {
+  segLoading ??= (async () => {
+    const [{ ImageSegmenter }, { dir, fileset }] = await Promise.all([import('@mediapipe/tasks-vision'), loadVision()]);
+    return ImageSegmenter.createFromOptions(fileset, {
       baseOptions: { modelAssetPath: `${dir}/selfie_segmenter.tflite`, delegate: 'CPU' },
       runningMode: 'IMAGE', outputConfidenceMasks: true, outputCategoryMask: false,
     });
-  })().catch((e) => { loading = null; throw e; });
-  return loading;
+  })().catch((e) => { segLoading = null; throw e; });
+  return segLoading;
+}
+
+function loadFaces(): Promise<FaceDetector> {
+  faceLoading ??= (async () => {
+    const [{ FaceDetector }, { dir, fileset }] = await Promise.all([import('@mediapipe/tasks-vision'), loadVision()]);
+    return FaceDetector.createFromOptions(fileset, {
+      baseOptions: { modelAssetPath: `${dir}/blaze_face_short_range.tflite`, delegate: 'CPU' },
+      runningMode: 'IMAGE', minDetectionConfidence: 0.5,
+    });
+  })().catch((e) => { faceLoading = null; throw e; });
+  return faceLoading;
 }
 
 export interface Box { x: number; y: number; w: number; h: number }
@@ -86,44 +115,113 @@ export function fitBox(box: Box): Box {
   return { x: Math.round((CUT_W - w) / 2), y: CUT_H - h, w, h };
 }
 
-/** Ảnh người đã tách nền (data URL WebP, máy không có WebP thì PNG; đều giữ nền trong suốt), hoặc null nếu không tách được. */
-export async function cutOutPerson(bmp: ImageBitmap): Promise<string | null> {
+/** Cằm nằm ở đâu so với khung mặt của Face Detector (tính từ mép trên, theo chiều cao khung). */
+const CHIN_AT = 1.0;
+
+const smooth = (a: number, b: number, v: number) => { const t = Math.min(1, Math.max(0, (v - a) / (b - a))); return t * t * (3 - 2 * t); };
+
+/** Phần giữ lại quanh khuôn mặt (0…1) tại điểm (x, y), toạ độ đã xoay thẳng mắt. `face` là khung mặt của Face Detector.
+    Nửa dưới cắt theo hình bầu dục ôm cằm (bỏ cổ và vai); nửa trên để rộng cho tóc. Khi có mặt nạ người thì tóc theo mặt nạ;
+    không có thì cắt hẳn thành hình bầu dục cả trên lẫn dưới. */
+export function headClip(x: number, y: number, face: Box, withMask: boolean): number {
+  const cx = face.x + face.w / 2, cy = face.y + face.h * 0.45, chin = face.y + face.h * CHIN_AT;
+  const u = (x - cx) / (face.w * 0.6);
+  if (y >= cy) {
+    const v = (y - cy) / (chin - cy);
+    return 1 - smooth(0.8, 1, u * u + v * v);
+  }
+  if (withMask) return 1 - smooth(1.5, 1.8, Math.abs(u));
+  const v = (cy - y) / (face.h * 0.95);
+  return 1 - smooth(0.82, 1, u * u + v * v);
+}
+
+/** Cắt ảnh người dùng thành hai bản: người đứng tự do và cái đầu để ghép. Data URL WebP (máy không có WebP thì PNG; đều giữ nền
+    trong suốt), bản nào không làm được thì null. */
+export async function cutOutReader(bmp: ImageBitmap): Promise<{ stand: string | null; head: string | null }> {
   const k = Math.min(1, WORK / Math.max(bmp.width, bmp.height));
   const w = Math.max(1, Math.round(bmp.width * k)), h = Math.max(1, Math.round(bmp.height * k));
   const work = document.createElement('canvas');
   work.width = w; work.height = h;
   const ctx = work.getContext('2d', { willReadFrequently: true });
-  if (!ctx) return null;
+  if (!ctx) return { stand: null, head: null };
   ctx.drawImage(bmp, 0, 0, w, h);
+  const pixels = ctx.getImageData(0, 0, w, h);
 
-  let conf: Float32Array, mw: number, mh: number;
+  // Mặt nạ người, cùng kích thước ảnh làm việc.
+  let alpha: Uint8ClampedArray | null = null, box: Box | null = null;
   try {
     const seg = await loadSegmenter();
     const res = seg.segment(work);
     const mask = res.confidenceMasks?.[0];
-    if (!mask) { res.close(); return null; }
-    conf = mask.getAsFloat32Array().slice(); mw = mask.width; mh = mask.height;
+    if (mask) {
+      const conf = mask.getAsFloat32Array().slice(), mw = mask.width, mh = mask.height;
+      const cut = maskToAlpha(conf, mw, mh);
+      if (cut) {
+        alpha = new Uint8ClampedArray(w * h);
+        for (let y = 0; y < h; y++) {
+          const my = Math.min(mh - 1, Math.floor((y * mh) / h));
+          for (let x = 0; x < w; x++) alpha[y * w + x] = cut.alpha[my * mw + Math.min(mw - 1, Math.floor((x * mw) / w))];
+        }
+        box = { x: (cut.box.x * w) / mw, y: (cut.box.y * h) / mh, w: (cut.box.w * w) / mw, h: (cut.box.h * h) / mh };
+      }
+    }
     res.close();
-  } catch { return null; }
+  } catch { /* không tách được nền: vẫn thử cắt đầu hình bầu dục */ }
 
-  const cut = maskToAlpha(conf, mw, mh);
-  if (!cut) return null;
-  const img = ctx.getImageData(0, 0, w, h);
-  for (let y = 0; y < h; y++) {
-    const my = Math.min(mh - 1, Math.floor((y * mh) / h));
-    for (let x = 0; x < w; x++) img.data[(y * w + x) * 4 + 3] = cut.alpha[my * mw + Math.min(mw - 1, Math.floor((x * mw) / w))];
-  }
-  ctx.putImageData(img, 0, 0);
+  return { stand: alpha && box ? standImage(pixels, alpha, box) : null, head: await headImage(work, pixels, alpha).catch(() => null) };
+}
 
-  const sx = w / mw, sy = h / mh;
-  const src = { x: cut.box.x * sx, y: cut.box.y * sy, w: cut.box.w * sx, h: cut.box.h * sy };
+function encode(c: HTMLCanvasElement): string {
+  const url = c.toDataURL('image/webp', 0.9);
+  return url.startsWith('data:image/webp') ? url : c.toDataURL('image/png');
+}
+
+function withAlpha(pixels: ImageData, alpha: (i: number) => number): HTMLCanvasElement {
+  const c = document.createElement('canvas');
+  c.width = pixels.width; c.height = pixels.height;
+  const img = new ImageData(new Uint8ClampedArray(pixels.data), pixels.width, pixels.height);
+  for (let i = 0, n = pixels.width * pixels.height; i < n; i++) img.data[i * 4 + 3] = alpha(i);
+  c.getContext('2d')!.putImageData(img, 0, 0);
+  return c;
+}
+
+function standImage(pixels: ImageData, alpha: Uint8ClampedArray, src: Box): string {
+  const cut = withAlpha(pixels, (i) => alpha[i]);
   const dst = fitBox(src);
   const out = document.createElement('canvas');
   out.width = CUT_W; out.height = CUT_H;
-  const o = out.getContext('2d');
-  if (!o) return null;
+  const o = out.getContext('2d')!;
   o.imageSmoothingQuality = 'high';
-  o.drawImage(work, src.x, src.y, src.w, src.h, dst.x, dst.y, dst.w, dst.h);
-  const url = out.toDataURL('image/webp', 0.9);
-  return url.startsWith('data:image/webp') ? url : out.toDataURL('image/png');
+  o.drawImage(cut, src.x, src.y, src.w, src.h, dst.x, dst.y, dst.w, dst.h);
+  return encode(out);
+}
+
+async function headImage(work: HTMLCanvasElement, pixels: ImageData, alpha: Uint8ClampedArray | null): Promise<string | null> {
+  const faces = await loadFaces();
+  const found = faces.detect(work).detections.filter((d) => d.boundingBox).sort((a, b) => b.boundingBox!.width * b.boundingBox!.height - a.boundingBox!.width * a.boundingBox!.height)[0];
+  const bb = found?.boundingBox;
+  if (!bb || bb.width < 24) return null;
+  const w = pixels.width;
+  const face: Box = { x: bb.originX, y: bb.originY, w: bb.width, h: bb.height };
+  // Nghiêng đầu theo đường nối hai mắt (điểm 0 và 1, toạ độ 0…1).
+  const [e0, e1] = found.keypoints;
+  const angle = e0 && e1 ? Math.atan2((e1.y - e0.y) * pixels.height, (e1.x - e0.x) * w) : 0;
+  const tilt = Math.abs(angle) < 0.6 ? angle : 0;
+  const cx = face.x + face.w / 2, cy = face.y + face.h / 2, cos = Math.cos(-tilt), sin = Math.sin(-tilt);
+  const cut = withAlpha(pixels, (i) => {
+    const x = i % w, y = (i - x) / w;
+    // xoay ngược quanh tâm mặt để đo theo hướng thẳng mắt
+    const rx = cx + (x - cx) * cos - (y - cy) * sin, ry = cy + (x - cx) * sin + (y - cy) * cos;
+    return Math.round((alpha ? alpha[i] : 255) * headClip(rx, ry, face, !!alpha));
+  });
+  // cằm trên ảnh gốc: điểm dưới tâm mặt, xoay theo độ nghiêng của đầu
+  const s = HEAD_FACE / face.w, d = face.y + face.h * CHIN_AT - cy;
+  const chinX = cx - d * Math.sin(tilt), chinY = cy + d * Math.cos(tilt);
+  const out = document.createElement('canvas');
+  out.width = HEAD_W; out.height = HEAD_H;
+  const o = out.getContext('2d')!;
+  o.imageSmoothingQuality = 'high';
+  o.translate(HEAD_CX, HEAD_CHIN); o.scale(s, s); o.rotate(-tilt);
+  o.drawImage(cut, -chinX, -chinY);
+  return encode(out);
 }

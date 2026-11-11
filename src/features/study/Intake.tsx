@@ -9,6 +9,7 @@ import ui from '../../ui/components/ui.module.css';
 import { MISSING_DATE, toDraft, toInput, useDraftBirth, type Draft } from '../profiles/draft';
 import { hourLabel } from '../profiles/format';
 import profiles from '../profiles/profiles.module.css';
+import { useReader } from '../reader/hooks';
 import s from './study.module.css';
 
 const STEPS = ['name', 'gender', 'date', 'hour'] as const;
@@ -17,6 +18,7 @@ const STEPS = ['name', 'gender', 'date', 'hour'] as const;
 export function Intake() {
   const { store } = useAppCtx();
   const nav = useNav();
+  const { Ta } = useReader();
   const [d, setD] = useState<Draft>(() => toDraft());
   const [i, setI] = useState(0);
   const [tried, setTried] = useState(false);
@@ -41,7 +43,7 @@ export function Intake() {
 
   return (
     <form className={s.intake} noValidate onSubmit={next}>
-      {i === 0 && <p className={s.line}>{DONG_LINES.intro[0]}</p>}
+      {i === 0 && <p className={s.line}>{DONG_LINES.intro[0].replace('{Ta}', Ta)}</p>}
       <p className={s.ask}>{DONG_LINES[step][0]}</p>
 
       {step === 'name' && (

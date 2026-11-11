@@ -57,7 +57,7 @@ export const taTitle = (p: Persona) => p.ta.charAt(0).toLocaleUpperCase('vi') + 
 /** Người đọc tự tạo từ ảnh của người dùng. */
 export const CUSTOM_READER = 'custom';
 export const CUSTOM_TA: readonly string[] = ['thầy', 'cô', 'ông', 'bà', 'anh', 'chị', 'tôi'];
-export interface CustomReaderInfo { name: string; ta: string; voice: 'nam' | 'nu'; frame?: boolean }
+export interface CustomReaderInfo { name: string; ta: string; voice: 'nam' | 'nu'; look?: 'stand' | 'frame' | 'face'; frame?: boolean }
 export const DEFAULT_CUSTOM: CustomReaderInfo = { name: 'Người đọc của tôi', ta: 'thầy', voice: 'nam' };
 
 /** Người đọc đang chọn trong Cài đặt. `custom` mà chưa có thông tin thì dùng mặc định; mã lạ thì là Thầy. */

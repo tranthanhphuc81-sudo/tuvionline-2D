@@ -1,5 +1,5 @@
 /* Chép phần chạy mô hình nhận diện bàn tay (WASM của MediaPipe) từ node_modules vào public/palm/ để app chạy offline.
-   Mô hình hand_landmarker.task và selfie_segmenter.tflite (tách nền ảnh người đọc; đều Apache 2.0) đã nằm sẵn trong public/palm/. Chạy tự động trước dev và build. */
+   Mô hình hand_landmarker.task, selfie_segmenter.tflite và blaze_face_short_range.tflite (tách nền, ghép mặt ảnh người đọc; đều Apache 2.0) đã nằm sẵn trong public/palm/. Chạy tự động trước dev và build. */
 import { copyFileSync, existsSync, mkdirSync } from 'node:fs';
 
 const from = 'node_modules/@mediapipe/tasks-vision/wasm';

@@ -24,7 +24,7 @@ export const GUIDE_SECTIONS: readonly { title: string; items: readonly string[] 
     'Xem lại bảng "Máy đo được" và sửa chỗ chưa đúng trước khi xem kết quả. Ảnh không được lưu; app giữ các nét đã chạm để vẽ lại sơ đồ và so sánh các lần xem.',
   ] },
   { title: 'Người đọc và giọng đọc', items: [
-    'Cài đặt → Người đọc: chọn nhân vật, màu áo, hoặc dùng ảnh của bạn (app tự tách người ra khỏi nền để đứng trong Tĩnh thất). Lời đọc tự xưng theo nhân vật.',
+    'Cài đặt → Người đọc: chọn nhân vật, màu áo, hoặc dùng ảnh của bạn (app tự tách người ra khỏi nền để đứng trong Tĩnh thất, hoặc ghép khuôn mặt lên thân nhân vật vẽ sẵn). Lời đọc tự xưng theo nhân vật.',
     'Nghe thử từng giọng của máy rồi chọn. Máy chưa có giọng tiếng Việt thì bấm "Tải thêm giọng tiếng Việt".',
   ] },
   { title: 'Lưu và chia sẻ', items: [

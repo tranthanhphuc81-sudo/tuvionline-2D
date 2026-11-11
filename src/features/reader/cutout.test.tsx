@@ -5,8 +5,11 @@ import { AppProvider } from '../../app/context';
 import { createStore } from '../../state/store';
 import { emptyState, parsePersisted, type PersistedState } from '../../state/schema';
 import { ReaderSection } from '../settings/ReaderSection';
-import { CUT_H, CUT_W, fitBox, maskToAlpha } from './cutout';
-import { loadReaderPhoto, READER_CUTOUT_KEY, READER_PHOTO_KEY, removeReaderPhoto } from './customPhoto';
+import { CUT_H, CUT_W, fitBox, headClip, maskToAlpha } from './cutout';
+import { loadReaderPhoto, READER_CUTOUT_KEY, READER_HEAD_KEY, READER_PHOTO_KEY, removeReaderPhoto } from './customPhoto';
+import { withFace } from './Character';
+import { chosenLook, faceBody, shownLook } from './ReaderFigure';
+import thay from '../../assets/journey/character/thay.json';
 import type { KV } from '../../platform/storage';
 
 afterEach(cleanup);
@@ -51,25 +54,71 @@ describe('Tách nền ảnh người đọc', () => {
     expect([wide.w, wide.y + wide.h]).toEqual([CUT_W, CUT_H]);
   });
 
-  it('lưu được lựa chọn giữ khung tròn, sai kiểu thì báo lỗi', () => {
-    const s = (frame: unknown) => ({ ...emptyState(), settings: { ...emptyState().settings, readerCustom: { name: 'A', ta: 'cô', voice: 'nu', frame } } });
-    expect(parsePersisted(JSON.parse(JSON.stringify(s(true)))).ok).toBe(true);
-    expect(parsePersisted(s('co')).ok).toBe(false);
+  it('cắt đầu: giữ mặt và tóc, bỏ cổ vai; không có mặt nạ người thì cắt hình bầu dục', () => {
+    const face = { x: 100, y: 100, w: 100, h: 100 };
+    expect(headClip(150, 150, face, true)).toBe(1);
+    expect(headClip(150, 230, face, true)).toBe(0); // cổ dưới cằm
+    expect(headClip(60, 190, face, true)).toBe(0); // vai
+    expect(headClip(150, 40, face, true)).toBe(1); // tóc cao trên đỉnh vẫn giữ theo mặt nạ
+    expect(headClip(150, 40, face, false)).toBe(0);
+    expect(headClip(70, 60, face, true)).toBe(1); // tóc xoà ngang
+    expect(headClip(-40, 60, face, true)).toBe(0);
   });
 
-  it('Cài đặt: có ảnh tách nền thì xem trước người đứng tự do, chọn được khung tròn', async () => {
-    const data: Record<string, string> = { [READER_PHOTO_KEY]: 'data:image/jpeg;base64,AA', [READER_CUTOUT_KEY]: 'data:image/webp;base64,BB' };
+  it('ghép mặt: bỏ nét vẽ của đầu, thêm lớp ảnh gắn vào đầu để cử động theo', () => {
+    const out = withFace(thay, 'data:image/webp;base64,AA');
+    const head = out.layers.find((l) => l.nm === 'đầu')!;
+    const face = out.layers.find((l) => l.nm === 'mặt người dùng') as unknown as { ty: number; parent: number; refId: string };
+    expect(head.shapes).toEqual([]);
+    expect([face.ty, face.parent, face.refId]).toEqual([2, head.ind, 'userHead']);
+    expect(out.layers.indexOf(face as never)).toBe(out.layers.indexOf(head) - 1); // ngay trên lớp đầu
+    expect(out.assets).toContainEqual(expect.objectContaining({ id: 'userHead', p: 'data:image/webp;base64,AA', e: 1 }));
+    expect(thay.layers.find((l) => l.nm === 'đầu')!.shapes.length).toBeGreaterThan(0); // không sửa file gốc
+    const noHead = { layers: [{ nm: 'thân' }] };
+    expect(withFace(noHead, 'x')).toBe(noHead);
+  });
+
+  it('cách hiện: theo lựa chọn, thiếu bản nào thì lùi về bản có', () => {
+    const all = { photo: 'p', cutout: 'c', head: 'h' };
+    expect(chosenLook(undefined)).toBe('stand');
+    expect(chosenLook({ name: 'A', ta: 'cô', voice: 'nu', frame: true })).toBe('frame');
+    expect(chosenLook({ name: 'A', ta: 'cô', voice: 'nu', frame: true, look: 'face' })).toBe('face');
+    expect(shownLook('face', all)).toBe('face');
+    expect(shownLook('face', { ...all, head: null })).toBe('stand');
+    expect(shownLook('face', { ...all, head: null, cutout: null })).toBe('frame');
+    expect(shownLook('stand', { ...all, cutout: null })).toBe('frame');
+    expect(shownLook('frame', all)).toBe('frame');
+    expect(shownLook('stand', { photo: null, cutout: null, head: null })).toBeNull();
+    expect([faceBody({ name: 'A', ta: 'cô', voice: 'nu' }), faceBody(undefined)]).toEqual(['co-do', 'thay']);
+  });
+
+  it('lưu được cách hiện ảnh, sai kiểu thì báo lỗi', () => {
+    const s = (extra: object) => ({ ...emptyState(), settings: { ...emptyState().settings, readerCustom: { name: 'A', ta: 'cô', voice: 'nu', ...extra } } });
+    expect(parsePersisted(JSON.parse(JSON.stringify(s({ frame: true })))).ok).toBe(true);
+    expect(parsePersisted(JSON.parse(JSON.stringify(s({ look: 'face' })))).ok).toBe(true);
+    expect(parsePersisted(s({ frame: 'co' })).ok).toBe(false);
+    expect(parsePersisted(s({ look: 'mat' })).ok).toBe(false);
+  });
+
+  it('Cài đặt: xem trước người đứng tự do, chọn được ghép mặt (có màu áo) và khung tròn', async () => {
+    const data: Record<string, string> = { [READER_PHOTO_KEY]: 'data:image/jpeg;base64,AA', [READER_CUTOUT_KEY]: 'data:image/webp;base64,BB', [READER_HEAD_KEY]: 'data:image/webp;base64,CC' };
     const kv = { get: async (k: string) => data[k] ?? null, set: async (k: string, v: string) => { data[k] = v; }, remove: async (k: string) => { delete data[k]; }, keys: async () => Object.keys(data) } as unknown as KV;
     await loadReaderPhoto(kv);
     const store = createStore<PersistedState>({ ...emptyState(), settings: { ...emptyState().settings, reader: 'custom' } });
     const { container } = render(<AppProvider store={store}><ReaderSection voices={[]} /></AppProvider>);
     const stage = screen.getByRole('img', { name: /Xem trước/ });
     expect(stage.querySelector('img')!.getAttribute('src')).toContain('webp');
+    expect(screen.queryByRole('radiogroup', { name: 'Màu áo' })).toBeNull();
+    fireEvent.click(screen.getByRole('radio', { name: 'Ghép mặt' }));
+    expect(store.getState().settings.readerCustom?.look).toBe('face');
+    expect(stage.querySelector('img')).toBeNull(); // nhân vật Lottie thay cho ảnh
+    fireEvent.click(screen.getByRole('radio', { name: /^Đỏ son/ }));
+    expect(store.getState().settings.readerRobe).toBe('son');
     fireEvent.click(screen.getByRole('radio', { name: 'Khung tròn' }));
-    expect(store.getState().settings.readerCustom?.frame).toBe(true);
+    expect(store.getState().settings.readerCustom?.look).toBe('frame');
     expect(stage.querySelector('img')!.getAttribute('src')).toContain('jpeg');
     fireEvent.click(screen.getByRole('radio', { name: 'Đứng tự do' }));
-    expect(store.getState().settings.readerCustom?.frame).toBeUndefined();
+    expect(store.getState().settings.readerCustom?.look).toBe('stand');
     await act(() => removeReaderPhoto(kv));
     expect(data).toEqual({});
     expect(container.querySelector('[role="img"]')).toBeNull();
