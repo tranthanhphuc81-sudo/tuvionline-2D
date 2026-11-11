@@ -135,15 +135,85 @@ export function headClip(x: number, y: number, face: Box, withMask: boolean): nu
   return 1 - smooth(0.82, 1, u * u + v * v);
 }
 
-/** Cắt ảnh người dùng thành hai bản: người đứng tự do và cái đầu để ghép. Data URL WebP (máy không có WebP thì PNG; đều giữ nền
-    trong suốt), bản nào không làm được thì null. */
-export async function cutOutReader(bmp: ImageBitmap): Promise<{ stand: string | null; head: string | null }> {
+/** Bộ phận để ảnh cử động: `upper` là ảnh đã tô kín chỗ hàm (màu da, có lòng miệng tối), `jaw` là riêng phần hàm dưới đặt đè lên
+    đúng chỗ cũ; hạ `jaw` xuống `drop` px là miệng mở. Mí mắt là hình vẽ màu da đặt lên hai mắt, hiện thoáng chốc là chớp mắt.
+    Toạ độ theo khung ảnh tương ứng (đầu HEAD_W × HEAD_H hoặc người đứng CUT_W × CUT_H). */
+export interface TalkRig { mouth: [number, number]; drop: number; eyes: [number, number][]; lid: [number, number]; skin: string; line: string }
+export interface TalkParts { upper: string; jaw: string; rig: TalkRig }
+
+type Pt = [number, number];
+/** Khuôn mặt tìm được, toạ độ ảnh làm việc. */
+interface FaceInfo { box: Box; eyes: Pt[]; mouth: Pt | null; tilt: number }
+
+/** Vùng hàm dưới (0…1): nửa dưới hình bầu dục từ khe môi xuống cằm, mép hai bên mềm, mép trên cắt đúng khe môi. */
+export function jawMask(x: number, y: number, mouth: Pt, rx: number, ry: number): number {
+  if (y < mouth[1]) return 0;
+  const u = (x - mouth[0]) / rx, v = (y - mouth[1]) / ry;
+  return 1 - smooth(0.78, 1, u * u + v * v);
+}
+
+const hex = (r: number, g: number, b: number) => '#' + [r, g, b].map((v) => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0')).join('');
+const round1 = (p: Pt): Pt => [Math.round(p[0] * 10) / 10, Math.round(p[1] * 10) / 10];
+
+/** Tách hàm và lấy chỗ đặt mí mắt từ ảnh đã cắt. `fw`/`fh`: cỡ khuôn mặt trên ảnh này; mặt quá nhỏ thì không làm. */
+function talkParts(c: HTMLCanvasElement, eyes: Pt[], kp: Pt, chinY: number, fw: number, fh: number): TalkParts | null {
+  if (fw < 24 || eyes.length < 2) return null;
+  // Điểm miệng của Face Detector hay lệch ngang; mặt nhìn thẳng thì tâm miệng nằm dưới giữa hai mắt.
+  const mouth: Pt = [(eyes[0][0] + eyes[1][0]) / 2, kp[1]];
+  const W = c.width, H = c.height;
+  const d = c.getContext('2d')!.getImageData(0, 0, W, H).data;
+  // màu da: trung bình hai mảng má cạnh mũi
+  let r = 0, g = 0, b = 0, n = 0;
+  const rad = Math.max(2, Math.round(fw * 0.05));
+  for (const side of [-1, 1]) {
+    const px = Math.round(mouth[0] + side * fw * 0.28), py = Math.round(mouth[1] - fh * 0.14);
+    for (let y = py - rad; y <= py + rad; y++) for (let x = px - rad; x <= px + rad; x++) {
+      if (x < 0 || y < 0 || x >= W || y >= H) continue;
+      const i = (y * W + x) * 4;
+      if (d[i + 3] < 200) continue;
+      r += d[i]; g += d[i + 1]; b += d[i + 2]; n++;
+    }
+  }
+  const [sr, sg, sb] = n ? [r / n, g / n, b / n] : [217, 168, 138];
+  const rx = fw * 0.3, ry = Math.max(chinY - mouth[1], fh * 0.22) * 1.08;
+  const up = new ImageData(new Uint8ClampedArray(d), W, H), jaw = new ImageData(new Uint8ClampedArray(d), W, H);
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+    const m = jawMask(x, y, mouth, rx, ry);
+    if (!m) { jaw.data[(y * W + x) * 4 + 3] = 0; continue; }
+    const i = (y * W + x) * 4;
+    jaw.data[i + 3] = Math.round(d[i + 3] * m);
+    up.data[i] += (sr - up.data[i]) * m; up.data[i + 1] += (sg - up.data[i + 1]) * m; up.data[i + 2] += (sb - up.data[i + 2]) * m;
+  }
+  const draw = (img: ImageData, mouthHole: boolean) => {
+    const o = document.createElement('canvas');
+    o.width = W; o.height = H;
+    const x = o.getContext('2d')!;
+    x.putImageData(img, 0, 0);
+    if (mouthHole) {
+      x.globalCompositeOperation = 'source-atop';
+      x.fillStyle = '#3b1a17';
+      x.beginPath(); x.ellipse(mouth[0], mouth[1] + fh * 0.03, fw * 0.24, fh * 0.06, 0, 0, Math.PI * 2); x.fill();
+    }
+    return encode(o);
+  };
+  return {
+    upper: draw(up, true), jaw: draw(jaw, false),
+    rig: { mouth: round1(mouth), drop: Math.round(fh * 0.08 * 10) / 10, eyes: eyes.slice(0, 2).map(round1), lid: round1([fw * 0.2, fh * 0.1]), skin: hex(sr, sg, sb), line: hex(sr * 0.6, sg * 0.55, sb * 0.55) },
+  };
+}
+
+export interface ReaderCut { stand: string | null; head: string | null; standTalk: TalkParts | null; headTalk: TalkParts | null }
+
+/** Cắt ảnh người dùng thành hai bản: người đứng tự do và cái đầu để ghép, kèm bộ phận cử động (hàm, mí mắt) nếu thấy rõ mặt.
+    Ảnh là data URL WebP (máy không có WebP thì PNG; đều giữ nền trong suốt), bản nào không làm được thì null. */
+export async function cutOutReader(bmp: ImageBitmap): Promise<ReaderCut> {
+  const out: ReaderCut = { stand: null, head: null, standTalk: null, headTalk: null };
   const k = Math.min(1, WORK / Math.max(bmp.width, bmp.height));
   const w = Math.max(1, Math.round(bmp.width * k)), h = Math.max(1, Math.round(bmp.height * k));
   const work = document.createElement('canvas');
   work.width = w; work.height = h;
   const ctx = work.getContext('2d', { willReadFrequently: true });
-  if (!ctx) return { stand: null, head: null };
+  if (!ctx) return out;
   ctx.drawImage(bmp, 0, 0, w, h);
   const pixels = ctx.getImageData(0, 0, w, h);
 
@@ -168,7 +238,22 @@ export async function cutOutReader(bmp: ImageBitmap): Promise<{ stand: string | 
     res.close();
   } catch { /* không tách được nền: vẫn thử cắt đầu hình bầu dục */ }
 
-  return { stand: alpha && box ? standImage(pixels, alpha, box) : null, head: await headImage(work, pixels, alpha).catch(() => null) };
+  const face = await findFace(work).catch(() => null);
+  if (alpha && box) {
+    const src = box, st = standImage(pixels, alpha, src);
+    out.stand = encode(st.canvas);
+    if (face?.mouth) {
+      const sx = st.dst.w / src.w, sy = st.dst.h / src.h;
+      const map = (p: Pt): Pt => [st.dst.x + (p[0] - src.x) * sx, st.dst.y + (p[1] - src.y) * sy];
+      out.standTalk = talkParts(st.canvas, face.eyes.map(map), map(face.mouth), map([0, face.box.y + face.box.h * CHIN_AT])[1], face.box.w * sx, face.box.h * sy);
+    }
+  }
+  if (face) {
+    const hd = headImage(pixels, alpha, face);
+    out.head = encode(hd.canvas);
+    if (face.mouth) out.headTalk = talkParts(hd.canvas, face.eyes.map(hd.map), hd.map(face.mouth), HEAD_CHIN, HEAD_FACE, (HEAD_FACE * face.box.h) / face.box.w);
+  }
+  return out;
 }
 
 function encode(c: HTMLCanvasElement): string {
@@ -185,7 +270,7 @@ function withAlpha(pixels: ImageData, alpha: (i: number) => number): HTMLCanvasE
   return c;
 }
 
-function standImage(pixels: ImageData, alpha: Uint8ClampedArray, src: Box): string {
+function standImage(pixels: ImageData, alpha: Uint8ClampedArray, src: Box): { canvas: HTMLCanvasElement; dst: Box } {
   const cut = withAlpha(pixels, (i) => alpha[i]);
   const dst = fitBox(src);
   const out = document.createElement('canvas');
@@ -193,20 +278,23 @@ function standImage(pixels: ImageData, alpha: Uint8ClampedArray, src: Box): stri
   const o = out.getContext('2d')!;
   o.imageSmoothingQuality = 'high';
   o.drawImage(cut, src.x, src.y, src.w, src.h, dst.x, dst.y, dst.w, dst.h);
-  return encode(out);
+  return { canvas: out, dst };
 }
 
-async function headImage(work: HTMLCanvasElement, pixels: ImageData, alpha: Uint8ClampedArray | null): Promise<string | null> {
+/** Khuôn mặt lớn nhất trong ảnh, kèm hai mắt, miệng (điểm 0, 1, 3 của Face Detector) và độ nghiêng đầu theo hai mắt. */
+async function findFace(work: HTMLCanvasElement): Promise<FaceInfo | null> {
   const faces = await loadFaces();
   const found = faces.detect(work).detections.filter((d) => d.boundingBox).sort((a, b) => b.boundingBox!.width * b.boundingBox!.height - a.boundingBox!.width * a.boundingBox!.height)[0];
   const bb = found?.boundingBox;
   if (!bb || bb.width < 24) return null;
-  const w = pixels.width;
-  const face: Box = { x: bb.originX, y: bb.originY, w: bb.width, h: bb.height };
-  // Nghiêng đầu theo đường nối hai mắt (điểm 0 và 1, toạ độ 0…1).
-  const [e0, e1] = found.keypoints;
-  const angle = e0 && e1 ? Math.atan2((e1.y - e0.y) * pixels.height, (e1.x - e0.x) * w) : 0;
-  const tilt = Math.abs(angle) < 0.6 ? angle : 0;
+  const px = (i: number): Pt | null => { const p = found.keypoints[i]; return p ? [p.x * work.width, p.y * work.height] : null; };
+  const e0 = px(0), e1 = px(1);
+  const angle = e0 && e1 ? Math.atan2(e1[1] - e0[1], e1[0] - e0[0]) : 0;
+  return { box: { x: bb.originX, y: bb.originY, w: bb.width, h: bb.height }, eyes: e0 && e1 ? [e0, e1] : [], mouth: px(3), tilt: Math.abs(angle) < 0.6 ? angle : 0 };
+}
+
+function headImage(pixels: ImageData, alpha: Uint8ClampedArray | null, info: FaceInfo): { canvas: HTMLCanvasElement; map: (p: Pt) => Pt } {
+  const w = pixels.width, face = info.box, tilt = info.tilt;
   const cx = face.x + face.w / 2, cy = face.y + face.h / 2, cos = Math.cos(-tilt), sin = Math.sin(-tilt);
   const cut = withAlpha(pixels, (i) => {
     const x = i % w, y = (i - x) / w;
@@ -223,5 +311,8 @@ async function headImage(work: HTMLCanvasElement, pixels: ImageData, alpha: Uint
   o.imageSmoothingQuality = 'high';
   o.translate(HEAD_CX, HEAD_CHIN); o.scale(s, s); o.rotate(-tilt);
   o.drawImage(cut, -chinX, -chinY);
-  return encode(out);
+  // cùng phép biến đổi như trên, cho từng điểm (mắt, miệng)
+  const c = Math.cos(tilt), sn = Math.sin(tilt);
+  const map = (p: Pt): Pt => { const dx = p[0] - chinX, dy = p[1] - chinY; return [HEAD_CX + s * (dx * c + dy * sn), HEAD_CHIN + s * (-dx * sn + dy * c)]; };
+  return { canvas: out, map };
 }

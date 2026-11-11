@@ -1,6 +1,6 @@
 /* Cài đặt → Người đọc: chọn nhân vật ngồi ở Tĩnh thất và đọc kết quả, màu áo, hoặc dùng ảnh của chính mình; nghe thử từng giọng.
    Lời đọc tự xưng theo nhân vật (thầy, cô, bà, ông, chị…). */
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { CUSTOM_READER, CUSTOM_TA, DEFAULT_CUSTOM, PERSONAS, ROBES, ROBE_IDS, robeOf, readerPersona } from '../../content/reader/personas';
 import { speechFailedText } from '../../content/speech';
 import { isNative } from '../../platform/native';
@@ -13,7 +13,7 @@ import ui from '../../ui/components/ui.module.css';
 import { Character } from '../reader/Character';
 import { removeReaderPhoto, saveReaderPhoto } from '../reader/customPhoto';
 import { thayVoice, useReader } from '../reader/hooks';
-import { chosenLook, useReaderLook } from '../reader/ReaderFigure';
+import { chosenLook, StandFigure, useReaderLook } from '../reader/ReaderFigure';
 import s from '../reader/reader.module.css';
 
 const CUTOUT_FAILED = 'Chưa tách được người ra khỏi nền ảnh này nên ảnh sẽ nằm trong khung tròn. Ảnh chân dung rõ mặt, nền đơn giản sẽ tách đẹp hơn.';
@@ -30,12 +30,18 @@ export function ReaderSection({ voices }: { voices: readonly string[] }) {
   const rate = useApp((x) => x.settings.ttsRate);
   const pitch = useApp((x) => x.settings.ttsPitch);
   const { persona } = useReader();
-  const { photo, cutout, head, look, body } = useReaderLook();
+  const { photo, cutout, head, anim, look, body } = useReaderLook();
   const robeColors = ROBES[robeOf(persona, robe)].colors;
   const file = useRef<HTMLInputElement>(null);
   const [note, setNote] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [photoNote, setPhotoNote] = useState<string | null>(null);
+  const [demo, setDemo] = useState<'idle' | 'talk'>('idle');
+  useEffect(() => {
+    if (demo === 'idle') return;
+    const t = setTimeout(() => setDemo('idle'), 4000);
+    return () => clearTimeout(t);
+  }, [demo]);
   const isCustom = reader === CUSTOM_READER;
   const current = isCustom ? CUSTOM_READER : persona.id;
 
@@ -86,7 +92,7 @@ export function ReaderSection({ voices }: { voices: readonly string[] }) {
         ))}
         <button type="button" role="radio" aria-checked={isCustom} aria-label="Ảnh của bạn: dùng ảnh tự chọn làm người đọc" className={s.card}
           onClick={() => (photo ? setSetting(store, 'reader', CUSTOM_READER) : file.current?.click())}>
-          {look === 'face' ? <Character name={body} state="idle" robe={robeColors} face={head} className={s.preview} />
+          {look === 'face' ? <Character name={body} state="idle" robe={robeColors} face={head} talk={anim.head} className={s.preview} />
             : look === 'stand' ? <img className={s.previewStand} src={cutout!} alt="" />
               : photo ? <img className={s.previewPhoto} src={photo} alt="" /> : <span className={s.previewEmpty} aria-hidden="true">＋</span>}
           <span className={s.cardName} aria-hidden="true">Ảnh của bạn</span>
@@ -100,9 +106,12 @@ export function ReaderSection({ voices }: { voices: readonly string[] }) {
           <p className={ui.muted}>Ảnh chỉ lưu trên máy này, không gửi đi đâu và không nằm trong file sao lưu. App tự tách người ra khỏi nền ngay trên máy: người đứng trong Tĩnh thất như các nhân vật vẽ sẵn, hoặc ghép khuôn mặt lên thân nhân vật vẽ sẵn. Nên chọn ảnh chân dung nhìn thẳng, rõ mặt, nền đơn giản.</p>
           {photo && !busy && (
             <div className={s.stage} aria-label="Xem trước người đọc ở Tĩnh thất" role="img">
-              {look === 'face' ? <Character name={body} state="idle" robe={robeColors} face={head} className={s.stageChar} />
-                : look === 'stand' ? <img className={s.stagePerson} src={cutout!} alt="" /> : <img className={s.stagePhoto} src={photo} alt="" />}
+              {look === 'face' ? <Character name={body} state={demo} robe={robeColors} face={head} talk={anim.head} className={s.stageChar} />
+                : look === 'stand' ? <StandFigure src={cutout!} talk={anim.stand} state={demo} className={s.stageStand} /> : <img className={s.stagePhoto} src={photo} alt="" />}
             </div>
+          )}
+          {photo && !busy && ((look === 'face' && anim.head) || (look === 'stand' && anim.stand)) && (
+            <button type="button" className={ui.btn} disabled={demo === 'talk'} onClick={() => setDemo('talk')}>▶ Xem thử lúc đang đọc</button>
           )}
           {busy && <p className={ui.info} role="status">Đang tách người ra khỏi nền và tìm khuôn mặt…</p>}
           {photoNote && <p className={ui.info} role="status">{photoNote}</p>}

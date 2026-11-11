@@ -7,7 +7,7 @@ import { emptyState, parsePersisted, type PersistedState } from '../../state/sch
 import { ReaderSection } from '../settings/ReaderSection';
 import { CUT_H, CUT_W, fitBox, headClip, maskToAlpha } from './cutout';
 import { loadReaderPhoto, READER_CUTOUT_KEY, READER_HEAD_KEY, READER_PHOTO_KEY, removeReaderPhoto } from './customPhoto';
-import { withFace } from './Character';
+import { withFace } from './faceRig';
 import { chosenLook, faceBody, shownLook } from './ReaderFigure';
 import thay from '../../assets/journey/character/thay.json';
 import type { KV } from '../../platform/storage';
