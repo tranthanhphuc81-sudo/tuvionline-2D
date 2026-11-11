@@ -9,7 +9,9 @@ Bổ sung cho `PROMPT-KIT.md`. Thêm vào màn hình Bát Tự và Thầy đọc
 - kiểm chứng bằng các năm đã qua;
 - lời khuyên thực hành theo Thập thần.
 
-**Thứ tự chạy:** Phase 3C chạy ngay bây giờ, vì Phase 0–7 và 3B đã xong phần code. Phải xong trước khi mở lại Phase 8.x và 9.1. Chạy lần lượt trên cùng Codespace. Mỗi prompt: dán vào Claude Code, đọc kết quả, chạy thử, cập nhật `docs/PROGRESS.md`, `git commit` rồi mới sang prompt tiếp.
+**Thứ tự chạy:** Phase 3C chạy ngay bây giờ, vì Phase 0–7 và 3B.1–3B.3 đã xong phần code (đồ vật đèn dầu của 3B.7 làm cùng 3B.3). Phải xong trước khi mở lại Phase 8.x và 9.1. Chạy lần lượt trên cùng Codespace.
+
+**Đụng độ với phần chỉ tay còn dở:** 3B.6 (kịch bản Thầy đọc cho chỉ tay, thêm `focus.palm` vào Cue) và 3B.8 (lời dẫn chỉ tay trong `templates.ts`) CHƯA làm, mà 3C.6 và 3C.7 sửa đúng các chỗ đó (`src/features/reader/script.ts`, type Cue, `src/content/reader/templates.ts`). Quy ước: 3C.2–3C.5 chạy bất cứ lúc nào; 3C.6 chạy SAU 3B.6, 3C.7 chạy SAU 3B.8. Nếu muốn làm 3C.6/3C.7 trước thì prompt đó phải để chỗ cho `focus.palm` và công cụ `palm` (không đổi chữ ký `buildScript`, không đổi cách chọn mẫu theo công cụ), và ghi vào `docs/PROGRESS.md` để 3B.6/3B.8 biết. Mỗi prompt: dán vào Claude Code, đọc kết quả, chạy thử, cập nhật `docs/PROGRESS.md`, `git commit` rồi mới sang prompt tiếp.
 
 Ký hiệu model giữ như kit chính (đổi bằng `/model`):
 
@@ -24,6 +26,13 @@ Ký hiệu model giữ như kit chính (đổi bằng `/model`):
 | `docs/ngu-hanh-engine/` | Engine tham chiếu v0.2: `data.ts`, `config.ts`, `engine.ts`, `follow.ts`, `advice.ts`, `README.md`, `demo.ts`. TypeScript thuần, KHÔNG nằm trong `tsconfig`/vitest, KHÔNG đóng gói vào app. Bước 3C.2 sẽ port vào `src/core`. |
 | `docs/NGU-HANH-SO-SANH.md` | So sánh Dụng Thần legacy và engine trên 3000 lá số dùng chung tứ trụ của app, kèm bộ 24 lá số mẫu để gán nhãn. |
 | `docs/ngu-hanh-engine/compare-dung-than.ts` | Script tái tạo bảng so sánh: `npx tsx docs/ngu-hanh-engine/compare-dung-than.ts`. |
+
+**Cách chạy (đã thử 11/11/2026):**
+
+- Demo: `node docs/ngu-hanh-engine/demo.ts` (Node ≥ 22.18 tự bỏ kiểu TypeScript, không cần cài thêm gì).
+- Script so sánh KHÔNG chạy được bằng `node` trực tiếp, vì code trong `src` import không có đuôi `.ts`.
+- `tsx` CHƯA có trong `devDependencies`, nên `npx tsx` sẽ tải bản mới nhất từ npm mỗi lần (cần mạng, không ghim phiên bản). Bước 3C.2 thêm `tsx` vào devDependencies.
+- Chạy lại ngày 11/11/2026 thì ra bảng giống hệt bản đã commit (chỉ khác ký tự xuống dòng).
 
 Con số then chốt trong bảng so sánh:
 
@@ -55,7 +64,11 @@ CHƯA VIẾT CODE. Ghi vào docs/ARCHITECTURE.md mục mới "14. Phân tích ng
    - công sửa;
    - khả năng đổi sang phương án khác sau này;
    - kết quả khớp đáp án người luận trong NGU-HANH-SO-SANH mục 3 (nếu có). Nếu chủ dự án CHƯA điền đáp án thì chỉ được chọn phương án đảo ngược được, và ghi điều kiện để chuyển phương án (vd. "engine khớp ≥ 75% đáp án trên ≥ 12 lá số").
-2. Những nơi đang dùng Dụng thần và nguồn của từng nơi sau quyết định: dải Đại Vận và tra Lưu Niên ở màn Bát Tự (batTuReading.daiVanNow / yearNow), Tổng hợp, thẻ chia sẻ ảnh, kịch bản Thầy đọc, màu sắc ở Bát Trạch, La Bàn. Lập bảng: nơi, nguồn hiện tại, nguồn sau 3C, có đổi chữ hiển thị không.
+2. Những nơi dùng Dụng thần và nguồn của từng nơi sau quyết định. Hiện trạng (rà ngày 11/11/2026, kiểm lại trước khi ghi):
+   - dùng TRỰC TIẾP: màn Bát Tự (src/content/battu/explain.ts, tongket.ts; dải Đại Vận và tra Lưu Niên qua batTuReading.daiVanNow / yearNow) và Tổng hợp (src/core/tonghop/reading.ts, src/content/tonghop/explain.ts);
+   - dùng GIÁN TIẾP qua câu chữ của Bát Tự: thẻ chia sẻ ảnh (src/features/share dùng batTuTongKet) và kịch bản Thầy đọc (dựng cue từ Section của content);
+   - CHƯA dùng: màu sắc ở Bát Trạch (theo Mệnh Quái) và La Bàn. Đây là chỗ CÓ THỂ thêm mới, tuỳ điểm 3.
+   Lập bảng: nơi, nguồn hiện tại, nguồn sau 3C, có đổi chữ hiển thị không.
 3. Mâu thuẫn màu sắc và hướng: cùng một người có thể nhận gợi ý màu theo Nạp Âm, theo Mệnh Quái (Bát Trạch) và theo Dụng thần. Chọn: chỉ một nguồn ở mỗi màn, hay hiện cả ba và ghi rõ nguồn. Viết đúng câu giải thích sẽ hiện cho người dùng.
 4. Port engine vào src/core/nguhanh:
    - DÙNG LẠI bảng có sẵn của app (CAN, CHI, TANG_CAN, CAN_HANH, CHI_HANH, BT_HANH_ORDER, seasonHanh), bỏ bảng trùng trong data.ts, có test chứng minh hai bảng khớp trước khi bỏ;
@@ -70,6 +83,7 @@ CHƯA VIẾT CODE. Ghi vào docs/ARCHITECTURE.md mục mới "14. Phân tích ng
    - Thay yearPillar() bằng yearCanChiIndex theo Lập Xuân của app.
    - Đưa Đại Vận (ch.daiVan, khoiVanYears) vào đánh giá giai đoạn và vào câu hỏi kiểm chứng. Đại Vận ưu tiên hơn Lưu Niên vì người dùng nhớ giai đoạn 10 năm dễ hơn từng năm.
    - Quy tắc chọn câu hỏi: tối đa mấy câu, từ tuổi bao nhiêu, cách hiện năm (có kèm tuổi mụ, ghi chú "tính từ Lập Xuân").
+   - Cách tính câu trả lời Đại Vận trong resolveWithFeedback (engine v0.2 chỉ nhận năm): một giai đoạn 10 năm nặng bằng hay hơn một năm (hệ số k riêng), có hỏi Đại Vận đang chạy dở không, và một Đại Vận có tính là một "câu" trong ngưỡng kết luận (≥ 3 câu) không.
 6. Kiểm chứng bằng quá khứ:
    - nơi hiện: màn Bát Tự, Tĩnh thất (thầy hỏi), hay cả hai;
    - lựa chọn trả lời: thuận / bình thường / khó khăn / KHÔNG NHỚ, và "không nhớ" không được tính;
@@ -83,9 +97,11 @@ CHƯA VIẾT CODE. Ghi vào docs/ARCHITECTURE.md mục mới "14. Phân tích ng
 8. Chính sách nội dung, áp dụng ARCHITECTURE mục 12.8:
    - đổi nhãn năm "Cần thận trọng" / "Kém thuận" thành cách nói mềm, luôn kèm gợi ý nên làm gì;
    - không lời khuyên y tế, đầu tư, pháp lý cụ thể;
-   - đoạn nào vào noSpeech;
    - lời nhắc văn hoá ở đầu và cuối mục;
    - không bao giờ gợi ý vật phẩm hay cúng giải.
+   Ghi thành HAI danh sách riêng, đặt tên rõ, vì test 3C.3 và 3C.6 dùng khác nhau:
+   - (i) KHÔNG HIỆN: từ/cụm không được xuất hiện ở bất kỳ câu mới nào, kể cả chữ trên màn hình (vd. cúng, giải hạn, mua, vật phẩm mang lại may mắn, "chính xác", "chắc chắn", "dự đoán đúng", lời khuyên y tế/đầu tư cụ thể). Định nghĩa ở src/content/nguhanh, có test.
+   - (ii) KHÔNG ĐỌC: NO_SPEECH_TERMS ở src/content/noSpeech.ts (ARCHITECTURE 12.8) cộng phần bổ sung nếu cần. Câu chứa từ này VẪN ĐƯỢC HIỆN chữ, chỉ không đọc thành lời. Ghi rõ đoạn nào của mục ngũ hành đánh dấu noSpeech.
 9. Kiểm thử:
    - tests/fixtures/nguhanh-golden.json (24 lá số mẫu, có đáp án khi chủ dự án điền);
    - snapshot RIÊNG cho engine ngũ hành, không đụng core-snapshot;
@@ -98,14 +114,25 @@ CHƯA VIẾT CODE. Ghi vào docs/ARCHITECTURE.md mục mới "14. Phân tích ng
 ```
 Theo docs/ARCHITECTURE.md mục 14 (điểm 4, 5, 9), port docs/ngu-hanh-engine/src vào src/core/nguhanh (TypeScript strict, import không đuôi .ts theo moduleResolution Bundler):
 - Trước tiên viết test chứng minh bảng tàng can, hành của can/chi, thứ tự hành trong docs/ngu-hanh-engine/src/data.ts khớp bảng có sẵn trong src/core/battu/engine.ts và src/core/canchi. Khớp rồi mới bỏ bảng trùng và dùng bảng của app.
-- toNguHanhChart(ch: BatTuChart). Tính điểm, xếp loại nhật chủ, assessFollow, buildReadings, evaluatePeriod (nhận cả trụ Lưu Niên lẫn trụ Đại Vận), verificationQuestions, resolveWithFeedback: giữ NGUYÊN thuật toán và hệ số của v0.2, chỉ đổi kiểu dữ liệu và tên hành.
+- toNguHanhChart(ch: BatTuChart). Tính điểm, xếp loại nhật chủ, assessFollow, buildReadings, evaluatePeriod (nhận cả trụ Lưu Niên lẫn trụ Đại Vận), verificationQuestions, resolveWithFeedback: giữ NGUYÊN thuật toán và hệ số của v0.2, chỉ đổi kiểu dữ liệu và tên hành. NGOẠI LỆ DUY NHẤT là phần Đại Vận dưới đây.
+- Đại Vận trong kiểm chứng (v0.2 chỉ hỏi và phân xử theo năm, FeedbackAnswer = { year, outcome }):
+  - câu trả lời đổi thành { kind: 'nam', year, outcome } | { kind: 'daiVan', index, outcome }, khớp với nguHanhAnswers của 3C.5;
+  - verificationQuestions chọn cả các giai đoạn Đại Vận đã qua (lấy từ ch.daiVan, khoiVanYears), theo quy tắc ở ARCHITECTURE 14.5;
+  - mức khớp của một Đại Vận tính bằng evaluatePeriod trên trụ Đại Vận; hệ số k và cách đếm vào ngưỡng kết luận theo 14.5;
+  - giữ nguyên công thức cập nhật (exp(k × mức khớp), kẹp ±1, sàn 2%) và ngưỡng kết luận (≥ 3 câu, ≥ 80%, khớp ≥ 75%);
+  - "Không nhớ" không truyền vào engine.
+- Thêm tsx vào devDependencies (ghim một phiên bản cụ thể) và script npm "compare:dungthan" để chạy script so sánh offline, không để npx tải bản mới mỗi lần.
 - Engine trả mã (method, grade, strength, check id, tham số số liệu) thay cho câu văn. Các câu trong engine.ts/follow.ts hiện là chuỗi tiếng Việt: đổi thành { code, params } để src/content dựng câu ở 3C.3.
 - Không dùng new Date() trong core: năm hiện tại là tham số.
 - Xuất qua src/core/index.ts.
-- Chuyển docs/ngu-hanh-engine/compare-dung-than.ts thành scripts/compare-dung-than.ts, trỏ vào engine đã port. Chạy lại phải ra đúng các con số trong docs/NGU-HANH-SO-SANH.md (seed cố định). Lệch thì dừng lại báo cáo, không sửa số.
+- Chuyển docs/ngu-hanh-engine/compare-dung-than.ts thành scripts/compare-dung-than.ts, trỏ vào engine đã port, vẫn ghi ra docs/NGU-HANH-SO-SANH.md (seed cố định). Vì engine đã port trả mã chứ không trả chữ:
+  - mục 1 (bảng số) phải khớp TỪNG con số; lệch thì dừng lại báo cáo, không sửa số;
+  - mục 3 (24 lá số): giữ đúng ngày sinh, tứ trụ, hành dụng/hỷ/kỵ, phần trăm, phương pháp và hạng tòng cách. Nhãn chữ (vượng/nhược, tên phương pháp, Chân/Giả/Không thành) để tạm một bảng nhỏ trong script, đánh dấu TODO; 3C.3 đổi sang dùng src/content/nguhanh. Được đổi chính tả theo app (Hoả, Thuỷ, hoà);
+  - git diff của file sinh ra chỉ được có thay đổi chính tả ở mục 3 và dòng lệnh ở mục 4.
 Unit test (vitest):
 (a) 5 lá số trong docs/ngu-hanh-engine/demo.ts ra đúng: Chân Tòng Sát; Giả tòng 65/35; Không thành; Chân Khúc Trực; lá thường.
-(b) resolveWithFeedback: 4/4 năm khớp thì kết luận; 2/3 thì "chưa phân định"; dưới 3 năm thì "chưa đủ dữ liệu".
+(b) resolveWithFeedback: 4/4 năm khớp thì kết luận; 2/3 thì "chưa phân định"; dưới 3 năm thì "chưa đủ dữ liệu". Chỉ có câu trả lời năm thì trọng số ra đúng như v0.2 (so với docs/ngu-hanh-engine trên cùng đầu vào).
+(b2) Đại Vận: một giai đoạn khớp cách luận A thì trọng số A tăng, ngược lại thì giảm; câu hỏi Đại Vận chỉ trỏ tới giai đoạn đã qua.
 (c) Bất biến ở ARCHITECTURE 14.9 chạy trên 500 lá số sinh từ batTuChart.
 (d) Snapshot riêng tests/nguhanh-snapshot.test.ts cho 500 lá số.
 npm test phải xanh, tests/core-snapshot.test.ts KHÔNG đổi, npm run build OK. Báo cáo số test trước/sau.
@@ -117,11 +144,12 @@ npm test phải xanh, tests/core-snapshot.test.ts KHÔNG đổi, npm run build O
 Theo ARCHITECTURE mục 14 (điểm 4, 7, 8):
 - Phần đã chốt dùng lại legacy (FAMILY, HANH_INFO…): import từ src/content/interp, KHÔNG chép lại hay sửa câu.
 - Phần mới: viết docs/NGU-HANH.md làm NGUỒN câu chữ. Lấy từ ELEMENT_PRACTICAL, TEN_GOD_PRACTICAL, FAVOR_VI, FAVOR_HINT và các câu lý do trong docs/ngu-hanh-engine/src, bỏ những ý đã có trong bảng legacy. Áp dụng quy tắc đổi nhãn mềm và danh sách cấm ở điểm 8. Giọng "bài học nhỏ" như các công cụ khác.
-- src/content/nguhanh/: hàm thuần nhận kết quả engine và trả câu, gồm reasons(), followChecks(), patternSummary(), practicalReport(), timingLabel(), verificationPrompt(). Đánh dấu noSpeech cho đoạn thuộc danh sách cấm đọc.
+- src/content/nguhanh/: hàm thuần nhận kết quả engine và trả câu, gồm reasons(), followChecks(), patternSummary(), practicalReport(), timingLabel(), verificationPrompt(). Đánh dấu noSpeech cho đoạn thuộc danh sách (ii) KHÔNG ĐỌC (14.8).
+- Thay bảng nhãn tạm trong scripts/compare-dung-than.ts (TODO của 3C.2) bằng src/content/nguhanh. Chạy lại script: mục 1 không đổi số nào.
 - Ghi chú ở đầu thư mục: đây là nội dung mới, không chép legacy, không thuộc tests/parity (giống src/content/palm).
 Unit test:
 (a) mọi mã engine có thể trả về (method, grade, strength, check id, favor) đều có câu tương ứng, không có chuỗi rỗng hay "undefined";
-(b) không câu nào chứa từ trong danh sách cấm của ARCHITECTURE 12.8 và 14.8;
+(b) không câu nào (kể cả chữ chỉ để xem) chứa từ trong danh sách (i) KHÔNG HIỆN của 14.8; câu chứa từ trong danh sách (ii) KHÔNG ĐỌC thì phải được đánh dấu noSpeech;
 (c) lời nhắc văn hoá có ở đầu và cuối practicalReport;
 (d) 24 lá số golden dựng câu không lỗi.
 ```
@@ -165,7 +193,7 @@ Unit test:
 Cập nhật CLAUDE.md dòng "Lược đồ lyso.state hiện là v3" thành v4.
 ```
 
-### 3C.6 · 🔵 Tầm trung — kịch bản Thầy đọc và hội thoại hỏi đáp trong Tĩnh thất, logic cần test kỹ
+### 3C.6 · 🔵 Tầm trung — kịch bản Thầy đọc và hội thoại hỏi đáp trong Tĩnh thất, logic cần test kỹ. Chạy SAU 3B.6 (cùng sửa type Cue và script.ts, xem "Đụng độ" ở đầu kit)
 
 ```
 Theo ARCHITECTURE mục 12.7–12.8 và 14 (điểm 6, 8), mở rộng src/features/reader:
@@ -174,16 +202,16 @@ Theo ARCHITECTURE mục 12.7–12.8 và 14 (điểm 6, 8), mở rộng src/featu
 - Đồ vật trên án thư: dùng bốn thẻ tre (Bát Tự) có sẵn, thêm lựa chọn "Ngũ hành" sau khi đọc xong Bát Tự. Không thêm đồ vật mới trừ khi 14.6 đã quyết.
 Unit test thêm vào tests/reader-script.test.ts:
 (a) không cue nào > 180 ký tự;
-(b) không cue TTS nào chứa từ cấm;
+(b) không cue TTS nào chứa từ trong danh sách (ii) KHÔNG ĐỌC, và không cue nào (TTS hay caption) chứa từ trong danh sách (i) KHÔNG HIỆN của 14.8;
 (c) câu mở và câu kết có lời nhắc văn hoá;
 (d) chỉ có cue hỏi kiểm chứng khi có cách luận thay thế và chưa kết luận;
 (e) focus.hidden chỉ trỏ tới tàng can có thật của trụ đó.
 ```
 
-### 3C.7 · 🟢 Nhanh/rẻ — viết lời dẫn theo quy tắc đã chốt, không đổi logic; chủ dự án đọc duyệt bằng tay
+### 3C.7 · 🟢 Nhanh/rẻ — viết lời dẫn theo quy tắc đã chốt, không đổi logic; chủ dự án đọc duyệt bằng tay. Chạy SAU 3B.8 (cùng sửa templates.ts)
 
 ```
-Theo persona, xưng hô và danh sách cấm trong ARCHITECTURE mục 12 và 14.8, mở rộng src/content/reader/templates.ts cho phần ngũ hành:
+Theo persona, xưng hô trong ARCHITECTURE mục 12 và hai danh sách (i) KHÔNG HIỆN, (ii) KHÔNG ĐỌC ở 14.8, mở rộng src/content/reader/templates.ts cho phần ngũ hành:
 - 3 câu mở, 3 câu kết;
 - lời dẫn cho từng loại lý do (đắc lệnh, thất lệnh, tam hợp, lục xung, Phù ức, Điều hậu, Thông quan, Chân tòng, Giả tòng, Không thành), mỗi loại ít nhất 2 biến thể;
 - lời hỏi kiểm chứng cho Đại Vận và Lưu Niên;
