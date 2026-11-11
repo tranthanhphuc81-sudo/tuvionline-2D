@@ -136,7 +136,8 @@ export function headClip(x: number, y: number, face: Box, withMask: boolean): nu
 }
 
 /** Bộ phận để ảnh cử động: `upper` là ảnh đã tô kín chỗ hàm (màu da, có lòng miệng tối), `jaw` là riêng phần hàm dưới đặt đè lên
-    đúng chỗ cũ; hạ `jaw` xuống `drop` px là miệng mở. Mí mắt là hình vẽ màu da đặt lên hai mắt, hiện thoáng chốc là chớp mắt.
+    đúng chỗ cũ; hạ `jaw` xuống `drop` px là miệng mở. Mí mắt là hình bầu dục màu da cỡ `lid`, tâm ở `eyes` (đã nhích lên so với
+    tâm mắt, xem LID_RAISE), mép dưới là hàng mi; hiện thoáng chốc là chớp mắt.
     Toạ độ theo khung ảnh tương ứng (đầu HEAD_W × HEAD_H hoặc người đứng CUT_W × CUT_H). */
 export interface TalkRig { mouth: [number, number]; drop: number; eyes: [number, number][]; lid: [number, number]; skin: string; line: string }
 export interface TalkParts { upper: string; jaw: string; rig: TalkRig }
@@ -152,6 +153,61 @@ export function jawMask(x: number, y: number, mouth: Pt, rx: number, ry: number)
   return 1 - smooth(0.78, 1, u * u + v * v);
 }
 
+/** Dò lại độ cao của mắt quanh điểm Face Detector đưa ra (điểm này có khi lệch lên xuống): trong một ô nhỏ quanh điểm, lấy trọng tâm
+    các hàng tối hơn hẳn mức chung (lòng đen, hàng mi). Ô nhỏ để không lẫn lông mày; dịch tối đa 4% chiều cao mặt. */
+export function refineEye(img: { data: ArrayLike<number>; width: number; height: number }, p: Pt, fw: number, fh: number): Pt {
+  const { data: d, width: W, height: H } = img;
+  const x0 = Math.max(0, Math.round(p[0] - fw * 0.07)), x1 = Math.min(W - 1, Math.round(p[0] + fw * 0.07));
+  const y0 = Math.max(0, Math.round(p[1] - fh * 0.06)), y1 = Math.min(H - 1, Math.round(p[1] + fh * 0.06));
+  const rows: [number, number][] = [];
+  for (let y = y0; y <= y1; y++) {
+    let sum = 0, n = 0;
+    for (let x = x0; x <= x1; x++) {
+      const i = (y * W + x) * 4;
+      if (d[i + 3] < 200) continue;
+      sum += 255 - (0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2]); n++;
+    }
+    if (n) rows.push([y, sum / n]);
+  }
+  if (rows.length < 3) return p;
+  const sorted = rows.map((r) => r[1]).sort((a, b) => a - b), base = sorted[Math.floor(sorted.length / 2)];
+  let sw = 0, sy = 0;
+  for (const [y, v] of rows) { const w = Math.max(0, v - base); sw += w; sy += w * y; }
+  if (sw < 1) return p;
+  const lim = fh * 0.04;
+  return [p[0], p[1] + Math.max(-lim, Math.min(lim, sy / sw - p[1]))];
+}
+
+/** Khe miệng thật quanh điểm miệng của Face Detector: hàng tối nhất trong dải giữa miệng (khe môi khi ngậm, khe giữa hai hàm
+    răng khi cười nhe răng), kèm màu lòng miệng lấy ở đó. Điểm của mô hình có khi rơi giữa hàng răng trên; cắt ở đó thì răng bị
+    chẻ đôi. Không thấy hàng nào tối hẳn thì giữ điểm cũ và màu lòng miệng mặc định. */
+export function findMouthGap(img: { data: ArrayLike<number>; width: number; height: number }, p: Pt, fw: number, fh: number): { y: number; color: [number, number, number] } {
+  const { data: d, width: W, height: H } = img;
+  const x0 = Math.max(0, Math.round(p[0] - fw * 0.12)), x1 = Math.min(W - 1, Math.round(p[0] + fw * 0.12));
+  const y0 = Math.max(0, Math.round(p[1] - fh * 0.06)), y1 = Math.min(H - 1, Math.round(p[1] + fh * 0.08));
+  const rows: { y: number; lum: number; rgb: [number, number, number] }[] = [];
+  for (let y = y0; y <= y1; y++) {
+    let l = 0, r = 0, g = 0, b = 0, n = 0;
+    for (let x = x0; x <= x1; x++) {
+      const i = (y * W + x) * 4;
+      if (d[i + 3] < 200) continue;
+      l += 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2]; r += d[i]; g += d[i + 1]; b += d[i + 2]; n++;
+    }
+    if (n) rows.push({ y, lum: l / n, rgb: [r / n, g / n, b / n] });
+  }
+  const fallback = { y: p[1], color: [59, 26, 23] as [number, number, number] };
+  if (rows.length < 3) return fallback;
+  const sorted = rows.map((r) => r.lum).sort((a, b) => a - b), median = sorted[Math.floor(sorted.length / 2)];
+  const darkest = rows.reduce((a, b) => (b.lum < a.lum ? b : a));
+  if (darkest.lum > median - 15) return fallback;
+  // lòng miệng tối hơn hàng tối nhất một chút (hàng đó còn lẫn môi, răng)
+  return { y: darkest.y, color: darkest.rgb.map((v) => v * 0.7) as [number, number, number] };
+}
+
+/** Chỗ đặt mí mắt (tâm hình bầu dục) so với tâm mắt: nhích lên để mí phủ cả bờ mi trên, mép dưới (hàng mi khi nhắm) nằm hơi dưới
+    tâm mắt như mắt nhắm thật, không tràn xuống bọng mắt. Tính theo chiều cao mí. */
+export const LID_RAISE = 0.22;
+
 const hex = (r: number, g: number, b: number) => '#' + [r, g, b].map((v) => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0')).join('');
 const round1 = (p: Pt): Pt => [Math.round(p[0] * 10) / 10, Math.round(p[1] * 10) / 10];
 
@@ -159,9 +215,12 @@ const round1 = (p: Pt): Pt => [Math.round(p[0] * 10) / 10, Math.round(p[1] * 10)
 function talkParts(c: HTMLCanvasElement, eyes: Pt[], kp: Pt, chinY: number, fw: number, fh: number): TalkParts | null {
   if (fw < 24 || eyes.length < 2) return null;
   // Điểm miệng của Face Detector hay lệch ngang; mặt nhìn thẳng thì tâm miệng nằm dưới giữa hai mắt.
-  const mouth: Pt = [(eyes[0][0] + eyes[1][0]) / 2, kp[1]];
   const W = c.width, H = c.height;
   const d = c.getContext('2d')!.getImageData(0, 0, W, H).data;
+  const mx = (eyes[0][0] + eyes[1][0]) / 2;
+  // cắt hàm đúng khe miệng thật (khe môi hoặc khe giữa hai hàm răng)
+  const gap = findMouthGap({ data: d, width: W, height: H }, [mx, kp[1]], fw, fh);
+  const mouth: Pt = [mx, gap.y + 0.5];
   // màu da: trung bình hai mảng má cạnh mũi
   let r = 0, g = 0, b = 0, n = 0;
   const rad = Math.max(2, Math.round(fw * 0.05));
@@ -176,29 +235,31 @@ function talkParts(c: HTMLCanvasElement, eyes: Pt[], kp: Pt, chinY: number, fw: 
   }
   const [sr, sg, sb] = n ? [r / n, g / n, b / n] : [217, 168, 138];
   const rx = fw * 0.3, ry = Math.max(chinY - mouth[1], fh * 0.22) * 1.08;
+  // Lúc ngậm, hàm đè lên phải trùng khít ảnh gốc: chỉ tô (màu da, lòng miệng) ở phần hàm đặc hẳn; ở mép mềm ảnh dưới giữ nguyên
+  // ảnh gốc, nên trộn với hàm vẫn ra đúng ảnh gốc, không lộ đường viền.
   const up = new ImageData(new Uint8ClampedArray(d), W, H), jaw = new ImageData(new Uint8ClampedArray(d), W, H);
+  const hx = fw * 0.22, hy = fh * 0.1, [cr, cg, cb] = gap.color;
   for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
     const m = jawMask(x, y, mouth, rx, ry);
-    if (!m) { jaw.data[(y * W + x) * 4 + 3] = 0; continue; }
     const i = (y * W + x) * 4;
     jaw.data[i + 3] = Math.round(d[i + 3] * m);
-    up.data[i] += (sr - up.data[i]) * m; up.data[i + 1] += (sg - up.data[i + 1]) * m; up.data[i + 2] += (sb - up.data[i + 2]) * m;
+    if (m < 0.999) continue;
+    // lòng miệng đậm ở giữa, nhạt dần về hai khoé thành màu da
+    const u = (x - mouth[0]) / hx, v = (y - mouth[1]) / hy, t = 1 - smooth(0.45, 1, u * u + v * v);
+    up.data[i] = sr + (cr - sr) * t; up.data[i + 1] = sg + (cg - sg) * t; up.data[i + 2] = sb + (cb - sb) * t;
   }
-  const draw = (img: ImageData, mouthHole: boolean) => {
+  const draw = (img: ImageData, quality?: number) => {
     const o = document.createElement('canvas');
     o.width = W; o.height = H;
-    const x = o.getContext('2d')!;
-    x.putImageData(img, 0, 0);
-    if (mouthHole) {
-      x.globalCompositeOperation = 'source-atop';
-      x.fillStyle = '#3b1a17';
-      x.beginPath(); x.ellipse(mouth[0], mouth[1] + fh * 0.03, fw * 0.24, fh * 0.06, 0, 0, Math.PI * 2); x.fill();
-    }
-    return encode(o);
+    o.getContext('2d')!.putImageData(img, 0, 0);
+    return encode(o, quality);
   };
+  // mí mắt: dò lại tâm mắt trên ảnh gốc (trước khi tô), rồi nhích lên theo LID_RAISE
+  const lid: Pt = [fw * 0.2, fh * 0.1];
+  const lids = eyes.slice(0, 2).map((e) => { const [x, y] = refineEye({ data: d, width: W, height: H }, e, fw, fh); return round1([x, y - lid[1] * LID_RAISE]); });
   return {
-    upper: draw(up, true), jaw: draw(jaw, false),
-    rig: { mouth: round1(mouth), drop: Math.round(fh * 0.08 * 10) / 10, eyes: eyes.slice(0, 2).map(round1), lid: round1([fw * 0.2, fh * 0.1]), skin: hex(sr, sg, sb), line: hex(sr * 0.6, sg * 0.55, sb * 0.55) },
+    upper: draw(up), jaw: draw(jaw, 1),
+    rig: { mouth: round1(mouth), drop: Math.round(fh * 0.08 * 10) / 10, eyes: lids, lid: round1(lid), skin: hex(sr, sg, sb), line: hex(sr * 0.6, sg * 0.55, sb * 0.55) },
   };
 }
 
@@ -256,8 +317,10 @@ export async function cutOutReader(bmp: ImageBitmap): Promise<ReaderCut> {
   return out;
 }
 
-function encode(c: HTMLCanvasElement): string {
-  const url = c.toDataURL('image/webp', 0.9);
+/** `quality` 1 là WebP không mất dữ liệu: dùng cho ảnh hàm, để độ trong suốt ở mép khớp đúng ảnh dưới (nén có mất dữ liệu làm
+    lộ đường viền quanh hàm lúc ngậm). */
+function encode(c: HTMLCanvasElement, quality = 0.9): string {
+  const url = c.toDataURL('image/webp', quality);
   return url.startsWith('data:image/webp') ? url : c.toDataURL('image/png');
 }
 

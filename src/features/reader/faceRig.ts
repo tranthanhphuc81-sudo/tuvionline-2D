@@ -70,7 +70,7 @@ export function withFace<T extends Lottie>(data: T, head: string, talk?: TalkPar
         ...base, ind, ty: 4, nm: 'mí mắt',
         ks: { o: { a: 1, k: blinkKeys(op) }, r: still(0), p: still([0, 0, 0]), a: still([0, 0, 0]), s: still([100, 100, 100]) },
         shapes: [
-          { ty: 'gr', it: [{ ty: 'sh', ks: still({ v: [[x - lw * 0.42, y + lh * 0.15], [x + lw * 0.42, y + lh * 0.15]], i: [[0, 0], [0, 0]], o: [[0, 0], [0, 0]], c: false }) },
+          { ty: 'gr', it: [{ ty: 'sh', ks: still({ v: [[x - lw * 0.45, y + lh * 0.22], [x, y + lh * 0.46], [x + lw * 0.45, y + lh * 0.22]], i: [[0, 0], [-lw * 0.25, 0], [0, 0]], o: [[0, 0], [lw * 0.25, 0], [0, 0]], c: false }) },
             { ty: 'st', c: still(rgb(talk.rig.line)), o: still(100), w: still(0.6), lc: 2, lj: 2 }, tr()] },
           { ty: 'gr', it: [{ ty: 'el', p: still([x, y]), s: still([lw, lh]) }, { ty: 'fl', c: still(rgb(talk.rig.skin)), o: still(100), r: 1 }, tr()] },
         ],

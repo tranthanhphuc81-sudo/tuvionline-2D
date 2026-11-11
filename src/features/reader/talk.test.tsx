@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect, afterEach } from 'vitest';
 import { render, cleanup } from '@testing-library/react';
-import { jawMask, type TalkParts } from './cutout';
+import { findMouthGap, jawMask, refineEye, type TalkParts } from './cutout';
 import { parseAnim } from './customPhoto';
 import { blinkKeys, FLAP, jawKeys, withFace } from './faceRig';
 import { StandFigure } from './ReaderFigure';
@@ -22,6 +22,35 @@ describe('Người đọc ảnh cử động', () => {
     expect(jawMask(140, 180, [100, 176], 27, 30)).toBe(0);
     const edge = jawMask(124, 180, [100, 176], 27, 30);
     expect(edge).toBeGreaterThan(0); expect(edge).toBeLessThan(1);
+  });
+
+  it('dò lại mắt: điểm lệch thì kéo về hàng tối (lòng đen); không có gì tối thì giữ nguyên; dịch có giới hạn', () => {
+    const W = 100, H = 100;
+    const img = (darkY: number | null) => {
+      const data = new Uint8ClampedArray(W * H * 4);
+      for (let i = 0; i < W * H; i++) { const y = Math.floor(i / W); const dark = darkY !== null && Math.abs(y - darkY) <= 1; data.set(dark ? [40, 30, 30, 255] : [200, 160, 140, 255], i * 4); }
+      return { data, width: W, height: H };
+    };
+    expect(refineEye(img(47), [50, 50], 100, 100)[1]).toBeCloseTo(47, 0);
+    expect(refineEye(img(53), [50, 50], 100, 100)[1]).toBeCloseTo(53, 0);
+    expect(refineEye(img(null), [50, 50], 100, 100)).toEqual([50, 50]);
+    expect(refineEye(img(42), [50, 50], 100, 200)[1]).toBeGreaterThanOrEqual(50 - 8); // tối đa 4% chiều cao mặt
+    expect(refineEye(img(47), [50, 50], 100, 100)[0]).toBe(50);
+  });
+
+  it('khe miệng: cười nhe răng thì cắt ở khe tối dưới hàng răng, không chẻ đôi răng; lấy màu lòng miệng từ ảnh', () => {
+    const W = 100, H = 100;
+    // da, hàng răng trắng ở y 44–49, khe tối y 50–51, môi dưới
+    const data = new Uint8ClampedArray(W * H * 4);
+    for (let i = 0; i < W * H; i++) {
+      const y = Math.floor(i / W);
+      data.set(y >= 44 && y <= 49 ? [245, 245, 240, 255] : y >= 50 && y <= 51 ? [60, 20, 20, 255] : y >= 52 && y <= 55 ? [150, 80, 70, 255] : [200, 160, 140, 255], i * 4);
+    }
+    const gap = findMouthGap({ data, width: W, height: H }, [50, 46], 100, 100); // điểm của mô hình rơi giữa hàng răng
+    expect(gap.y).toBeGreaterThanOrEqual(50); expect(gap.y).toBeLessThanOrEqual(51);
+    expect(gap.color[0]).toBeLessThan(60);
+    const flat = new Uint8ClampedArray(W * H * 4).fill(200);
+    expect(findMouthGap({ data: flat, width: W, height: H }, [50, 46], 100, 100).y).toBe(46); // không có khe rõ: giữ điểm cũ
   });
 
   it('khung hình hàm: lúc nghỉ khép, các đoạn đang đọc mấp máy, đầu cuối mỗi đoạn khép lại', () => {
