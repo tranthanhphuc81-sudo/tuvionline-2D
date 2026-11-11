@@ -179,12 +179,13 @@ export function refineEye(img: { data: ArrayLike<number>; width: number; height:
   return [p[0], p[1] + Math.max(-lim, Math.min(lim, sy / sw - p[1]))];
 }
 
-/** Khe miệng thật quanh điểm miệng của Face Detector: hàng tối nhất trong dải giữa miệng (khe môi khi ngậm, khe giữa hai hàm
+/** Khe miệng thật quanh điểm miệng của Face Detector: khe tối trên cùng trong dải giữa miệng (khe môi khi ngậm, khe giữa hai hàm
     răng khi cười nhe răng), kèm màu lòng miệng lấy ở đó. Điểm của mô hình có khi rơi giữa hàng răng trên; cắt ở đó thì răng bị
     chẻ đôi. Không thấy hàng nào tối hẳn thì giữ điểm cũ và màu lòng miệng mặc định. */
 export function findMouthGap(img: { data: ArrayLike<number>; width: number; height: number }, p: Pt, fw: number, fh: number): { y: number; color: [number, number, number] } {
   const { data: d, width: W, height: H } = img;
-  const x0 = Math.max(0, Math.round(p[0] - fw * 0.12)), x1 = Math.min(W - 1, Math.round(p[0] + fw * 0.12));
+  // dải hẹp giữa miệng: rộng quá thì lẫn má, khe miệng không còn đủ tương phản
+  const x0 = Math.max(0, Math.round(p[0] - fw * 0.08)), x1 = Math.min(W - 1, Math.round(p[0] + fw * 0.08));
   const y0 = Math.max(0, Math.round(p[1] - fh * 0.06)), y1 = Math.min(H - 1, Math.round(p[1] + fh * 0.08));
   const rows: { y: number; lum: number; rgb: [number, number, number] }[] = [];
   for (let y = y0; y <= y1; y++) {
@@ -198,11 +199,17 @@ export function findMouthGap(img: { data: ArrayLike<number>; width: number; heig
   }
   const fallback = { y: p[1], color: [59, 26, 23] as [number, number, number] };
   if (rows.length < 3) return fallback;
-  const sorted = rows.map((r) => r.lum).sort((a, b) => a - b), median = sorted[Math.floor(sorted.length / 2)];
-  const darkest = rows.reduce((a, b) => (b.lum < a.lum ? b : a));
-  if (darkest.lum > median - 15) return fallback;
-  // lòng miệng tối hơn hàng tối nhất một chút (hàng đó còn lẫn môi, răng)
-  return { y: darkest.y, color: darkest.rgb.map((v) => v * 0.7) as [number, number, number] };
+  // Mỗi hàng chấm theo tương phản cục bộ: tối hơn hàng sáng nhất sát bên (±3 hàng) bao nhiêu. Khe dưới hàng răng không tối hơn
+  // hẳn mức chung nhưng nằm ngay dưới răng sáng nên nổi bật; vệt bóng dưới môi dưới tối hơn nhưng chỉ cạnh môi và cằm.
+  const local = rows.map((r, k) => Math.max(...rows.slice(Math.max(0, k - 3), k + 4).map((q) => q.lum)) - r.lum);
+  const best = Math.max(...local);
+  if (best < 12) return fallback;
+  // Khe miệng là khe TRÊN CÙNG đủ rõ (từ 55% hàng rõ nhất), không nhất thiết rõ nhất: chọn vệt bóng dưới môi dưới thì cả môi
+  // dưới đứng yên khi nói.
+  const isMin = (k: number) => (k === 0 || rows[k].lum <= rows[k - 1].lum) && (k === rows.length - 1 || rows[k].lum <= rows[k + 1].lum);
+  const gap = rows.find((_, k) => local[k] >= best * 0.55 && isMin(k)) ?? rows[local.indexOf(best)];
+  // lòng miệng tối hơn hàng đó một chút (hàng đó còn lẫn môi, răng)
+  return { y: gap.y, color: gap.rgb.map((v) => v * 0.55) as [number, number, number] };
 }
 
 /** Đường môi (khe giữa hai môi, hay khe dưới hàng răng khi cười) theo từng cột: đi từ giữa miệng ra hai bên, mỗi cột lấy điểm tối
@@ -230,15 +237,54 @@ export function mouthLine(img: { data: ArrayLike<number>; width: number; height:
       if (dir < 0) left = x; else right = x;
     }
   }
-  // làm mượt, ngoài khoé giữ độ cao ở khoé
-  const r = Math.max(1, Math.round(fw * 0.02)), at = new Float32Array(W);
+  // Môi là một đường cong trơn: khớp parabol y = a + b·t + c·t² (t tính từ giữa miệng) qua các điểm dò được, nên ria mép hay nếp da
+  // không làm đường cắt răng cưa. Ngoài khoé giữ độ cao ở khoé.
+  const fit = fitParabola([...raw].filter(([x]) => x >= left && x <= right).map(([x, y]) => [x - cx, y]));
+  const at = new Float32Array(W);
   for (let x = 0; x < W; x++) {
-    const xc = Math.max(left, Math.min(right, x));
-    let sum = 0, n = 0;
-    for (let k = Math.max(left, xc - r); k <= Math.min(right, xc + r); k++) { const v = raw.get(k); if (v !== undefined) { sum += v; n++; } }
-    at[x] = (n ? sum / n : cy) + 0.5;
+    const t = Math.max(left, Math.min(right, x)) - cx;
+    at[x] = (fit ? fit[0] + fit[1] * t + fit[2] * t * t : cy) + 0.5;
   }
   return { at, left, right };
+}
+
+/** Khớp parabol y = a + b·t + c·t² theo bình phương nhỏ nhất; ít điểm quá hay suy biến thì null. */
+function fitParabola(pts: number[][]): [number, number, number] | null {
+  if (pts.length < 5) return null;
+  let s0 = 0, s1 = 0, s2 = 0, s3 = 0, s4 = 0, y0 = 0, y1 = 0, y2 = 0;
+  for (const [t, y] of pts) { const t2 = t * t; s0++; s1 += t; s2 += t2; s3 += t2 * t; s4 += t2 * t2; y0 += y; y1 += y * t; y2 += y * t2; }
+  const det = (m: number[][]) => m[0][0] * (m[1][1] * m[2][2] - m[1][2] * m[2][1]) - m[0][1] * (m[1][0] * m[2][2] - m[1][2] * m[2][0]) + m[0][2] * (m[1][0] * m[2][1] - m[1][1] * m[2][0]);
+  const A = [[s0, s1, s2], [s1, s2, s3], [s2, s3, s4]], D = det(A);
+  if (Math.abs(D) < 1e-9) return null;
+  const col = (k: number) => det(A.map((row, i) => row.map((v, j) => (j === k ? [y0, y1, y2][i] : v))));
+  return [col(0) / D, col(1) / D, col(2) / D];
+}
+
+/** Ảnh có sẵn hàng răng trên ngay trên đường môi không (cười nhe răng), kèm màu răng: dải sát trên đường môi, phần giữa miệng, đủ
+    nhiều điểm sáng và ít màu (răng) thì có; màu răng lấy trung bình các điểm đó. Không có thì màu ngà mặc định. */
+export function upperTeeth(img: { data: ArrayLike<number>; width: number; height: number }, lip: { at: ArrayLike<number>; left: number; right: number }, fh: number): { shown: boolean; color: [number, number, number] } {
+  const { data: d, width: W } = img;
+  const span = lip.right - lip.left, x0 = Math.round(lip.left + span * 0.2), x1 = Math.round(lip.right - span * 0.2);
+  const band = Math.max(2, Math.round(fh * 0.05));
+  let n = 0, hit = 0, r = 0, g = 0, b = 0;
+  for (let x = x0; x <= x1; x++) for (let y = Math.floor(lip.at[x]) - band; y < Math.floor(lip.at[x]); y++) {
+    const i = (y * W + x) * 4;
+    if (y < 0 || d[i + 3] < 200) continue;
+    n++;
+    const lum = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2], chroma = Math.max(d[i], d[i + 1], d[i + 2]) - Math.min(d[i], d[i + 1], d[i + 2]);
+    if (lum > 165 && chroma < 60) { hit++; r += d[i]; g += d[i + 1]; b += d[i + 2]; }
+  }
+  return n && hit / n > 0.3 ? { shown: true, color: [r / hit, g / hit, b / hit] } : { shown: false, color: [233, 227, 213] };
+}
+
+/** Răng vẽ trong lòng miệng (0…1) tại điểm cách đường môi `rel` lần độ mở tối đa, `u` là vị trí ngang (−1…1 giữa hai khoé răng):
+    răng dưới nằm ở đáy khe (lộ ra khi miệng mở rộng, như đỉnh răng nhô trên môi dưới); răng trên ở mép trên khe, chỉ khi ảnh chưa
+    có sẵn răng trên. Hai đầu hàng răng thu lại trước khoé miệng. */
+export function teethAt(rel: number, u: number, upperShown: boolean): number {
+  const across = 1 - smooth(0.55, 1, u * u);
+  const lower = smooth(0.6, 0.72, rel) * (1 - smooth(1.1, 1.2, rel));
+  const upper = upperShown ? 0 : 1 - smooth(0.2, 0.32, rel);
+  return Math.max(lower, upper) * across;
 }
 
 /** Chỗ đặt mí mắt (tâm hình bầu dục) so với tâm mắt: nhích lên để mí phủ cả bờ mi trên, mép dưới (hàng mi khi nhắm) nằm hơi dưới
@@ -281,6 +327,11 @@ function talkParts(c: HTMLCanvasElement, eyes: Pt[], kp: Pt, chinY: number, fw: 
   // lòng miệng rộng đúng tới hai khoé miệng thật
   const hx = Math.max(fw * 0.15, (lip.right - lip.left) / 2 + 1), hy = fh * 0.1, [cr, cg, cb] = gap.color;
   const hcx = (lip.left + lip.right) / 2;
+  // răng: răng dưới luôn vẽ ở đáy khe, răng trên chỉ vẽ khi ảnh chưa có (miệng ngậm); răng trong miệng tối hơn răng ngoài sáng
+  const teeth = upperTeeth({ data: d, width: W, height: H }, lip, fh), drop = fh * 0.08;
+  // ảnh chưa có răng thì lấy màu răng từ màu da sáng lên (ảnh tối, ảnh đen trắng thì răng cũng theo, không trắng chói)
+  const base = teeth.shown ? teeth.color : [sr, sg, sb].map((v) => v + (255 - v) * 0.55);
+  const [tr, tg, tb] = base.map((v, k) => v * 0.78 + gap.color[k] * 0.22);
   for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
     const cut = lip.at[x];
     const m = jawMask(x, y, cut, mouth, rx, ry);
@@ -289,8 +340,11 @@ function talkParts(c: HTMLCanvasElement, eyes: Pt[], kp: Pt, chinY: number, fw: 
     if (m < 0.999) continue;
     // lòng miệng ôm theo đường môi, đậm ở giữa, nhạt dần về hai khoé thành ảnh gốc
     const u = (x - hcx) / hx, v = (y - cut) / hy, t = 1 - smooth(0.45, 1, u * u + v * v);
-    if (t <= 0) continue;
-    up.data[i] += (cr - up.data[i]) * t; up.data[i + 1] += (cg - up.data[i + 1]) * t; up.data[i + 2] += (cb - up.data[i + 2]) * t;
+    // chừa 1 px ngay dưới đường cắt: mép hàm khi phóng to bị làm mềm, vẽ gì ở đó cũng lộ thành vệt lúc ngậm
+    if (t <= 0 || y - cut < 1) continue;
+    const w = teethAt((y - cut) / drop, (x - hcx) / (hx * 0.85), teeth.shown);
+    const fr = cr + (tr - cr) * w, fg = cg + (tg - cg) * w, fb = cb + (tb - cb) * w;
+    up.data[i] += (fr - up.data[i]) * t; up.data[i + 1] += (fg - up.data[i + 1]) * t; up.data[i + 2] += (fb - up.data[i + 2]) * t;
   }
   const draw = (img: ImageData, quality?: number) => {
     const o = document.createElement('canvas');
@@ -303,7 +357,7 @@ function talkParts(c: HTMLCanvasElement, eyes: Pt[], kp: Pt, chinY: number, fw: 
   const lids = eyes.slice(0, 2).map((e) => { const [x, y] = refineEye({ data: d, width: W, height: H }, e, fw, fh); return round1([x, y - lid[1] * LID_RAISE]); });
   return {
     upper: draw(up), jaw: draw(jaw, 1),
-    rig: { mouth: round1(mouth), drop: Math.round(fh * 0.08 * 10) / 10, eyes: lids, lid: round1(lid), skin: hex(sr, sg, sb), line: hex(sr * 0.6, sg * 0.55, sb * 0.55) },
+    rig: { mouth: round1(mouth), drop: Math.round(drop * 10) / 10, eyes: lids, lid: round1(lid), skin: hex(sr, sg, sb), line: hex(sr * 0.6, sg * 0.55, sb * 0.55) },
   };
 }
 

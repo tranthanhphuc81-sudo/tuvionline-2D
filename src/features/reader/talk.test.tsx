@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect, afterEach } from 'vitest';
 import { render, cleanup } from '@testing-library/react';
-import { findMouthGap, jawMask, mouthLine, refineEye, type TalkParts } from './cutout';
+import { findMouthGap, jawMask, mouthLine, refineEye, teethAt, upperTeeth, type TalkParts } from './cutout';
 import { parseAnim } from './customPhoto';
 import { blinkKeys, FLAP, jawKeys, withFace } from './faceRig';
 import { StandFigure } from './ReaderFigure';
@@ -70,6 +70,31 @@ describe('Người đọc ảnh cử động', () => {
     expect(gap.color[0]).toBeLessThan(60);
     const flat = new Uint8ClampedArray(W * H * 4).fill(200);
     expect(findMouthGap({ data: flat, width: W, height: H }, [50, 46], 100, 100).y).toBe(46); // không có khe rõ: giữ điểm cũ
+  });
+
+  it('khe miệng: chọn khe dưới hàng răng, không chọn vệt bóng dưới môi dưới dù vệt đó tối hơn', () => {
+    const W = 100, H = 100;
+    const row = (y: number): number[] =>
+      y >= 40 && y <= 45 ? [240, 240, 235, 255] // răng trên
+        : y === 46 ? [150, 110, 100, 255] // khe dưới răng (không tối lắm)
+          : y >= 47 && y <= 52 ? [190, 120, 110, 255] // môi dưới
+            : y >= 53 && y <= 54 ? [110, 80, 70, 255] // bóng dưới môi, tối hơn khe
+              : [200, 160, 140, 255];
+    const data = new Uint8ClampedArray(W * H * 4);
+    for (let i = 0; i < W * H; i++) data.set(row(Math.floor(i / W)), i * 4);
+    expect(findMouthGap({ data, width: W, height: H }, [50, 48], 100, 100).y).toBe(46);
+  });
+
+  it('răng: thấy răng trên trong ảnh thì không vẽ thêm; răng dưới ở đáy khe, thu lại trước khoé', () => {
+    const W = 100, H = 100, lip = { at: new Float32Array(W).fill(50.5), left: 30, right: 70 };
+    const mk = (teeth: boolean) => { const data = new Uint8ClampedArray(W * H * 4); for (let i = 0; i < W * H; i++) { const y = Math.floor(i / W); data.set(teeth && y >= 46 && y < 50 ? [240, 238, 230, 255] : [190, 130, 110, 255], i * 4); } return { data, width: W, height: H }; };
+    expect(upperTeeth(mk(true), lip, 100).shown).toBe(true);
+    expect(upperTeeth(mk(false), lip, 100).shown).toBe(false);
+    expect(teethAt(0.9, 0, true)).toBe(1); // răng dưới ở đáy khe
+    expect(teethAt(0.4, 0, true)).toBe(0); // giữa khe là lòng miệng tối
+    expect(teethAt(0.1, 0, true)).toBe(0); // ảnh đã có răng trên: không vẽ thêm
+    expect(teethAt(0.1, 0, false)).toBe(1); // ảnh ngậm miệng: vẽ răng trên
+    expect(teethAt(0.9, 1, true)).toBe(0); // tới khoé thì hết răng
   });
 
   it('khung hình hàm: lúc nghỉ khép, các đoạn đang đọc mấp máy, đầu cuối mỗi đoạn khép lại', () => {
