@@ -1,6 +1,6 @@
 # Ngũ hành Engine (Bát Tự) — v0.2
 
-> **Bản tham chiếu trong repo tuvionline-2D.** Không nằm trong `tsconfig`/vitest, không đóng gói vào app. Bước 3C.2 của `docs/PROMPT-KIT-NGU-HANH.md` port engine này vào `src/core/nguhanh` (dùng lại bảng can chi, tàng can của app). Giữ thư mục này để đối chiếu, giống `docs/legacy/`. Lệnh `npm run demo`/`typecheck` bên dưới là của gói gốc; trong repo này chạy demo bằng `npx tsx docs/ngu-hanh-engine/demo.ts`.
+> **Bản tham chiếu trong repo tuvionline-2D.** Không nằm trong `tsconfig`/vitest, không đóng gói vào app. Bước 3C.2 của `docs/PROMPT-KIT-NGU-HANH.md` port engine này vào `src/core/nguhanh` (dùng lại bảng can chi, tàng can của app). Giữ thư mục này để đối chiếu, giống `docs/legacy/`. Lệnh `npm run demo`/`typecheck` bên dưới là của gói gốc; trong repo này chạy demo bằng `node docs/ngu-hanh-engine/demo.ts` (Node ≥ 22.18 tự bỏ kiểu, không cần cài thêm). Script so sánh `compare-dung-than.ts` import cả `src` (không đuôi `.ts`) nên phải chạy bằng `npx tsx` (tải tsx từ npm cho tới khi bước 3C.2 thêm vào devDependencies).
 
 Module TypeScript thuần (không phụ thuộc thư viện) để:
 
