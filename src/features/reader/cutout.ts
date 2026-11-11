@@ -135,7 +135,7 @@ export function headClip(x: number, y: number, face: Box, withMask: boolean): nu
   return 1 - smooth(0.82, 1, u * u + v * v);
 }
 
-/** Bộ phận để ảnh cử động: `upper` là ảnh đã tô kín chỗ hàm (màu da, có lòng miệng tối), `jaw` là riêng phần hàm dưới đặt đè lên
+/** Bộ phận để ảnh cử động: `upper` là ảnh gốc có lòng miệng tối dưới đường môi, `jaw` là riêng phần hàm dưới (cắt theo đường môi) đặt đè lên
     đúng chỗ cũ; hạ `jaw` xuống `drop` px là miệng mở. Mí mắt là hình bầu dục màu da cỡ `lid`, tâm ở `eyes` (đã nhích lên so với
     tâm mắt, xem LID_RAISE), mép dưới là hàng mi; hiện thoáng chốc là chớp mắt.
     Toạ độ theo khung ảnh tương ứng (đầu HEAD_W × HEAD_H hoặc người đứng CUT_W × CUT_H). */
@@ -146,9 +146,10 @@ type Pt = [number, number];
 /** Khuôn mặt tìm được, toạ độ ảnh làm việc. */
 interface FaceInfo { box: Box; eyes: Pt[]; mouth: Pt | null; tilt: number }
 
-/** Vùng hàm dưới (0…1): nửa dưới hình bầu dục từ khe môi xuống cằm, mép hai bên mềm, mép trên cắt đúng khe môi. */
-export function jawMask(x: number, y: number, mouth: Pt, rx: number, ry: number): number {
-  if (y < mouth[1]) return 0;
+/** Vùng hàm dưới (0…1): nửa dưới hình bầu dục từ khe môi xuống cằm, mép hai bên mềm, mép trên cắt theo đường môi (`cutY` là độ
+    cao đường môi ở cột x, cong theo môi thật). */
+export function jawMask(x: number, y: number, cutY: number, mouth: Pt, rx: number, ry: number): number {
+  if (y < cutY) return 0;
   const u = (x - mouth[0]) / rx, v = (y - mouth[1]) / ry;
   return 1 - smooth(0.78, 1, u * u + v * v);
 }
@@ -204,6 +205,42 @@ export function findMouthGap(img: { data: ArrayLike<number>; width: number; heig
   return { y: darkest.y, color: darkest.rgb.map((v) => v * 0.7) as [number, number, number] };
 }
 
+/** Đường môi (khe giữa hai môi, hay khe dưới hàng răng khi cười) theo từng cột: đi từ giữa miệng ra hai bên, mỗi cột lấy điểm tối
+    nhất sát điểm của cột trước nên bám theo đường cong của môi (khoé miệng cười cong lên). Hết khe tối rõ là tới khoé miệng; ngoài
+    khoé giữ độ cao ở khoé. Làm mượt cho khỏi răng cưa. Trả độ cao đường môi cho mọi cột và hai khoé miệng. */
+export function mouthLine(img: { data: ArrayLike<number>; width: number; height: number }, center: Pt, fw: number, fh: number): { at: Float32Array; left: number; right: number } {
+  const { data: d, width: W, height: H } = img;
+  const lum = (x: number, y: number) => { const i = (y * W + x) * 4; return d[i + 3] < 200 ? null : 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2]; };
+  const cx = Math.round(center[0]), cy = Math.round(center[1]);
+  const half = Math.round(fw * 0.3), step = Math.max(1, Math.round(fh * 0.015)), win = Math.round(fh * 0.06);
+  const raw = new Map<number, number>([[cx, cy]]);
+  let left = cx, right = cx;
+  for (const dir of [-1, 1]) {
+    let prev = cy, weak = 0;
+    for (let x = cx + dir; Math.abs(x - cx) <= half && x >= 0 && x < W; x += dir) {
+      // điểm tối nhất sát điểm cột trước, so với độ sáng chung của cột quanh miệng
+      let best = prev, bestL = Infinity;
+      for (let y = Math.max(0, prev - step); y <= Math.min(H - 1, prev + step); y++) { const l = lum(x, y); if (l !== null && l < bestL) { bestL = l; best = y; } }
+      const col: number[] = [];
+      for (let y = Math.max(0, cy - win); y <= Math.min(H - 1, cy + win); y++) { const l = lum(x, y); if (l !== null) col.push(l); }
+      col.sort((a, b) => a - b);
+      const med = col.length ? col[Math.floor(col.length / 2)] : 0;
+      if (!col.length || med - bestL < 12) { if (++weak >= 3) break; } else weak = 0;
+      raw.set(x, best); prev = best;
+      if (dir < 0) left = x; else right = x;
+    }
+  }
+  // làm mượt, ngoài khoé giữ độ cao ở khoé
+  const r = Math.max(1, Math.round(fw * 0.02)), at = new Float32Array(W);
+  for (let x = 0; x < W; x++) {
+    const xc = Math.max(left, Math.min(right, x));
+    let sum = 0, n = 0;
+    for (let k = Math.max(left, xc - r); k <= Math.min(right, xc + r); k++) { const v = raw.get(k); if (v !== undefined) { sum += v; n++; } }
+    at[x] = (n ? sum / n : cy) + 0.5;
+  }
+  return { at, left, right };
+}
+
 /** Chỗ đặt mí mắt (tâm hình bầu dục) so với tâm mắt: nhích lên để mí phủ cả bờ mi trên, mép dưới (hàng mi khi nhắm) nằm hơi dưới
     tâm mắt như mắt nhắm thật, không tràn xuống bọng mắt. Tính theo chiều cao mí. */
 export const LID_RAISE = 0.22;
@@ -221,6 +258,8 @@ function talkParts(c: HTMLCanvasElement, eyes: Pt[], kp: Pt, chinY: number, fw: 
   // cắt hàm đúng khe miệng thật (khe môi hoặc khe giữa hai hàm răng)
   const gap = findMouthGap({ data: d, width: W, height: H }, [mx, kp[1]], fw, fh);
   const mouth: Pt = [mx, gap.y + 0.5];
+  // đường cắt cong theo môi thật, không thẳng băng
+  const lip = mouthLine({ data: d, width: W, height: H }, [mx, gap.y], fw, fh);
   // màu da: trung bình hai mảng má cạnh mũi
   let r = 0, g = 0, b = 0, n = 0;
   const rad = Math.max(2, Math.round(fw * 0.05));
@@ -235,18 +274,23 @@ function talkParts(c: HTMLCanvasElement, eyes: Pt[], kp: Pt, chinY: number, fw: 
   }
   const [sr, sg, sb] = n ? [r / n, g / n, b / n] : [217, 168, 138];
   const rx = fw * 0.3, ry = Math.max(chinY - mouth[1], fh * 0.22) * 1.08;
-  // Lúc ngậm, hàm đè lên phải trùng khít ảnh gốc: chỉ tô (màu da, lòng miệng) ở phần hàm đặc hẳn; ở mép mềm ảnh dưới giữ nguyên
-  // ảnh gốc, nên trộn với hàm vẫn ra đúng ảnh gốc, không lộ đường viền.
+  // Lúc ngậm, hàm đè lên phải trùng khít ảnh gốc: chỉ tô lòng miệng ở phần hàm đặc hẳn; ở mép mềm ảnh dưới giữ nguyên ảnh gốc,
+  // nên trộn với hàm vẫn ra đúng ảnh gốc, không lộ đường viền. Ngoài lòng miệng cũng giữ ảnh gốc (không tô màu da phẳng): hạ hàm
+  // xuống thì hai bên chỉ lộ thớ da thật, không thành một dải màu trơn.
   const up = new ImageData(new Uint8ClampedArray(d), W, H), jaw = new ImageData(new Uint8ClampedArray(d), W, H);
-  const hx = fw * 0.22, hy = fh * 0.1, [cr, cg, cb] = gap.color;
+  // lòng miệng rộng đúng tới hai khoé miệng thật
+  const hx = Math.max(fw * 0.15, (lip.right - lip.left) / 2 + 1), hy = fh * 0.1, [cr, cg, cb] = gap.color;
+  const hcx = (lip.left + lip.right) / 2;
   for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
-    const m = jawMask(x, y, mouth, rx, ry);
+    const cut = lip.at[x];
+    const m = jawMask(x, y, cut, mouth, rx, ry);
     const i = (y * W + x) * 4;
     jaw.data[i + 3] = Math.round(d[i + 3] * m);
     if (m < 0.999) continue;
-    // lòng miệng đậm ở giữa, nhạt dần về hai khoé thành màu da
-    const u = (x - mouth[0]) / hx, v = (y - mouth[1]) / hy, t = 1 - smooth(0.45, 1, u * u + v * v);
-    up.data[i] = sr + (cr - sr) * t; up.data[i + 1] = sg + (cg - sg) * t; up.data[i + 2] = sb + (cb - sb) * t;
+    // lòng miệng ôm theo đường môi, đậm ở giữa, nhạt dần về hai khoé thành ảnh gốc
+    const u = (x - hcx) / hx, v = (y - cut) / hy, t = 1 - smooth(0.45, 1, u * u + v * v);
+    if (t <= 0) continue;
+    up.data[i] += (cr - up.data[i]) * t; up.data[i + 1] += (cg - up.data[i + 1]) * t; up.data[i + 2] += (cb - up.data[i + 2]) * t;
   }
   const draw = (img: ImageData, quality?: number) => {
     const o = document.createElement('canvas');

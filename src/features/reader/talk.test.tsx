@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect, afterEach } from 'vitest';
 import { render, cleanup } from '@testing-library/react';
-import { findMouthGap, jawMask, refineEye, type TalkParts } from './cutout';
+import { findMouthGap, jawMask, mouthLine, refineEye, type TalkParts } from './cutout';
 import { parseAnim } from './customPhoto';
 import { blinkKeys, FLAP, jawKeys, withFace } from './faceRig';
 import { StandFigure } from './ReaderFigure';
@@ -17,11 +17,30 @@ const markers = thay.markers;
 
 describe('Người đọc ảnh cử động', () => {
   it('vùng hàm: dưới khe môi, giữa cằm; trên khe môi và ngoài má thì không', () => {
-    expect(jawMask(100, 190, [100, 176], 27, 30)).toBe(1);
-    expect(jawMask(100, 170, [100, 176], 27, 30)).toBe(0);
-    expect(jawMask(140, 180, [100, 176], 27, 30)).toBe(0);
-    const edge = jawMask(124, 180, [100, 176], 27, 30);
+    expect(jawMask(100, 190, 176, [100, 176], 27, 30)).toBe(1);
+    expect(jawMask(100, 170, 176, [100, 176], 27, 30)).toBe(0);
+    expect(jawMask(140, 180, 176, [100, 176], 27, 30)).toBe(0);
+    const edge = jawMask(124, 180, 176, [100, 176], 27, 30);
     expect(edge).toBeGreaterThan(0); expect(edge).toBeLessThan(1);
+    expect(jawMask(115, 174, 172, [100, 176], 27, 30)).toBe(1); // khoé miệng cong lên: đường cắt ở đó cao hơn giữa miệng
+  });
+
+  it('đường môi: bám theo khe tối cong lên ở hai khoé, ngoài khoé giữ độ cao ở khoé', () => {
+    const W = 120, H = 100;
+    const lipY = (x: number) => Math.round(60 - ((x - 60) / 20) ** 2 * 3); // giữa y 60, khoé (x 40, 80) y 57
+    const data = new Uint8ClampedArray(W * H * 4);
+    for (let i = 0; i < W * H; i++) {
+      const x = i % W, y = Math.floor(i / W);
+      const dark = x >= 40 && x <= 80 && Math.abs(y - lipY(x)) <= 1;
+      data.set(dark ? [50, 20, 20, 255] : [200, 160, 140, 255], i * 4);
+    }
+    const line = mouthLine({ data, width: W, height: H }, [60, 60], 100, 100);
+    expect(Math.abs(line.at[60] - 60.5)).toBeLessThan(1.2); // làm mượt nên lệch chút
+    expect(line.at[44]).toBeLessThan(line.at[60] - 1); // cong lên về phía khoé
+    expect(line.at[76]).toBeLessThan(line.at[60] - 1);
+    expect(line.left).toBeLessThanOrEqual(42); expect(line.right).toBeGreaterThanOrEqual(78);
+    expect(line.left).toBeGreaterThanOrEqual(38); expect(line.right).toBeLessThanOrEqual(82); // dừng ở khoé
+    expect(line.at[10]).toBe(line.at[line.left]); // ngoài khoé giữ độ cao ở khoé
   });
 
   it('dò lại mắt: điểm lệch thì kéo về hàng tối (lòng đen); không có gì tối thì giữ nguyên; dịch có giới hạn', () => {
