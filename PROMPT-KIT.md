@@ -11,6 +11,8 @@ Ký hiệu chọn model (đổi bằng lệnh `/model` trong Claude Code):
 Quy ước chung cho mọi prompt: Claude Code đọc `CLAUDE.md` tự động. Luôn giữ `npm test` xanh.
 
 > Bản 3D nhiều người chơi ("Đạo quán online") là sản phẩm riêng, xem `PROMPT-KIT-3D.md`.
+>
+> Kit bổ sung: `docs/PROMPT-KIT-CHI-TAY.md` (Phase 3B, xem chỉ tay) và `docs/PROMPT-KIT-NGU-HANH.md` (Phase 3C, phân tích ngũ hành cho Bát Tự, chạy trước khi mở lại Phase 8–9).
 
 ---
 
