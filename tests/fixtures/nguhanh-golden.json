@@ -1,0 +1,317 @@
+{
+ "_meta": "24 lá số mẫu của docs/NGU-HANH-SO-SANH.md mục 3 (cùng thứ tự). Cột answer để trống cho tới khi chủ dự án hoặc người luận điền dụng thần đúng kèm nguồn (ARCHITECTURE 14.1).",
+ "cases": [
+  {
+   "no": 1,
+   "category": "trung",
+   "input": {
+    "gender": "M",
+    "dd": 26,
+    "mm": 12,
+    "yy": 1977,
+    "hourIdx": 11
+   },
+   "answer": null,
+   "source": null
+  },
+  {
+   "no": 2,
+   "category": "trung",
+   "input": {
+    "gender": "M",
+    "dd": 10,
+    "mm": 8,
+    "yy": 1953,
+    "hourIdx": 0
+   },
+   "answer": null,
+   "source": null
+  },
+  {
+   "no": 3,
+   "category": "trung",
+   "input": {
+    "gender": "M",
+    "dd": 2,
+    "mm": 5,
+    "yy": 1982,
+    "hourIdx": 10
+   },
+   "answer": null,
+   "source": null
+  },
+  {
+   "no": 4,
+   "category": "trung",
+   "input": {
+    "gender": "M",
+    "dd": 27,
+    "mm": 4,
+    "yy": 1975,
+    "hourIdx": 11
+   },
+   "answer": null,
+   "source": null
+  },
+  {
+   "no": 5,
+   "category": "lech-nhe",
+   "input": {
+    "gender": "M",
+    "dd": 22,
+    "mm": 12,
+    "yy": 2001,
+    "hourIdx": 10
+   },
+   "answer": null,
+   "source": null
+  },
+  {
+   "no": 6,
+   "category": "lech-nhe",
+   "input": {
+    "gender": "M",
+    "dd": 6,
+    "mm": 1,
+    "yy": 1957,
+    "hourIdx": 5
+   },
+   "answer": null,
+   "source": null
+  },
+  {
+   "no": 7,
+   "category": "lech-nhe",
+   "input": {
+    "gender": "M",
+    "dd": 3,
+    "mm": 6,
+    "yy": 1962,
+    "hourIdx": 5
+   },
+   "answer": null,
+   "source": null
+  },
+  {
+   "no": 8,
+   "category": "dao-chieu",
+   "input": {
+    "gender": "M",
+    "dd": 12,
+    "mm": 10,
+    "yy": 1963,
+    "hourIdx": 7
+   },
+   "answer": null,
+   "source": null
+  },
+  {
+   "no": 9,
+   "category": "dao-chieu",
+   "input": {
+    "gender": "M",
+    "dd": 8,
+    "mm": 12,
+    "yy": 1968,
+    "hourIdx": 7
+   },
+   "answer": null,
+   "source": null
+  },
+  {
+   "no": 10,
+   "category": "dao-chieu",
+   "input": {
+    "gender": "M",
+    "dd": 24,
+    "mm": 12,
+    "yy": 1969,
+    "hourIdx": 6
+   },
+   "answer": null,
+   "source": null
+  },
+  {
+   "no": 11,
+   "category": "dao-chieu",
+   "input": {
+    "gender": "M",
+    "dd": 5,
+    "mm": 3,
+    "yy": 1980,
+    "hourIdx": 11
+   },
+   "answer": null,
+   "source": null
+  },
+  {
+   "no": 12,
+   "category": "dao-chieu",
+   "input": {
+    "gender": "M",
+    "dd": 15,
+    "mm": 8,
+    "yy": 1982,
+    "hourIdx": 10
+   },
+   "answer": null,
+   "source": null
+  },
+  {
+   "no": 13,
+   "category": "dao-chieu",
+   "input": {
+    "gender": "M",
+    "dd": 26,
+    "mm": 12,
+    "yy": 1959,
+    "hourIdx": 2
+   },
+   "answer": null,
+   "source": null
+  },
+  {
+   "no": 14,
+   "category": "dao-chieu",
+   "input": {
+    "gender": "M",
+    "dd": 2,
+    "mm": 9,
+    "yy": 1996,
+    "hourIdx": 2
+   },
+   "answer": null,
+   "source": null
+  },
+  {
+   "no": 15,
+   "category": "dao-chieu",
+   "input": {
+    "gender": "M",
+    "dd": 11,
+    "mm": 10,
+    "yy": 2004,
+    "hourIdx": 11
+   },
+   "answer": null,
+   "source": null
+  },
+  {
+   "no": 16,
+   "category": "dieu-hau",
+   "input": {
+    "gender": "M",
+    "dd": 19,
+    "mm": 11,
+    "yy": 2009,
+    "hourIdx": 9
+   },
+   "answer": null,
+   "source": null
+  },
+  {
+   "no": 17,
+   "category": "dieu-hau",
+   "input": {
+    "gender": "M",
+    "dd": 15,
+    "mm": 6,
+    "yy": 1987,
+    "hourIdx": 10
+   },
+   "answer": null,
+   "source": null
+  },
+  {
+   "no": 18,
+   "category": "dieu-hau",
+   "input": {
+    "gender": "M",
+    "dd": 27,
+    "mm": 5,
+    "yy": 1988,
+    "hourIdx": 6
+   },
+   "answer": null,
+   "source": null
+  },
+  {
+   "no": 19,
+   "category": "tong-chan",
+   "input": {
+    "gender": "M",
+    "dd": 10,
+    "mm": 3,
+    "yy": 1958,
+    "hourIdx": 3
+   },
+   "answer": null,
+   "source": null
+  },
+  {
+   "no": 20,
+   "category": "tong-chan",
+   "input": {
+    "gender": "M",
+    "dd": 2,
+    "mm": 10,
+    "yy": 2009,
+    "hourIdx": 9
+   },
+   "answer": null,
+   "source": null
+  },
+  {
+   "no": 21,
+   "category": "tong-chan",
+   "input": {
+    "gender": "M",
+    "dd": 3,
+    "mm": 1,
+    "yy": 1955,
+    "hourIdx": 4
+   },
+   "answer": null,
+   "source": null
+  },
+  {
+   "no": 22,
+   "category": "tong-gia",
+   "input": {
+    "gender": "M",
+    "dd": 13,
+    "mm": 3,
+    "yy": 1986,
+    "hourIdx": 3
+   },
+   "answer": null,
+   "source": null
+  },
+  {
+   "no": 23,
+   "category": "tong-gia",
+   "input": {
+    "gender": "M",
+    "dd": 17,
+    "mm": 9,
+    "yy": 1980,
+    "hourIdx": 8
+   },
+   "answer": null,
+   "source": null
+  },
+  {
+   "no": 24,
+   "category": "tong-gia",
+   "input": {
+    "gender": "M",
+    "dd": 22,
+    "mm": 12,
+    "yy": 1954,
+    "hourIdx": 0
+   },
+   "answer": null,
+   "source": null
+  }
+ ]
+}

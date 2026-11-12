@@ -1,22 +1,16 @@
 /**
  * So sánh Dụng Thần legacy (src/core/battu/reading.ts) với engine ngũ hành đã port (src/core/nguhanh) trên 3000 lá số.
  * Chạy từ gốc repo: npm run compare:dungthan  → ghi docs/NGU-HANH-SO-SANH.md
- * Engine trả mã nên nhãn chữ ở mục 3 lấy từ bảng tạm bên dưới (TODO 3C.3: thay bằng src/content/nguhanh).
+ * Engine trả mã nên nhãn chữ ở mục 3 lấy từ src/content/nguhanh.
  */
 import { writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { batTuChart, batTuReading } from "../src/core/index";
 import { CAN, CHI } from "../src/core/canchi/index";
-import { analyze, compareWithLegacy, toNguHanhChart, type FollowGrade, type FollowType, type Method, type Strength } from "../src/core/nguhanh/index";
+import { analyze, compareWithLegacy, toNguHanhChart } from "../src/core/nguhanh/index";
+import { GRADE_VI, METHOD_VI, STRENGTH_VI, TYPE_VI } from "../src/content/nguhanh/vocab";
 
-// TODO 3C.3: bảng nhãn tạm, thay bằng src/content/nguhanh. Chính tả theo app (Hoả, Thuỷ, hoà).
-const STRENGTH_VI: Record<Strength, string> = { "tong-nhuoc": "Cực nhược", nhuoc: "Thân nhược", "trung-hoa": "Trung hoà", vuong: "Thân vượng", "chuyen-vuong": "Cực vượng" };
-const METHOD_VI: Record<Method, string> = { "phu-uc": "Phù ức", "dieu-hau": "Điều hậu", "thong-quan": "Thông quan", "tong-cach": "Thuận thế", "trung-hoa": "Giữ trung hoà" };
-const GRADE_VI: Record<FollowGrade, string> = { chan: "Chân", gia: "Giả", "khong-thanh": "Không thành cách" };
-const TYPE_VI: Record<FollowType, string> = {
-  "tong-sat": "Tòng Sát", "tong-tai": "Tòng Tài", "tong-nhi": "Tòng Nhi", "tong-the": "Tòng Thế", "khuc-truc": "Khúc Trực", "viem-thuong": "Viêm Thượng",
-  "gia-sac": "Giá Sắc", "tong-cach-kim": "Tòng Cách (Kim chuyên vượng)", "nhuan-ha": "Nhuận Hạ", "tong-cuong": "Tòng Cường",
-};
+const short = (t: string) => t.split(" (")[0];
 let seed = 20261111; const rnd = () => (seed = (seed * 1103515245 + 12345) % 2147483648) / 2147483648;
 const HOURS = ["Tý","Sửu","Dần","Mão","Thìn","Tỵ","Ngọ","Mùi","Thân","Dậu","Tuất","Hợi"];
 
@@ -49,7 +43,7 @@ for (let i = 0; i < N; i++) {
     key: `${dd}/${mm}/${yy}`, date: `${String(dd).padStart(2,"0")}/${String(mm).padStart(2,"0")}/${yy} giờ ${HOURS[h]}`,
     tru: ch.pillars.map((p) => `${CAN[p.can]} ${CHI[p.chi]}`).join(" · "),
     legacy: `${r.assessment.thanVuong ? "Vượng" : "Nhược"} (${r.assessment.trangThai}${r.assessment.dacLenh ? ", đắc lệnh" : ""}, giúp ${r.assessment.giup}/hao ${r.assessment.hao}) → dụng ${r.dung.join(", ")}; kỵ ${r.ky.join(", ")}`,
-    engine: `${STRENGTH_VI[dm.strength]} (${Math.round(dm.supportRatio * 100)}%), ${METHOD_VI[ug.method]} → dụng ${ug.dung}, hỷ ${ug.hy}; kỵ ${ug.ky}${f ? ` · ${TYPE_VI[f.type]}: ${GRADE_VI[f.grade]}` : ""}`,
+    engine: `${STRENGTH_VI[dm.strength]} (${Math.round(dm.supportRatio * 100)}%), ${short(METHOD_VI[ug.method])} → dụng ${ug.dung}, hỷ ${ug.hy}; kỵ ${ug.ky}${f ? ` · ${TYPE_VI[f.type]}: ${short(GRADE_VI[f.grade])}` : ""}`,
     cat: "", follow: fk, dacLenh: r.assessment.dacLenh, legacyVuong: r.assessment.thanVuong, ratio: dm.supportRatio, method: ug.method,
   });
   const row = rows[rows.length - 1];
