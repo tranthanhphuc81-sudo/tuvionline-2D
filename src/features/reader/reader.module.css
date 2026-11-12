@@ -75,4 +75,7 @@
 .robe[aria-checked='true'] { border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold); }
 .voiceRow { display: flex; align-items: center; gap: var(--space-2); min-height: var(--tap); }
 .voiceRow > span { flex: 1; }
+/* Ô chọn giọng nằm trong nhãn: chạm vào cả dòng chữ là chọn, vùng chạm cao ≥ 44px */
+.voiceOpt { flex: 1; display: flex; align-items: center; gap: var(--space-2); min-height: var(--tap); cursor: pointer; }
+.voiceOpt input { width: 20px; height: 20px; margin: 0; flex: none; }
 .stageChar { width: 160px; height: 176px; }

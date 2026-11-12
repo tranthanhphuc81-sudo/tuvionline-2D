@@ -1,5 +1,7 @@
 .shell {
   height: 100dvh; display: grid; grid-template-rows: auto 1fr auto auto;
+  /* Cột không được rộng hơn màn hình: thiếu dòng này thì tiêu đề dài + chip hồ sơ kéo cả app tràn ngang ở 360px */
+  grid-template-columns: minmax(0, 1fr);
   padding-left: var(--safe-left); padding-right: var(--safe-right);
 }
 .topbar {
@@ -15,7 +17,7 @@
 }
 .iconBtn:active { background: var(--surface2); }
 .chip {
-  display: inline-flex; align-items: center; gap: 6px; min-height: var(--tap); max-width: 42vw; flex: none;
+  display: inline-flex; align-items: center; gap: 6px; min-height: var(--tap); max-width: 42vw; flex: 0 1 auto; min-width: 0;
   padding: 4px 12px 4px 4px; border-radius: 999px; border: 1px solid var(--line-strong); background: var(--surface2); color: var(--ink);
 }
 .chipAvatar {
