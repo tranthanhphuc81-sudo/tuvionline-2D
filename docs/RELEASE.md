@@ -111,7 +111,14 @@ Hiện `android:allowBackup="true"`. Android có thể tự sao lưu dữ liệu
 
 Điều kiện để các câu trên đúng: đã tắt Auto Backup, bản phát hành không đặt `LYSO_LIVE_URL`, không thêm SDK nào. Thêm tính năng gửi dữ liệu hoặc SDK bất kỳ thì phải khai lại.
 
-**Chỉ tay (3B.3, đã có trong code):** chụp ảnh bằng `<input type="file" accept="image/*" capture="environment">`, WebView giao việc cho app máy ảnh của hệ thống nên KHÔNG khai quyền `CAMERA`. CHƯA THỬ trên APK: nếu nút chụp không mở được máy ảnh thì phải thêm quyền `CAMERA` (và khai lại Data safety, chính sách quyền riêng tư) trước khi phát hành. Ảnh chỉ xử lý trên máy, không lưu; app lưu các nét đã chạm và 21 điểm khớp bàn tay, xoá cùng hồ sơ. Mô hình MediaPipe Hand Landmarker (Apache 2.0) đóng gói trong app (~22 MB gồm WASM), cần ghi công ở mục Giới thiệu.
+**Chỉ tay (3B.3, rà soát lại ở 3B.9 ngày 12/11/2026):**
+- **Quyền máy ảnh:** chụp ảnh bằng `<input type="file" accept="image/*" capture="environment">`, WebView giao việc cho app máy ảnh của hệ thống nên KHÔNG khai quyền `CAMERA`. CHƯA THỬ trên APK: nếu nút chụp không mở được máy ảnh thì phải thêm quyền `CAMERA` (và khai lại Data safety, chính sách quyền riêng tư) trước khi phát hành.
+- **Ảnh tay KHÔNG được lưu:** ảnh chỉ xử lý trên máy. Sau khi xem, ảnh thu nhỏ được giữ trong bộ nhớ (`src/features/palm/photoMemory.ts`) để vẽ đường chỉ lên ảnh ở màn kết quả; rời màn kết quả, xoá kết quả hoặc tắt app là mất. Không ghi ảnh tay vào bộ nhớ máy, `lyso.state` hay file sao lưu.
+- **Phiên xem tay lưu cục bộ** trong `lyso.state` (`palmSessions`): 21 điểm khớp bàn tay (toạ độ tương đối), các nét đường chỉ đã vẽ, câu trả lời, tay trái hay phải, ngày xem. Tối đa 12 lần cho mỗi hồ sơ và mỗi tay. Xoá được từng lần trong lịch sử, xoá cùng hồ sơ, xoá bằng "Xoá toàn bộ dữ liệu"; có trong file sao lưu (người dùng tự bấm).
+- **Ảnh người đọc tự tạo** (tính năng khác, dùng chung bộ MediaPipe để tách nền và ghép mặt): lưu ở các khoá `lyso.reader.photo…` trên máy, không gửi đi, xoá được ở Cài đặt và bằng "Xoá toàn bộ dữ liệu".
+- **Không có yêu cầu mạng:** rà 12/11/2026, trong `src/` không có `fetch`, `XMLHttpRequest`, `sendBeacon`, `WebSocket` hay địa chỉ http(s) nào ngoài chú thích; mô hình MediaPipe (`hand_landmarker.task`, `selfie_segmenter.tflite`, `blaze_face_short_range.tflite`) và WASM nạp từ thư mục `palm/` trong app (`new URL('palm', document.baseURI)`), không từ CDN. Khi thêm mô hình hay thư viện mới phải rà lại.
+- **Ghi công:** MediaPipe Hand Landmarker và các mô hình đi kèm (Apache 2.0, Google), ~22 MB gồm WASM, cần ghi ở mục Giới thiệu.
+- Tính năng này không đổi câu trả lời nào trên form Data safety (cùng diện "chỉ lưu trên máy" ở bảng trên), với điều kiện không phải thêm quyền `CAMERA`.
 
 **Phân tích ngũ hành (3C.5, đã có trong code):** lược đồ `lyso.state` lên v4, thêm `nguHanhAnswers`: mỗi câu trả lời kiểm chứng gồm hồ sơ, dấu ngày giờ sinh, mốc năm hoặc Đại Vận (số, không phải ngày cụ thể của người dùng), kết quả (thuận lợi, bình thường, khó khăn, không nhớ) và giờ trả lời. Câu trả lời:
 - chỉ lưu trên máy trong `lyso.state`, KHÔNG gửi đi đâu (đã rà mạng ở trên);
@@ -142,6 +149,7 @@ Không tìm thấy điều riêng về tử vi, phong thủy trong các trang đ
 - Luôn nói rõ là nội dung văn hoá, tham khảo. Không dùng "dự đoán chính xác", "đổi vận", "chữa", "chẩn đoán", "cam kết".
 - Không ghi "số 1", "tốt nhất", giá, khuyến mãi, lời khen không rõ nguồn. Không dùng tên người nổi tiếng hay logo khác.
 - **Mô tả phần phân tích ngũ hành (khi viết mô tả ở 8.3; chưa có file STORE-LISTING):** được nêu "phân tích ngũ hành định lượng, giải thích vì sao", "nhiều cách luận, kèm lời nhắc tham khảo". KHÔNG dùng "chính xác", "dự đoán đúng", "kiểm chứng bằng quá khứ cho kết quả đúng"; thẻ kiểm chứng chỉ giúp xem cách luận nào hợp hơn, không chứng minh app đoán đúng.
+- **Mô tả phần Xem chỉ tay (khi viết mô tả ở 8.3; chưa có file STORE-LISTING):** câu gợi ý: "Xem chỉ tay: chụp lòng bàn tay, vẽ lại các đường chỉ ngay trên ảnh rồi đọc ý nghĩa theo sách tướng tay xưa. Ảnh chỉ xử lý trên máy, không lưu, không gửi đi. Nội dung mang tính văn hoá, tham khảo; đường tay đổi theo cách mình sống." KHÔNG dùng "chẩn đoán", "dự đoán chính xác", "biết trước tương lai", không nhắc sức khoẻ, tuổi thọ.
 - Ảnh chụp phải đúng trải nghiệm thật trong app.
 
 ### Rủi ro cần xem ở Phase 9
