@@ -141,29 +141,146 @@
 - Thầy đọc xong rồi. Giữ điều hay, bỏ điều chưa hợp. Số là tham khảo, đức năng thắng số.
 - Đọc đến đây là đủ. Ngày mai vẫn do mình làm ra. Số là tham khảo, đức năng thắng số.
 
+## Ngũ hành (Phase 3C.6 và 3C.7, chờ duyệt)
+
+> Thầy đọc phần phân tích ngũ hành ở màn Bát Tự (nút "Nghe phần ngũ hành") và ở Tĩnh thất. Mỗi lý do có lời dẫn riêng, chọn theo lá số. `{hanh}`, `{dung}`, `{hy}`, `{ky}`, `{cach}`, `{tincay}`, `{chi}`, `{tiet}`, `{nhatChu}`, `{the}` được điền từ kết quả của lá số. Phần chữ trên màn hình (bảng điều kiện, phần trăm, danh sách thói quen) Thầy không đọc.
+
+**Câu mở**
+- Thầy chào {goi}. Mình xem thêm phần phân tích ngũ hành của lá số {cuaAi}. Số là tham khảo, đức năng thắng số.
+- Phần này thầy đếm kỹ năm hành trong tám chữ {cuaAi}. Đây chỉ là một cách tính thêm. Số là tham khảo, đức năng thắng số.
+- {goi} nghe thầy đọc phần ngũ hành nhé. Cách tính này mang tính tham khảo. Số là tham khảo, đức năng thắng số.
+
+**Câu kết**
+- Phần ngũ hành thầy đọc đến đây. Chữ trên màn hình còn đủ các chi tiết. Số là tham khảo, đức năng thắng số.
+- Thầy đọc xong rồi. Cách tính nào cũng chỉ để mình tự soi lại nếp sống. Số là tham khảo, đức năng thắng số.
+- Đọc đến đây thôi. Việc sắp xếp ngày tháng vẫn do mình quyết. Số là tham khảo, đức năng thắng số.
+
+**Lý do 1: nguyệt lệnh (chi tháng), trụ tháng và các Can tàng sáng lên**
+
+- {goi} xem trụ tháng, chi {chi} thuộc mùa {tiet}. Nhật Chủ {nhatChu} sinh đúng mùa mình, gọi là đắc lệnh, thế {the}.
+- Chi tháng là {chi}, mùa {tiet}. Nhật Chủ {nhatChu} được mùa nâng đỡ, đắc lệnh, đang ở thế {the}.
+(thất lệnh:)
+- {goi} xem trụ tháng, chi {chi} thuộc mùa {tiet}. Nhật Chủ {nhatChu} không hợp mùa này, gọi là thất lệnh, thế {the}.
+- Chi tháng là {chi}, mùa {tiet}. Mùa này không nâng đỡ Nhật Chủ {nhatChu}, thất lệnh, đang ở thế {the}.
+
+**Lý do 2: các chi hợp hoặc xung nhau (chọn một)**
+
+Tam hợp:
+- Trong các chi có tam hợp cục {hanh}, làm hành {hanh} mạnh thêm.
+- Các chi trên lá số kết thành tam hợp cục {hanh}, hành {hanh} nhờ vậy mạnh lên.
+Bán hợp:
+- Có hai chi bán hợp hướng {hanh}, hành {hanh} được thêm một phần lực.
+- Hai chi trên lá số bán hợp về hướng {hanh}, nên hành {hanh} nhỉnh thêm.
+Lục hợp:
+- Có hai chi lục hợp hướng {hanh}, kéo thêm chút lực cho hành {hanh}.
+- Hai chi kề nhau lục hợp về {hanh}, hành {hanh} nhờ đó được thêm chút lực.
+Lục xung:
+- Có hai chi xung nhau, lực của chúng giảm bớt.
+- Trong các chi có một cặp xung nhau, nên sức của hai chi đó yếu đi.
+
+**Lý do 3: cách chọn Dụng thần (chọn theo phương pháp)**
+
+Phù ức:
+- Thầy chọn Dụng thần theo cách bù chỗ yếu, tiết chỗ mạnh. Hành cần bổ sung là {dung}, hỗ trợ là {hy}, nên tiết chế {ky}.
+- Theo cách cân bằng mạnh yếu, hành cần bổ sung là {dung}; {hy} hỗ trợ; {ky} nên tiết chế.
+Điều hậu:
+- Lá số lệch về nóng lạnh nên thầy lo điều hậu trước. Hành cần bổ sung là {dung}, hỗ trợ là {hy}, nên tiết chế {ky}.
+- Mùa sinh làm lá số quá {khi}, nên cần điều hậu trước. Hành cần bổ sung là {dung}; nên tiết chế {ky}.
+Giữ trung hoà:
+- Nhật Chủ khá cân bằng nên thầy không cần can thiệp mạnh. Chỉ bù hành yếu nhất là {dung}, bớt hành dư nhất là {ky}.
+- Lá số gần cân bằng. Hành yếu nhất là {dung}, mình bù thêm; hành dư là {ky}, mình bớt lại.
+Thuận thế (tòng cách, chuyên vượng):
+- Với cách cục này, thầy chọn theo thế chung của lá số. Hành cần bổ sung là {dung}, hỗ trợ là {hy}, nên tiết chế {ky}.
+- Lá số theo thế của {cach}. Hành cần bổ sung là {dung}; {hy} hỗ trợ; {ky} nên tiết chế.
+Thông quan (thêm khi có):
+- Hai hành {a} và {b} đang khắc nhau khá mạnh. Thầy lấy {cau} làm cầu nối cho dịu.
+- Giữa {a} và {b} có chỗ căng, hành {cau} đứng giữa làm cầu nối là hợp.
+
+**Lý do 4: cách cục đặc biệt (chỉ khi có dấu hiệu)**
+
+Chân:
+- Lá số này thành {cach} khá rõ, độ tin cậy {tincay}. Các điều kiện đều đạt.
+- Thầy thấy {cach} thành cách rõ ràng, độ tin cậy {tincay}.
+Giả:
+- Lá số có dấu hiệu {cach} nhưng chưa trọn, độ tin cậy {tincay}. Nên xem cả hai cách luận.
+- Về cách cục đặc biệt, thầy thấy {cach} nhưng chưa trọn, độ tin cậy {tincay}.
+Không thành:
+- Lá số có dấu hiệu {cach} nhưng chưa đạt điều kiện, nên thầy luận theo cách thông thường.
+- Dấu hiệu {cach} chưa đủ để thành cách, nên mình luận theo cách thông thường.
+
+**Khi có hai cách luận**
+- Với lá số này có hai cách luận. Thầy nghiêng nhiều hơn về {cachchinh}, nhưng cách còn lại cũng đáng xem.
+- Có hai cách luận cho lá số này, hiện thầy nghiêng về {cachchinh}.
+
+Sau lời khuyên (chiến lược theo Thập Thần, nguyên văn từ `docs/NGU-HANH.md`), nếu còn câu hỏi kiểm chứng:
+
+**Trước câu hỏi về một giai đoạn mười năm (Đại Vận)**
+- Để biết cách luận nào hợp hơn, thầy xin hỏi {goi} về một giai đoạn mười năm đã qua.
+- {goi} nhớ lại giúp thầy một giai đoạn mười năm đã qua nhé. Không nhớ thì cứ bỏ qua.
+
+**Trước câu hỏi về một năm**
+- Để biết cách luận nào hợp hơn, thầy xin hỏi {goi} về một năm đã qua.
+- {goi} nhớ lại giúp thầy một năm đã qua nhé. Không nhớ thì cứ bỏ qua.
+
+Câu hỏi nguyên văn: "Năm 2015 (Ất Mùi), lúc bạn 27 tuổi (tuổi mụ). Năm tính từ Lập Xuân, khoảng đầu tháng 2 dương lịch. Nhìn chung năm đó với bạn là thuận lợi, bình thường hay khó khăn?"
+
+**Sau mỗi câu trả lời (ở Tĩnh thất)**
+- Cảm ơn {goi}, thầy ghi lại rồi.
+- Thầy ghi nhận rồi, cảm ơn {goi}.
+
+**Khi đã phân định được**
+- Các giai đoạn {goi} kể khớp với một cách luận. Thầy xem cách đó là chính.
+- Nghe {goi} kể, thầy thấy một cách luận hợp hơn hẳn. Mình lấy cách đó làm chính.
+
+**Khi chưa phân định**
+- Chưa đủ để thầy nói chắc cách luận nào hợp hơn. {goi} cứ xem cả hai như hai góc nhìn.
+- Thầy chưa dám nói chắc cách nào hợp hơn. Cứ xem cả hai cách luận như hai góc nhìn.
+
+**Khi chưa đủ dữ liệu (dưới 3 câu trả lời)**
+- Mới có ít giai đoạn để so, thầy chưa nói được gì. {goi} nhớ thêm được thì hay.
+- Chưa đủ giai đoạn để thầy kết luận. Khi nào nhớ thêm, mình xem tiếp.
+
+Câu nối ngay sau là kết quả nguyên văn của máy, ví dụ "Chưa phân định rõ ("Luận Tòng Cường" khớp 2/3 mốc, trọng số 60%)…".
+
 ## Chỉ tay
 
 **Câu mở**
-- Thầy chào {goi}. Mình cùng xem bàn tay {cuaAi}. Số là tham khảo, đức năng thắng số.
-- Bàn tay là tấm gương soi lại mình. Thầy đọc tay {cuaAi}. Số là tham khảo, đức năng thắng số.
-- Thầy thấy các đường chỉ {cuaAi} rồi. Mình đọc từ từ nhé. Số là tham khảo, đức năng thắng số.
+- Thầy chào {goi}. Mình cùng xem bàn tay {cuaAi}. Đường chỉ đổi theo cách mình sống. Số là tham khảo, đức năng thắng số.
+- Bàn tay là tấm gương soi lại mình. Thầy đọc tay {cuaAi}, nhớ là đường chỉ đổi theo cách mình sống. Số là tham khảo, đức năng thắng số.
+- Thầy thấy các đường chỉ {cuaAi} rồi. Đường chỉ đổi theo cách mình sống, mình đọc từ từ nhé. Số là tham khảo, đức năng thắng số.
 
 **Trước phần tóm tắt theo chủ đề**
 - Trước hết thầy tóm lại mấy ý chính.
 - Mình nghe phần tóm tắt đã.
 
-**Chỉ vào từng đường chính (đường đó sáng lên trên ảnh hoặc sơ đồ)**
+**Lời dẫn từng mục (mỗi mục có nội dung mới được dẫn)**
+Tổng quan bàn tay:
+- Trước hết thầy nói về hình dáng chung của bàn tay {cuaAi}.
+- Mình nhìn tổng quan bàn tay trước, từ hình dáng đến độ dày.
+Ngón tay:
+- Giờ thầy xem các ngón tay: độ dài và hình dáng từng ngón.
+- Sang phần ngón tay, thầy xem từng ngón một.
+Trước các đường chính:
+- Bây giờ tới các đường chính trên lòng bàn tay.
+- Thầy xem các đường chính nhé, từng đường một.
+Chỉ vào từng đường chính (đường đó sáng lên trên ảnh hoặc sơ đồ):
 - {goi} xem {duong}, thầy tô sáng trên tay đây.
 - Đây là {duong}.
+Đường phụ:
+- Ngoài ra còn mấy đường phụ, thầy nói ngắn thôi.
+- Các đường phụ chỉ là điểm thêm, {goi} nghe để tham khảo.
+Gò và dấu hiệu (gò đang nói sáng lên trên sơ đồ):
+- Giờ thầy xem các gò trên lòng bàn tay và những dấu nhỏ, nếu có.
+- Phần cuối là gò và dấu hiệu. Dấu nhỏ nào cũng chỉ là gợi ý.
 
-**Trước các mục còn lại (tổng quan bàn tay, ngón, đường phụ, gò)**
+**Trước các mục còn lại**
 - Giờ thầy đọc kỹ từng phần.
 - Thầy đọc tiếp từng phần trên tay.
 
 **Câu kết**
-- Tay thầy đọc đến đây. Đường chỉ đổi theo cách mình sống, sáu tháng một năm xem lại cũng được. Số là tham khảo, đức năng thắng số.
-- Thầy đọc xong rồi. Giữ điều hay, sửa điều chưa hợp, tay cũng đổi theo. Số là tham khảo, đức năng thắng số.
-- Đọc đến đây thôi. Tay là của mình, đường đi cũng do mình. Số là tham khảo, đức năng thắng số.
+- Tay thầy đọc đến đây. Đường chỉ đổi theo cách mình sống, sáu tháng đến một năm xem lại cũng được. Số là tham khảo, đức năng thắng số.
+- Thầy đọc xong rồi. Giữ điều hay, sửa điều chưa hợp, tay cũng đổi theo. Sáu tháng đến một năm sau mình xem lại. Số là tham khảo, đức năng thắng số.
+- Đọc đến đây thôi. Tay là của mình, đường chỉ đổi theo cách mình sống, sáu tháng đến một năm sau xem lại cũng hay. Số là tham khảo, đức năng thắng số.
 
 Câu luận đọc nguyên văn từ `palm-content.vi.json`. Câu đánh dấu không đọc (`tts: false`, hiện là HN09, HN10) hoặc dính từ cấm đọc thì chỉ hiện chữ.
 
