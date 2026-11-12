@@ -52,6 +52,14 @@ describe('Màn hình Bát Tự', () => {
 });
 
 describe('Mục Phân tích ngũ hành (3C.4)', () => {
+  it('mô hình cân bằng: chọn điểm cân bằng theo mùa sinh và Nhật Chủ thì hiện tỷ lệ cần của từng hành', () => {
+    setup({ day: 6, month: 2, year: 2021, hourIdx: 6 });
+    expect(screen.queryByText(/Điểm cân bằng theo lá số/)).toBeNull();
+    fireEvent.click(screen.getByRole('radio', { name: /Theo mùa sinh và Nhật Chủ/ }));
+    expect(screen.getByText(/Điểm cân bằng theo lá số: Mộc \d+%, Hoả \d+%, Thổ \d+%, Kim \d+%, Thuỷ \d+%/)).toBeTruthy();
+    expect(screen.getByText(/Các mức dịch này cũng là hệ số tự đặt/)).toBeTruthy();
+  });
+
   it('mô hình cân bằng: mặc định sai phân, đổi sang hệ vi phân thì lời giải thích đổi theo', () => {
     setup({ day: 6, month: 2, year: 2021, hourIdx: 6 });
     expect(screen.getByText(/mỗi bước, mỗi hành nhận thêm/)).toBeTruthy();

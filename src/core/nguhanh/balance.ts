@@ -5,7 +5,8 @@
    Vì vòng đối xứng nên điểm cân bằng là mỗi hành 20%. "Can thiệp tối thiểu": thử thêm một lượng nhỏ DELTA vào từng
    hành một, chạy STEPS bước, hành nào đưa lá số về gần cân bằng nhất thì xếp hạng 1. Mô hình bỏ qua mùa sinh và Nhật Chủ,
    nên không thay Dụng thần; chỉ cho biết Dụng thần có hợp với trực giác "bù chỗ lệch" hay không. */
-import type { Element } from './data';
+import type { Climate, Element } from './data';
+import type { Strength } from './engine';
 
 export const CYCLE_ORDER: readonly Element[] = ['Mộc', 'Hoả', 'Thổ', 'Kim', 'Thuỷ'];
 export const BALANCE = { S: 0.3, K: 0.05, DELTA: 0.1, STEPS: 5, EQUILIBRIUM: 0.2 } as const;
@@ -48,13 +49,40 @@ export interface InterventionRank {
 }
 
 /** Xếp hạng việc "thêm một ít hành e" (e là Dụng thần) theo mô hình cân bằng. */
-export function rankIntervention(shares: Record<Element, number>, e: Element, mode: BalanceMode = 'roi-rac'): InterventionRank {
+/* ===== Điểm cân bằng theo lá số (tuỳ chọn) =====
+   Thay vì 20% đều, điểm cân bằng τ dịch theo mùa sinh (điều hậu) và độ vượng suy của Nhật Chủ (phù ức). Mức dịch là hệ số TỰ ĐẶT:
+   - mùa lạnh (Hợi, Tý, Sửu): Hoả +CLIMATE; mùa nóng (Tỵ, Ngọ, Mùi): Thuỷ +CLIMATE;
+   - Thân nhược: hành Nhật Chủ và hành sinh ra nó +STRENGTH; Thân vượng: hành Nhật Chủ sinh ra và hành Nhật Chủ khắc +STRENGTH;
+   - Cực vượng (chuyên vượng) thuận theo thế mạnh như Thân nhược; Cực nhược (tòng) thuận theo thế yếu như Thân vượng; Trung hoà không dịch.
+   Rồi chuẩn hoá tổng 1. Hệ chạy trên y = x/τ (đã chuẩn hoá): y đều nhau thì x = τ, nên τ là điểm đứng yên. */
+export const TARGET = { CLIMATE: 0.05, STRENGTH: 0.04 } as const;
+export interface TargetInput { dayMaster: Element; strength: Strength; climate: Climate }
+
+const at5 = (e: Element, k: number) => CYCLE_ORDER[(CYCLE_ORDER.indexOf(e) + k + 5) % 5];
+
+/** Điểm cân bằng τ theo mùa sinh và Nhật Chủ (tổng 1). */
+export function balanceTarget(t: TargetInput): Record<Element, number> {
+  const v: Record<Element, number> = { Mộc: 0.2, Hoả: 0.2, Thổ: 0.2, Kim: 0.2, Thuỷ: 0.2 };
+  if (t.climate === 'lanh') v.Hoả += TARGET.CLIMATE;
+  if (t.climate === 'nong') v.Thuỷ += TARGET.CLIMATE;
+  if (t.strength === 'nhuoc' || t.strength === 'chuyen-vuong') { v[t.dayMaster] += TARGET.STRENGTH; v[at5(t.dayMaster, -1)] += TARGET.STRENGTH; }
+  if (t.strength === 'vuong' || t.strength === 'tong-nhuoc') { v[at5(t.dayMaster, 1)] += TARGET.STRENGTH; v[at5(t.dayMaster, 2)] += TARGET.STRENGTH; }
+  const sum = CYCLE_ORDER.reduce((a, e) => a + v[e], 0);
+  for (const e of CYCLE_ORDER) v[e] /= sum;
+  return v;
+}
+
+/** Xếp hạng việc "thêm một ít hành e"; target bỏ trống thì điểm cân bằng là 20% đều. */
+export function rankIntervention(shares: Record<Element, number>, e: Element, mode: BalanceMode = 'roi-rac', target?: Record<Element, number>): InterventionRank {
   const x0 = norm(CYCLE_ORDER.map((el) => shares[el]));
+  const tau = target ? CYCLE_ORDER.map((el) => target[el]) : CYCLE_ORDER.map(() => BALANCE.EQUILIBRIUM);
   const scores = CYCLE_ORDER.map((_, i) => {
-    let x = norm(x0.map((v, j) => v + (i === j ? BALANCE.DELTA : 0)));
-    if (mode === 'vi-phan') x = flowContinuous(x);
-    else for (let t = 0; t < BALANCE.STEPS; t++) x = balanceStep(x);
-    return distanceToEquilibrium(x);
+    const x = norm(x0.map((v, j) => v + (i === j ? BALANCE.DELTA : 0)));
+    let y = norm(x.map((v, j) => v / tau[j]));
+    if (mode === 'vi-phan') y = flowContinuous(y);
+    else for (let t = 0; t < BALANCE.STEPS; t++) y = balanceStep(y);
+    const xe = norm(y.map((v, j) => v * tau[j]));
+    return Math.sqrt(xe.reduce((a, v, j) => a + (v - tau[j]) ** 2, 0));
   });
   const idx = CYCLE_ORDER.indexOf(e);
   const rank = 1 + scores.filter((s, i) => s < scores[idx] - 1e-12 || (Math.abs(s - scores[idx]) <= 1e-12 && i < idx)).length;
