@@ -17,6 +17,7 @@
     "android:release": "npm run cap:sync && node scripts/gradle.mjs bundleRelease app/build/outputs/bundle/release/app-release.aab",
     "prebuild": "node scripts/copy-palm-assets.mjs",
     "compare:dungthan": "tsx scripts/compare-dung-than.ts",
+    "compare:sach": "tsx scripts/compare-sach.ts",
     "doc:nguhanh": "tsx scripts/export-nguhanh-doc.ts"
   },
   "dependencies": {

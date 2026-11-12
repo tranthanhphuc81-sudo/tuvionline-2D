@@ -130,8 +130,8 @@ Engine chỉ trả mã và số; mỗi mã dưới đây đổi thành câu như
 | `resolve.insufficient` | Chưa đủ dữ liệu: cần ít nhất 3 mốc để kết luận (hiện có 0). |
 | `resolve.undecided` | Chưa phân định rõ ("Luận Khúc Trực" khớp 1/4 mốc, trọng số 72%). Có thể do câu hỏi quá chung chung hoặc trí nhớ chưa chắc. Bạn có thể trả lời thêm, hoặc nhờ người luận xem trực tiếp. |
 | `root.none` | Quan Sát (phe chế Nhật Chủ) không có gốc ở địa chi nào |
-| `root.real` | Ấn/Tỷ (phe cứu Nhật Chủ) có gốc: Bính (bản khí) trong chi năm Tỵ = 1; Giáp (trung khí) trong chi tháng Hợi = 1; Giáp (trung khí) trong chi ngày Hợi = 0,75 → tổng 2,75 (> 0,8: có gốc thật) |
-| `root.weak` | Quan Sát (phe chế Nhật Chủ) có gốc: Tân (trung khí) trong chi năm Tuất = 0,5; Tân (dư khí) trong chi giờ Sửu = 0,2 → tổng 0,7 (≤ 0,8: gốc yếu) |
+| `root.real` | Ấn/Tỷ (phe cứu Nhật Chủ) có gốc: Bính (bản khí) trong chi năm Tỵ = 1; Giáp (trung khí) trong chi tháng Hợi = 1; Giáp (trung khí) trong chi ngày Hợi = 0,75 → tổng 2,75 (> 1: có gốc thật) |
+| `root.weak` | Quan Sát (phe chế Nhật Chủ) có gốc: Tân (trung khí) trong chi năm Tuất = 0,5; Tân (dư khí) trong chi giờ Sửu = 0,2 → tổng 0,7 (≤ 1: gốc yếu) |
 | `secondary.dieuHau` | Sinh mùa lạnh (tháng Tý) mà Hoả chỉ chiếm 2% → cục thiên lạnh, cần Hoả sưởi ấm |
 | `secondary.thongQuan` | Mộc (31%) đang khắc mạnh Thổ (26%) → dùng Hoả làm cầu nối (Mộc sinh Hoả, Hoả sinh Thổ) |
 | `trace.clash` | Lục xung Mão–Dậu: giảm lực hai chi (×0,75) |
@@ -166,6 +166,16 @@ Engine chỉ trả mã và số; mỗi mã dưới đây đổi thành câu như
 > Hoả · Quan Sát · Kỵ thần 4%
 >
 > Kết luận này ổn định: đổi sang cách đặt hệ số khác (coi trọng nguyệt lệnh hơn) vẫn cho cùng Dụng thần.
+
+> Mô hình cân bằng 5 hành (tuỳ chọn)
+>
+> Hình minh hoạ, không dùng để chọn Dụng thần. Muốn bổ sung Kim: nuôi Thổ (sinh Kim) và bớt Hoả (khắc Kim).
+>
+> Lưu ý: chỉ vòng sinh khắc là kiến thức cổ truyền. Phương trình và các hệ số là mô hình tự đặt để minh hoạ, không lấy từ sách hay trường phái nào, chưa được kiểm chứng; đừng dùng nó để luận đoán.
+>
+> Mô hình đơn giản: mỗi bước, mỗi hành nhận thêm 30% phần chênh so với hành sinh ra nó và bị hành khắc nó trừ 5%; hệ đứng yên khi cả năm hành đều 20%. "Can thiệp tối thiểu": thử thêm 10% vào từng hành một, cho chạy 5 bước, hành nào đưa lá số về gần mức cân bằng nhất thì xếp hạng 1.
+>
+> Theo mô hình này, Kim xếp thứ 3/5; hành bù chỗ lệch hiệu quả nhất là Thổ. Mô hình bỏ qua mùa sinh và Nhật Chủ nên Dụng thần vẫn lấy theo cách luận ở trên.
 
 > Vì sao ra kết quả này
 >
@@ -264,6 +274,16 @@ Engine chỉ trả mã và số; mỗi mã dưới đây đổi thành câu như
 > Thuỷ · Thực Thương · Dụng thần 5%
 >
 > Kết luận này chưa vững: nếu coi trọng nguyệt lệnh hơn thì Dụng thần là Mộc thay vì Thuỷ. Nên xem như một gợi ý, chưa phải kết quả chắc.
+
+> Mô hình cân bằng 5 hành (tuỳ chọn)
+>
+> Hình minh hoạ, không dùng để chọn Dụng thần. Muốn bổ sung Thuỷ: nuôi Kim (sinh Thuỷ) và bớt Thổ (khắc Thuỷ).
+>
+> Lưu ý: chỉ vòng sinh khắc là kiến thức cổ truyền. Phương trình và các hệ số là mô hình tự đặt để minh hoạ, không lấy từ sách hay trường phái nào, chưa được kiểm chứng; đừng dùng nó để luận đoán.
+>
+> Mô hình đơn giản: mỗi bước, mỗi hành nhận thêm 30% phần chênh so với hành sinh ra nó và bị hành khắc nó trừ 5%; hệ đứng yên khi cả năm hành đều 20%. "Can thiệp tối thiểu": thử thêm 10% vào từng hành một, cho chạy 5 bước, hành nào đưa lá số về gần mức cân bằng nhất thì xếp hạng 1.
+>
+> Theo mô hình này, bổ sung Thuỷ là cách bù chỗ lệch hiệu quả nhất, khớp với Dụng thần ở trên.
 
 > Vì sao ra kết quả này
 >
@@ -367,6 +387,16 @@ Engine chỉ trả mã và số; mỗi mã dưới đây đổi thành câu như
 >
 > Kết luận này ổn định: đổi sang cách đặt hệ số khác (coi trọng nguyệt lệnh hơn) vẫn cho cùng Dụng thần.
 
+> Mô hình cân bằng 5 hành (tuỳ chọn)
+>
+> Hình minh hoạ, không dùng để chọn Dụng thần. Muốn bổ sung Hoả: nuôi Mộc (sinh Hoả) và bớt Thuỷ (khắc Hoả).
+>
+> Lưu ý: chỉ vòng sinh khắc là kiến thức cổ truyền. Phương trình và các hệ số là mô hình tự đặt để minh hoạ, không lấy từ sách hay trường phái nào, chưa được kiểm chứng; đừng dùng nó để luận đoán.
+>
+> Mô hình đơn giản: mỗi bước, mỗi hành nhận thêm 30% phần chênh so với hành sinh ra nó và bị hành khắc nó trừ 5%; hệ đứng yên khi cả năm hành đều 20%. "Can thiệp tối thiểu": thử thêm 10% vào từng hành một, cho chạy 5 bước, hành nào đưa lá số về gần mức cân bằng nhất thì xếp hạng 1.
+>
+> Theo mô hình này, Hoả xếp thứ 3/5; hành bù chỗ lệch hiệu quả nhất là Thổ. Mô hình bỏ qua mùa sinh và Nhật Chủ nên Dụng thần vẫn lấy theo cách luận ở trên.
+
 > Vì sao ra kết quả này
 >
 > Phương pháp: Thuận thế (tòng cách, chuyên vượng)
@@ -395,7 +425,7 @@ Engine chỉ trả mã và số; mỗi mã dưới đây đổi thành câu như
 >
 > ◐ Một phần
 >
-> Quan Sát (phe chế Nhật Chủ) có gốc: Tân (trung khí) trong chi năm Tuất = 0,5; Tân (dư khí) trong chi giờ Sửu = 0,2 → tổng 0,7 (≤ 0,8: gốc yếu)
+> Quan Sát (phe chế Nhật Chủ) có gốc: Tân (trung khí) trong chi năm Tuất = 0,5; Tân (dư khí) trong chi giờ Sửu = 0,2 → tổng 0,7 (≤ 1: gốc yếu)
 >
 > Có Can nào lộ ra giúp hay chế Nhật Chủ không?
 >

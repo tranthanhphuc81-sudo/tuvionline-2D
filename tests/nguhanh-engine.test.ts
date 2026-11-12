@@ -7,7 +7,7 @@ import { describe, expect, it } from 'vitest';
 import { LucHaoEngine, batTuChart, batTuReading } from '../src/core';
 import { BT_HANH_ORDER, CAN_HANH, TANG_CAN, seasonHanh } from '../src/core/battu/engine';
 import {
-  BRANCH_CLASHES, BRANCH_SIX_COMBOS, ELEMENTS, analyze, compareWithLegacy, daiVanYears, evaluatePeriod, hiddenStems, resolveWithFeedback,
+  BRANCH_CLASHES, BRANCH_SIX_COMBOS, DEFAULT_CONFIG, ELEMENTS, REFERENCE_CONFIG, analyze, compareWithLegacy, daiVanYears, evaluatePeriod, hiddenStems, resolveWithFeedback,
   seasonClimate, seasonElement, stemElement, toNguHanhChart, verificationQuestions, pillarOfYear,
   type Element, type FeedbackAnswer, type NguHanhAnalysis, type NguHanhChart,
 } from '../src/core/nguhanh';
@@ -88,7 +88,7 @@ describe('Bản port giữ nguyên thuật toán v0.2 (500 lá số so với doc
   });
   it('điểm, vượng/nhược, tòng cách, Dụng/Hỷ/Kỵ/Cừu, đánh giá năm, câu hỏi và phân xử', () => {
     for (const c of FIXTURE.cases) {
-      const a = analyze(chartOf(c.input));
+      const a = analyze(chartOf(c.input), REFERENCE_CONFIG);
       const at = `${c.input.dd}/${c.input.mm}/${c.input.yy} h${c.input.hourIdx}`;
       expect(a.score.scores, at).toEqual(c.scores);
       expect(a.score.shares, at).toEqual(c.shares);
@@ -273,29 +273,40 @@ describe('Bất biến trên 500 lá số', () => {
 });
 
 /* ----- So sánh với legacy (số trong docs/NGU-HANH-SO-SANH.md) ----- */
+function legacyStats(cfg: typeof REFERENCE_CONFIG) {
+  let seed = 20261111; const rnd = () => (seed = (seed * 1103515245 + 12345) % 2147483648) / 2147483648;
+  const N = 3000; let same = 0, inDung = 0, flip = 0; const flipBy: Record<string, number> = {};
+  let alt = 0, follow = 0;
+  for (let i = 0; i < N; i++) {
+    const yy = 1950 + Math.floor(rnd() * 60), mm = 1 + Math.floor(rnd() * 12), dd = 1 + Math.floor(rnd() * 28), h = Math.floor(rnd() * 12); rnd();
+    const ch = batTuChart({ gender: 'M', dd, mm, yy, hourIdx: h } as never);
+    const leg = batTuReading(ch, 2026);
+    const a = analyze(toNguHanhChart(ch), cfg);
+    const cmp = compareWithLegacy(leg, a.usefulGod, a.dayMaster.strength);
+    if (leg.primary === a.usefulGod.dung) same++;
+    if (leg.dung.includes(a.usefulGod.dung)) inDung++;
+    if (cmp.match === 'nguoc') { flip++; flipBy[cmp.cause] = (flipBy[cmp.cause] ?? 0) + 1; }
+    if (a.readings.length > 1) alt++;
+    if (a.follow) follow++;
+  }
+  const p = (n: number) => (100 * n / N).toFixed(1);
+  return { pct: [p(same), p(inDung), p(flip)], flip, flipBy, alt, follow };
+}
+
 describe('compareWithLegacy trên 3000 lá số (seed 20261111)', () => {
-  it('ra đúng số của bảng so sánh và bảng nguyên nhân ở ARCHITECTURE 14', () => {
-    let seed = 20261111; const rnd = () => (seed = (seed * 1103515245 + 12345) % 2147483648) / 2147483648;
-    const N = 3000; let same = 0, inDung = 0, flip = 0; const flipBy: Record<string, number> = {}; const allBy: Record<string, number> = {};
-    let alt = 0, follow = 0;
-    for (let i = 0; i < N; i++) {
-      const yy = 1950 + Math.floor(rnd() * 60), mm = 1 + Math.floor(rnd() * 12), dd = 1 + Math.floor(rnd() * 28), h = Math.floor(rnd() * 12); rnd();
-      const ch = batTuChart({ gender: 'M', dd, mm, yy, hourIdx: h } as never);
-      const leg = batTuReading(ch, 2026);
-      const a = analyze(toNguHanhChart(ch));
-      const cmp = compareWithLegacy(leg, a.usefulGod, a.dayMaster.strength);
-      if (leg.primary === a.usefulGod.dung) same++;
-      if (leg.dung.includes(a.usefulGod.dung)) inDung++;
-      allBy[cmp.cause] = (allBy[cmp.cause] ?? 0) + 1;
-      if (cmp.match === 'nguoc') { flip++; flipBy[cmp.cause] = (flipBy[cmp.cause] ?? 0) + 1; }
-      if (a.readings.length > 1) alt++;
-      if (a.follow) follow++;
-    }
-    const p = (n: number) => (100 * n / N).toFixed(1);
-    expect([p(same), p(inDung), p(flip)]).toEqual(['36.1', '61.2', '40.5']);
-    expect(flip).toBe(1216);
-    expect(flipBy).toEqual({ 'vuong-nhuoc': 504, 'trung-hoa': 400, 'dieu-hau': 159, 'tong-cach': 100, 'khac-chon': 53 });
-    expect(alt).toBe(132);
-    expect(follow).toBe(688);
+  it('bản v0.2 (REFERENCE_CONFIG) ra đúng số của bảng so sánh và bảng nguyên nhân ở ARCHITECTURE 14', () => {
+    expect(legacyStats(REFERENCE_CONFIG)).toEqual({
+      pct: ['36.1', '61.2', '40.5'], flip: 1216,
+      flipBy: { 'vuong-nhuoc': 504, 'trung-hoa': 400, 'dieu-hau': 159, 'tong-cach': 100, 'khac-chon': 53 },
+      alt: 132, follow: 688,
+    });
+  });
+  it('bản app dùng (DEFAULT_CONFIG, hiệu chỉnh theo sách, ARCHITECTURE 14.12): ghi lại số mới', () => {
+    // So với v0.2: thêm 60 lá có hai cách luận (Tòng thành Giả); đảo chiều với legacy tăng 43 lá (nhóm Tòng cách 100 → 152, nhóm khác giảm nhẹ).
+    expect(legacyStats(DEFAULT_CONFIG)).toEqual({
+      pct: ['35.7', '60.3', '42.0'], flip: 1259,
+      flipBy: { 'vuong-nhuoc': 498, 'trung-hoa': 400, 'dieu-hau': 156, 'tong-cach': 152, 'khac-chon': 53 },
+      alt: 192, follow: 688,
+    });
   });
 });

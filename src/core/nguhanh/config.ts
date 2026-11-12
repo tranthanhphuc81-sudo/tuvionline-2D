@@ -50,6 +50,8 @@ export interface ScoringConfig {
 
   /** Điều hậu: tỷ lệ tối thiểu của hành Hỏa (sinh mùa lạnh) / Thủy (sinh mùa nóng) */
   climateMinShare: number;
+  /** Điều hậu được ưu tiên hơn Phù ức khi hành cần chiếm dưới tỷ lệ này (v0.2: climateMinShare / 2) */
+  climatePriorityShare: number;
   /** Thông quan: mỗi hành trong cặp xung khắc phải chiếm ít nhất tỷ lệ này */
   bridgeMinShare: number;
 
@@ -80,9 +82,13 @@ export interface ScoringConfig {
   };
 }
 
-export const DEFAULT_CONFIG: ScoringConfig = {
+/**
+ * Bộ hệ số gốc của bản tham chiếu docs/ngu-hanh-engine v0.2, giữ nguyên để test chứng minh bản port đúng thuật toán.
+ * App KHÔNG dùng bộ này; app dùng DEFAULT_CONFIG (đã hiệu chỉnh theo sách, ARCHITECTURE 14.12).
+ */
+export const REFERENCE_CONFIG: ScoringConfig = {
   id: "tu-binh-pho-thong",
-  name: "Tử Bình phổ thông (mặc định)",
+  name: "Tử Bình phổ thông (v0.2)",
   stemWeight: 1.0,
   branchWeight: 1.2,
   hiddenRatios: { 1: [1], 2: [0.7, 0.3], 3: [0.6, 0.3, 0.1] },
@@ -102,6 +108,7 @@ export const DEFAULT_CONFIG: ScoringConfig = {
   },
   thresholds: { followWeak: 0.15, weak: 0.4, strong: 0.55, followStrong: 0.85 },
   climateMinShare: 0.12,
+  climatePriorityShare: 0.06,
   bridgeMinShare: 0.3,
   follow: {
     candidateWeak: 0.25,
@@ -117,6 +124,18 @@ export const DEFAULT_CONFIG: ScoringConfig = {
     giaMin: 0.5,
     giaMaxWeight: 0.65,
   },
+};
+
+/**
+ * Bộ hệ số app dùng: v0.2 cộng hiệu chỉnh theo 50 lá số mẫu trong sách (ARCHITECTURE 14.12, docs/NGU-HANH-SACH.md).
+ * Hiệu chỉnh 12/11/2026: weakRootMax 0,8 → 1,0. Một trung khí ở chi tháng (0,5 × 2 = 1,0) hay một trung khí ở chi ngày
+ * cộng một dư khí vẫn là gốc yếu, không chặn Tòng cách (sách nhận Tòng Tài ở tbct-13 dù Thìn có Ất, Tuất có Đinh).
+ * Các thay đổi khác đã thử mà không giữ: xem ARCHITECTURE 14.12.
+ */
+export const DEFAULT_CONFIG: ScoringConfig = {
+  ...REFERENCE_CONFIG,
+  name: "Tử Bình phổ thông (mặc định)",
+  follow: { ...REFERENCE_CONFIG.follow, weakRootMax: 1.0 },
 };
 
 /** Preset ví dụ: coi nguyệt lệnh cực nặng (gần với cách luận "đắc lệnh là chính") */

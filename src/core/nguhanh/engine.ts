@@ -252,7 +252,7 @@ export function balanceGod(chart: NguHanhChart, sr: ScoreResult, dmi: DayMasterI
   const reasons: Msg[] = [];
   const { secondary, climateNeed } = secondaryNotes(chart, sr, cfg);
 
-  if (climateNeed && sr.shares[climateNeed] < cfg.climateMinShare / 2) {
+  if (climateNeed && sr.shares[climateNeed] < cfg.climatePriorityShare) {
     reasons.push(secondary.find((s) => s.method === 'dieu-hau')!.reason);
     reasons.push(msg('reason.dieuHauFirst'));
     // Kỵ là hành gây ra cái nóng/lạnh thái quá, KHÔNG phải "hành khắc dụng thần" một cách máy móc

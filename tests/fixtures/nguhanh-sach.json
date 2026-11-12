@@ -1,0 +1,792 @@
+{
+  "_meta": {
+    "sources": {
+      "tbct": "Tử Bình Chân Thuyên, bản dịch Phương Trọng Thầm (docs/sach/Tu binh chan thuyen.pdf, bản scan 303 trang). Trang là số in ở chân trang, trùng số trang PDF. Đọc bằng mắt từ ảnh trang.",
+      "ttt": "Trích Thiên Tủy, Lưu Bá Ôn soạn, Nhậm Thiết Tiều bình chú, bản sachhoc.com (docs/sach/Trich Thien Tuy.pdf, 202 trang có lớp chữ). Trang là số \"Page\" ở đầu trang; ref là số thứ tự lá số trong sách."
+    },
+    "selected": "12/11/2026. Chỉ lấy lá số mà sách nói rõ dùng gì (dụng Ấn, dụng Bính điều hậu, Tòng Tài cách…). Bỏ qua lá chỉ kể vận tốt xấu, lá mệnh xấu chỉ nêu điều thiếu, lá nêu hai ba hành ngang nhau. Chưa có người thứ hai soát lại.",
+    "dung": "Hành dụng thần theo sách, quy từ Thập Thần ra hành theo Nhật chủ. accept: hành khác sách cũng nói là tốt (vận tốt, hỷ thần), dùng để xếp loại \"gần\", không tính là trùng.",
+    "kind": "Cách sách lấy dụng thần: phu-uc (phù ức, chế hoá theo vượng suy), dieu-hau, tong (tòng, chuyên vượng, thuận thế), hoa-khi (hoá khí cách).",
+    "convention": "Đáp án là cách luận của hai trường phái cổ, không phải sự thật khách quan. Tử Bình Chân Thuyên luận theo cách cục ở tháng sinh; Trích Thiên Tủy luận theo vượng suy, gần với cách engine luận hơn. Lệch không có nghĩa engine sai (ARCHITECTURE 14.1).",
+    "pillars": "Năm · Tháng · Ngày · Giờ, đúng như sách in (trừ chỗ có trường fix). Sách không cho ngày sinh dương lịch nên engine nhận thẳng tứ trụ, không đi qua lịch."
+  },
+  "cases": [
+    {
+      "id": "tbct-1",
+      "book": "tbct",
+      "page": "152, 154",
+      "who": "Thư Thượng thư",
+      "pillars": [
+        "Đinh Hợi",
+        "Nhâm Tý",
+        "Tân Tỵ",
+        "Đinh Dậu"
+      ],
+      "dung": "Hoả",
+      "kind": "dieu-hau",
+      "note": "Kim thuỷ Thực thần dụng Sát; dụng thần là Quan tinh, để điều hậu"
+    },
+    {
+      "id": "tbct-2",
+      "book": "tbct",
+      "page": "152, 154",
+      "who": "Tiền Tham chính",
+      "pillars": [
+        "Bính Ngọ",
+        "Quý Tỵ",
+        "Giáp Tý",
+        "Bính Dần"
+      ],
+      "dung": "Thuỷ",
+      "kind": "dieu-hau",
+      "note": "Mộc hoả Thương quan dụng Ấn, cũng là ý điều hậu"
+    },
+    {
+      "id": "tbct-3",
+      "book": "tbct",
+      "page": "151–152",
+      "who": "Thường Quốc Công",
+      "pillars": [
+        "Tân Mão",
+        "Tân Mão",
+        "Quý Dậu",
+        "Kỷ Mùi"
+      ],
+      "dung": "Kim",
+      "kind": "phu-uc",
+      "note": "Thực bị Kiêu đoạt, dùng Ấn hoá Sát"
+    },
+    {
+      "id": "tbct-4",
+      "book": "tbct",
+      "page": "151–152",
+      "who": "Hồ Hội Nguyên",
+      "pillars": [
+        "Mậu Tuất",
+        "Nhâm Tuất",
+        "Bính Tý",
+        "Mậu Tuất"
+      ],
+      "dung": "Mộc",
+      "kind": "phu-uc",
+      "note": "Mậu thổ quá nặng chế Sát, cần nhất là Ấn"
+    },
+    {
+      "id": "tbct-5",
+      "book": "tbct",
+      "page": "153",
+      "who": null,
+      "pillars": [
+        "Kỷ Hợi",
+        "Bính Dần",
+        "Giáp Dần",
+        "Nhâm Thân"
+      ],
+      "dung": "Hoả",
+      "kind": "phu-uc",
+      "note": "Bính hoả Thực thần thấu là hỷ, Nhâm Ấn đoạt Thực là bệnh"
+    },
+    {
+      "id": "tbct-6",
+      "book": "tbct",
+      "page": "200",
+      "who": null,
+      "pillars": [
+        "Ất Dậu",
+        "Ất Dậu",
+        "Ất Dậu",
+        "Giáp Thân"
+      ],
+      "dung": "Kim",
+      "accept": [
+        "Thổ",
+        "Thuỷ"
+      ],
+      "kind": "tong",
+      "note": "Tòng Sát cách: vận Kim tốt nhất, thổ thuỷ cũng cát, hoả là nghịch"
+    },
+    {
+      "id": "tbct-7",
+      "book": "tbct",
+      "page": "205",
+      "who": null,
+      "pillars": [
+        "Giáp Thìn",
+        "Đinh Mão",
+        "Giáp Tý",
+        "Mậu Thìn"
+      ],
+      "dung": "Hoả",
+      "kind": "phu-uc",
+      "note": "Dương Nhận tháng hai, dụng Đinh tiết tú"
+    },
+    {
+      "id": "tbct-8",
+      "book": "tbct",
+      "page": "205",
+      "who": null,
+      "pillars": [
+        "Quý Mão",
+        "Ất Mão",
+        "Giáp Dần",
+        "Đinh Mão"
+      ],
+      "dung": "Mộc",
+      "accept": [
+        "Thuỷ"
+      ],
+      "kind": "tong",
+      "note": "Đinh vô căn bị Quý hại, luận Chuyên Vượng, vận Đông Bắc thuận"
+    },
+    {
+      "id": "tbct-9",
+      "book": "tbct",
+      "page": "210",
+      "who": "Thị lang",
+      "pillars": [
+        "Đinh Dậu",
+        "Kỷ Dậu",
+        "Giáp Thìn",
+        "Ất Hợi"
+      ],
+      "dung": "Hoả",
+      "kind": "phu-uc",
+      "note": "Thất Sát nắm lệnh, Đinh thấu thì dụng Đinh chế Sát"
+    },
+    {
+      "id": "tbct-10",
+      "book": "tbct",
+      "page": "218",
+      "who": "Thượng thư",
+      "pillars": [
+        "Canh Thân",
+        "Nhâm Ngọ",
+        "Ất Mão",
+        "Tân Tỵ"
+      ],
+      "dung": "Thuỷ",
+      "kind": "dieu-hau",
+      "note": "Điều hậu dụng Nhâm, thông căn ở Thân"
+    },
+    {
+      "id": "tbct-11",
+      "book": "tbct",
+      "page": "222",
+      "who": null,
+      "pillars": [
+        "Mậu Thìn",
+        "Quý Hợi",
+        "Ất Tỵ",
+        "Bính Tý"
+      ],
+      "dung": "Hoả",
+      "kind": "dieu-hau",
+      "note": "Điều hậu dụng Bính"
+    },
+    {
+      "id": "tbct-12",
+      "book": "tbct",
+      "page": "230",
+      "who": null,
+      "pillars": [
+        "Giáp Dần",
+        "Nhâm Thân",
+        "Bính Tý",
+        "Quý Tỵ"
+      ],
+      "dung": "Mộc",
+      "kind": "phu-uc",
+      "note": "Quan Sát hỗn tạp, được Giáp mộc hoá"
+    },
+    {
+      "id": "tbct-13",
+      "book": "tbct",
+      "page": "230",
+      "who": null,
+      "pillars": [
+        "Mậu Thân",
+        "Canh Thân",
+        "Bính Thìn",
+        "Mậu Tuất"
+      ],
+      "dung": "Kim",
+      "kind": "tong",
+      "note": "Tòng Tài cách"
+    },
+    {
+      "id": "tbct-14",
+      "book": "tbct",
+      "page": "235",
+      "who": "Lâm Sâm",
+      "pillars": [
+        "Mậu Thìn",
+        "Giáp Dần",
+        "Đinh Mão",
+        "Kỷ Dậu"
+      ],
+      "dung": "Kim",
+      "kind": "phu-uc",
+      "note": "Mộc hoả bế tắc, lấy Dậu kim ở chi giờ làm dụng",
+      "fix": "Sách in giờ Ất Dậu; ngày Đinh thì giờ Dậu phải là Kỷ Dậu (Ngũ Thử Độn), coi là lỗi in"
+    },
+    {
+      "id": "tbct-15",
+      "book": "tbct",
+      "page": "235",
+      "who": null,
+      "pillars": [
+        "Tân Mão",
+        "Canh Dần",
+        "Đinh Dậu",
+        "Quý Mão"
+      ],
+      "dung": "Mộc",
+      "kind": "phu-uc",
+      "note": "Không có Giáp thì dụng Mão (Khô thảo dẫn Đinh)"
+    },
+    {
+      "id": "tbct-16",
+      "book": "tbct",
+      "page": "240",
+      "who": "Hồ Lâm Dực",
+      "pillars": [
+        "Nhâm Thân",
+        "Đinh Mùi",
+        "Đinh Mùi",
+        "Kỷ Dậu"
+      ],
+      "dung": "Kim",
+      "accept": [
+        "Thuỷ"
+      ],
+      "kind": "phu-uc",
+      "note": "Kỷ thổ dày nặng, hỷ có kim hoá; vận kim thuỷ đẹp"
+    },
+    {
+      "id": "tbct-17",
+      "book": "tbct",
+      "page": "250",
+      "who": null,
+      "pillars": [
+        "Mậu Ngọ",
+        "Kỷ Mùi",
+        "Mậu Thân",
+        "Kỷ Mùi"
+      ],
+      "dung": "Kim",
+      "kind": "phu-uc",
+      "note": "Thổ dày, nhờ chi ngày Thân kim làm dụng"
+    },
+    {
+      "id": "tbct-18",
+      "book": "tbct",
+      "page": "258",
+      "who": null,
+      "pillars": [
+        "Tân Mùi",
+        "Quý Tỵ",
+        "Kỷ Mùi",
+        "Kỷ Tỵ"
+      ],
+      "dung": "Thuỷ",
+      "kind": "dieu-hau",
+      "note": "Hoả viêm thổ táo, hỷ Quý thuỷ nhuận trạch"
+    },
+    {
+      "id": "tbct-19",
+      "book": "tbct",
+      "page": "262",
+      "who": null,
+      "pillars": [
+        "Ất Dậu",
+        "Bính Tuất",
+        "Kỷ Mão",
+        "Giáp Tuất"
+      ],
+      "dung": "Thổ",
+      "accept": [
+        "Hoả"
+      ],
+      "kind": "hoa-khi",
+      "note": "Giáp Kỷ hoá thổ cách, vận hoả thổ quý"
+    },
+    {
+      "id": "tbct-20",
+      "book": "tbct",
+      "page": "262",
+      "who": "Ngự Sử",
+      "pillars": [
+        "Ất Mùi",
+        "Bính Tuất",
+        "Kỷ Sửu",
+        "Mậu Thìn"
+      ],
+      "dung": "Thổ",
+      "accept": [
+        "Hoả"
+      ],
+      "kind": "tong",
+      "note": "Giá Sắc cách, hoả vận phát quý, mộc vận phá cách"
+    },
+    {
+      "id": "tbct-21",
+      "book": "tbct",
+      "page": "270",
+      "who": "Vương Sĩ Trân",
+      "pillars": [
+        "Tân Dậu",
+        "Bính Thân",
+        "Canh Tý",
+        "Bính Tuất"
+      ],
+      "dung": "Hoả",
+      "kind": "phu-uc",
+      "note": "Thân cường dụng Bính, Bính hoả thấu hai vị"
+    },
+    {
+      "id": "tbct-22",
+      "book": "tbct",
+      "page": "270",
+      "who": null,
+      "pillars": [
+        "Mậu Thân",
+        "Canh Thân",
+        "Canh Thân",
+        "Canh Thìn"
+      ],
+      "dung": "Thuỷ",
+      "accept": [
+        "Kim"
+      ],
+      "kind": "tong",
+      "note": "Không có hoả, vượng cực cần tiết, vận Tây Bắc"
+    },
+    {
+      "id": "tbct-23",
+      "book": "tbct",
+      "page": "280",
+      "who": null,
+      "pillars": [
+        "Nhâm Thìn",
+        "Kỷ Dậu",
+        "Tân Sửu",
+        "Quý Tỵ"
+      ],
+      "dung": "Thuỷ",
+      "kind": "phu-uc",
+      "note": "Vượng cực cần tiết, thủ Nhâm thuỷ làm dụng"
+    },
+    {
+      "id": "tbct-24",
+      "book": "tbct",
+      "page": "290",
+      "who": null,
+      "pillars": [
+        "Bính Tý",
+        "Đinh Dậu",
+        "Nhâm Thân",
+        "Giáp Thìn"
+      ],
+      "dung": "Thuỷ",
+      "accept": [
+        "Kim",
+        "Mộc"
+      ],
+      "kind": "tong",
+      "note": "Thân Tý Thìn đủ thuỷ cục, nhận Chuyên Vượng; vận thuỷ mộc đều tốt"
+    },
+    {
+      "id": "tbct-25",
+      "book": "tbct",
+      "page": "296",
+      "who": "Bá tước",
+      "pillars": [
+        "Giáp Thìn",
+        "Kỷ Tỵ",
+        "Quý Dậu",
+        "Tân Dậu"
+      ],
+      "dung": "Kim",
+      "kind": "phu-uc",
+      "note": "Sát cường có Giáp hợp, thân nhược có Tân phát nguyên"
+    },
+    {
+      "id": "tbct-26",
+      "book": "tbct",
+      "page": "296",
+      "who": "Tham Chính",
+      "pillars": [
+        "Giáp Ngọ",
+        "Kỷ Tỵ",
+        "Quý Mùi",
+        "Mậu Ngọ"
+      ],
+      "dung": "Hoả",
+      "kind": "hoa-khi",
+      "note": "Quý nhược vô căn, hợp thành Quý hoá hoả, cách khá chân"
+    },
+    {
+      "id": "ttt-11",
+      "book": "ttt",
+      "ref": "11",
+      "page": "24–25",
+      "pillars": [
+        "Giáp Dần",
+        "Nhâm Thân",
+        "Quý Tỵ",
+        "Quý Hợi"
+      ],
+      "dung": "Hoả",
+      "kind": "phu-uc",
+      "note": "Thuỷ nhiều mà vượng, mộc bị xung không dùng được, dụng thần tại Tỵ hoả"
+    },
+    {
+      "id": "ttt-12",
+      "book": "ttt",
+      "ref": "12",
+      "page": "25",
+      "pillars": [
+        "Quý Tỵ",
+        "Quý Hợi",
+        "Giáp Dần",
+        "Nhâm Thân"
+      ],
+      "dung": "Hoả",
+      "kind": "dieu-hau",
+      "note": "Giáp mộc sinh mùa đông, hàn tất lấy hoả làm dụng thần"
+    },
+    {
+      "id": "ttt-13",
+      "book": "ttt",
+      "ref": "13",
+      "page": "25",
+      "pillars": [
+        "Tân Mão",
+        "Đinh Dậu",
+        "Mậu Tý",
+        "Mậu Ngọ"
+      ],
+      "dung": "Mộc",
+      "accept": [
+        "Hoả"
+      ],
+      "kind": "phu-uc",
+      "note": "Thương quan dụng ấn cách, lấy quan tinh làm dụng; hỷ dụng tại mộc hoả"
+    },
+    {
+      "id": "ttt-14",
+      "book": "ttt",
+      "ref": "14",
+      "page": "25",
+      "pillars": [
+        "Tân Mùi",
+        "Tân Sửu",
+        "Mậu Thìn",
+        "Nhâm Tuất"
+      ],
+      "dung": "Kim",
+      "kind": "phu-uc",
+      "note": "Vận mộc hoả làm dụng thần Tân kim thụ thương"
+    },
+    {
+      "id": "ttt-17",
+      "book": "ttt",
+      "ref": "17",
+      "page": "27",
+      "pillars": [
+        "Tân Mùi",
+        "Ất Mùi",
+        "Canh Thìn",
+        "Đinh Hợi"
+      ],
+      "dung": "Hoả",
+      "kind": "phu-uc",
+      "note": "Đinh hoả tư lệnh phát lộ làm dụng thần, chế Tân kim tỷ kiếp"
+    },
+    {
+      "id": "ttt-20",
+      "book": "ttt",
+      "ref": "20",
+      "page": "29",
+      "pillars": [
+        "Đinh Tỵ",
+        "Quý Sửu",
+        "Đinh Mão",
+        "Bính Ngọ"
+      ],
+      "dung": "Kim",
+      "kind": "phu-uc",
+      "note": "Quý thuỷ thoái khí không chế được kiếp, lấy Tân kim tàng trong Sửu làm dụng thần"
+    },
+    {
+      "id": "ttt-26",
+      "book": "ttt",
+      "ref": "26",
+      "page": "33",
+      "pillars": [
+        "Kỷ Hợi",
+        "Đinh Mão",
+        "Canh Thân",
+        "Canh Thìn"
+      ],
+      "dung": "Hoả",
+      "kind": "phu-uc",
+      "note": "Canh kim lộc vượng ở Thân, có Kỷ ấn, dụng Đinh làm dụng thần"
+    },
+    {
+      "id": "ttt-28",
+      "book": "ttt",
+      "ref": "28",
+      "page": "33",
+      "pillars": [
+        "Canh Thân",
+        "Nhâm Ngọ",
+        "Tân Dậu",
+        "Quý Tỵ"
+      ],
+      "dung": "Hoả",
+      "kind": "phu-uc",
+      "note": "Kim thuỷ tương sinh, Ngọ hoả làm dụng đắc thế"
+    },
+    {
+      "id": "ttt-38",
+      "book": "ttt",
+      "ref": "38",
+      "page": "37",
+      "pillars": [
+        "Bính Tý",
+        "Kỷ Hợi",
+        "Ất Dậu",
+        "Nhâm Ngọ"
+      ],
+      "dung": "Hoả",
+      "kind": "dieu-hau",
+      "note": "Ất mộc lạnh cần sưởi ấm, Bính hoả làm dụng thần, Nhâm thuỷ là khắc thần"
+    },
+    {
+      "id": "ttt-40",
+      "book": "ttt",
+      "ref": "40",
+      "page": "38",
+      "pillars": [
+        "Giáp Dần",
+        "Mậu Thìn",
+        "Bính Dần",
+        "Bính Thân"
+      ],
+      "dung": "Kim",
+      "kind": "phu-uc",
+      "note": "Nhật chủ quá vượng, Thân xung Dần, tài tinh làm dụng thần"
+    },
+    {
+      "id": "ttt-41",
+      "book": "ttt",
+      "ref": "41",
+      "page": "38",
+      "pillars": [
+        "Nhâm Thân",
+        "Giáp Thìn",
+        "Bính Dần",
+        "Bính Thân"
+      ],
+      "dung": "Mộc",
+      "kind": "phu-uc",
+      "note": "Nhâm thuỷ sinh Giáp mộc, Giáp là dụng thần"
+    },
+    {
+      "id": "ttt-42",
+      "book": "ttt",
+      "ref": "42",
+      "page": "38",
+      "pillars": [
+        "Kỷ Tỵ",
+        "Tân Mùi",
+        "Nhâm Ngọ",
+        "Ất Tỵ"
+      ],
+      "dung": "Hoả",
+      "kind": "tong",
+      "note": "Không lấy Tân kim làm dụng; Nhâm hợp Đinh trong Ngọ, tòng hoả"
+    },
+    {
+      "id": "ttt-46",
+      "book": "ttt",
+      "ref": "46",
+      "page": "40",
+      "pillars": [
+        "Kỷ Tỵ",
+        "Quý Dậu",
+        "Bính Dần",
+        "Canh Dần"
+      ],
+      "dung": "Thuỷ",
+      "kind": "phu-uc",
+      "note": "Bính toạ hai Dần trường sinh, có lộc ở năm, lấy quan làm dụng"
+    },
+    {
+      "id": "ttt-61",
+      "book": "ttt",
+      "ref": "61",
+      "page": "44",
+      "pillars": [
+        "Nhâm Tuất",
+        "Nhâm Tý",
+        "Giáp Tý",
+        "Mậu Thìn"
+      ],
+      "dung": "Thổ",
+      "kind": "phu-uc",
+      "note": "Thuỷ thế cường bạo, chỉ Mậu thổ tài tinh làm dụng được"
+    },
+    {
+      "id": "ttt-65",
+      "book": "ttt",
+      "ref": "65",
+      "page": "46",
+      "pillars": [
+        "Kỷ Mùi",
+        "Đinh Sửu",
+        "Mậu Tý",
+        "Kỷ Mùi"
+      ],
+      "dung": "Kim",
+      "kind": "phu-uc",
+      "note": "Thổ vượng, nhật chủ thổ thì dụng kim đẹp nhất, tú khí lưu hành"
+    },
+    {
+      "id": "ttt-66",
+      "book": "ttt",
+      "ref": "66",
+      "page": "46",
+      "pillars": [
+        "Bính Dần",
+        "Giáp Ngọ",
+        "Bính Tuất",
+        "Ất Mùi"
+      ],
+      "dung": "Thổ",
+      "kind": "tong",
+      "note": "Chi hội hoả cục, hoả cực vượng, dụng thổ đẹp nhất"
+    },
+    {
+      "id": "ttt-71",
+      "book": "ttt",
+      "ref": "71",
+      "page": "49",
+      "pillars": [
+        "Đinh Sửu",
+        "Canh Tuất",
+        "Canh Tý",
+        "Giáp Thân"
+      ],
+      "dung": "Hoả",
+      "kind": "phu-uc",
+      "note": "Kim cần hoả luyện; Đinh có gốc ở Tuất làm dụng thần"
+    },
+    {
+      "id": "ttt-74",
+      "book": "ttt",
+      "ref": "74",
+      "page": "50",
+      "pillars": [
+        "Nhâm Tý",
+        "Quý Sửu",
+        "Bính Ngọ",
+        "Nhâm Thìn"
+      ],
+      "dung": "Mộc",
+      "kind": "phu-uc",
+      "note": "Cần dụng mộc ấn tinh hoá sát sinh nhật chủ"
+    },
+    {
+      "id": "ttt-83",
+      "book": "ttt",
+      "ref": "83",
+      "page": "54",
+      "pillars": [
+        "Tân Mùi",
+        "Tân Mão",
+        "Ất Mùi",
+        "Đinh Hợi"
+      ],
+      "dung": "Hoả",
+      "kind": "phu-uc",
+      "note": "Tam hợp mộc cục, kim hư, Đinh hoả thấu chế sát làm dụng thần"
+    },
+    {
+      "id": "ttt-89",
+      "book": "ttt",
+      "ref": "89",
+      "page": "56",
+      "pillars": [
+        "Tân Mão",
+        "Bính Thân",
+        "Quý Mão",
+        "Nhâm Tuất"
+      ],
+      "dung": "Kim",
+      "kind": "phu-uc",
+      "note": "Ấn thụ cách, lấy Thân kim làm dụng thần"
+    },
+    {
+      "id": "ttt-103",
+      "book": "ttt",
+      "ref": "103",
+      "page": "67",
+      "pillars": [
+        "Ất Sửu",
+        "Giáp Thân",
+        "Giáp Thân",
+        "Tân Mùi"
+      ],
+      "dung": "Kim",
+      "kind": "tong",
+      "note": "Mộc không căn, Tân kim thấu, mộc thái suy nên dụng kim"
+    },
+    {
+      "id": "ttt-105",
+      "book": "ttt",
+      "ref": "105",
+      "page": "68",
+      "pillars": [
+        "Ất Sửu",
+        "Nhâm Ngọ",
+        "Bính Tuất",
+        "Giáp Ngọ"
+      ],
+      "dung": "Thổ",
+      "kind": "phu-uc",
+      "note": "Hoả thái vượng, dụng thổ"
+    },
+    {
+      "id": "ttt-109",
+      "book": "ttt",
+      "ref": "109",
+      "page": "69",
+      "pillars": [
+        "Mậu Thìn",
+        "Mậu Ngọ",
+        "Mậu Thân",
+        "Kỷ Mùi"
+      ],
+      "dung": "Kim",
+      "kind": "tong",
+      "note": "Thổ trọng sinh mùa hạ, thổ thái vượng, dụng thần tại kim"
+    },
+    {
+      "id": "ttt-116",
+      "book": "ttt",
+      "ref": "116",
+      "page": "70",
+      "pillars": [
+        "Kỷ Hợi",
+        "Đinh Mão",
+        "Canh Dần",
+        "Bính Tý"
+      ],
+      "dung": "Mộc",
+      "kind": "phu-uc",
+      "note": "Dụng thần mộc; vận mộc (tài) tốt, vận thuỷ trung bình, vận hoả kém"
+    }
+  ]
+}
