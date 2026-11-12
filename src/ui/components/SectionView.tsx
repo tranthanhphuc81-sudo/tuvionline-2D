@@ -21,8 +21,8 @@ function CycleView({ b }: { b: Extract<Block, { kind: 'cycle' }> }) {
         })}
         {b.nodes.map((n, i) => (
           <g key={n.label} className={s.cycleNode} data-focus={!!n.focus}>
-            <circle cx={pos[i].x} cy={pos[i].y} r={11 + Math.min(n.pct, 40) / 8} />
-            <text x={pos[i].x} y={pos[i].y + 3} textAnchor="middle">{n.label}</text>
+            <circle cx={pos[i].x} cy={pos[i].y} r={13 + Math.min(n.pct, 40) / 8} fill={n.fill} />
+            <text x={pos[i].x} y={pos[i].y + 3.5} textAnchor="middle" fill={n.ink}>{n.label}</text>
           </g>
         ))}
       </svg>

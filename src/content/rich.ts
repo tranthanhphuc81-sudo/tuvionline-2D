@@ -86,7 +86,7 @@ export interface TableBlock extends BlockBase { kind: 'table'; head: string[]; r
 /** Vòng 5 hành minh hoạ: cạnh sinh (+) và khắc (−) giữa 5 nút; chỉ để giải thích, không chọn Dụng thần (ARCHITECTURE 14.11) */
 export interface CycleBlock extends BlockBase {
   kind: 'cycle';
-  nodes: { label: string; pct: number; role?: string; focus?: boolean }[];
+  nodes: { label: string; pct: number; role?: string; focus?: boolean; fill: string; ink: string }[];
   edges: { from: number; to: number; kind: 'sinh' | 'khac'; active: boolean }[];
   caption: RichNode[];
 }

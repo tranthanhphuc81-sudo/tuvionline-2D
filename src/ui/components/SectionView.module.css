@@ -67,8 +67,7 @@
 .cycleEdge { stroke: currentColor; stroke-width: 1; opacity: 0.45; fill: none; }
 .cycleEdge[data-kind='khac'] { stroke-dasharray: 3 3; }
 .cycleEdge[data-active='true'] { stroke: var(--gold); opacity: 1; stroke-width: 2; color: var(--gold); }
-.cycleNode circle { fill: var(--surface3); stroke: var(--line-strong); }
-.cycleNode[data-focus='true'] circle { fill: var(--gold); stroke: var(--gold); }
-.cycleNode text { font-size: 9px; fill: var(--text); }
-.cycleNode[data-focus='true'] text { fill: var(--bg); font-weight: 700; }
+.cycleNode circle { stroke: var(--line-strong); stroke-width: 1; }
+.cycleNode[data-focus='true'] circle { stroke: var(--gold); stroke-width: 3; }
+.cycleNode text { font-size: 10px; font-weight: 600; }
 .cycleKey { display: block; }

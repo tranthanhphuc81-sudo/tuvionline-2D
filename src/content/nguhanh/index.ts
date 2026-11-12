@@ -98,6 +98,14 @@ export function sensitivityNote(chart: Parameters<typeof analyzeSensitivity>[0],
 }
 
 const CYCLE: Element[] = ['Mộc', 'Hoả', 'Thổ', 'Kim', 'Thuỷ'];
+/** Màu tượng trưng của từng hành (cố định, không đổi theo giao diện sáng/tối) và màu chữ đủ tương phản trên nền đó. */
+const CYCLE_COLOR: Record<Element, { fill: string; ink: string }> = {
+  Mộc: { fill: '#27794a', ink: '#ffffff' },
+  Hoả: { fill: '#c9402f', ink: '#ffffff' },
+  Thổ: { fill: '#d2a64a', ink: '#2b2110' },
+  Kim: { fill: '#e4e4e0', ink: '#22252b' },
+  Thuỷ: { fill: '#2f5f9e', ink: '#ffffff' },
+};
 
 /** Hình 5 nút minh hoạ vì sao cần thêm Dụng thần (ARCHITECTURE 14.11): chỉ vẽ lại quan hệ sinh khắc quanh Dụng thần, không tham gia chọn Dụng thần. */
 export function cycleBlock(shares: Record<Element, number>, dung: Element, tags: Record<string, string>): Block {
@@ -110,7 +118,7 @@ export function cycleBlock(shares: Record<Element, number>, dung: Element, tags:
   const caption = `Hình minh hoạ, không dùng để chọn Dụng thần. Muốn bổ sung <b>${dung}</b>: nuôi <b>${mother}</b> (sinh ${dung}) và bớt <b>${foe}</b> (khắc ${dung}).`;
   return {
     id: 'nguhanh.headline.cycle', kind: 'cycle', tags: NO_SPEECH,
-    nodes: CYCLE.map((e) => ({ label: e, pct: Math.round(shares[e] * 100), role: tags[e], focus: e === dung })),
+    nodes: CYCLE.map((e) => ({ label: e, pct: Math.round(shares[e] * 100), role: tags[e], focus: e === dung, ...CYCLE_COLOR[e] })),
     edges, caption: parseRich(caption),
   };
 }
