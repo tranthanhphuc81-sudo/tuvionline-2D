@@ -1,11 +1,11 @@
-/* 4 thẻ trụ Bát Tự (2×2 ở màn hẹp, 4 cột khi rộng). `focus` dành cho Phase 6 (thầy đọc tô sáng một trụ). */
+/* 4 thẻ trụ Bát Tự (2×2 ở màn hẹp, 4 cột khi rộng). `focus` dành cho Phase 6 (thầy đọc tô sáng một trụ; `hidden` tô các tàng can của trụ đó, dùng ở 3C.6). */
 import { BatTuEngine, tangCanOf, type BatTuChart } from '../../core';
 import s from './battu.module.css';
 
 const { CAN, CHI, HANH5, CAN_HANH, thapThan } = BatTuEngine;
 export const hanhAmDuong = (canIdx: number) => HANH5[CAN_HANH[canIdx]] + ' ' + (canIdx % 2 === 0 ? 'Dương' : 'Âm');
 
-export function Pillars({ ch, focus }: { ch: BatTuChart; focus?: { pillar?: number } }) {
+export function Pillars({ ch, focus }: { ch: BatTuChart; focus?: { pillar?: number; hidden?: number[] } }) {
   return (
     <div className={s.pillars}>
       {ch.pillars.map((pl, i) => {
@@ -20,7 +20,7 @@ export function Pillars({ ch, focus }: { ch: BatTuChart; focus?: { pillar?: numb
             <span className={s.loTag} data-nhatchu={!!pl.isNhatChu}>{tag}</span>
             <div className={s.tangTitle}>Tàng can trong {CHI[pl.chi]}</div>
             {tang.map((t) => (
-              <div key={t.can} className={s.tangRow} data-dominant={t.level === 'Bản khí'}>
+              <div key={t.can} className={s.tangRow} data-dominant={t.level === 'Bản khí'} data-focus={(focus?.pillar === i && focus.hidden?.includes(t.can)) || undefined}>
                 <span>{CAN[t.can]} <small>({t.level})</small></span><span className={s.tt}>{t.thapThan}</span>
               </div>
             ))}

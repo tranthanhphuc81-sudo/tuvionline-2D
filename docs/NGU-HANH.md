@@ -151,7 +151,7 @@ Engine chỉ trả mã và số; mỗi mã dưới đây đổi thành câu như
 >
 > Phân tích định lượng chọn Kim làm Dụng thần chính, gợi ý sơ bộ ở trên chọn Thổ. Hai cách cùng một hướng: Kim vẫn nằm trong nhóm hành có lợi của gợi ý sơ bộ. Hai cách cùng thấy Thân nhược nhưng chọn hành khác: gợi ý sơ bộ lấy hành ít chữ nhất, phân tích định lượng lấy hành chữa đúng nguyên nhân mất cân bằng.
 
-> Phân tích ngũ hành
+> Tóm lại
 >
 > Nhật Chủ Kim — Thân nhược. Hành cần bổ sung: Kim (hỗ trợ: Thổ); hành nên tiết chế: Hoả.
 >
@@ -247,7 +247,7 @@ Engine chỉ trả mã và số; mỗi mã dưới đây đổi thành câu như
 >
 > Ở lá số này, hai cách tính cho kết quả gần như ngược nhau: gợi ý sơ bộ nghiêng về Thổ, Kim, phân tích định lượng nghiêng về Thuỷ. Khi tính đủ 8 chữ, Nhật Chủ gần cân bằng (trung hoà), nên phân tích định lượng chỉ bù hành yếu nhất thay vì bồi thêm hay tiết bớt Nhật Chủ. Sách Phần 2 (mục 6.3 và Chương 7) coi cách sơ bộ là bước nền tảng, còn lá số thực tế cần xét thêm những yếu tố này. Bạn có thể đọc cả hai như hai góc nhìn. Nếu định dựa vào đây để quyết định việc gì, nên nhờ người luận xem trực tiếp.
 
-> Phân tích ngũ hành
+> Tóm lại
 >
 > Nhật Chủ Kim — Trung hoà. Hành cần bổ sung: Thuỷ (hỗ trợ: Kim); hành nên tiết chế: Thổ.
 >
@@ -347,7 +347,7 @@ Engine chỉ trả mã và số; mỗi mã dưới đây đổi thành câu như
 >
 > Ở lá số này, hai cách tính cho kết quả gần như ngược nhau: gợi ý sơ bộ nghiêng về Hoả, Thổ, Kim, phân tích định lượng nghiêng về Hoả. Lá số có dấu hiệu cách cục đặc biệt (Khúc Trực); khi đó nguyên tắc Vượng Suy thông thường không còn áp dụng (Phần 2, Chương 7). Sách Phần 2 (mục 6.3 và Chương 7) coi cách sơ bộ là bước nền tảng, còn lá số thực tế cần xét thêm những yếu tố này. Bạn có thể đọc cả hai như hai góc nhìn. Nếu định dựa vào đây để quyết định việc gì, nên nhờ người luận xem trực tiếp.
 
-> Phân tích ngũ hành
+> Tóm lại
 >
 > Nhật Chủ Mộc — Thân vượng. Hành cần bổ sung: Hoả (hỗ trợ: Mộc); hành nên tiết chế: Kim.
 >
