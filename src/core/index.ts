@@ -11,6 +11,8 @@ import { NapAmEngine } from './napam/engine';
 import { napAmForBirth, type NapAmBirth } from './napam/reading';
 import { batTrachReading } from './battrach/reading';
 import { tongHopReading, type TongHopReading } from './tonghop/reading';
+import { cachCucOfBirth } from './cachcuc';
+export { cachCucOfBirth };
 import { resolveBirth, type BirthCalcInput, type BirthError, type BirthProfile, type ResolvedBirth, type SolarDate } from './birth';
 import type { Gender, HourIdx } from './types';
 import type { Hanh } from './canchi/hanh';
@@ -52,6 +54,10 @@ export type {
 export type { BatTuChart, BatTuInput, Pillar, ThapThan, TangCanRole } from './battu/types';
 /** Engine phân tích ngũ hành (Phase 3C): dùng NguHanh.analyze(NguHanh.toNguHanhChart(chart)); tên trong namespace tránh trùng Pillar, Element... của phần khác. */
 export * as NguHanh from './nguhanh';
+export { cachCucOfBirth as cachCucOfChart, cachCucOf, tuLenhCan, TU_LENH, dieuHauNeed, godHanh } from './cachcuc';
+export type { CachCucReading, CachKey, CachLyDo, CachNguon, CachTrangThai, GodKey, QuanHe, QuanHeKind } from './cachcuc';
+export { quanHe, dongKhi, noiVang, PRESENT_SHARE } from './cachcuc';
+export type { DongKhi } from './cachcuc';
 export {
   assessThan, locThapThan, muaOf, dungThanPattern, thapThanProfile, batTuReading, batTuYearLookup, tangCanOf, familyOf, FAMILY_GODS,
 } from './battu/reading';
@@ -141,7 +147,8 @@ export function profileSummary(p: BirthProfile): { ok: true; summary: QuickProfi
 /** Tổng Hợp 4 hệ thống từ ngày sinh đã kiểm tra. */
 export function tongHopOf(birth: Extract<ResolvedBirth, { ok: true }>): TongHopReading {
   const { solar, input } = birth;
-  return tongHopReading(tuViChart(input), batTuChart(input), batTrachReading(solar, input.gender), napAmForBirth(solar.dd, solar.mm, solar.yy));
+  const bt = batTuChart(input);
+  return tongHopReading(tuViChart(input), bt, batTrachReading(solar, input.gender), napAmForBirth(solar.dd, solar.mm, solar.yy), cachCucOfBirth(bt, input));
 }
 
 function summarize(solar: SolarDate, input: BirthCalcInput): QuickProfile {

@@ -16,7 +16,7 @@ App tiếng Việt gồm 7 công cụ: Tử Vi Đẩu Số, Bát Tự, Lục Hà
 
 ## Cấu trúc
 
-- `src/core/` — engine tính toán, là NGUỒN SỰ THẬT. TypeScript strict (`calendar/`, `canchi/`, `tuvi/`, `battu/`, `luchao/`, `battrach/`, `napam/`, `tonghop/`, `laban/`, `birth.ts`; `nguhanh/` là engine phân tích ngũ hành mới, port từ `docs/ngu-hanh-engine`, xem ARCHITECTURE mục 14), công thức giữ nguyên từ bản web đã kiểm chứng; `src/core/index.ts` là điểm vào duy nhất mà UI được phép import. Engine trả số liệu/mã, không trả câu văn.
+- `src/core/` — engine tính toán, là NGUỒN SỰ THẬT. TypeScript strict (`calendar/`, `canchi/`, `tuvi/`, `battu/`, `luchao/`, `battrach/`, `napam/`, `tonghop/`, `laban/`, `birth.ts`; `nguhanh/` là engine phân tích ngũ hành mới, port từ `docs/ngu-hanh-engine`, xem ARCHITECTURE mục 14; `cachcuc/` là cách cục theo Tử Bình Chân Thuyên, mục 15), công thức giữ nguyên từ bản web đã kiểm chứng; `src/core/index.ts` là điểm vào duy nhất mà UI được phép import. Engine trả số liệu/mã, không trả câu văn.
 - `src/content/` — câu chữ cho người đọc, chép NGUYÊN VĂN từ legacy, dạng hàm thuần nhận kết quả engine (ARCHITECTURE mục 5.4). Ngoại lệ: câu chữ chỉ tay (`src/content/palm`) là nội dung mới, nguồn ở `docs/CHI-TAY.md`, không chép nguyên văn sách; không sửa tay `palm-content.vi.json`. Engine chỉ tay ở `src/core/palm` nhận phần mô tả đặc điểm từ content, không đọc câu chữ.
 - `tests/core-snapshot.test.ts` — bản chụp ~70.000 đầu ra engine; KHÔNG sinh lại (`UPDATE_CORE_SNAPSHOT=1`) để làm test xanh.
 - `src/app/` — khung app: `App.tsx` (thanh trên, 5 tab giữ mount, thanh tab dưới), `router.ts` (ngăn xếp mỗi tab + bảng quy tắc Back), `boot.ts`, `context.tsx`.

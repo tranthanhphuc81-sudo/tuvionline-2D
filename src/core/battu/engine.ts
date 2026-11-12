@@ -13,7 +13,7 @@ export const CAN_HANH: readonly BtHanhIdx[] = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4];
 /** Tý Thuỷ, Sửu Thổ, Dần Mộc, Mão Mộc, Thìn Thổ, Tỵ Hoả, Ngọ Hoả, Mùi Thổ, Thân Kim, Dậu Kim, Tuất Thổ, Hợi Thuỷ */
 export const CHI_HANH: readonly BtHanhIdx[] = [4, 2, 0, 0, 2, 1, 1, 2, 3, 3, 2, 4];
 /** Giờ đại diện của mỗi giờ (2 tiếng), tính bằng độ lệch so với giữa trưa — JD nguyên của jdFromDate ứng với giữa trưa. */
-const HOUR_OFFSET_FROM_NOON: readonly number[] = [-12, -10, -8, -6, -4, -2, 0, 2, 4, 6, 8, 10];
+export const HOUR_OFFSET_FROM_NOON: readonly number[] = [-12, -10, -8, -6, -4, -2, 0, 2, 4, 6, 8, 10];
 
 export const TANG_CAN: Record<number, readonly (readonly [CanIdx, TangCanRole])[]> = {
   0: [[9, 'Bản khí']], 1: [[5, 'Bản khí'], [9, 'Trung khí'], [7, 'Dư khí']],

@@ -11,6 +11,7 @@ import type { BatTuChart } from '../battu/types';
 import type { NapAmBirth } from '../napam/reading';
 import { mainStarsOf } from '../tuvi/reading';
 import type { TuViChart } from '../tuvi/types';
+import type { CachCucReading } from '../cachcuc';
 
 export type HanhRelKind = 'same' | 'a-sinh-b' | 'b-sinh-a' | 'a-khac-b' | 'b-khac-a';
 export interface HanhRel { a: Hanh; b: Hanh; kind: HanhRelKind }
@@ -61,10 +62,12 @@ export interface TongHopReading {
   napam: { canChiTen: string; hanh: Hanh; ten: string };
   /** ba cặp đối chiếu chéo (mỗi hệ vốn độc lập, đây chỉ là cách nhìn tham khảo) */
   rel: { tuViBatTu: HanhRel; batTuNapAm: HanhRel; batTrachNapAm: HanhRel };
+  /** cách cục theo Tử Bình Chân Thuyên (ARCHITECTURE 15); null khi nơi gọi không tính */
+  cachCuc: CachCucReading | null;
 }
 
 /** Gộp kết quả 4 hệ thống của một người. */
-export function tongHopReading(tv: TuViChart, bt: BatTuChart, pt: BatTrachReading, na: NapAmBirth): TongHopReading {
+export function tongHopReading(tv: TuViChart, bt: BatTuChart, pt: BatTrachReading, na: NapAmBirth, cachCuc: CachCucReading | null = null): TongHopReading {
   // Dụng Thần và Thập Thần không phụ thuộc năm xem; năm truyền vào chỉ dùng cho Đại Vận, ở đây không đọc tới.
   const br = batTuReading(bt, bt.tietYear);
   const nhatChuHanh = br.assessment.nhatChuHanh;
@@ -84,5 +87,6 @@ export function tongHopReading(tv: TuViChart, bt: BatTuChart, pt: BatTrachReadin
     },
     napam: { canChiTen: na.canChiTen, hanh: na.hanh, ten: na.ten },
     rel: { tuViBatTu: hanhRel(tv.cucHanh, nhatChuHanh), batTuNapAm: hanhRel(nhatChuHanh, na.hanh), batTrachNapAm: hanhRel(pt.hanh, na.hanh) },
+    cachCuc,
   };
 }

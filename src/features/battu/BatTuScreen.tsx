@@ -19,6 +19,11 @@ import { cardReading, cardWho } from '../share/card';
 import ui from '../../ui/components/ui.module.css';
 import { Pillars, hanhAmDuong } from './Pillars';
 import { NguHanhSection } from './NguHanhSection';
+import { cachCucOfBirth, dongKhi, noiVang, quanHe, BatTuEngine as BTE } from '../../core';
+import { analyze, toNguHanhChart } from '../../core/nguhanh';
+import { cachCucSection, cachCucSpeech } from '../../content/cachcuc/text';
+import { quanHeSection } from '../../content/cachcuc/quanhe';
+import { dongKhiSection, tinhTinhSection } from '../../content/cachcuc/dongkhi';
 import s from './battu.module.css';
 
 const { CAN, CHI } = BatTuEngine;
@@ -55,6 +60,10 @@ export function BatTuScreen() {
   const lx = batTuLapXuanNote(ch);
   const look = batTuYearLookup(ch, year);
   const curAge = look.tuoi > 0 ? look.tuoi : null;
+  const nh = analyze(toNguHanhChart(ch));
+  const cc = cachCucOfBirth(ch, res.birth.input, nh);
+  const nhatChuHanh = BTE.HANH5[BTE.CAN_HANH[ch.nhatChu]];
+  const nv = noiVang(nh.score.shares);
   const summary: [string, string][] = [
     ['Âm lịch', ch.lunar[0] + '/' + ch.lunar[1] + (ch.lunar[3] ? ' (nhuận)' : '') + '/' + ch.lunar[2]],
     ['Nhật Chủ', CAN[ch.nhatChu] + ' (' + hanhAmDuong(ch.nhatChu) + ')'],
@@ -68,18 +77,35 @@ export function BatTuScreen() {
       <dl className={s.summary}>
         {summary.map(([k, v]) => <div key={k} className={s.cell} data-wide={k === 'Bát Tự' || k === 'Âm/Dương Nam Nữ'}><dt>{k}</dt><dd>{v}</dd></div>)}
       </dl>
-      <SpeakButton id="battu" getCues={() => buildScript('battu', who, { cells: summary, leads: [batTuLead(ch.pillars.findIndex((p) => p.isNhatChu), res.summary.battu.nhatChu)], sections: batTuTongKet(ch, thisYear()) })} />
+      <SpeakButton id="battu" getCues={() => buildScript('battu', who, { cells: summary, leads: [batTuLead(ch.pillars.findIndex((p) => p.isNhatChu), res.summary.battu.nhatChu)], prose: [cachCucSpeech(cc)], sections: batTuTongKet(ch, thisYear()) })} />
       <ShareButton getCard={() => ({ slug: 'bat-tu', title: 'Bát Tự Tứ Trụ', ...cardWho(profile), groups: [{ cells: summary }], reading: cardReading(batTuTongKet(ch, thisYear())) })} />
       {lx && <p className={ui.info} role="note"><RichText nodes={parseRich(lx)} /></p>}
 
       <h2 className={ui.sectionTitle}>Tứ Trụ hoàn chỉnh</h2>
       <Pillars ch={ch} focus={cueFocus} />
 
+      <details className={s.fold}>
+        <summary><h2 className={ui.sectionTitle}>Hình, xung, hội, hợp</h2><span className={ui.muted}>các chữ kéo đẩy nhau</span></summary>
+        <section className={ui.card}><SectionView sections={[quanHeSection(quanHe(ch.pillars.map((x) => x.can), ch.pillars.map((x) => x.chi)), ch.pillars.map((x) => x.can), ch.pillars.map((x) => x.chi))]} /></section>
+      </details>
+
       <h2 className={ui.sectionTitle}>Vượng Suy và Dụng Thần sơ bộ</h2>
       <section className={ui.card}><SectionView sections={[batTuVuongSuy(ch)]} /></section>
       <section className={ui.card}><SectionView sections={[batTuDungThan(ch)]} /></section>
 
       <NguHanhSection profileId={profile.id} key={ch.pillars.map((x) => x.can + '-' + x.chi).join(',')} ch={ch} nowYear={thisYear()} />
+
+      <h2 className={ui.sectionTitle}>Cách cục theo Tử Bình Chân Thuyên</h2>
+      <section className={ui.card}><SectionView sections={[cachCucSection(cc, ch.pillars.map((x) => x.can), ch.monthChiIdx, nh.usefulGod.dung)]} /></section>
+
+      <details className={s.fold}>
+        <summary><h2 className={ui.sectionTitle}>Dòng chảy của khí</h2><span className={ui.muted}>khí bắt đầu và dừng ở đâu</span></summary>
+        <section className={ui.card}><SectionView sections={[dongKhiSection(dongKhi(nh.score.shares, nhatChuHanh), nhatChuHanh)]} /></section>
+      </details>
+      <details className={s.fold}>
+        <summary><h2 className={ui.sectionTitle}>Tính tình theo ngũ hành</h2><span className={ui.muted}>gợi ý để tự soi</span></summary>
+        <section className={ui.card}><SectionView sections={[tinhTinhSection(nv.noi, nv.vang)]} /></section>
+      </details>
 
       <h2 className={ui.sectionTitle}>Đại Vận (mỗi chặng 10 năm, khởi từ Trụ Tháng)</h2>
       <div ref={strip} className={s.strip} role="list" aria-label="Các Đại Vận">

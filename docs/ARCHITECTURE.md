@@ -1296,3 +1296,71 @@ Chủ dự án yêu cầu thử sửa thuật toán theo các kiểu lệch ở 
 | 3C.9 | Data safety, QA checklist (trước 8.1, 9.1) | Theo kit | Không |
 
 Khi chủ dự án điền đáp án: chạy lại so sánh với đáp án, rồi xét điều kiện chuyển phương án ở 14.1 trước bước kế tiếp.
+
+---
+
+## 15. Cách cục theo Tử Bình Chân Thuyên (chốt 12/11/2026)
+
+> Nguồn: `docs/TU-VAN-SACH.md` mục 3A, 3B. Chủ dự án chốt: làm theo thứ tự đề xuất; cách cục được Thầy đọc và đưa vào "Tóm lại về bạn".
+
+### 15.1 Vị trí và quan hệ với engine ngũ hành
+
+**Lựa chọn:**
+- `src/core/cachcuc` là một cách luận **thứ hai**, đặt cạnh engine ngũ hành (mục 14), không thay engine đó.
+- Engine ngũ hành cung cấp thân vượng hay nhược, và Tòng cách. Cách cục dùng hai kết quả này.
+- Màn Bát Tự có mục "Cách cục theo Tử Bình Chân Thuyên" ngay sau phần Phân tích ngũ hành, nêu cả Dụng thần của hai cách luận. Khi khác nhau, app nói thẳng là hai cách luận cho kết quả khác nhau, không chọn hộ.
+
+**Lý do:** engine ngũ hành chỉ khớp sách 45%, và phiên 14.14 đã thử sửa quy tắc phù ức mà không cải thiện. Phần lệch phần lớn do sách luận theo cách cục ở tháng sinh (`docs/NGU-HANH-SACH.md`).
+
+**Phương án bị loại:** *Thay Dụng thần của engine bằng cách cục:* trường phái *Trích Thiên Tủy* không luận theo cách cục; với 65 lá Trích Thiên Tủy, cách cục chỉ khớp 14/65, ngang engine.
+
+### 15.2 Chọn cách và tư lệnh
+
+1. Bản khí của chi tháng là Tỷ Kiên → **Kiến Lộc**; là Kiếp Tài → **Dương Nhận** nếu Nhật Chủ dương, **Nguyệt Kiếp** nếu âm. Sách không lấy chữ cùng hành với mình làm cách, nên tương thần tìm ở Quan, Tài, Sát, Thực, Thương.
+2. Can tàng của chi tháng lộ lên can năm, tháng hoặc giờ → lấy làm cách, ưu tiên bản khí, rồi trung khí, dư khí.
+3. Không lộ, và biết ngày sinh → theo **can tư lệnh**: can cầm quyền tính theo số ngày từ tiết đầu tháng (`TU_LENH`, mỗi tháng 30 ngày; Thân gộp Mậu Kỷ 10 ngày). Không biết ngày (lá số trong sách) → theo bản khí.
+
+**Bảng `TU_LENH` là bảng phổ biến, CHƯA đối chiếu bảng in trong sách** (TBCT phụ lục chương 3, bản quét). Các bản lưu truyền chênh nhau 1–3 ngày, nên đổi bảng sau khi đối chiếu sẽ làm đổi cách của người sinh sát ranh giới.
+
+### 15.3 Thành, bại, cứu, tương thần, điều hậu
+
+- Cách lành (Quan, Tài, Ấn, Thực) thì giữ gìn; cách dữ (Sát, Thương, Nhận) thì chế ngự. Bảng quy tắc ở `cachCuc()`: chữ phá cách, chữ cứu, và tương thần theo thân vượng hay nhược.
+- Cách bị phá mà không có cứu: Dụng thần là hành của chữ cứu còn thiếu.
+- **Điều hậu đứng trước cách cục** khi sinh tháng Hợi, Tý, Sửu (và Dần với Nhật Chủ Kim, Mộc): cần Hoả; tháng Tỵ, Ngọ, Mùi với Nhật Chủ khác Thuỷ: cần Thuỷ. Áp dụng kể cả khi lá số đã có sẵn hành đó.
+- **Tòng cách** (engine ngũ hành xếp Chân): theo ngoại cách, dùng Dụng thần của engine.
+
+### 15.4 Kết quả đối chiếu (`npm run compare:cachcuc`)
+
+| Nhóm | Cách cục | Engine ngũ hành |
+|---|---|---|
+| Tử Bình Chân Thuyên, 56 lá | **29/56 (52%)** | 17/56 (30%) |
+| Trích Thiên Tủy, 65 lá | 14/65 (22%) | 14/65 (22%) |
+| TBCT, sách dùng điều hậu | 15/15 | |
+| TBCT, sách dùng phù ức | 11/29 | |
+| TBCT, Tòng / hoá khí | 3/9 · 0/3 | |
+
+**Giới hạn phải nói rõ:**
+- Quy tắc, nhất là điều hậu, được chọn **sau khi xem** 56 lá TBCT, nên 52% là mức trên tập đã nhìn thấy, không phải phép thử độc lập.
+- Biến thể dùng Ấn làm mặc định khi cách bị phá cho 55%; tôi giữ biến thể dùng "chữ cứu còn thiếu" (52%) vì có lý do theo sách. Hai biến thể chỉ chênh 2 lá.
+- Chưa có Hoá khí cách (0/3).
+- `tests/cachcuc.test.ts` khoá mức tối thiểu 29/56 và 14/65 để thay đổi sau không làm tụt mà không ai biết.
+
+### 15.5 Câu chữ, Thầy đọc, "Tóm lại về bạn"
+
+- `src/content/cachcuc/text.ts`: nội dung mới, viết bằng lời của app, KHÔNG chép câu văn của bản dịch (`docs/TU-VAN-SACH.md` mục 5). Luôn có `CACHCUC_NOTE` nói đây là cách luận theo sách, đã viết gọn, khớp khoảng một nửa.
+- Thầy đọc ở màn Bát Tự: thêm một đoạn `cachCucSpeech` trước phần Tổng kết.
+- "Tóm lại về bạn" (Tổng hợp): thêm dòng `cachCucTomLai`. Đây là phần thêm ngoài legacy, nên `tests/parity/tonghop.test.ts` bỏ dòng này khi so (`cachCuc: null`).
+- Ảnh chia sẻ, Bát Trạch, La Bàn: KHÔNG đổi.
+
+### 15.6 Hình, xung, hội, hợp (TU-VAN-SACH 3C)
+
+- `src/core/cachcuc/quanhe.ts`: can hợp, can xung, tam hội, tam hợp, bán hợp (cần chi giữa), lục hợp, lục xung, tương hình (Dần Tỵ Thân, Sửu Tuất Mùi, Tý Mão), tự hình (Thìn, Ngọ, Dậu, Hợi), lục hại. Chưa có lục phá (ít dùng).
+- Đánh dấu hai trụ có kề nhau không (sách: cách xa thì hợp, xung yếu đi), và xung được giải khi một chi đang ở trong hợp khác (TBCT ch.7). Không xét hợp có hoá hay không.
+- Màn Bát Tự: khối gập "Hình, xung, hội, hợp" ngay dưới Tứ Trụ. Luôn kèm câu "hợp không hẳn tốt, xung không hẳn xấu". Thầy KHÔNG đọc phần này; ảnh chia sẻ không đổi.
+
+### 15.7 Dòng chảy của khí và tính tình (TU-VAN-SACH 3D, 3E)
+
+- `src/core/cachcuc/dongkhi.ts`: dòng chảy bắt đầu ở hành có tỉ lệ lớn nhất (theo điểm của engine ngũ hành), đi theo vòng tương sinh tới khi gặp hành dưới 8% (`PRESENT_SHARE`); báo hành bị nghẽn và đường chảy có qua hành của Nhật Chủ không.
+- Tính tình: hành nổi nhất và các hành dưới 8%, ghép với ngũ thường (Mộc nhân, Hoả lễ, Thổ tín, Kim nghĩa, Thuỷ trí). Câu chữ chỉ gợi ý, không gán nhãn xấu; hành vắng thì gợi cách bù.
+- Ngưỡng 8% là số tạm, chưa đối chiếu với lá số mẫu.
+- Hai khối gập trên màn Bát Tự, sau mục Cách cục. Thầy không đọc; không vào "Tóm lại về bạn".

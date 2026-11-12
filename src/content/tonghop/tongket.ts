@@ -6,6 +6,7 @@ import { CAN_TRAITS, FAMILY } from '../interp/battu';
 import { HANH_INFO } from '../interp/hanh';
 import { NAPAM_IMG } from '../interp/napam';
 import { STAR } from '../interp/tuvi';
+import { cachCucTomLai } from '../cachcuc/text';
 import { DEFAULT_NOTE } from '../tuvi/tongket';
 
 export function tongHopTomLai(r: TongHopReading): Section[] {
@@ -17,6 +18,8 @@ export function tongHopTomLai(r: TongHopReading): Section[] {
   const ct = CAN_TRAITS[battu.nhatChuCan];
   tomTat.push('<b>Bản chất (Bát Tự):</b> Nhật Chủ ' + battu.nhatChuCan + ' — ' + ct.hinh + ' (' + ct.net + ').');
   tomTat.push('<b>Mạng (Nạp Âm):</b> ' + napam.ten + ' — ' + (NAPAM_IMG[napam.ten] || '') + '.');
+  // Thêm ngoài legacy (ARCHITECTURE 15.5): test đối chiếu tonghop bỏ dòng này khi so
+  if (r.cachCuc) tomTat.push(cachCucTomLai(r.cachCuc));
 
   const info = HANH_INFO[battu.primary];
   manh.push('Hành nên bổ sung nhất (theo Bát Tự): <b>' + battu.primary + '</b> — màu ' + info.mau + '.');

@@ -185,7 +185,7 @@ describe('Lời nhắc văn hoá và cấu trúc báo cáo', () => {
     }
     const missing = NH.PLAIN_KEYS.filter((k) => !seen.has(k) && !NH.PLAIN_RARE_KEYS.includes(k));
     expect(missing, `nhánh chưa gặp: ${missing.join(', ')}`).toEqual([]);
-  });
+  }, 30_000); // duyệt nhiều lá số ngẫu nhiên: chạy riêng khoảng 2 giây, quá 5 giây khi chạy song song
   it('mục "Nói dễ hiểu": các nhánh hiếm (dựng tình huống) cũng ra câu đúng', () => {
     const seen = new Set<string>();
     const check = (a: NguHanhAnalysis, r: NguHanhAnalysis['readings'][number]) => {

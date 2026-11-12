@@ -7,7 +7,8 @@ import { sectionPlainText } from '../../src/content/rich';
 import { tongHopParts } from '../../src/content/tonghop/explain';
 import { firstDiff, loadLegacy, sampleProfiles, squash, submitBatTrach, submitBirthForm, submitNapAm, submitTuVi, type TvInput } from './legacy';
 
-const appText = (r: TongHopReading) => tongHopParts(r).map((part) => part.title + part.sections.map((s) => sectionPlainText(s)).join('\n')).join('\n');
+/** Dòng cách cục thêm ngoài legacy (ARCHITECTURE 15.5) nên không có trong trang cũ. */
+const appText = (r: TongHopReading) => tongHopParts({ ...r, cachCuc: null }).map((part) => part.title + part.sections.map((s) => sectionPlainText(s)).join('\n')).join('\n');
 
 function legacyText(doc: Document, p: TvInput, solar: { dd: number; mm: number; yy: number }): string {
   submitTuVi(doc, p);
