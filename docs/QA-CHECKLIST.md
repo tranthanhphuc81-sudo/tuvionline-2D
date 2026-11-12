@@ -1,6 +1,6 @@
 # Danh sách kiểm tay trước khi phát hành
 
-> Tạo ngày 12/11/2026 ở bước 3C.9. Những mục dưới đây máy tự động (test, build) không kiểm được: cần người cầm điện thoại thật. Bổ sung dần khi thêm tính năng. Làm trên **APK thử từ GitHub Actions** (artifact `lyso-debug-apk`) hoặc bản phát hành.
+> Tạo ngày 12/11/2026 ở bước 3C.9. Những mục dưới đây máy tự động (test, build) không kiểm được: cần người cầm điện thoại thật. Bổ sung dần khi thêm tính năng. Phase 9 (12/11/2026) thêm các mục chung và mục cho từng công cụ. Làm trên **APK thử từ GitHub Actions** (artifact `lyso-debug-apk`) hoặc bản phát hành.
 
 Cách đánh dấu: ghi ngày, máy (ví dụ "Galaxy S25 Ultra, Android 16"), và kết quả (đạt / lỗi kèm mô tả) ngay sau mục.
 
@@ -103,6 +103,112 @@ Chuẩn bị: một hồ sơ có sẵn, ánh sáng đủ, thêm một ảnh tay 
 
 - Đổi cách chọn tay trong Cài đặt và chia sẻ ảnh kết quả chỉ tay: kit 3B.9 có nhắc, nhưng app hiện chưa có hai tính năng này. Khi thêm thì bổ sung mục kiểm.
 
-## Các phần khác
+## Chung cho cả app (Phase 9, thêm 12/11/2026)
 
-Chưa có danh sách kiểm tay cho Tử Vi, Bát Tự cũ, Lục Hào, Bát Trạch, La Bàn, Nạp Âm, Hành trình. Bổ sung ở Phase 9 (xem `docs/RELEASE.md` mục 7).
+Lấy từ ARCHITECTURE mục 7.3 và kết quả lần thử trên S25 Ultra (PROGRESS, 05/11/2026). Nên làm trên **hai máy**: một máy mới và một máy Android tầm thấp (RAM 2–3 GB).
+
+### Cài đặt, khởi động, dữ liệu
+
+- [ ] Cài APK (bản không đặt `LYSO_LIVE_URL`) rồi mở lần đầu khi **đang ở chế độ máy bay**: app chạy đủ, chữ tiếng Việt có dấu hiện đúng font (font đóng gói offline), không ô vuông.
+- [ ] Thêm 3 hồ sơ: một nhập dương lịch, một nhập **âm lịch có tháng nhuận**, một sinh giờ Tý muộn (23:00–23:59) ngày 31/12. Tắt hẳn app, mở lại: cả 3 còn nguyên, hồ sơ đang chọn vẫn đúng.
+- [ ] Nhập ngày không có thật (31/02, 30 tháng âm thiếu): báo lỗi tiếng Việt, KHÔNG tự đổi thành ngày khác.
+- [ ] Cài bản mới đè lên bản cũ: hồ sơ, cài đặt, quẻ Lục Hào gần nhất, hướng cửa, cặp hợp hôn còn nguyên.
+
+### Nút Back (ARCHITECTURE mục 1.3)
+
+- [ ] Đang mở bảng chọn hồ sơ hoặc hộp thoại: Back đóng nó, không lùi màn.
+- [ ] Đang ở màn con (chi tiết, sửa hồ sơ, kết quả chỉ tay): Back lùi một màn.
+- [ ] Đang ở gốc một tab khác Tĩnh thất: Back về Tĩnh thất.
+- [ ] Đang ở gốc Tĩnh thất: Back đưa app vào nền (không thoát hẳn); mở lại thấy đúng chỗ cũ, không chạy lại lối vào.
+- [ ] Thầy đang đọc: Back dừng đọc trước. Đang đi lối vào đạo quán: Back vào thẳng Tĩnh thất.
+
+### Giao diện
+
+- [ ] Cỡ chữ hệ thống lớn nhất, màn 360dp: không màn nào cuộn ngang, chữ không bị cắt, nút vẫn bấm được.
+- [ ] Cài đặt → Chế độ màu: Theo máy, Sáng, Tối đều đúng; đổi chế độ tối của máy khi đang để "Theo máy" thì app đổi theo.
+- [ ] Xoay ngang máy ở từng tab: bố cục không vỡ, không mất dữ liệu đang nhập.
+- [ ] TalkBack: các nút chỉ có biểu tượng (⏮ ⏭ 🐢, ±1, ±15 độ, chia sẻ) đọc đúng nhãn tiếng Việt.
+
+### Đọc thành lời
+
+- [ ] Máy **có** giọng tiếng Việt: nút đọc ở mỗi công cụ đọc hết bài dài, tắt mạng vẫn đọc.
+- [ ] Máy **chưa có** giọng tiếng Việt (gỡ gói giọng hoặc dùng máy khác): hiện câu "Không đọc được trên máy này…" kèm cách tải gói giọng, không treo, không im lặng; Cài đặt có nút "Tải thêm giọng tiếng Việt" mở đúng trang cài giọng của máy.
+- [ ] Đang đọc thì bấm Home: dừng đọc. Mở lại: không tự đọc tiếp lung tung.
+- [ ] Thanh đọc: nghe lại đoạn trước, tạm dừng / đọc tiếp, đoạn sau, dừng đều chạy; Tốc độ đọc và Cao độ giọng trong Cài đặt có tác dụng.
+- [ ] Có cuộc gọi đến khi đang đọc: dừng đọc, gọi xong không phát lại tiếng ồn.
+
+### Chia sẻ, sao lưu
+
+- [ ] Nút "Chia sẻ ảnh" ở cả 7 chỗ (Tử Vi, Bát Tự, Lục Hào, Bát Trạch, La Bàn, Nạp Âm, Tổng hợp): bảng chia sẻ của Android mở ra; gửi qua **Zalo** và **Messenger** được; bài dài ra nhiều ảnh có số "Ảnh 1/N", mọi ảnh có dòng lưu ý văn hoá.
+- [ ] Sao lưu ra file → khôi phục bằng trình chọn file của Android: thành công, có hỏi lại trước khi thay.
+- [ ] Khôi phục một file không phải sao lưu (ảnh, văn bản): báo lỗi rõ, dữ liệu hiện có không mất.
+
+## Tử Vi
+
+- [ ] Mở Tử Vi từ tờ lá số ở Tĩnh thất: sao rơi vào 12 cung (khoảng 2,6 giây); chạm lá số thì bỏ qua; bật "giảm chuyển động" của máy thì không có hiệu ứng.
+- [ ] Lá số 12 cung đọc được ở 360dp; chạm một cung thì thẻ chi tiết đổi theo; "Danh sách" → chạm một cung thì quay về lá số đúng cung đó.
+- [ ] Dải Đại Hạn: giai đoạn hiện tại được đánh dấu; chạm một giai đoạn thì chọn đúng cung.
+- [ ] Tra vận hạn theo năm: đổi năm thì nội dung đổi theo.
+- [ ] Thầy đọc: cung đang nói tới sáng lên trên lá số.
+- [ ] Đọc lại mục sức khoẻ (cung Tật Ách) trong Tổng kết và trên ảnh chia sẻ: chủ dự án quyết định có thêm câu "không thay cho tư vấn y tế" (`docs/RELEASE.md` mục 4, "Rủi ro cần xem ở Phase 9").
+
+## Bát Tự (phần có từ trước Phase 3C)
+
+- [ ] Bốn trụ, Vượng Suy, Dụng Thần sơ bộ, Tổng kết hiện đủ; sinh sát Lập Xuân thì trụ năm đổi đúng theo Lập Xuân (không theo Tết).
+- [ ] Dải Đại Vận cuộn ngang bằng ngón tay, giai đoạn hiện tại được đánh dấu; Tra Lưu Niên đổi năm được.
+- [ ] Thầy đọc: trụ đang nói tới sáng lên.
+
+## Lục Hào
+
+- [ ] "Gieo quẻ" bằng nút và bằng **lắc máy**: gieo đủ 6 hào, có rung nhẹ; lắc nhẹ khi đi bộ không tự gieo (ngưỡng lắc 22 m/s² là số tạm, ghi lại cảm nhận).
+- [ ] Chuyển sang tab khác rồi lắc: không gieo.
+- [ ] "Nhập tay" 6 số rồi "Lập quẻ từ 6 số đã nhập": ra đúng quẻ.
+- [ ] **Đổi việc hỏi (Dụng Thần) hoặc ngày xem: quẻ giữ nguyên, không gieo lại.** Tắt app, mở lại: quẻ gần nhất còn.
+- [ ] Nhập ngày xem không có thật: báo lỗi, không lập quẻ.
+- [ ] Thầy đọc: hào đang nói tới sáng lên.
+
+## Bát Trạch
+
+- [ ] Sinh sát Lập Xuân: Mệnh Quái đổi năm theo Lập Xuân.
+- [ ] Chọn hướng cửa chính: phần căn nhà đang xét hiện ra; bỏ chọn thì mất; tắt app mở lại vẫn nhớ hướng.
+- [ ] Bảng Du Niên, gợi ý bố trí, ngũ hành ứng dụng hiện đủ; Thầy đọc tô sáng đúng hướng.
+
+## La Bàn (9 phép thử ARCHITECTURE mục 11, điều kiện nghiệm thu 4.2)
+
+Ghi lại số µT hiện trên màn hình ở mỗi phép thử để chốt ngưỡng 25–65 µT và ngưỡng sai số 15°.
+
+- [ ] 1. So với la bàn vật lý hoặc Google Maps ở 8 hướng, máy nằm ngang, ngoài trời, xa kim loại: lệch ≤ 5°.
+- [ ] 2. Xoay máy nhanh 90°: kim theo kịp trong 1 giây, không vọt lố quá 5°.
+- [ ] 3. Đặt yên 30 giây: dao động ≤ 2°.
+- [ ] 4. Đặt cạnh loa hoặc vật kim loại lớn: hiện cảnh báo nhiễu, số độ mờ đi (lần thử 05/11/2026 KHÔNG ĐẠT, đã sửa, chưa thử lại).
+- [ ] 5. Vẽ hình số 8 sau khi bị nhiễu: cảnh báo tự mất.
+- [ ] 6. Xoay ngang máy: hướng vẫn đúng. Dựng đứng máy: có nhắc đặt máy nằm ngang.
+- [ ] 7. Vào nền rồi quay lại: cảm biến dừng khi ở nền, chạy lại khi về.
+- [ ] 8. Để đo liên tục 10 phút: màn hình không tắt, máy không nóng bất thường, pin tụt hợp lý.
+- [ ] 9. Máy không có từ kế (nếu kiếm được): báo rõ, tự chuyển "✋ Xoay tay".
+- [ ] "✋ Xoay tay": kéo vòng la bàn bằng ngón tay, nút ±1, ±15 độ và ô nhập số độ đều chạy. Ô "Hiệu chỉnh (độ)" nhận −45 đến 45 và được nhớ sau khi tắt app.
+
+## Nạp Âm
+
+- [ ] Sinh trước Tết (tháng 1, đầu tháng 2 dương lịch): mạng Nạp Âm tính theo năm âm trước (đổi năm theo Tết).
+- [ ] Chọn Người 1 và Người 2 để xem hợp hôn: bảng so sánh hiện ra; tắt app mở lại vẫn nhớ cặp.
+
+## Tĩnh thất và lối vào đạo quán
+
+- [ ] Cài đặt → Khi mở app: thử cả "Tự động", "Đầy đủ", "Rút gọn", "Không có"; mở lại app thấy đúng kiểu. "Tự động": ngày rằm, mùng 1 đi đầy đủ.
+- [ ] Lối vào: chạm "Bỏ qua" và Back đều vào thẳng Tĩnh thất. Máy để im lặng hoặc rung thì không phát tiếng.
+- [ ] Đo fps lối vào và Tĩnh thất trên **máy tầm thấp** (điều kiện chặn 6.2 và 6.6): mượt, không giật khi chuyển trạm. Không đạt thì ghi lại để đổi sang ảnh động CSS.
+- [ ] Thắp hương: chạm giữ khoảng 0,8 giây thì nén hương cháy; tắt app mở lại trong 20 phút vẫn còn cháy, hết 20 phút thì tàn.
+- [ ] 6 đồ vật trên án thư mở đúng công cụ; Thầy đọc có phụ đề, nút ⏮ ⏯ ⏭ 🐢 chạy.
+- [ ] Chưa có hồ sơ: Intake hỏi lần lượt tên, giới tính, ngày, giờ; nhập ngày sai bị báo như form hồ sơ.
+- [ ] Đổi người đọc trong Cài đặt (10 nhân vật, màu áo, hoặc ảnh tự chọn): hình ở Tĩnh thất đổi theo, lời đọc tự xưng đúng.
+
+## Bộ nhớ và hiệu năng
+
+- [ ] Máy tầm thấp: mở lần lượt cả 5 tab, Xem chỉ tay và lối vào đầy đủ, rồi quay lại tab đầu: không bị Android đóng app, không mất trạng thái.
+- [ ] Đọc yêu cầu chất lượng về bộ nhớ của Google Play áp dụng từ 02/2027 (`docs/RELEASE.md` mục 5) và đối chiếu với lần đo này.
+
+## Ngoài phạm vi danh sách này
+
+- Thiết lập ký và cấu hình phát hành: `docs/RELEASE.md` mục 2 (Phase 8.2, đang tạm hoãn).
+- Soi lưu lượng mạng trên bản release thật ở chế độ máy bay: `docs/RELEASE.md` mục 3.
