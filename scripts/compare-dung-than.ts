@@ -59,7 +59,7 @@ const md = `# So sánh Dụng Thần: bản legacy và engine ngũ hành
 
 > Sinh tự động ngày 11/11/2026 để làm đầu vào cho bước 🔴 3C.1 (\`docs/PROMPT-KIT-NGU-HANH.md\`). Không phải tài liệu kiến trúc.
 > Mẫu: ${N} lá số ngẫu nhiên (seed cố định 20261111), năm sinh 1950–2009, đủ 12 giờ. Tứ trụ lấy từ \`batTuChart\` của app (đã xử lý Lập Xuân, giờ Tý muộn), nên hai bên dùng CÙNG một bộ tứ trụ.
-> Legacy = \`batTuReading\` (\`src/core/battu/reading.ts\`). Engine = \`docs/ngu-hanh-engine\` v0.2, preset mặc định.
+> Legacy = \`batTuReading\` (\`src/core/battu/reading.ts\`). Engine = \`src/core/nguhanh\` với \`DEFAULT_CONFIG\` (v0.2 của \`docs/ngu-hanh-engine\` cộng hiệu chỉnh theo sách ngày 12/11/2026, ARCHITECTURE 14.12). Số của bản v0.2 gốc (36,1% / 61,2% / 40,5%) giữ trong ARCHITECTURE 14 và test \`REFERENCE_CONFIG\`.
 
 ## 1. Kết quả tổng
 

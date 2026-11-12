@@ -33,7 +33,8 @@ describe('bộ lá số mẫu từ sách', () => {
   it('engine chạy được trên mọi lá; mức khớp hiện tại (ghi lại, không phải mục tiêu)', () => {
     const rs = cases.map(evaluate);
     const n = (m: string) => rs.filter((r) => r.match === m).length;
-    expect({ trung: n('trung'), gan: n('gan'), khac: n('khac'), nguoc: n('nguoc') }).toEqual({ trung: 18, gan: 2, khac: 20, nguoc: 10 });
-    expect(rs.filter((r) => r.rule14).length).toBe(24);
+    // v0.2 (trước hiệu chỉnh 14.12): trùng 18, gần 2, khác 20, ngược 10; khớp 14.1 là 24.
+    expect({ trung: n('trung'), gan: n('gan'), khac: n('khac'), nguoc: n('nguoc') }).toEqual({ trung: 20, gan: 2, khac: 19, nguoc: 9 });
+    expect(rs.filter((r) => r.rule14).length).toBe(25);
   });
 });

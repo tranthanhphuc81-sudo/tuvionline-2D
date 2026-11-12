@@ -1044,7 +1044,7 @@ Kèm mã nguyên nhân theo bảng số đo: `tong-cach`, `dieu-hau`, `trung-hoa
 6. Chỉ xét (A) sau khi (C) đã chạy ổn qua một bản phát hành.
 7. Muốn chuyển: sửa mục này trước, ghi kết quả đối chiếu, và ghi rõ ngoại lệ parity trong CLAUDE.md.
 
-**Đối chiếu với sách (12/11/2026).** 24 lá ở `NGU-HANH-SO-SANH.md` mục 3 là lá ngẫu nhiên nên không sách nào luận sẵn; điều 1 ở trên vẫn chưa đạt. Thay vào đó, lấy 50 lá ví dụ mà sách nói rõ dùng gì: 26 lá *Tử Bình Chân Thuyên* (bản dịch Phương Trọng Thầm), 24 lá *Trích Thiên Tủy* (Nhậm Thiết Tiều bình chú), cả hai ở `docs/sach/` (không commit vì là sách có bản quyền và nặng). Dữ liệu ở `tests/fixtures/nguhanh-sach.json`, bảng ở `docs/NGU-HANH-SACH.md` (`npm run compare:sach`); sách không cho ngày sinh nên engine nhận thẳng tứ trụ, không so được với legacy. Kết quả: dụng thần chính của engine trùng sách 18/50 (36%), ngược 10/50 (20%); theo định nghĩa khớp của điều 2 là 24/50 (48%), *Tử Bình Chân Thuyên* 13/26, *Trích Thiên Tủy* 11/24. Dưới 50% nên **rơi vào điều 5** (hiệu chỉnh engine rồi chạy lại trước khi làm gì khác); chưa hiệu chỉnh, chờ chủ dự án quyết. Các nhóm lệch thấy rõ: engine không có Hoá khí cách (2 lá); lá sách dùng Quan Sát hay Tài khắc chế mà engine lại cho thân nhược hoặc trung hoà (ttt-26, ttt-40, ttt-41, ttt-46, tbct-9); Tòng Tài sách nhận mà engine không thành cách (tbct-13); lá engine xếp "trung hoà" thì chỉ bù hành yếu nhất, hay lệch sách. Khi hiệu chỉnh phải giữ bộ này làm tập kiểm tra, tránh chỉnh cho khớp đúng 50 lá này (chia một phần làm tập thử riêng).
+**Đối chiếu với sách (12/11/2026).** 24 lá ở `NGU-HANH-SO-SANH.md` mục 3 là lá ngẫu nhiên nên không sách nào luận sẵn; điều 1 ở trên vẫn chưa đạt. Thay vào đó, lấy 50 lá ví dụ mà sách nói rõ dùng gì: 26 lá *Tử Bình Chân Thuyên* (bản dịch Phương Trọng Thầm), 24 lá *Trích Thiên Tủy* (Nhậm Thiết Tiều bình chú), cả hai ở `docs/sach/` (không commit vì là sách có bản quyền và nặng). Dữ liệu ở `tests/fixtures/nguhanh-sach.json`, bảng ở `docs/NGU-HANH-SACH.md` (`npm run compare:sach`); sách không cho ngày sinh nên engine nhận thẳng tứ trụ, không so được với legacy. Kết quả: dụng thần chính của engine trùng sách 18/50 (36%), ngược 10/50 (20%); theo định nghĩa khớp của điều 2 là 24/50 (48%), *Tử Bình Chân Thuyên* 13/26, *Trích Thiên Tủy* 11/24. Dưới 50% nên **rơi vào điều 5** (hiệu chỉnh engine rồi chạy lại trước khi làm gì khác). Đã hiệu chỉnh cùng ngày (14.12): lên 25/50 (50%), trùng 20/50, ngược 9/50; các số trong câu này là của v0.2. Các nhóm lệch thấy rõ: engine không có Hoá khí cách (2 lá); lá sách dùng Quan Sát hay Tài khắc chế mà engine lại cho thân nhược hoặc trung hoà (ttt-26, ttt-40, ttt-41, ttt-46, tbct-9); Tòng Tài sách nhận mà engine không thành cách (tbct-13); lá engine xếp "trung hoà" thì chỉ bù hành yếu nhất, hay lệch sách. Khi hiệu chỉnh phải giữ bộ này làm tập kiểm tra, tránh chỉnh cho khớp đúng 50 lá này (chia một phần làm tập thử riêng).
 
 **Đáp án người luận là quy ước.** Đáp án của người luận là một quy ước chuyên môn (sự đồng thuận của nghề), không phải sự thật khách quan; các trường phái có thể cho đáp án khác nhau trên cùng một lá số. Bộ golden vì vậy chỉ là mốc tham chiếu, không phải chuẩn tuyệt đối: khi engine khác đáp án, ghi rõ hai bên và nguồn, không tự coi bên nào là đúng.
 
@@ -1194,6 +1194,38 @@ Hai preset của engine (`PRESETS`: mặc định và coi trọng nguyệt lện
 **Điểm cân bằng theo mùa sinh và Nhật Chủ (tuỳ chọn thứ ba):** thay vì 20% đều, điểm cân bằng τ dịch theo mùa (mùa lạnh Hoả +5%, mùa nóng Thuỷ +5%) và vượng suy (Thân nhược hoặc Cực vượng: hành Nhật Chủ và hành sinh ra nó +4% mỗi hành; Thân vượng hoặc Cực nhược: hành Nhật Chủ sinh ra và hành Nhật Chủ khắc +4% mỗi hành), rồi chuẩn hoá. Hệ chạy trên y = x/τ nên τ là điểm đứng yên. Mức dịch là hệ số tự đặt. Đo trên 1500 lá số (sai phân): Dụng thần đứng hạng 1 ở 33,9% (đều 20%: 38,8%), hạng 1 hoặc 2 ở 69,1% (đều: 70,7%). Tức là thêm mùa sinh và Nhật Chủ theo cách này không làm mô hình khớp engine hơn; cần đáp án người luận để biết bên nào gần thực tế.
 
 **Mô hình hệ động lực 5 nút** (sinh là cạnh +, khắc là cạnh −, trạng thái cân bằng, can thiệp tối thiểu) chỉ nên làm hình minh hoạ cho Thầy giải thích "vì sao cần thêm hành này", không là phương pháp chọn Dụng thần thứ ba. Đã làm (12/11/2026): khối `cycle` ở mục "Tóm lại" của Phân tích ngũ hành (nét liền sinh, nét đứt khắc, tô đậm hai cạnh vào Dụng thần); Thầy không đọc hình này.
+
+### 14.12 Hiệu chỉnh engine theo lá số mẫu trong sách (12/11/2026)
+
+**Bối cảnh:** đối chiếu 50 lá số mẫu trong sách (14.1) cho khớp 24/50 (48%), rơi vào điều 5. Chủ dự án yêu cầu hiệu chỉnh.
+
+**Cách làm:** chia 50 lá thành tập chỉnh 34 lá và tập thử 16 lá (mỗi sách, cứ lá thứ ba vào tập thử). Dò lưới 7 tham số trên tập chỉnh: `follow.candidateWeak` (0,25–0,40), `follow.weakRootMax` (0,8–1,2), độ chênh theo mùa (×0,5–1), trọng số chi tháng (1,5–2,5), ngưỡng nhược/vượng (0,35–0,45 / 0,50–0,60), mức ưu tiên Điều hậu `climatePriorityShare` (6–12%, trước là `climateMinShare / 2` cố định). Mỗi bộ đo thêm tỷ lệ đổi Dụng thần trên 3000 lá ngẫu nhiên.
+
+**Kết quả:**
+
+| Phương án | 50 lá (khớp 14.1 / trùng / ngược) | Tập chỉnh | Tập thử | Đổi Dụng thần trên 3000 lá |
+|---|---|---|---|---|
+| v0.2 (trước) | 24 / 18 / 10 | 17/34 | 7/16 | 0% |
+| **`weakRootMax` 1,0 (đã chọn)** | **25 / 20 / 9** | 18/34 | 7/16 | 1,5% |
+| Điều hậu ưu tiên dưới 12% | 25 / 18 / 9 | 18/34 | 7/16 | 10,5% |
+| Hai thay đổi trên | 26 / 20 / 8 | 19/34 | 7/16 | 11,7% |
+| Tốt nhất trên tập chỉnh (đổi 6 tham số) | — | 22/34 | 9/16, trùng giảm 6 → 4–5 | — |
+
+**Lựa chọn:** chỉ đổi `weakRootMax` 0,8 → 1,0 trong `DEFAULT_CONFIG`. Lý do theo sách: một trung khí ở chi tháng (0,5 × 2 = 1,0) hay trung khí ở chi ngày cộng một dư khí vẫn là gốc yếu, sách vẫn nhận Tòng (tbct-13 Tòng Tài dù Thìn có Ất, Tuất có Đinh). Ảnh hưởng nhỏ: 1,5% lá số ngẫu nhiên đổi Dụng thần, Tòng cách thành cách (Chân hoặc Giả) từ 4,4% lên 6,4%; so với legacy, đảo chiều tăng 40,5% → 42,0% (thêm 43 lá; nhóm nguyên nhân Tòng cách 100 → 152, các nhóm khác giảm nhẹ), lá có hai cách luận 132 → 192. `REFERENCE_CONFIG` giữ nguyên v0.2 để test chứng minh bản port; `climatePriorityShare` thành tham số nhưng giữ 6% (không đổi hành vi).
+
+**Phương án bị loại:**
+- *Bộ tốt nhất trên tập chỉnh (đổi 6 tham số cùng lúc):* tập chỉnh lên 22/34 nhưng tập thử chỉ 9/16 và số lá trùng thẳng ở tập thử giảm. Đó là dấu hiệu chỉnh vừa khít 34 lá chứ không tốt lên thật.
+- *Ưu tiên Điều hậu rộng hơn:* thêm 1 lá nhưng 6–11% người dùng đổi Dụng thần; không đáng.
+- *Chỉ nới `candidateWeak`:* một mình không đổi lá nào (các lá Tòng vẫn trượt cổng gốc hoặc can lộ).
+
+**Điều tham số không chữa được (cần đổi thuật toán, nên có người luận duyệt trước):**
+1. Không có Hoá khí cách (tbct-19, tbct-26).
+2. Thân vượng: engine chọn Tài khi Ấn nhiều hơn Tỷ, Quan Sát khi Quan Sát ≥ 1, còn lại Thực Thương, theo điểm. Sách chọn theo chữ thấu can và có gốc (ttt-83, ttt-105 dùng Thực Thương dù có Quan Sát; tbct-21, ttt-71 dùng Quan Sát dù Thực Thương nhiều hơn), nên không có ngưỡng điểm nào khớp cả hai phía.
+3. Thân nhược mà Thực Thương quá nặng: sách có khi dùng Tài tiết Thực Thương (tbct-16) thay vì Ấn.
+4. Lá engine xếp "trung hoà": bù hành yếu nhất chỉ khớp 1/4 lá; chia theo phía vượng/nhược cũng chỉ 1/4.
+5. Vài lá sách thấy thân mạnh nhờ trường sinh, lộc ở chi ngày, giờ mà engine thấy nhược (ttt-26, ttt-46); làm phẳng hệ số mùa chữa được hai lá này nhưng làm hỏng lá khác.
+
+Sau hiệu chỉnh vẫn khớp đúng 50% (25/50), vừa chạm ngưỡng của điều 5; khác biệt so với v0.2 là 1 lá, tập thử không đổi, nên **không coi là engine đã đáng tin hơn**. Muốn tiến xa hơn cần thêm dữ liệu (thêm lá số từ sách, hoặc người luận) và quyết định về các điểm thuật toán ở trên.
 
 ### 14.10 Thứ tự triển khai
 
