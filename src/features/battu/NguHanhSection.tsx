@@ -9,14 +9,16 @@ import { useApp, useAppCtx } from '../../app/context';
 import { clearNguHanhAnswers, setNguHanhAnswer } from '../../state/actions';
 import { birthKeyOf, type NguHanhOutcome } from '../../state/schema';
 import { SectionView } from '../../ui/components/SectionView';
+import { SpeakButton } from '../../ui/components/SpeakButton';
+import { useWho } from '../reader/hooks';
+import { buildScript } from '../reader/script';
+import { ASK_OPTIONS, nextNguHanhQuestion, nguHanhScriptInput } from '../reader/nguhanhScript';
 import { Segmented } from '../../ui/components/Segmented';
 import ui from '../../ui/components/ui.module.css';
 import s from './battu.module.css';
 
 const FOLD_IDS = new Set(['nguhanh.why', 'nguhanh.notes']);
 
-/** Tham số chọn câu hỏi của app (ARCHITECTURE 14.5): tối đa 2 Đại Vận đã đi hết và 3 năm từ 18 tuổi mụ. */
-const ASK = { minAge: 18, maxYears: 3, maxDaiVan: 2 } as const;
 const OUTCOMES: NguHanhOutcome[] = ['tot', 'binh', 'xau', 'khong-nho'];
 
 export function NguHanhSection({ ch, nowYear, profileId }: { ch: BatTuChart; nowYear: number; profileId: string }) {
@@ -31,9 +33,9 @@ export function NguHanhSection({ ch, nowYear, profileId }: { ch: BatTuChart; now
     return fb.length ? resolveWithFeedback(base, fb) : null;
   }, [base, mine]);
   const a = resolved ? resolved.analysis : base;
-  const questions = useMemo(() => verificationQuestions(base, { nowYear, ...ASK }), [base, nowYear]);
-  const next = resolved?.decided ? undefined : questions.find((q) => !mine.some((x) => x.target.kind === q.target.kind
-    && (x.target.kind === 'nam' ? x.target.year === (q.target as { year: number }).year : x.target.index === (q.target as { index: number }).index)));
+  const questions = useMemo(() => verificationQuestions(base, { nowYear, ...ASK_OPTIONS }), [base, nowYear]);
+  const next = useMemo(() => nextNguHanhQuestion(base, !!resolved?.decided, mine, nowYear), [base, resolved, mine, nowYear]);
+  const who = useWho();
   const legacy = useMemo(() => batTuReading(ch, nowYear), [ch, nowYear]);
   const [picked, setPicked] = useState<Reading['id'] | null>(null);
   const main = a.readings[0], other = a.readings[1];
@@ -54,6 +56,7 @@ export function NguHanhSection({ ch, nowYear, profileId }: { ch: BatTuChart; now
     <section aria-labelledby="battu-nguhanh" className={ui.stack}>
       <h2 id="battu-nguhanh" className={ui.sectionTitle}>Phân tích ngũ hành</h2>
       <div className={ui.card}>
+        <SpeakButton id="nguhanh" label="Nghe phần ngũ hành" getCues={() => buildScript('nguhanh', who, nguHanhScriptInput({ a, ask: next ? { question: next, base } : undefined }, who))} />
         {grade === 'gia' && other && (
           <Segmented<Reading['id']>
             label="Cách luận (hai cách cho kết quả khác nhau)"
