@@ -144,6 +144,8 @@
 ## Ngũ hành (Phase 3C.6 và 3C.7, chờ duyệt)
 
 > Thầy đọc phần phân tích ngũ hành ở màn Bát Tự (nút "Nghe phần ngũ hành") và ở Tĩnh thất. Mỗi lý do có lời dẫn riêng, chọn theo lá số. `{hanh}`, `{dung}`, `{hy}`, `{ky}`, `{cach}`, `{tincay}`, `{chi}`, `{tiet}`, `{nhatChu}`, `{the}` được điền từ kết quả của lá số. Phần chữ trên màn hình (bảng điều kiện, phần trăm, danh sách thói quen) Thầy không đọc.
+>
+> Sau các lời dẫn, Thầy đọc bốn đoạn của mục "Nói dễ hiểu" (dựng từ chính lá số, câu mẫu ở `docs/NGU-HANH.md` và `src/content/nguhanh/plain.ts`): Dụng thần là gì trong đời sống kèm một việc cụ thể, Hỷ thần, Kỵ thần kèm một tình huống cụ thể, năm thuận nhất và năm nên giữ nhịp nhất trong 12 năm tới. Chữ "bạn" trong các đoạn này đổi theo cách Thầy gọi ({goi}), giữ nguyên "bạn bè".
 
 **Câu mở**
 - Thầy chào {goi}. Mình xem thêm phần phân tích ngũ hành của lá số {cuaAi}. Số là tham khảo, đức năng thắng số.
