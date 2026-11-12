@@ -1,5 +1,5 @@
 /**
- * Bộ lá số mẫu lấy từ sách (tests/fixtures/nguhanh-sach.json): đọc tứ trụ in trong sách, chạy engine ngũ hành, xếp loại khớp.
+ * Bộ lá số mẫu lấy từ sách (src/content/nguhanh/sach.json, cũng là nguồn của mục "Lá số cổ giống bạn"): đọc tứ trụ in trong sách, chạy engine ngũ hành, xếp loại khớp.
  * Dùng chung cho scripts/compare-sach.ts (sinh docs/NGU-HANH-SACH.md) và tests/nguhanh-sach.test.ts.
  */
 import { readFileSync } from "node:fs";
@@ -22,7 +22,7 @@ export type SachMatch = "trung" | "gan" | "nguoc" | "khac";
 export interface SachResult { c: SachCase; a: NguHanhAnalysis; match: SachMatch; altHit: boolean; stable: boolean; rule14: boolean }
 
 export function loadSach(): { meta: Record<string, unknown>; cases: SachCase[] } {
-  const j = JSON.parse(readFileSync(fileURLToPath(new URL("../../tests/fixtures/nguhanh-sach.json", import.meta.url)), "utf8"));
+  const j = JSON.parse(readFileSync(fileURLToPath(new URL("../../src/content/nguhanh/sach.json", import.meta.url)), "utf8"));
   return { meta: j._meta, cases: j.cases };
 }
 
