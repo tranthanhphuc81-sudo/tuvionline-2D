@@ -167,6 +167,20 @@ Engine chỉ trả mã và số; mỗi mã dưới đây đổi thành câu như
 >
 > Kết luận này ổn định: đổi sang cách đặt hệ số khác (coi trọng nguyệt lệnh hơn) vẫn cho cùng Dụng thần.
 
+> Nói dễ hiểu
+>
+> Bạn là Canh (Kim): can của ngày sinh, đại diện cho chính bạn. Phe giúp bạn (Kim và hành sinh ra Kim) chiếm khoảng 33% lực của lá số, phần còn lại thuộc về các hành làm bạn tiêu hao hay bị chế ngự. Như vậy là yếu: giống một người phải gánh việc nặng hơn sức mình, nên điều lá số cần trước hết là được tiếp sức hoặc bớt gánh.
+>
+> Hành mạnh nhất trong lá số là Mộc (42%): bạn sinh tháng Mão (mùa xuân), đúng lúc Mộc vượng nhất. Ngược lại, Hoả gần như vắng mặt (4%).
+>
+> Vì phe bạn đang yếu, hành có ích là hành tiếp sức cho bạn hoặc giúp bạn gánh bớt: Kim. Với bạn, Kim là Tỷ Kiếp, trong đời sống ứng với chính bạn và những người ngang hàng: anh chị em, bạn bè, đồng nghiệp cùng cấp, sức khoẻ và sự tự lập. "Bổ sung Kim" không phải chuyện đồ vật, mà là đưa thêm những điều đó vào nếp sống, vừa sức mình. Ví dụ: thay vì một mình gánh một việc lớn, rủ một người bạn cùng nghề làm chung và chia rõ phần ai nấy làm; hoặc giữ lịch tập thể dục ba buổi một tuần để có sức bền.
+>
+> Hỗ trợ cho Kim là Thổ (Ấn của bạn): việc học, bằng cấp, người thầy, người đi trước nâng đỡ, và những lúc nghỉ để nạp lại sức. Có thêm phần này thì phần trên bền hơn.
+>
+> Hành nên tiết chế là Hoả (Quan Sát của bạn), ứng với khuôn khổ và trách nhiệm: cấp trên, chức danh, nội quy, kỷ luật, danh tiếng. Khi phần này lấn lên, dễ gặp những chuyện như: nhận cùng lúc nhiều chức danh, hoặc làm dưới quyền người quá khắt khe mà không nói ra cho đến lúc kiệt sức.
+>
+> Năm thuận nhất trong 12 năm tới là 2029 Kỷ Dậu: can Kỷ thuộc Thổ (hành hỗ trợ), chi Dậu thuộc Kim (đúng hành bạn cần). Đây là năm hợp để tìm cộng sự bù trừ năng lực. Năm nên giữ nhịp nhất là 2026 Bính Ngọ: cả can Bính lẫn chi Ngọ đều thuộc Hoả, hành nên tiết chế. Năm đó nên giữ nhịp an toàn, chưa vội mở rộng hay nhận thêm cam kết lớn. Đây là gợi ý sắp xếp nhịp làm việc, không phải lời báo trước.
+
 > Mô hình cân bằng 5 hành (tuỳ chọn)
 >
 > Hình minh hoạ, không dùng để chọn Dụng thần. Muốn bổ sung Kim: nuôi Thổ (sinh Kim) và bớt Hoả (khắc Kim).
@@ -274,6 +288,20 @@ Engine chỉ trả mã và số; mỗi mã dưới đây đổi thành câu như
 > Thuỷ · Thực Thương · Dụng thần 5%
 >
 > Kết luận này chưa vững: nếu coi trọng nguyệt lệnh hơn thì Dụng thần là Mộc thay vì Thuỷ. Nên xem như một gợi ý, chưa phải kết quả chắc.
+
+> Nói dễ hiểu
+>
+> Bạn là Canh (Kim): can của ngày sinh, đại diện cho chính bạn. Phe giúp bạn (Kim và hành sinh ra Kim) chiếm khoảng 52% lực của lá số, phần còn lại thuộc về các hành làm bạn tiêu hao hay bị chế ngự. Như vậy là gần cân bằng: hai phe xấp xỉ nhau, nên chỉ cần chỉnh nhẹ chỗ đang thiếu, không cần thay đổi lớn.
+>
+> Hành mạnh nhất trong lá số là Thổ (34%): bạn sinh tháng Tuất (mùa cuối thu), đúng lúc Thổ vượng nhất; Thổ nằm sẵn trong chi giờ Tuất. Ngược lại, Thuỷ gần như vắng mặt (5%).
+>
+> Hai phe gần cân bằng nên không cần chỉnh mạnh; chỉ bù hành đang thiếu nhất là Thuỷ. Với bạn, Thuỷ là Thực Thương, trong đời sống ứng với khả năng thể hiện và làm ra cái mới: nói, viết, dạy, sáng tạo, tay nghề. "Bổ sung Thuỷ" không phải chuyện đồ vật, mà là đưa thêm những điều đó vào nếp sống, vừa sức mình. Ví dụ: mỗi tuần viết một bài chia sẻ điều mình làm tốt, hoặc nhận dạy kèm một kỹ năng mình có cho vài người quen.
+>
+> Hỗ trợ cho Thuỷ là Kim (Tỷ Kiếp của bạn): chính bạn và những người ngang hàng: anh chị em, bạn bè, đồng nghiệp cùng cấp, sức khoẻ và sự tự lập. Có thêm phần này thì phần trên bền hơn.
+>
+> Hành nên tiết chế là Thổ (Ấn của bạn), ứng với việc học, bằng cấp, người thầy, người đi trước nâng đỡ, và những lúc nghỉ để nạp lại sức. Khi phần này lấn lên, dễ gặp những chuyện như: học hết khoá này sang khoá khác mà chưa làm ra sản phẩm nào; hoặc chờ có người sắp xếp sẵn rồi mới bắt tay vào việc.
+>
+> Năm thuận nhất trong 12 năm tới là 2032 Nhâm Tý: cả can Nhâm lẫn chi Tý đều thuộc Thuỷ, đúng hành bạn cần. Đây là năm hợp để xây sản phẩm hay hồ sơ cá nhân. Năm nên giữ nhịp nhất là 2027 Đinh Mùi: can Đinh thuộc Hoả (hành tiếp sức cho hành nên tiết chế), chi Mùi thuộc Thổ (hành nên tiết chế). Năm đó nên giữ nhịp an toàn, chưa vội mở rộng hay nhận thêm cam kết lớn. Đây là gợi ý sắp xếp nhịp làm việc, không phải lời báo trước.
 
 > Mô hình cân bằng 5 hành (tuỳ chọn)
 >
@@ -386,6 +414,20 @@ Engine chỉ trả mã và số; mỗi mã dưới đây đổi thành câu như
 > Hoả · Thực Thương · Dụng thần 4%
 >
 > Kết luận này ổn định: đổi sang cách đặt hệ số khác (coi trọng nguyệt lệnh hơn) vẫn cho cùng Dụng thần.
+
+> Nói dễ hiểu
+>
+> Bạn là Giáp (Mộc): can của ngày sinh, đại diện cho chính bạn. Phe giúp bạn (Mộc và hành sinh ra Mộc) chiếm khoảng 83% lực của lá số, phần còn lại thuộc về các hành làm bạn tiêu hao hay bị chế ngự. Phe của bạn mạnh áp đảo. Gặp trường hợp này, sách xưa không ép bớt mà cho thuận theo thế mạnh, giống dòng sông lớn thì nên khơi cho chảy chứ không đắp đập chặn ngang.
+>
+> Hành mạnh nhất trong lá số là Mộc (55%): Mộc lộ ra ở can năm Giáp, can tháng Ất, can giờ Ất; Mộc nằm sẵn trong chi ngày Dần. Ngược lại, Hoả gần như vắng mặt (4%).
+>
+> Lá số theo thế Khúc Trực, nên hành có ích là hành đi cùng thế mạnh: Hoả. Với bạn, Hoả là Thực Thương, trong đời sống ứng với khả năng thể hiện và làm ra cái mới: nói, viết, dạy, sáng tạo, tay nghề. "Thuận theo Hoả" không phải chuyện đồ vật, mà là đưa thêm những điều đó vào nếp sống, vừa sức mình. Ví dụ: mỗi tuần viết một bài chia sẻ điều mình làm tốt, hoặc nhận dạy kèm một kỹ năng mình có cho vài người quen.
+>
+> Hỗ trợ cho Hoả là Mộc (Tỷ Kiếp của bạn): chính bạn và những người ngang hàng: anh chị em, bạn bè, đồng nghiệp cùng cấp, sức khoẻ và sự tự lập. Có thêm phần này thì phần trên bền hơn.
+>
+> Hành nên tránh, vì đi ngược thế của lá số, là Kim (Quan Sát của bạn), ứng với khuôn khổ và trách nhiệm: cấp trên, chức danh, nội quy, kỷ luật, danh tiếng. Khi phần này lấn lên, dễ gặp những chuyện như: nhận cùng lúc nhiều chức danh, hoặc làm dưới quyền người quá khắt khe mà không nói ra cho đến lúc kiệt sức.
+>
+> Năm thuận nhất trong 12 năm tới là 2026 Bính Ngọ: cả can Bính lẫn chi Ngọ đều thuộc Hoả, đúng hành nên thuận theo. Đây là năm hợp để xây sản phẩm hay hồ sơ cá nhân. Năm nên giữ nhịp nhất là 2029 Kỷ Dậu: can Kỷ thuộc Thổ (hành tiếp sức cho hành nên tránh), chi Dậu thuộc Kim (hành nên tránh). Năm đó nên giữ nhịp an toàn, chưa vội mở rộng hay nhận thêm cam kết lớn. Đây là gợi ý sắp xếp nhịp làm việc, không phải lời báo trước.
 
 > Mô hình cân bằng 5 hành (tuỳ chọn)
 >

@@ -38,7 +38,7 @@ export function NguHanhSection({ ch, nowYear, profileId }: { ch: BatTuChart; now
   // Bảng 4 điều kiện hiện rõ khi Chân hoặc Giả; khi Không thành thì nằm trong "Vì sao ra kết quả này" (14.7)
   const patternInFold = grade === 'khong-thanh';
   const inFold = (id: string) => FOLD_IDS.has(id) || (patternInFold && id === 'nguhanh.pattern');
-  const head = sections.filter((x) => ['nguhanh.intro', 'nguhanh.headline'].includes(x.id) || (!patternInFold && x.id === 'nguhanh.pattern'));
+  const head = sections.filter((x) => ['nguhanh.intro', 'nguhanh.headline', 'nguhanh.plain'].includes(x.id) || (!patternInFold && x.id === 'nguhanh.pattern'));
   const fold = sections.filter((x) => inFold(x.id));
   const balance = sections.find((x) => x.id === 'nguhanh.balance');
   // Chân: cách luận khác chỉ hiện khi người dùng bấm xem; Giả: luôn có ở lựa chọn ngang hàng

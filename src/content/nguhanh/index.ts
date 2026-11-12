@@ -12,6 +12,7 @@ import { analyzeSensitivity, rankIntervention, balanceTarget, BALANCE, TARGET, t
 import { FAMILY } from '../interp/battu';
 import { msgText, type RenderCtx } from './render';
 import { ELEMENT_PRACTICAL, TEN_GOD_PRACTICAL } from './practical';
+import { plainBlocks } from './plain';
 import {
   SENSITIVITY_STABLE, sensitivityUnstable, CHECK_QUESTION, CHECK_STATUS, CLOSING_NOTE, COLOR_SOURCE_NOTE, DISCLAIMER, FAVOR_HINT, FAVOR_LABEL, FAVOR_TONE, INTRO_NOTE, METHOD_VI, OUTCOME_LABEL,
   STRENGTH_VI, TEN_GOD_VI, TYPE_VI,
@@ -21,6 +22,7 @@ export * from './vocab';
 export { msgText } from './render';
 export type { RenderCtx } from './render';
 export { ELEMENT_PRACTICAL, TEN_GOD_PRACTICAL } from './practical';
+export { plainBlocks, PLAIN_KEYS, PLAIN_RARE_KEYS } from './plain';
 
 const { CAN, CHI } = BatTuEngine;
 const NO_SPEECH = ['no-speech'];
@@ -232,6 +234,9 @@ export function practicalReport(a: NguHanhAnalysis, o: ReportOptions): Section[]
     { id: 'nguhanh.headline.bars', kind: 'bars', tags: NO_SPEECH, rows: balance.map((e) => ({ label: `${e} · ${TEN_GOD_VI[tenGodOf(dm, e)]}${tags[e] ? ' · ' + tags[e] : ''}`, pct: Math.round(a.score.shares[e] * 100) })) },
     p('nguhanh.headline.sens', sensitivityNote(a.chart, ug.dung)),
   ]);
+
+  // 2a. Nói dễ hiểu: kết luận bằng lời thường, có số liệu và ví dụ của chính lá số này
+  sec('plain', 'Nói dễ hiểu', plainBlocks(a, reading, o.nowYear).blocks);
 
   // 2b. Mô hình cân bằng (tuỳ chọn, gập sẵn): hình 5 nút và xếp hạng "can thiệp tối thiểu"
   sec('balance', 'Mô hình cân bằng 5 hành (tuỳ chọn)', [cycleBlock(a.score.shares, ug.dung, tags), ...balanceBlocks(a.score.shares, ug.dung, o.balanceMode, o.balanceTarget === 'la-so' ? { dayMaster: dm, strength: a.dayMaster.strength, climate: seasonClimate(a.chart.month.branch) } : undefined)]);
