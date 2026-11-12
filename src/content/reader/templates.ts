@@ -128,9 +128,9 @@ export const TOOL_LINES: Record<ReaderTool, { open: readonly string[]; close: re
       `{Ta} thấy các đường chỉ {cuaAi} rồi. Đường chỉ đổi theo cách mình sống, mình đọc từ từ nhé. ${C}`,
     ],
     close: [
-      `Tay {ta} đọc đến đây. Đường chỉ đổi theo cách mình sống, sáu tháng một năm xem lại cũng được. ${C}`,
-      `{Ta} đọc xong rồi. Giữ điều hay, sửa điều chưa hợp, tay cũng đổi theo. ${C}`,
-      `Đọc đến đây thôi. Tay là của mình, đường đi cũng do mình. ${C}`,
+      `Tay {ta} đọc đến đây. Đường chỉ đổi theo cách mình sống, sáu tháng đến một năm xem lại cũng được. ${C}`,
+      `{Ta} đọc xong rồi. Giữ điều hay, sửa điều chưa hợp, tay cũng đổi theo. Sáu tháng đến một năm sau mình xem lại. ${C}`,
+      `Đọc đến đây thôi. Tay là của mình, đường chỉ đổi theo cách mình sống, sáu tháng đến một năm sau xem lại cũng hay. ${C}`,
     ],
     cells: ['Trước hết {ta} tóm lại mấy ý chính.', 'Mình nghe phần tóm tắt đã.'],
     sections: ['Giờ {ta} đọc kỹ từng phần.', '{Ta} đọc tiếp từng phần trên tay.'],
@@ -152,6 +152,11 @@ export const LEADS = {
   nguhanhCamOn: ['Cảm ơn {goi}, {ta} ghi lại rồi.', '{Ta} ghi nhận rồi, cảm ơn {goi}.'],
   nguhanhChuaChac: ['Chưa đủ để {ta} nói chắc cách luận nào hợp hơn. {goi} cứ xem cả hai như hai góc nhìn.', '{Ta} chưa dám nói chắc cách nào hợp hơn. Cứ xem cả hai cách luận như hai góc nhìn.'],
   nguhanhHoi: ['Để biết cách luận nào hợp hơn, {ta} xin hỏi {goi} về một giai đoạn đã qua.', '{goi} nhớ lại giúp {ta} một giai đoạn đã qua nhé. Không nhớ thì cứ bỏ qua.'],
+  chitayTongQuan: ['Trước hết {ta} nói về hình dáng chung của bàn tay {cuaAi}.', 'Mình nhìn tổng quan bàn tay trước, từ hình dáng đến độ dày.'],
+  chitayNgon: ['Giờ {ta} xem các ngón tay: độ dài và hình dáng từng ngón.', 'Sang phần ngón tay, {ta} xem từng ngón một.'],
+  chitayBaDuong: ['Bây giờ tới các đường chính trên lòng bàn tay.', '{Ta} xem các đường chính nhé, từng đường một.'],
+  chitayDuongPhu: ['Ngoài ra còn mấy đường phụ, {ta} nói ngắn thôi.', 'Các đường phụ chỉ là điểm thêm, {goi} nghe để tham khảo.'],
+  chitayGoDau: ['Giờ {ta} xem các gò trên lòng bàn tay và những dấu nhỏ, nếu có.', 'Phần cuối là gò và dấu hiệu. Dấu nhỏ nào cũng chỉ là gợi ý.'],
   chitayDuong: ['{goi} xem {duong}, {ta} tô sáng trên tay đây.', 'Đây là {duong}.'],
 } as const;
 

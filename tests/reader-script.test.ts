@@ -247,9 +247,27 @@ describe('Kịch bản Thầy đọc chỉ tay', () => {
         expect(cues.at(-1)!.caption).toContain(CULTURE_LINE);
       }
     }
-    // ít nhất một câu kết nhắc xem lại sau 6–12 tháng (ba biến thể, đổi theo ngày)
-    const closes = [0, 1, 2].map((i) => buildPalmScript(who, palmScriptInput(views()[0]), i).at(-1)!.caption!);
-    expect(closes.some((c) => /sáu tháng một năm|6.{0,3}12 tháng/.test(c))).toBe(true);
+    // cả ba câu kết đều nhắc tay đổi theo cách sống và xem lại sau sáu tháng đến một năm
+    for (const i of [0, 1, 2]) {
+      const close = buildPalmScript(who, palmScriptInput(views()[0]), i).at(-1)!.caption!;
+      expect(close, 'câu kết ' + i).toMatch(/Đường chỉ đổi theo cách mình sống|đường chỉ đổi theo cách mình sống|tay cũng đổi theo/);
+      expect(close, 'câu kết ' + i).toMatch(/[Ss]áu tháng/);
+    }
+  });
+
+  it('lời dẫn từng mục: mỗi mục có nội dung đều được dẫn bằng mẫu câu riêng, mỗi loại ≥ 2 biến thể', () => {
+    for (const k of ['chitayTongQuan', 'chitayNgon', 'chitayBaDuong', 'chitayDuongPhu', 'chitayGoDau', 'chitayDuong'] as const) expect(LEADS[k].length, k).toBeGreaterThanOrEqual(2);
+    for (const { v, cues } of scriptsOf()) {
+      const text = cues.map((c) => c.caption ?? '').join(' ');
+      for (const sec of v.sections.filter((x) => x.items.length && x.key !== 'duong-chinh')) {
+        // không đọc tiêu đề trơ trọi: câu dẫn của mục khác với tiêu đề
+        const leads = { 'tong-quan': LEADS.chitayTongQuan, ngon: LEADS.chitayNgon, 'duong-phu': LEADS.chitayDuongPhu, 'go-dau': LEADS.chitayGoDau }[sec.key as 'ngon'];
+        if (!leads) continue;
+        const heads = leads.map((l) => fill(l, { goi: 'con', cuaAi: 'của con', ta: 'thầy' }).slice(0, 24));
+        expect(heads.some((h) => text.includes(h)), sec.key).toBe(true);
+      }
+      expect(cues.some((c) => /các đường chính/i.test(c.caption ?? ''))).toBe(true);
+    }
   });
 
   it('(e) mỗi cue của câu luận có đường chính, gò hay dấu thì có focus.palm tương ứng', () => {
