@@ -1227,6 +1227,59 @@ Hai preset của engine (`PRESETS`: mặc định và coi trọng nguyệt lện
 
 Sau hiệu chỉnh vẫn khớp đúng 50% (25/50), vừa chạm ngưỡng của điều 5; khác biệt so với v0.2 là 1 lá, tập thử không đổi, nên **không coi là engine đã đáng tin hơn**. Muốn tiến xa hơn cần thêm dữ liệu (thêm lá số từ sách, hoặc người luận) và quyết định về các điểm thuật toán ở trên.
 
+### 14.13 Kiểm tra độc lập sau hiệu chỉnh (12/11/2026)
+
+Sau 14.12, lấy thêm 41 lá *Trích Thiên Tủy* nói rõ dụng thần mà chưa dùng khi hiệu chỉnh (đợt 2 trong `tests/fixtures/nguhanh-sach.json`, trường `batch`). Đây là phép thử thật của hiệu chỉnh, vì không lá nào trong đó ảnh hưởng tới việc chọn tham số.
+
+| | Số lá | Khớp 14.1 | Trùng | Ngược |
+|---|---|---|---|---|
+| Đợt 2, v0.2 | 41 | 19 (46%) | 7 (17%) | 11 (27%) |
+| Đợt 2, sau hiệu chỉnh | 41 | 19 (46%) | 7 (17%) | 11 (27%) |
+| Cả 91 lá, sau hiệu chỉnh | 91 | 44 (48%) | 27 (30%) | 20 (22%) |
+
+**Kết luận:** hiệu chỉnh 14.12 không đổi lá nào ở đợt 2, tức là không cải thiện được trên dữ liệu mới; nó vẫn đúng về lý (gốc yếu không chặn Tòng) nên giữ, nhưng không được coi là bằng chứng engine tốt hơn. Khớp vẫn dưới 50%, điều 5 của 14.1 chưa thoát.
+
+**Khớp theo phương pháp engine dùng (91 lá, bản app):**
+
+| Phương pháp | Số lá | Trùng | Khớp 14.1 | Ngược |
+|---|---|---|---|---|
+| Thuận thế (Tòng, Chuyên vượng) | 13 | 8 | 9 | 1 |
+| Phù ức | 52 | 16 | 25 | 11 |
+| Trung hoà (bù hành yếu nhất) | 13 | 2 | 5 | 5 |
+| Điều hậu được ưu tiên | 13 | 1 | 5 | 3 |
+
+Hai nhánh yếu nhất giống nhau ở cả hai đợt:
+1. **Trung hoà:** "bù hành yếu nhất" trùng sách 2/13 lá, ngược 5/13. Sách với lá cân bằng vẫn chọn theo cách cục và chữ thấu can, không bù hành ít điểm nhất.
+2. **Điều hậu được ưu tiên** (hành cần dưới 6%): trùng 1/13. Ở đợt 2, chín lá engine lấy Điều hậu, sách đều dùng hành khác (thường là chế hoá theo vượng suy). Ở đợt 1, nới rộng Điều hậu lại có lợi một lá: hai đợt chỉ hai hướng khác nhau, nên chưa đủ căn cứ đổi ngưỡng.
+3. **Thương quan dụng kiếp** (ttt-168, 169, 172; giống tbct-16 dùng Tài): thân nhược vì Thực Thương nặng mà Ấn yếu hoặc không có, sách dùng Tỷ Kiếp hoặc Tài; engine luôn dùng Ấn.
+
+Đây là thay đổi thuật toán (không phải hệ số), ảnh hưởng nhiều lá số của người dùng, nên **chưa làm**: cần chủ dự án quyết và nên có người luận duyệt quy tắc mới. Nếu làm, phải có thêm lá số mới chưa dùng (đợt 3) để thử lại, vì đợt 2 đã được nhìn khi tìm ra các kiểu lệch này.
+
+### 14.14 Thử sửa quy tắc chọn Dụng thần (12/11/2026): không giữ quy tắc nào
+
+Chủ dự án yêu cầu thử sửa thuật toán theo các kiểu lệch ở 14.13. Quy trình để tránh chỉnh vừa mẫu:
+
+1. Thêm cờ `rules` vào `ScoringConfig` (mặc định = cách v0.2, không đổi hành vi): `trungHoa` ('yeu-nhat' | 'theo-phia'), `nhuocThucThuong` ('an' | 'an-hoac-kiep', ngưỡng `anMin`), `vuongPick` ('diem' | 'thau-can'); cùng `climatePriorityShare` (14.12). Mã lý do mới có câu ở `src/content/nguhanh/render.ts`.
+2. Đo từng cờ và tổ hợp trên 91 lá đợt 1 + 2 (tập thiết kế) và tỷ lệ đổi Dụng thần trên 3000 lá ngẫu nhiên.
+3. **Chốt trước** hai phương án và điều kiện giữ, rồi mới lấy đợt 3: 30 lá phụ lục *Tử Bình Chân Thuyên* ở các trang chưa đọc (đã bỏ 2 lá sách in sai can giờ, xem `_meta.dropped`).
+
+**Trên tập thiết kế (91 lá, khớp 14.1 / trùng / ngược; đổi Dụng thần trên 3000 lá):** hiện tại 44 / 27 / 20. Trung hoà theo phía 43 / 26 / 17 (16,8%). Thương quan dụng kiếp khi Ấn < 0,5: 44 / 29 / 21 (2,8%). Thân vượng theo can lộ 43 / 27 / 21 (13,0%). Điều hậu chỉ ưu tiên khi dưới 3%: **48 / 29 / 19 (4,8%)**. Bỏ ưu tiên Điều hậu: 47 / 30 / 19 (10,4%). Gộp ba quy tắc trở lên làm 24–51% người dùng đổi Dụng thần mà khớp không hơn.
+
+**Hai phương án chốt và điều kiện (ghi trước khi xem đợt 3):** P1 = Điều hậu chỉ ưu tiên dưới 3%; P2 = P1 + Thương quan dụng kiếp (Ấn < 0,5). Giữ P1 nếu đợt 3 khớp không kém bản hiện tại **và** số lá ngược không tăng; chọn P2 thay P1 chỉ khi đợt 3 khớp hoặc trùng hơn P1 mà ngược không tăng.
+
+**Đợt 3 (30 lá):**
+
+| | Khớp 14.1 | Trùng | Ngược |
+|---|---|---|---|
+| v0.2 | 12 | 4 | 4 |
+| Bản app (14.12) | 11 | 4 | 4 |
+| P1 | 11 | 5 | 6 |
+| P2 | 11 | 5 | 6 |
+
+**Kết luận:** P1 và P2 đều làm số lá ngược tăng (4 → 6), trượt điều kiện, nên **không giữ**; engine không đổi. Đợt 3 có nhiều lá sách dùng Điều hậu (10/30), đúng chỗ P1 bỏ bớt Điều hậu: kiểu lệch "Điều hậu" đi theo cả hai hướng tuỳ lá, không sửa được bằng một ngưỡng. Hiệu chỉnh `weakRootMax` (14.12) cộng ba đợt là +1, 0, −1 lá (cả 121 lá: 55 như v0.2), tức là không có tác dụng đo được; vẫn giữ vì đã phát hành và đúng về lý, nhưng không coi là cải thiện. Cả 121 lá: khớp 55 (45%), trùng 31 (26%), ngược 24 (20%), vẫn dưới 50% (điều 5 của 14.1).
+
+**Điều rút ra:** sửa engine bằng dò tham số hay quy tắc đơn lẻ trên lá số trong sách đã chạm giới hạn. Phần lệch phản ánh khác biệt cách luận (sách đọc chữ thấu can, hợp hoá, khí hậu từng lá) nhiều hơn là một ngưỡng sai. Bước có ích tiếp theo là người luận xem các lá "Ngược" trong `docs/NGU-HANH-SACH.md` và quyết định quy tắc; các cờ `rules` để sẵn (tắt) cho việc thử đó. Muốn thử quy tắc mới thì cần thêm một đợt lá số chưa dùng (đợt 3 nay đã được nhìn).
+
 ### 14.10 Thứ tự triển khai
 
 | Bước | Việc | Xong khi | Chủ dự án duyệt |

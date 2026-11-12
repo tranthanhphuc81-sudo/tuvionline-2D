@@ -5,7 +5,7 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { CAN, CHI } from "../../src/core/canchi/index";
-import { analyze, analyzeSensitivity, type NguHanhAnalysis, type NguHanhChart } from "../../src/core/nguhanh/index";
+import { analyze, analyzeSensitivity, DEFAULT_CONFIG, type NguHanhAnalysis, type NguHanhChart, type ScoringConfig } from "../../src/core/nguhanh/index";
 import type { Element } from "../../src/core/nguhanh/data";
 
 export type Book = "tbct" | "ttt";
@@ -13,6 +13,8 @@ export type Kind = "phu-uc" | "dieu-hau" | "tong" | "hoa-khi";
 export interface SachCase {
   id: string; book: Book; page: string; who?: string | null; ref?: string;
   pillars: [string, string, string, string]; dung: Element; accept?: Element[]; kind: Kind; note: string; fix?: string;
+  /** 1: dùng để hiệu chỉnh (ARCHITECTURE 14.12); 2: thêm sau hiệu chỉnh, tập kiểm tra độc lập (14.13); 3: lấy sau khi chốt phương án sửa quy tắc (14.14) */
+  batch: 1 | 2 | 3;
 }
 /** trung: dụng thần chính của engine = sách; gan: engine nêu hành sách cũng cho là tốt, hoặc cách luận phụ của engine trùng sách; nguoc: kỵ thần engine là dụng thần sách; khac: còn lại. */
 export type SachMatch = "trung" | "gan" | "nguoc" | "khac";
@@ -38,9 +40,9 @@ export function sachChart(c: SachCase): NguHanhChart {
   return { year, month, day, hour, daiVan: [], khoiVanYears: 0, tietYear: 0 };
 }
 
-export function evaluate(c: SachCase): SachResult {
+export function evaluate(c: SachCase, cfg: ScoringConfig = DEFAULT_CONFIG): SachResult {
   const ch = sachChart(c);
-  const a = analyze(ch);
+  const a = analyze(ch, cfg);
   const ug = a.usefulGod;
   const altHit = a.readings.slice(1).some((r) => r.usefulGod.dung === c.dung);
   const match: SachMatch = ug.dung === c.dung ? "trung" : ug.ky === c.dung ? "nguoc" : (c.accept ?? []).includes(ug.dung) || altHit ? "gan" : "khac";

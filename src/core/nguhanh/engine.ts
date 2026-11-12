@@ -245,6 +245,16 @@ export function followGod(dmi: DayMasterInfo, fa: FollowAssessment, secondary: U
   return finalize('tong-cach', { dung, hy, ky }, reasons, secondary);
 }
 
+/** Thân vượng, quy tắc 'thau-can': nhóm Tài / Quan Sát / Thực Thương có can lộ nhiều nhất (bằng nhau thì theo điểm). */
+function exposedPick(chart: NguHanhChart, dm: Element, g: Record<TenGodGroup, number>): { group: TenGodGroup; stems: number } | null {
+  const stems = [chart.year.stem, chart.month.stem, chart.hour.stem];
+  const cands = (['Tai', 'QuanSat', 'ThucThuong'] as TenGodGroup[])
+    .map((group) => ({ group, stems: stems.filter((s) => tenGodOf(dm, stemElement(s)) === group).length }))
+    .filter((c) => c.stems > 0)
+    .sort((a, b) => b.stems - a.stems || g[b.group] - g[a.group]);
+  return cands[0] ?? null;
+}
+
 /** Cách luận thông thường: Điều hậu (nếu cấp bách) → Phù ức. Cực nhược/cực vượng được luận như nhược/vượng. */
 export function balanceGod(chart: NguHanhChart, sr: ScoreResult, dmi: DayMasterInfo, cfg: ScoringConfig = DEFAULT_CONFIG): UsefulGod {
   const dm = dmi.dayMaster;
@@ -261,17 +271,26 @@ export function balanceGod(chart: NguHanhChart, sr: ScoreResult, dmi: DayMasterI
       secondary.filter((s) => s.method !== 'dieu-hau'));
   }
 
+  let side: 'vuong' | 'nhuoc' = dmi.strength === 'vuong' || dmi.strength === 'chuyen-vuong' ? 'vuong' : 'nhuoc';
   if (dmi.strength === 'trung-hoa') {
-    const sorted = [...ELEMENTS].sort((x, y) => sr.scores[x] - sr.scores[y]);
-    const weakest = sorted[0], strongest = sorted[4];
-    const hy = generatedBy(weakest) === strongest ? sorted[1] : generatedBy(weakest);
-    reasons.push(msg('reason.trungHoa', { ratio: dmi.supportRatio, weakest, strongest }));
-    return finalize('trung-hoa', { dung: weakest, hy, ky: strongest }, reasons, secondary);
+    if (cfg.rules.trungHoa === 'yeu-nhat') {
+      const sorted = [...ELEMENTS].sort((x, y) => sr.scores[x] - sr.scores[y]);
+      const weakest = sorted[0], strongest = sorted[4];
+      const hy = generatedBy(weakest) === strongest ? sorted[1] : generatedBy(weakest);
+      reasons.push(msg('reason.trungHoa', { ratio: dmi.supportRatio, weakest, strongest }));
+      return finalize('trung-hoa', { dung: weakest, hy, ky: strongest }, reasons, secondary);
+    }
+    side = dmi.supportRatio < 0.5 ? 'nhuoc' : 'vuong';
+    reasons.push(msg('reason.trungHoaSide', { ratio: dmi.supportRatio, side }));
   }
 
-  if (dmi.strength === 'vuong' || dmi.strength === 'chuyen-vuong') {
+  if (side === 'vuong') {
     let pick: TenGodGroup;
-    if (g.An > g.TyKiep) {
+    const exposed = cfg.rules.vuongPick === 'thau-can' ? exposedPick(chart, dm, g) : null;
+    if (exposed) {
+      pick = exposed.group;
+      reasons.push(msg('reason.vuong.thauCan', { group: exposed.group, element: elementOfTenGod(dm, exposed.group), stems: exposed.stems }));
+    } else if (g.An > g.TyKiep) {
       pick = 'Tai';
       reasons.push(msg('reason.vuong.an', { an: g.An, tyKiep: g.TyKiep, tai: controls(dm) }));
     } else if (g.QuanSat >= 1) {
@@ -297,6 +316,9 @@ export function balanceGod(chart: NguHanhChart, sr: ScoreResult, dmi: DayMasterI
   } else if (main === 'QuanSat') {
     pick = 'An';
     reasons.push(msg('reason.nhuoc.quanSat', { quanSat: g.QuanSat, element: generatedBy(dm) }));
+  } else if (cfg.rules.nhuocThucThuong === 'an-hoac-kiep' && g.An < cfg.rules.anMin) {
+    pick = 'TyKiep';
+    reasons.push(msg('reason.nhuoc.thucThuongKiep', { thucThuong: g.ThucThuong, an: g.An, element: dm }));
   } else {
     pick = 'An';
     reasons.push(msg('reason.nhuoc.thucThuong', { thucThuong: g.ThucThuong, element: generatedBy(dm) }));

@@ -80,6 +80,21 @@ export interface ScoringConfig {
     /** Trọng số tối đa của cách luận thuận thế khi chỉ là Giả tòng — để cách luận còn lại luôn hiện rõ */
     giaMaxWeight: number;
   };
+
+  /**
+   * Biến thể quy tắc chọn Dụng thần (ARCHITECTURE 14.14). Giá trị đầu tiên của mỗi kiểu là cách của v0.2.
+   * - trungHoa: 'yeu-nhat' bù hành ít điểm nhất; 'theo-phia' luận như nhược (tỷ lệ hỗ trợ < 50%) hoặc vượng (≥ 50%).
+   * - nhuocThucThuong: thân nhược mà Thực Thương nặng nhất. 'an' luôn dùng Ấn; 'an-hoac-kiep' dùng Tỷ Kiếp khi Ấn yếu
+   *   (điểm Ấn < anMin), theo "Thương quan dụng kiếp" của Trích Thiên Tủy.
+   * - vuongPick: thân vượng chọn Tài / Quan Sát / Thực Thương. 'diem' theo điểm như v0.2; 'thau-can' ưu tiên nhóm có can lộ
+   *   (không tính nhật can), nhiều can lộ hơn thì trước, bằng nhau thì theo điểm; không nhóm nào lộ thì như 'diem'.
+   */
+  rules: {
+    trungHoa: 'yeu-nhat' | 'theo-phia';
+    nhuocThucThuong: 'an' | 'an-hoac-kiep';
+    anMin: number;
+    vuongPick: 'diem' | 'thau-can';
+  };
 }
 
 /**
@@ -124,6 +139,7 @@ export const REFERENCE_CONFIG: ScoringConfig = {
     giaMin: 0.5,
     giaMaxWeight: 0.65,
   },
+  rules: { trungHoa: 'yeu-nhat', nhuocThucThuong: 'an', anMin: 1, vuongPick: 'diem' },
 };
 
 /**

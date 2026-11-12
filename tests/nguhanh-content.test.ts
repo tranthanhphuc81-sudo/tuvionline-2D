@@ -70,6 +70,10 @@ describe('Mọi mã của engine đều có câu', () => {
     const rare: Msg[] = [
       { code: 'momentum.triad', p: { element: 'Hoả' } }, { code: 'momentum.halfTriad', p: { element: 'Thuỷ' } },
       { code: 'direction.mixed', p: { top: 'Tai', topValue: 3, second: 'QuanSat', secondValue: 2.5 } }, { code: 'direction.anLed' },
+      // quy tắc biến thể ARCHITECTURE 14.14
+      { code: 'reason.trungHoaSide', p: { ratio: 0.47, side: 'nhuoc' } }, { code: 'reason.trungHoaSide', p: { ratio: 0.52, side: 'vuong' } },
+      { code: 'reason.vuong.thauCan', p: { group: 'QuanSat', element: 'Hoả', stems: 2 } },
+      { code: 'reason.nhuoc.thucThuongKiep', p: { thucThuong: 4.7, an: 0.3, element: 'Thổ' } },
       { code: 'resolve.decided', p: { reading: 'thong-thuong', wins: 4, total: 4, weight: 0.9 } }, { code: 'resolve.undecided', p: { reading: 'thuan-the', wins: 2, total: 3, weight: 0.6 } },
     ];
     for (const m of rare) { const t = NH.msgText(m); expect(t, m.code).not.toBe(''); expect(t, m.code).not.toMatch(BAD); }

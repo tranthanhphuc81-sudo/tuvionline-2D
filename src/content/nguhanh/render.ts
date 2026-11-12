@@ -57,6 +57,9 @@ export function msgText(m: Msg, ctx: RenderCtx = {}): string {
     case 'reason.followSingle': return `Nhật Chủ ${p.dm} chỉ có ${pc(p.ratio)} lực, không có gốc → không "cứu", thuận theo ${god(p.main)} ${p.dung}`;
     case 'reason.dieuHauFirst': return 'Thiếu hụt rõ nên ưu tiên Điều hậu trước việc bồi thêm hay tiết bớt Nhật Chủ (theo tinh thần Cùng Thông Bảo Giám)';
     case 'reason.trungHoa': return `Nhật Chủ gần cân bằng (trung hoà, ${pc(p.ratio)} hỗ trợ) → không cần can thiệp mạnh: bù hành yếu nhất ${p.weakest}, bớt hành dư nhất ${p.strongest}`;
+    case 'reason.trungHoaSide': return `Nhật Chủ gần cân bằng (${pc(p.ratio)} hỗ trợ) nhưng nghiêng về phía ${p.side === 'vuong' ? 'mạnh' : 'yếu'} → luận như Thân ${p.side === 'vuong' ? 'vượng' : 'nhược'}`;
+    case 'reason.vuong.thauCan': return `Thân vượng, trong cục có ${god(p.group)} ${p.element} thấu can (${p.stems} chữ) → dùng ${god(p.group)} ${p.element}, chữ đã lộ ra thì dùng được ngay`;
+    case 'reason.nhuoc.thucThuongKiep': return `Thân nhược do Thực Thương tiết khí (${num(p.thucThuong)}) mà Ấn yếu (${num(p.an)}) → dùng Tỷ Kiếp ${p.element} để giúp Thân gánh Thực Thương (Thương quan dụng kiếp)`;
     case 'reason.vuong.an': return `Thân vượng chủ yếu do Ấn nhiều (${num(p.an)} so với Tỷ Kiếp ${num(p.tyKiep)}) → dùng Tài ${p.tai} để chế Ấn`;
     case 'reason.vuong.quanSat': return `Thân vượng do Tỷ Kiếp nhiều, trong cục có Quan Sát (${num(p.quanSat)}) → dùng Quan Sát ${p.element} để chế bớt Thân`;
     case 'reason.vuong.thucThuong': return `Thân vượng do Tỷ Kiếp, Quan Sát yếu hoặc không có → dùng Thực Thương ${p.element} để tiết bớt (nhẹ nhàng hơn là đưa Quan Sát vào khắc)`;
