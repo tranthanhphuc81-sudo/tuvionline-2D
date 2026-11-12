@@ -55,6 +55,30 @@ export function dieuHauNeed(dm: CanIdx, monthChi: ChiIdx): Hanh | null {
   return e === want ? null : want;
 }
 
+/* ===== Hoá khí cách (TTT phần II ch.13 "Hoá tượng", ch.15 "Giả hoá"; TBCT ch.22 "ngoại cách") ===== */
+
+export interface HoaKhi { to: Hanh; partner: 1 | 3; grade: 'chan' | 'gia' }
+
+/** Nhật Chủ hợp với can kề bên (tháng hoặc giờ) và hoá thành hành mới. Chân: chi tháng mang khí hành hoá, và can tháng, can giờ
+    không có hành khắc hành hoá. Giả: chi tháng mang khí hành hoá nhưng có hành khắc lộ bên cạnh. Ngoài ra không xét là hoá. */
+export function hoaKhi(stems: readonly CanIdx[], branches: readonly ChiIdx[]): HoaKhi | null {
+  const dm = stems[2];
+  for (const partner of [1, 3] as const) {
+    const o = stems[partner];
+    const combo = HOA_COMBOS.find((c) => (c.a === dm && c.b === o) || (c.a === o && c.b === dm));
+    if (!combo) continue;
+    const monthHas = TANG_CAN[branches[1]].some(([c]) => hanhOfCan(c) === combo.to);
+    if (!monthHas) continue;
+    const khac = BT_HANH_ORDER[(BT_HANH_ORDER.indexOf(combo.to) + 3) % 5];
+    const broken = [1, 3].some((i) => i !== partner && hanhOfCan(stems[i]) === khac);
+    return { to: combo.to, partner, grade: broken ? 'gia' : 'chan' };
+  }
+  return null;
+}
+const HOA_COMBOS: readonly { a: CanIdx; b: CanIdx; to: Hanh }[] = [
+  { a: 0, b: 5, to: 'Thổ' }, { a: 1, b: 6, to: 'Kim' }, { a: 2, b: 7, to: 'Thuỷ' }, { a: 3, b: 8, to: 'Mộc' }, { a: 4, b: 9, to: 'Hoả' },
+];
+
 /* ===== Cách cục ===== */
 
 export type CachKey = 'chinh-quan' | 'that-sat' | 'tai' | 'an' | 'thuc-than' | 'thuong-quan' | 'duong-nhan' | 'kien-loc' | 'nguyet-kiep';

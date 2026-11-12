@@ -1,7 +1,7 @@
 /* Cách cục theo tháng sinh (src/core/cachcuc) và câu chữ (src/content/cachcuc). ARCHITECTURE mục 15. */
 import { describe, it, expect } from 'vitest';
 import { TU_LENH, tuLenhCan, dieuHauNeed, cachCucOfChart, resolveBirth, batTuChart, tongHopOf } from '../src/core';
-import { cachCuc } from '../src/core/cachcuc';
+import { cachCuc, hoaKhi } from '../src/core/cachcuc';
 import { cachCucSection, cachCucSpeech, cachCucTomLai, CACHCUC_NOTE } from '../src/content/cachcuc/text';
 import { sectionPlainText } from '../src/content/rich';
 import { tongHopTomLai } from '../src/content/tonghop/tongket';
@@ -61,6 +61,18 @@ describe('thành, bại, cứu', () => {
   });
 });
 
+describe('hoá khí cách', () => {
+  it('Nhật Chủ hợp can kề bên, chi tháng mang khí hành hoá: Chân', () => {
+    expect(hoaKhi([1, 2, 5, 0] as never, [9, 10, 3, 10] as never)).toEqual({ to: 'Thổ', partner: 3, grade: 'chan' }); // Ất Dậu · Bính Tuất · Kỷ Mão · Giáp Tuất
+  });
+  it('chi tháng không mang khí hành hoá thì không hoá', () => {
+    expect(hoaKhi([1, 2, 5, 0] as never, [9, 3, 3, 10] as never)).toBeNull(); // tháng Mão
+  });
+  it('có hành khắc hành hoá lộ ở can kề bên: Giả, không theo ngoại cách', () => {
+    expect(hoaKhi([1, 1, 5, 0] as never, [9, 10, 3, 10] as never)?.grade).toBe('gia'); // Ất (Mộc khắc Thổ) ở can tháng
+  });
+});
+
 describe('điều hậu', () => {
   it('tháng lạnh cần Hoả, tháng nóng cần Thuỷ; tháng ôn hoà không cần', () => {
     expect(dieuHauNeed(7, 0)).toBe('Hoả'); // Tân sinh tháng Tý
@@ -75,7 +87,7 @@ describe('điều hậu', () => {
 describe('so với lá số mẫu trong sách', () => {
   const { cases } = loadSach();
   const hit = (book: string) => cases.filter((c) => c.book === book).filter((c) => { const ch = sachChart(c); const r = cachCucOf(ch, analyze(ch)); return r.dung === c.dung || (c.accept ?? []).includes(r.dung); }).length;
-  it('khớp Tử Bình Chân Thuyên không thấp hơn mức đã chốt (29/56)', () => { expect(hit('tbct')).toBeGreaterThanOrEqual(29); });
+  it('khớp Tử Bình Chân Thuyên không thấp hơn mức đã chốt (33/56)', () => { expect(hit('tbct')).toBeGreaterThanOrEqual(33); });
   it('Trích Thiên Tủy là trường phái khác, chỉ ghi lại mức hiện tại (14/65)', () => { expect(hit('ttt')).toBeGreaterThanOrEqual(14); });
 });
 

@@ -56,7 +56,8 @@ export type { BatTuChart, BatTuInput, Pillar, ThapThan, TangCanRole } from './ba
 export * as NguHanh from './nguhanh';
 export { cachCucOfBirth as cachCucOfChart, cachCucOf, tuLenhCan, TU_LENH, dieuHauNeed, godHanh } from './cachcuc';
 export type { CachCucReading, CachKey, CachLyDo, CachNguon, CachTrangThai, GodKey, QuanHe, QuanHeKind } from './cachcuc';
-export { quanHe, dongKhi, noiVang, PRESENT_SHARE } from './cachcuc';
+export { quanHe, dongKhi, noiVang, PRESENT_SHARE, lucThan, SAO_THAN_NHAN } from './cachcuc';
+export type { LucThanItem, ThanNhan, ViTriSao } from './cachcuc';
 export type { DongKhi } from './cachcuc';
 export {
   assessThan, locThapThan, muaOf, dungThanPattern, thapThanProfile, batTuReading, batTuYearLookup, tangCanOf, familyOf, FAMILY_GODS,

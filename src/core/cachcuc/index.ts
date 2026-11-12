@@ -3,15 +3,16 @@ import { analyze, toNguHanhChart, type NguHanhAnalysis, type NguHanhChart } from
 import { HOUR_OFFSET_FROM_NOON } from '../battu/engine';
 import type { BatTuChart } from '../battu/types';
 import type { BirthCalcInput } from '../birth';
-import { cachCuc, daysIntoMonth, dieuHauNeed, type CachCuc } from './engine';
+import { cachCuc, daysIntoMonth, dieuHauNeed, hoaKhi, type CachCuc, type HoaKhi } from './engine';
 import type { Hanh } from '../canchi/hanh';
 
 export * from './engine';
 export * from './quanhe';
 export * from './dongkhi';
+export * from './lucthan';
 
 /** `via`: cách cục thường (`cach`), ngoại cách theo Tòng của engine ngũ hành (`tong`), hay điều hậu thắng (`dieu-hau`). */
-export interface CachCucReading extends CachCuc { via: 'cach' | 'tong' | 'dieu-hau'; dungCach: Hanh }
+export interface CachCucReading extends CachCuc { via: 'cach' | 'tong' | 'hoa' | 'dieu-hau'; dungCach: Hanh; hoa?: HoaKhi }
 
 /** Cách cục của lá số, dùng thân vượng/nhược và Tòng cách từ engine ngũ hành (TBCT ch.22: gặp ngoại cách thì theo ngoại cách). */
 export function cachCucOf(ch: NguHanhChart, a: NguHanhAnalysis, days?: number): CachCucReading {
@@ -23,6 +24,8 @@ export function cachCucOf(ch: NguHanhChart, a: NguHanhAnalysis, days?: number): 
     days,
   });
   if (a.follow && a.follow.grade === 'chan') return { ...base, via: 'tong', dungCach: base.dung, dung: a.usefulGod.dung };
+  const hk = hoaKhi([ch.year.stem, ch.month.stem, ch.day.stem, ch.hour.stem], [ch.year.branch, ch.month.branch, ch.day.branch, ch.hour.branch]);
+  if (hk && hk.grade === 'chan') return { ...base, via: 'hoa', dungCach: base.dung, dung: hk.to, hoa: hk };
   const dh = dieuHauNeed(ch.day.stem, ch.month.branch);
   if (dh) return { ...base, via: 'dieu-hau', dungCach: base.dung, dung: dh };
   return { ...base, via: 'cach', dungCach: base.dung };

@@ -1320,7 +1320,7 @@ Khi chủ dự án điền đáp án: chạy lại so sánh với đáp án, r�
 2. Can tàng của chi tháng lộ lên can năm, tháng hoặc giờ → lấy làm cách, ưu tiên bản khí, rồi trung khí, dư khí.
 3. Không lộ, và biết ngày sinh → theo **can tư lệnh**: can cầm quyền tính theo số ngày từ tiết đầu tháng (`TU_LENH`, mỗi tháng 30 ngày; Thân gộp Mậu Kỷ 10 ngày). Không biết ngày (lá số trong sách) → theo bản khí.
 
-**Bảng `TU_LENH` là bảng phổ biến, CHƯA đối chiếu bảng in trong sách** (TBCT phụ lục chương 3, bản quét). Các bản lưu truyền chênh nhau 1–3 ngày, nên đổi bảng sau khi đối chiếu sẽ làm đổi cách của người sinh sát ranh giới.
+**Bảng `TU_LENH` là bảng phổ biến, CHƯA đối chiếu được với sách.** Bản quét TBCT có nhắc "bảng nhân nguyên tư lệnh ngày số" (trang 13) nhưng không in bảng. Bình chú ở trang 14 có câu "trong 20 ngày sau Thanh Minh, Ất mộc nắm lệnh", khác bảng đang dùng (Ất 9 ngày đầu tháng Thìn); chưa rõ là khác bản hay lỗi dịch, nên chưa đổi. Các bản lưu truyền chênh nhau 1–3 ngày; đổi bảng sẽ làm đổi cách của người sinh sát ranh giới.
 
 ### 15.3 Thành, bại, cứu, tương thần, điều hậu
 
@@ -1328,22 +1328,23 @@ Khi chủ dự án điền đáp án: chạy lại so sánh với đáp án, r�
 - Cách bị phá mà không có cứu: Dụng thần là hành của chữ cứu còn thiếu.
 - **Điều hậu đứng trước cách cục** khi sinh tháng Hợi, Tý, Sửu (và Dần với Nhật Chủ Kim, Mộc): cần Hoả; tháng Tỵ, Ngọ, Mùi với Nhật Chủ khác Thuỷ: cần Thuỷ. Áp dụng kể cả khi lá số đã có sẵn hành đó.
 - **Tòng cách** (engine ngũ hành xếp Chân): theo ngoại cách, dùng Dụng thần của engine.
+- **Hoá khí cách** (`hoaKhi`, thêm sau, TU-VAN-SACH 3H): Nhật Chủ hợp với can tháng hoặc can giờ, chi tháng mang khí hành hoá, can kề bên không có hành khắc hành hoá → theo ngoại cách, Dụng thần là hành hoá. Xét sau Tòng, trước điều hậu. Có hành khắc thì là Giả, không theo.
 
 ### 15.4 Kết quả đối chiếu (`npm run compare:cachcuc`)
 
 | Nhóm | Cách cục | Engine ngũ hành |
 |---|---|---|
-| Tử Bình Chân Thuyên, 56 lá | **29/56 (52%)** | 17/56 (30%) |
+| Tử Bình Chân Thuyên, 56 lá | **33/56 (59%)** (29/56 trước khi có Hoá khí cách) | 17/56 (30%) |
 | Trích Thiên Tủy, 65 lá | 14/65 (22%) | 14/65 (22%) |
 | TBCT, sách dùng điều hậu | 15/15 | |
 | TBCT, sách dùng phù ức | 11/29 | |
-| TBCT, Tòng / hoá khí | 3/9 · 0/3 | |
+| TBCT, Tòng / hoá khí | 3/9 · 3/3 | |
 
 **Giới hạn phải nói rõ:**
 - Quy tắc, nhất là điều hậu, được chọn **sau khi xem** 56 lá TBCT, nên 52% là mức trên tập đã nhìn thấy, không phải phép thử độc lập.
 - Biến thể dùng Ấn làm mặc định khi cách bị phá cho 55%; tôi giữ biến thể dùng "chữ cứu còn thiếu" (52%) vì có lý do theo sách. Hai biến thể chỉ chênh 2 lá.
-- Chưa có Hoá khí cách (0/3).
-- `tests/cachcuc.test.ts` khoá mức tối thiểu 29/56 và 14/65 để thay đổi sau không làm tụt mà không ai biết.
+- Hoá khí cách khớp 3/3, và làm đúng thêm một lá sách luận phù ức (tbct-p276-1) do tình cờ trùng hành. Ba lá này cũng đã được xem trước khi viết quy tắc.
+- `tests/cachcuc.test.ts` khoá mức tối thiểu 33/56 và 14/65 để thay đổi sau không làm tụt mà không ai biết.
 
 ### 15.5 Câu chữ, Thầy đọc, "Tóm lại về bạn"
 
@@ -1364,3 +1365,13 @@ Khi chủ dự án điền đáp án: chạy lại so sánh với đáp án, r�
 - Tính tình: hành nổi nhất và các hành dưới 8%, ghép với ngũ thường (Mộc nhân, Hoả lễ, Thổ tín, Kim nghĩa, Thuỷ trí). Câu chữ chỉ gợi ý, không gán nhãn xấu; hành vắng thì gợi cách bù.
 - Ngưỡng 8% là số tạm, chưa đối chiếu với lá số mẫu.
 - Hai khối gập trên màn Bát Tự, sau mục Cách cục. Thầy không đọc; không vào "Tóm lại về bạn".
+
+### 15.8 Lục thân trong lá số (TU-VAN-SACH 3F)
+
+- `src/core/cachcuc/lucthan.ts`: cung vị của bốn trụ, và sao đại diện cho cha, mẹ, anh chị em, người bạn đời, con cái theo quy ước truyền thống (khác nhau theo giới tính, như sách cổ). Tìm sao ở can năm, tháng, giờ và can tàng của bốn chi; can ngày là chính mình.
+- Chỉ phần giáo dục: KHÔNG có câu đoán sức khoẻ, sinh tử, hôn nhân hay con cái. Sao vắng thì nói rõ "không xem là điều xấu". Test quét câu chữ không chứa từ trong `NO_SPEECH_TERMS`.
+- Khối gập "Lục thân trong lá số" trên màn Bát Tự, sau Tính tình. Thầy không đọc; không vào "Tóm lại về bạn", ảnh chia sẻ.
+
+### 15.9 Chưa làm: lời sách cho Can ngày theo tháng sinh (TU-VAN-SACH 3G)
+
+Phần cuối bản quét TBCT (khoảng trang 192–303) luận từng Can ngày sinh mỗi tháng, kèm lá số ví dụ. Muốn làm phải đọc bằng mắt khoảng 110 trang ảnh, tóm tắt 120 ô (10 Can × 12 tháng) bằng lời của app, rồi chủ dự án duyệt. Việc tốn công và dễ lệch nguyên ý, nên tạm hoãn tới khi chủ dự án quyết có làm không.

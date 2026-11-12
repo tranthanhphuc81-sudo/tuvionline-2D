@@ -56,6 +56,7 @@ export function cachCucSection(r: CachCucReading, stems: readonly number[], mont
     ...r.lyDo.map((l, i) => p('cachcuc.lydo.' + i, lyDoText(l))),
   ];
   if (r.via === 'dieu-hau') blocks.push(p('cachcuc.dieuhau', 'Sinh tháng ' + CHI[monthChi] + ', khí trời ' + (r.dung === 'Hoả' ? 'lạnh' : 'nóng') + '. Theo sách, lúc này việc ' + (r.dung === 'Hoả' ? 'sưởi ấm' : 'làm mát') + ' đứng trước cách cục (gọi là điều hậu), nên Dụng thần là hành <b>' + r.dung + '</b>.'));
+  if (r.via === 'hoa' && r.hoa) blocks.push(p('cachcuc.hoa', 'Nhật Chủ ' + CAN[stems[2]] + ' hợp với ' + CAN[stems[r.hoa.partner]] + ' ở ' + PILLAR[r.hoa.partner] + ', chi tháng lại mang khí hành ' + r.hoa.to + ', nên hợp mà hoá thành hành <b>' + r.hoa.to + '</b> (gọi là Hoá khí cách, một ngoại cách). Gặp ngoại cách thì sách theo ngoại cách, nên Dụng thần là hành <b>' + r.dung + '</b>.'));
   if (r.via === 'tong') blocks.push(p('cachcuc.tong', 'Lá số thành Tòng cách, là một ngoại cách. Gặp ngoại cách thì sách theo ngoại cách, nên Dụng thần là hành <b>' + r.dung + '</b>.'));
   blocks.push(p('cachcuc.dung', 'Dụng thần theo cách cục: hành <b>' + r.dung + '</b>. ' + (r.dung === nguHanhDung ? 'Trùng với Dụng thần của phần phân tích ngũ hành ở trên.' : 'Phần phân tích ngũ hành ở trên chọn hành ' + nguHanhDung + ': hai cách luận khác nhau thì kết quả có thể khác, sách cổ cũng vậy.')));
   blocks.push(note('cachcuc.note', CACHCUC_NOTE));
@@ -65,6 +66,6 @@ export function cachCucSection(r: CachCucReading, stems: readonly number[], mont
 /** Lời Thầy đọc về cách cục: vài câu ngắn, không lặp lại phần lý do chi tiết. */
 export function cachCucSpeech(r: CachCucReading): string {
   const tuong = r.tuongThan ? ' Chữ giúp cách là ' + GOD_NAME[r.tuongThan] + '.' : '';
-  const why = r.via === 'dieu-hau' ? ' Sinh vào tháng ' + (r.dung === 'Hoả' ? 'lạnh nên cần sưởi ấm' : 'nóng nên cần làm mát') + ' trước, nên Dụng thần là ' + r.dung + '.' : r.via === 'tong' ? ' Lá số thành Tòng cách, nên theo ngoại cách, Dụng thần là ' + r.dung + '.' : ' Dụng thần theo cách cục là ' + r.dung + '.';
+  const why = r.via === 'dieu-hau' ? ' Sinh vào tháng ' + (r.dung === 'Hoả' ? 'lạnh nên cần sưởi ấm' : 'nóng nên cần làm mát') + ' trước, nên Dụng thần là ' + r.dung + '.' : r.via === 'tong' ? ' Lá số thành Tòng cách, nên theo ngoại cách, Dụng thần là ' + r.dung + '.' : r.via === 'hoa' ? ' Nhật Chủ hợp mà hoá thành hành ' + r.dung + ', nên theo Hoá khí cách, Dụng thần là ' + r.dung + '.' : ' Dụng thần theo cách cục là ' + r.dung + '.';
   return 'Xem theo sách Tử Bình Chân Thuyên, lá số này là ' + CACH_NAME[r.cach] + ', ' + TRANG_THAI[r.trangThai] + '.' + tuong + why;
 }

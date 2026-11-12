@@ -19,11 +19,12 @@ import { cardReading, cardWho } from '../share/card';
 import ui from '../../ui/components/ui.module.css';
 import { Pillars, hanhAmDuong } from './Pillars';
 import { NguHanhSection } from './NguHanhSection';
-import { cachCucOfBirth, dongKhi, noiVang, quanHe, BatTuEngine as BTE } from '../../core';
+import { cachCucOfBirth, dongKhi, lucThan, noiVang, quanHe, BatTuEngine as BTE } from '../../core';
 import { analyze, toNguHanhChart } from '../../core/nguhanh';
 import { cachCucSection, cachCucSpeech } from '../../content/cachcuc/text';
 import { quanHeSection } from '../../content/cachcuc/quanhe';
 import { dongKhiSection, tinhTinhSection } from '../../content/cachcuc/dongkhi';
+import { lucThanSection } from '../../content/cachcuc/lucthan';
 import s from './battu.module.css';
 
 const { CAN, CHI } = BatTuEngine;
@@ -105,6 +106,10 @@ export function BatTuScreen() {
       <details className={s.fold}>
         <summary><h2 className={ui.sectionTitle}>Tính tình theo ngũ hành</h2><span className={ui.muted}>gợi ý để tự soi</span></summary>
         <section className={ui.card}><SectionView sections={[tinhTinhSection(nv.noi, nv.vang)]} /></section>
+      </details>
+      <details className={s.fold}>
+        <summary><h2 className={ui.sectionTitle}>Lục thân trong lá số</h2><span className={ui.muted}>trụ nào, sao nào ứng với ai</span></summary>
+        <section className={ui.card}><SectionView sections={[lucThanSection(lucThan(ch, profile.gender), profile.gender)]} /></section>
       </details>
 
       <h2 className={ui.sectionTitle}>Đại Vận (mỗi chặng 10 năm, khởi từ Trụ Tháng)</h2>
