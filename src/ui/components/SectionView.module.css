@@ -32,6 +32,10 @@
 .barName { font-weight: 600; white-space: nowrap; }
 .bar { height: 8px; border-radius: 4px; background: var(--surface3); overflow: hidden; }
 .bar > span { display: block; height: 100%; background: var(--gold); border-radius: 4px; }
+.barRowStack { grid-template-columns: 1fr auto; row-gap: 3px; }
+.barRowStack .barName { grid-column: 1; grid-row: 1; white-space: normal; }
+.barRowStack .barPct { grid-column: 2; grid-row: 1; }
+.barRowStack .bar { grid-column: 1 / -1; grid-row: 2; }
 .barPct { text-align: right; font-variant-numeric: tabular-nums; color: var(--ink-dim); }
 .swatches { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 12px; font-size: var(--fs-sm); }
 .swatches li { display: inline-flex; align-items: center; gap: 6px; }

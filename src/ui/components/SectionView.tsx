@@ -35,7 +35,7 @@ function BlockView({ b }: { b: Block }) {
       return (
         <div className={s.bars}>
           {b.rows.map((r) => (
-            <div key={r.label} className={s.barRow}>
+            <div key={r.label} className={b.rows.some((x) => x.label.length > 12) ? `${s.barRow} ${s.barRowStack}` : s.barRow} role="img" aria-label={`${r.label}, ${r.pct} phần trăm`}>
               <span className={s.barName}>{r.label}</span>
               <span className={s.bar} aria-hidden="true"><span style={{ width: r.pct + '%' }} /></span>
               <span className={s.barPct}>{r.pct}%</span>

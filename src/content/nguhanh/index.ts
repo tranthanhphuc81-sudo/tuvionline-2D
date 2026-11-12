@@ -159,7 +159,7 @@ export function practicalReport(a: NguHanhAnalysis, o: ReportOptions): Section[]
   // 2. Kết luận ngắn và thanh 5 hành
   const tags: Record<string, string> = { [ug.dung]: 'Dụng thần', [ug.hy]: 'Hỷ thần', [ug.ky]: 'Kỵ thần', ...(ug.cuu ? { [ug.cuu]: 'Cừu thần' } : {}) };
   const balance = (['Mộc', 'Hoả', 'Thổ', 'Kim', 'Thuỷ'] as Element[]).sort((x, y) => a.score.shares[y] - a.score.shares[x]);
-  sec('headline', 'Phân tích ngũ hành', [
+  sec('headline', 'Tóm lại', [
     p('nguhanh.headline.0', `Nhật Chủ <b>${dm}</b> — <b>${STRENGTH_VI[a.dayMaster.strength]}</b>. Hành cần bổ sung: <b>${ug.dung}</b> (hỗ trợ: ${ug.hy}); hành nên tiết chế: ${ug.ky}.`, { pillar: 2 }),
     { id: 'nguhanh.headline.bars', kind: 'bars', tags: NO_SPEECH, rows: balance.map((e) => ({ label: `${e} · ${TEN_GOD_VI[tenGodOf(dm, e)]}${tags[e] ? ' · ' + tags[e] : ''}`, pct: Math.round(a.score.shares[e] * 100) })) },
   ]);

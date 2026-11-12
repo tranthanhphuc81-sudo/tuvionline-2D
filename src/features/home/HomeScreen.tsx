@@ -133,6 +133,13 @@ export function HomeScreen() {
         </section>
       ))}
 
+      {parts.length > 0 && (
+        <section className={ui.card} aria-label="Phân tích ngũ hành">
+          <p className={ui.muted}>Muốn xem cách tính định lượng cho Bát Tự (điểm 5 hành, vì sao chọn Dụng thần)? Có ở tab Bát Tự.</p>
+          <button type="button" className={`${ui.btn} ${ui.block}`} onClick={() => nav.selectTab('battu')}>Xem phân tích ngũ hành ở tab Bát Tự</button>
+        </section>
+      )}
+
       <p className={`${ui.muted} ${s.footer}`}>{CULTURAL_NOTE}</p>
     </div>
   );

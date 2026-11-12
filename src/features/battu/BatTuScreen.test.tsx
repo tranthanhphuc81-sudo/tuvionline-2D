@@ -49,3 +49,56 @@ describe('Màn hình Bát Tự', () => {
     expect(screen.getByText('Công cụ mang tính văn hoá, tham khảo — không phải căn cứ để đưa ra quyết định quan trọng.')).toBeTruthy();
   });
 });
+
+describe('Mục Phân tích ngũ hành (3C.4)', () => {
+  it('có tiêu đề, lời nhắc văn hoá, dòng đối chiếu và phần "Vì sao ra kết quả này" thu gọn được', () => {
+    setup({ day: 6, month: 2, year: 2021, hourIdx: 6 });
+    expect(screen.getByRole('heading', { name: 'Phân tích ngũ hành' })).toBeTruthy();
+    expect(screen.getByText(/mang tính văn hoá và tham khảo, không phải phép đo khoa học/)).toBeTruthy();
+    expect(screen.getByText(/phân tích định lượng/i)).toBeTruthy();
+    const fold = screen.getByText('Vì sao ra kết quả này').closest('details')!;
+    expect(fold.open).toBe(false);
+    expect(screen.getByText(/Số là tham khảo, đức năng thắng số./)).toBeTruthy();
+  });
+
+  it('thanh 5 hành có nhãn truy cập đọc được cả tên hành, vai trò và phần trăm', () => {
+    setup({ day: 6, month: 2, year: 2021, hourIdx: 6 });
+    const bars = screen.getAllByRole('img', { name: /, [0-9]+ phần trăm$/ }).filter((e) => /Dụng thần|Hỷ thần|Kỵ thần|Cừu thần|Tỷ Kiếp|Ấn|Tài|Thực Thương|Quan Sát/.test(e.getAttribute('aria-label') ?? ''));
+    expect(bars.length).toBeGreaterThanOrEqual(5);
+    expect(bars.some((e) => /Dụng thần/.test(e.getAttribute('aria-label')!))).toBe(true);
+  });
+
+  it('lá số Chân tòng: nút "Xem cách luận khác" đổi sang cách luận thông thường và quay lại được', () => {
+    setup({ day: 10, month: 3, year: 1958, hourIdx: 3 });
+    expect(screen.getByText(/Kiểm tra cách cục đặc biệt/)).toBeTruthy();
+    expect(screen.queryByText('Cách luận khác', { selector: 'h3' })).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Xem cách luận khác' }));
+    expect(screen.getByText('Cách luận khác', { selector: 'h3' })).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: 'Quay lại cách luận chính' }));
+    expect(screen.getByRole('button', { name: 'Xem cách luận khác' })).toBeTruthy();
+  });
+
+  it('lá số Giả tòng: hai cách luận ngang hàng, chọn cách thứ hai đổi nội dung', () => {
+    setup({ day: 13, month: 3, year: 1986, hourIdx: 3 });
+    const group = screen.getByRole('radiogroup', { name: /Cách luận/ });
+    const radios = Array.from(group.querySelectorAll('[role=radio]')) as HTMLElement[];
+    expect(radios).toHaveLength(2);
+    expect(radios[0].getAttribute('aria-checked')).toBe('true');
+    const before = screen.getByText((_, el) => el?.tagName === 'P' && /^Nhật Chủ [^ ]+ — (Thân|Cực|Trung)/.test(el.textContent ?? '')).textContent;
+    fireEvent.click(radios[1]);
+    expect(radios[1].getAttribute('aria-checked')).toBe('true');
+    expect(screen.getByText((_, el) => el?.tagName === 'P' && /^Nhật Chủ [^ ]+ — (Thân|Cực|Trung)/.test(el.textContent ?? '')).textContent).not.toBe(before);
+  });
+
+  it('lá số thường: không có lựa chọn cách luận, không có nút xem cách khác', () => {
+    setup({ day: 6, month: 2, year: 2021, hourIdx: 6 });
+    expect(screen.queryByRole('radiogroup', { name: /Cách luận/ })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Xem cách luận khác' })).toBeNull();
+  });
+
+  it('không nêu màu, hướng, vật phẩm trong mục ngũ hành', () => {
+    setup({ day: 6, month: 2, year: 2021, hourIdx: 6 });
+    const sec = screen.getByRole('heading', { name: 'Phân tích ngũ hành' }).closest('section')!;
+    expect(sec.textContent).not.toMatch(/hướng (Đông|Tây|Nam|Bắc)|màu (xanh|đỏ|vàng|trắng|đen)|vật phẩm/i);
+  });
+});
