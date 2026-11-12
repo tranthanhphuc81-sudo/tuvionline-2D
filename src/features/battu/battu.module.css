@@ -42,3 +42,8 @@
 .ngFold[open] > summary::after { transform: rotate(180deg); }
 .ngFold[open] { padding-bottom: var(--space-3); }
 .tangRow[data-focus='true'] { background: var(--surface3); box-shadow: inset 0 0 0 1.5px var(--jade); border-radius: 6px; }
+
+/* Thẻ kiểm chứng bằng các năm đã qua (3C.5) */
+.verify { display: grid; gap: var(--space-2); border: 1px solid var(--line); border-radius: 10px; padding: var(--space-3); background: var(--surface); }
+.verifyTitle { margin: 0; font-family: var(--font-serif); font-size: var(--fs-md); color: var(--gold); }
+.verifyBtns { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2); }
