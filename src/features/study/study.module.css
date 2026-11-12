@@ -42,3 +42,6 @@
 .intake { display: grid; gap: var(--space-3); padding: var(--space-4); background: var(--surface); border-top: 1px solid var(--line-strong); }
 .line { color: var(--ink-dim); }
 .ask { font-family: var(--font-serif); font-size: var(--fs-lg); color: var(--ink); }
+
+/* Hỏi đáp ngũ hành ở Tĩnh thất (3C.6) */
+.answers { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2); }

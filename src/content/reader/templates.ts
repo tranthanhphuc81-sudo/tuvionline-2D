@@ -149,6 +149,8 @@ export const LEADS = {
   nguhanhPhuongPhap: ['{Ta} chọn Dụng thần theo phương pháp {phuongphap}. Hành cần bổ sung là {dung}, hỗ trợ là {hy}, nên tiết chế {ky}.', 'Theo phương pháp {phuongphap}, hành cần bổ sung là {dung}; {hy} hỗ trợ; {ky} nên tiết chế.'],
   nguhanhTongCach: ['Lá số có dấu hiệu {cach}: {hang}, độ tin cậy {tincay}.', 'Về cách cục đặc biệt, {ta} thấy {cach}, kết quả {hang}, độ tin cậy {tincay}.'],
   nguhanhHaiCach: ['Với lá số này có hai cách luận. {Ta} nghiêng nhiều hơn về {cachchinh}, nhưng cách còn lại cũng đáng xem.', 'Có hai cách luận cho lá số này, hiện {ta} nghiêng về {cachchinh}.'],
+  nguhanhCamOn: ['Cảm ơn {goi}, {ta} ghi lại rồi.', '{Ta} ghi nhận rồi, cảm ơn {goi}.'],
+  nguhanhChuaChac: ['Chưa đủ để {ta} nói chắc cách luận nào hợp hơn. {goi} cứ xem cả hai như hai góc nhìn.', '{Ta} chưa dám nói chắc cách nào hợp hơn. Cứ xem cả hai cách luận như hai góc nhìn.'],
   nguhanhHoi: ['Để biết cách luận nào hợp hơn, {ta} xin hỏi {goi} về một giai đoạn đã qua.', '{goi} nhớ lại giúp {ta} một giai đoạn đã qua nhé. Không nhớ thì cứ bỏ qua.'],
   chitayDuong: ['{goi} xem {duong}, {ta} tô sáng trên tay đây.', 'Đây là {duong}.'],
 } as const;

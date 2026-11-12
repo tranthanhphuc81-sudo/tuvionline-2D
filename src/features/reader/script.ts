@@ -94,6 +94,11 @@ export interface PalmScriptInput {
   sections: readonly { title: string; items: readonly PalmSpoken[] }[];
 }
 
+/** Vài câu rời (không có câu mở, câu kết): lời hỏi đáp của Thầy ở Tĩnh thất. Câu dính từ cấm đọc thì im lặng, chỉ hiện chữ. */
+export function buildPlainCues(who: Who, texts: readonly string[], id: string): Cue[] {
+  return texts.flatMap((t) => proseCues(t, who.goi)).map((c, i) => ({ ...c, id: `${id}-${i}` }));
+}
+
 /** Kịch bản thầy đọc chỉ tay: câu mở → tóm tắt → từng đường chính (có tô sáng) → các mục còn lại → câu kết. */
 export function buildPalmScript(who: Who, input: PalmScriptInput, seed = new Date().getDate()): Cue[] {
   const lines = TOOL_LINES.chitay;

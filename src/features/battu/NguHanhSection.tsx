@@ -3,7 +3,8 @@
    Chân: một nút "Xem cách luận khác". Giả: hai lựa chọn ngang hàng. Không thành hoặc không có dấu hiệu: một cách luận. */
 import { useMemo, useState } from 'react';
 import { batTuReading, type BatTuChart } from '../../core';
-import { analyze, resolveWithFeedback, toNguHanhChart, verificationQuestions, type Reading } from '../../core/nguhanh';
+import type { Reading } from '../../core/nguhanh';
+import { useNguHanh } from './useNguHanh';
 import { OUTCOME_LABEL, VERIFICATION_INTRO, VERIFICATION_NOT_ENOUGH, practicalReport, readingLabel, resolutionText, verificationPrompt, weightPhrase } from '../../content/nguhanh';
 import { useApp, useAppCtx } from '../../app/context';
 import { clearNguHanhAnswers, setNguHanhAnswer } from '../../state/actions';
@@ -12,7 +13,7 @@ import { SectionView } from '../../ui/components/SectionView';
 import { SpeakButton } from '../../ui/components/SpeakButton';
 import { useWho } from '../reader/hooks';
 import { buildScript } from '../reader/script';
-import { ASK_OPTIONS, nextNguHanhQuestion, nguHanhScriptInput } from '../reader/nguhanhScript';
+import { nguHanhScriptInput } from '../reader/nguhanhScript';
 import { Segmented } from '../../ui/components/Segmented';
 import ui from '../../ui/components/ui.module.css';
 import s from './battu.module.css';
@@ -23,18 +24,7 @@ const OUTCOMES: NguHanhOutcome[] = ['tot', 'binh', 'xau', 'khong-nho'];
 
 export function NguHanhSection({ ch, nowYear, profileId }: { ch: BatTuChart; nowYear: number; profileId: string }) {
   const { store } = useAppCtx();
-  const allAnswers = useApp((x) => x.nguHanhAnswers);
-  const birthKey = useApp((x) => { const p = x.profiles.find((q) => q.id === profileId); return p ? birthKeyOf(p) : ''; });
-  const mine = useMemo(() => allAnswers.filter((x) => x.profileId === profileId && x.birthKey === birthKey), [allAnswers, profileId, birthKey]);
-  const base = useMemo(() => analyze(toNguHanhChart(ch)), [ch]);
-  // "Không nhớ" được lưu để khỏi hỏi lại nhưng không đưa vào engine, không đổi trọng số
-  const resolved = useMemo(() => {
-    const fb = mine.filter((x) => x.outcome !== 'khong-nho').map((x) => ({ target: x.target, outcome: x.outcome as 'tot' | 'binh' | 'xau' }));
-    return fb.length ? resolveWithFeedback(base, fb) : null;
-  }, [base, mine]);
-  const a = resolved ? resolved.analysis : base;
-  const questions = useMemo(() => verificationQuestions(base, { nowYear, ...ASK_OPTIONS }), [base, nowYear]);
-  const next = useMemo(() => nextNguHanhQuestion(base, !!resolved?.decided, mine, nowYear), [base, resolved, mine, nowYear]);
+  const { base, a, mine, resolved, questions, next } = useNguHanh(ch, nowYear, profileId);
   const who = useWho();
   const legacy = useMemo(() => batTuReading(ch, nowYear), [ch, nowYear]);
   const [picked, setPicked] = useState<Reading['id'] | null>(null);

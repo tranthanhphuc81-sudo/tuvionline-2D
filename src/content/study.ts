@@ -18,6 +18,13 @@ export function studyGreeting(goi: string, ten: string, third: boolean, seed: nu
 }
 export const STUDY_INVALID = 'Hồ sơ này có ngày sinh chưa đúng nên chưa đọc được. Hãy sửa lại trong mục Quản lý hồ sơ.';
 
+/** Lựa chọn "Ngũ hành" ở Tĩnh thất (3C.6): Thầy đọc phần ngũ hành rồi, nếu cần, hỏi vài giai đoạn đã qua để kiểm chứng. */
+export const STUDY_NGUHANH = {
+  button: 'Nghe phần ngũ hành',
+  group: 'Hỏi về các giai đoạn đã qua',
+  done: 'Xong',
+} as const;
+
 export const INCENSE_TEXT = {
   hold: 'Chạm giữ để thắp hương',
   burning: 'Hương đang cháy',
