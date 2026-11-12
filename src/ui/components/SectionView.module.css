@@ -61,3 +61,14 @@
   .table td:first-child { display: block; font-size: var(--fs-md); }
   .table td:first-child::before { content: none; }
 }
+
+.cycle { margin: 8px 0; text-align: center; }
+.cycle svg { width: min(100%, 280px); height: auto; color: var(--muted); }
+.cycleEdge { stroke: currentColor; stroke-width: 1; opacity: 0.45; fill: none; }
+.cycleEdge[data-kind='khac'] { stroke-dasharray: 3 3; }
+.cycleEdge[data-active='true'] { stroke: var(--gold); opacity: 1; stroke-width: 2; color: var(--gold); }
+.cycleNode circle { fill: var(--surface3); stroke: var(--line-strong); }
+.cycleNode[data-focus='true'] circle { fill: var(--gold); stroke: var(--gold); }
+.cycleNode text { font-size: 9px; fill: var(--text); }
+.cycleNode[data-focus='true'] text { fill: var(--bg); font-weight: 700; }
+.cycleKey { display: block; }

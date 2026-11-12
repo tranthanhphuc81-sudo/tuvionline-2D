@@ -106,9 +106,9 @@ export function msgText(m: Msg, ctx: RenderCtx = {}): string {
     case 'reading.follow': return `Luận ${type(p.type)}`;
     case 'reading.normal': return p.side === 'nhuoc' ? 'Luận thân nhược thông thường' : 'Luận thân vượng thông thường';
     /* --- phân xử bằng quá khứ --- */
-    case 'resolve.decided': return `Các mốc đã qua khớp với "${label(String(p.reading))}" (${p.wins}/${p.total} mốc, trọng số ${pc(p.weight)}). Có thể xem cách luận này là chính.`;
+    case 'resolve.decided': return `Các mốc đã qua khớp hơn với "${label(String(p.reading))}" (${p.wins}/${p.total} mốc, trọng số ${pc(p.weight)}). Đây chỉ là so sánh giữa hai cách tính, chưa chứng minh cách nào đúng; trí nhớ về các năm cũ cũng có thể lệch.`;
     case 'resolve.insufficient': return `Chưa đủ dữ liệu: cần ít nhất ${p.needed} mốc để kết luận (hiện có ${p.total}).`;
-    case 'resolve.undecided': return `Chưa phân định rõ ("${label(String(p.reading))}" khớp ${p.wins}/${p.total} mốc, trọng số ${pc(p.weight)}). Bạn có thể trả lời thêm, hoặc nhờ người luận xem trực tiếp.`;
+    case 'resolve.undecided': return `Chưa phân định rõ ("${label(String(p.reading))}" khớp ${p.wins}/${p.total} mốc, trọng số ${pc(p.weight)}). Có thể do câu hỏi quá chung chung hoặc trí nhớ chưa chắc. Bạn có thể trả lời thêm, hoặc nhờ người luận xem trực tiếp.`;
     default: return '';
   }
 }

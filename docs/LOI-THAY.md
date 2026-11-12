@@ -229,8 +229,8 @@ Câu hỏi nguyên văn: "Năm 2015 (Ất Mùi), lúc bạn 27 tuổi (tuổi m�
 - Thầy ghi nhận rồi, cảm ơn {goi}.
 
 **Khi đã phân định được**
-- Các giai đoạn {goi} kể khớp với một cách luận. Thầy xem cách đó là chính.
-- Nghe {goi} kể, thầy thấy một cách luận hợp hơn hẳn. Mình lấy cách đó làm chính.
+- Các giai đoạn {goi} kể khớp hơn với một cách luận. Thầy lấy cách đó làm chính, nhưng đây chỉ là so hai cách tính.
+- Nghe {goi} kể, thầy thấy một cách luận khớp hơn. Mình lấy cách đó làm chính, tạm vậy thôi.
 
 **Khi chưa phân định**
 - Chưa đủ để thầy nói chắc cách luận nào hợp hơn. {goi} cứ xem cả hai như hai góc nhìn.
@@ -239,6 +239,10 @@ Câu hỏi nguyên văn: "Năm 2015 (Ất Mùi), lúc bạn 27 tuổi (tuổi m�
 **Khi chưa đủ dữ liệu (dưới 3 câu trả lời)**
 - Mới có ít giai đoạn để so, thầy chưa nói được gì. {goi} nhớ thêm được thì hay.
 - Chưa đủ giai đoạn để thầy kết luận. Khi nào nhớ thêm, mình xem tiếp.
+
+**Khi hai bộ hệ số cho Dụng thần khác nhau (ARCHITECTURE 14.11)**
+- Một lưu ý: nếu đổi cách đặt hệ số thì hành cần bổ sung có thể khác, nên {goi} xem đây là gợi ý để tham khảo thôi.
+- Lưu ý nhỏ: đổi cách đặt hệ số thì hành cần bổ sung có thể lệch đi, nên {goi} cứ coi là gợi ý để tham khảo.
 
 Câu nối ngay sau là kết quả nguyên văn của máy, ví dụ "Chưa phân định rõ ("Luận Tòng Cường" khớp 2/3 mốc, trọng số 60%)…".
 

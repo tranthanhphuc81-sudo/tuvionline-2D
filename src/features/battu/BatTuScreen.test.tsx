@@ -52,6 +52,17 @@ describe('Màn hình Bát Tự', () => {
 });
 
 describe('Mục Phân tích ngũ hành (3C.4)', () => {
+  it('hình 5 nút: có nhãn truy cập đủ 5 hành, 10 cạnh, chú thích nét liền/nét đứt và ghi chú độ nhạy', () => {
+    setup({ day: 6, month: 2, year: 2021, hourIdx: 6 });
+    const fig = screen.getByRole('img', { name: /Vòng tương sinh tương khắc của năm hành/ });
+    for (const e of ['Mộc', 'Hoả', 'Thổ', 'Kim', 'Thuỷ']) expect(fig.getAttribute('aria-label')).toContain(e);
+    expect(fig.querySelectorAll('line')).toHaveLength(10);
+    expect(fig.querySelectorAll('line[data-active="true"]')).toHaveLength(2);
+    expect(screen.getByText(/Nét liền: sinh/)).toBeTruthy();
+    expect(screen.getByText(/Hình minh hoạ, không dùng để chọn Dụng thần/)).toBeTruthy();
+    expect(screen.getByText(/Kết luận này (ổn định|chưa vững)/)).toBeTruthy();
+  });
+
   it('có tiêu đề, lời nhắc văn hoá, dòng đối chiếu và phần "Vì sao ra kết quả này" thu gọn được', () => {
     setup({ day: 6, month: 2, year: 2021, hourIdx: 6 });
     expect(screen.getByRole('heading', { name: 'Phân tích ngũ hành' })).toBeTruthy();

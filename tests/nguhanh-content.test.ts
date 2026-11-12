@@ -190,3 +190,22 @@ describe('24 lá số golden', () => {
     }
   });
 });
+
+describe('Hình 5 nút minh hoạ (ARCHITECTURE 14.11)', () => {
+  it('vẽ đủ 5 nút, 10 cạnh, đúng 2 cạnh tô đậm trỏ vào Dụng thần, lời chú không dính từ cấm', async () => {
+    const { cycleBlock, hasBannedTerm } = await import('../src/content/nguhanh');
+    const { toPlainText } = await import('../src/content/rich');
+    const shares = { Mộc: 0.1, Hoả: 0.2, Thổ: 0.3, Kim: 0.25, Thuỷ: 0.15 } as never;
+    for (const dung of ['Mộc', 'Hoả', 'Thổ', 'Kim', 'Thuỷ'] as const) {
+      const b = cycleBlock(shares, dung, {}) as never as { nodes: { label: string; focus?: boolean }[]; edges: { from: number; to: number; kind: string; active: boolean }[]; caption: never };
+      expect(b.nodes).toHaveLength(5);
+      expect(b.edges).toHaveLength(10);
+      expect(b.nodes.filter((n) => n.focus).map((n) => n.label)).toEqual([dung]);
+      const i = b.nodes.findIndex((n) => n.focus);
+      const act = b.edges.filter((e) => e.active);
+      expect(act.map((e) => e.kind).sort()).toEqual(['khac', 'sinh']);
+      for (const e of act) expect(e.to).toBe(i);
+      expect(hasBannedTerm(toPlainText(b.caption))).toBe(false);
+    }
+  });
+});

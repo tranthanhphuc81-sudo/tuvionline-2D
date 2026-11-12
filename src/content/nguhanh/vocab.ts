@@ -40,6 +40,10 @@ export const OUTCOME_LABEL: Record<Outcome | 'khong-nho', string> = { tot: 'Thu�
 export const INTRO_NOTE = 'Đây là một cách tính định lượng theo lý số cổ truyền, mang tính văn hoá và tham khảo, không phải phép đo khoa học.';
 export const CLOSING_NOTE = 'Số là tham khảo, đức năng thắng số.';
 export const COLOR_SOURCE_NOTE = 'Màu và hướng gợi ý trong app đến từ ba cách tính khác nhau: theo Dụng thần Bát Tự (tab Bát Tự và Tổng hợp), theo Mệnh Quái (Bát Trạch, La Bàn) và theo Nạp Âm năm sinh. Mỗi cách trả lời một câu hỏi riêng nên có thể không trùng nhau, và mỗi màn hình đã ghi rõ đang theo cách nào. Đây là gợi ý mang tính văn hoá, tham khảo; không cần thay đổi hay sắm sửa gì để "hợp mệnh".';
+/** Độ nhạy theo trường phái (ARCHITECTURE 14.11): chạy lại với bộ hệ số coi trọng nguyệt lệnh hơn. */
+export const SENSITIVITY_STABLE = 'Kết luận này ổn định: đổi sang cách đặt hệ số khác (coi trọng nguyệt lệnh hơn) vẫn cho cùng Dụng thần.';
+export const sensitivityUnstable = (other: string, main: string) => `Kết luận này chưa vững: nếu coi trọng nguyệt lệnh hơn thì Dụng thần là ${other} thay vì ${main}. Nên xem như một gợi ý, chưa phải kết quả chắc.`;
+
 export const DISCLAIMER = 'Kết quả dựa trên hệ trọng số quy ước của một trường phái Tử Bình. Nên xem như gợi ý để tự soi xét và định hướng thói quen; các quyết định về sức khoẻ, tài chính, pháp lý cần ý kiến chuyên môn.';
 
 /** (i) KHÔNG HIỆN (ARCHITECTURE 14.8): từ, cụm không được xuất hiện trong bất kỳ câu mới nào, kể cả chữ chỉ để xem.

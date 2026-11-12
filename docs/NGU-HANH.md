@@ -22,7 +22,7 @@ Phần dùng lại nguyên văn từ legacy, KHÔNG chép ở đây: nét và ng
 | Cuối mục | Số là tham khảo, đức năng thắng số. |
 | Cuối mục (nguồn màu và hướng) | Màu và hướng gợi ý trong app đến từ ba cách tính khác nhau: theo Dụng thần Bát Tự (tab Bát Tự và Tổng hợp), theo Mệnh Quái (Bát Trạch, La Bàn) và theo Nạp Âm năm sinh. Mỗi cách trả lời một câu hỏi riêng nên có thể không trùng nhau, và mỗi màn hình đã ghi rõ đang theo cách nào. Đây là gợi ý mang tính văn hoá, tham khảo; không cần thay đổi hay sắm sửa gì để "hợp mệnh". |
 | Cuối mục (lưu ý) | Kết quả dựa trên hệ trọng số quy ước của một trường phái Tử Bình. Nên xem như gợi ý để tự soi xét và định hướng thói quen; các quyết định về sức khoẻ, tài chính, pháp lý cần ý kiến chuyên môn. |
-| Mở thẻ kiểm chứng | Hai cách luận cho kết quả khác nhau về lá số này. Nếu bạn nhớ lại một vài giai đoạn đã qua, câu trả lời sẽ giúp thấy cách luận nào hợp hơn. Bạn có thể chọn "Không nhớ" bất cứ lúc nào. |
+| Mở thẻ kiểm chứng | Hai cách luận cho kết quả khác nhau về lá số này. Nếu bạn nhớ lại một vài giai đoạn đã qua, câu trả lời giúp so xem cách luận nào khớp hơn. Đây chỉ là so hai cách tính, không chứng minh cách nào đúng, và trí nhớ có thể lệch. Bạn có thể chọn "Không nhớ" bất cứ lúc nào. |
 | Không đủ giai đoạn để hỏi | Chưa đủ giai đoạn đã qua để kiểm chứng. |
 | Khi hai cách lệch nhau nhiều (dưới mục Giai đoạn) | Đánh giá các năm ở đây có thể khác mục "Giai đoạn hiện tại" trong Tổng kết, vì hai cách lấy hành có lợi khác nhau. |
 
@@ -126,9 +126,9 @@ Engine chỉ trả mã và số; mỗi mã dưới đây đổi thành câu như
 | `reason.vuong.an` | Thân vượng chủ yếu do Ấn nhiều (4,27 so với Tỷ Kiếp 4,02) → dùng Tài Thuỷ để chế Ấn |
 | `reason.vuong.quanSat` | Thân vượng do Tỷ Kiếp nhiều, trong cục có Quan Sát (1,45) → dùng Quan Sát Hoả để chế bớt Thân |
 | `reason.vuong.thucThuong` | Thân vượng do Tỷ Kiếp, Quan Sát yếu hoặc không có → dùng Thực Thương Hoả để tiết bớt (nhẹ nhàng hơn là đưa Quan Sát vào khắc) |
-| `resolve.decided` | Các mốc đã qua khớp với "Luận thân nhược thông thường" (3/4 mốc, trọng số 88%). Có thể xem cách luận này là chính. |
+| `resolve.decided` | Các mốc đã qua khớp hơn với "Luận thân nhược thông thường" (3/4 mốc, trọng số 88%). Đây chỉ là so sánh giữa hai cách tính, chưa chứng minh cách nào đúng; trí nhớ về các năm cũ cũng có thể lệch. |
 | `resolve.insufficient` | Chưa đủ dữ liệu: cần ít nhất 3 mốc để kết luận (hiện có 0). |
-| `resolve.undecided` | Chưa phân định rõ ("Luận Khúc Trực" khớp 1/4 mốc, trọng số 72%). Bạn có thể trả lời thêm, hoặc nhờ người luận xem trực tiếp. |
+| `resolve.undecided` | Chưa phân định rõ ("Luận Khúc Trực" khớp 1/4 mốc, trọng số 72%). Có thể do câu hỏi quá chung chung hoặc trí nhớ chưa chắc. Bạn có thể trả lời thêm, hoặc nhờ người luận xem trực tiếp. |
 | `root.none` | Quan Sát (phe chế Nhật Chủ) không có gốc ở địa chi nào |
 | `root.real` | Ấn/Tỷ (phe cứu Nhật Chủ) có gốc: Bính (bản khí) trong chi năm Tỵ = 1; Giáp (trung khí) trong chi tháng Hợi = 1; Giáp (trung khí) trong chi ngày Hợi = 0,75 → tổng 2,75 (> 0,8: có gốc thật) |
 | `root.weak` | Quan Sát (phe chế Nhật Chủ) có gốc: Tân (trung khí) trong chi năm Tuất = 0,5; Tân (dư khí) trong chi giờ Sửu = 0,2 → tổng 0,7 (≤ 0,8: gốc yếu) |
@@ -164,6 +164,8 @@ Engine chỉ trả mã và số; mỗi mã dưới đây đổi thành câu như
 > Thổ · Ấn · Hỷ thần 12%
 >
 > Hoả · Quan Sát · Kỵ thần 4%
+>
+> Kết luận này ổn định: đổi sang cách đặt hệ số khác (coi trọng nguyệt lệnh hơn) vẫn cho cùng Dụng thần.
 
 > Vì sao ra kết quả này
 >
@@ -260,6 +262,8 @@ Engine chỉ trả mã và số; mỗi mã dưới đây đổi thành câu như
 > Kim · Tỷ Kiếp · Hỷ thần 13%
 >
 > Thuỷ · Thực Thương · Dụng thần 5%
+>
+> Kết luận này chưa vững: nếu coi trọng nguyệt lệnh hơn thì Dụng thần là Mộc thay vì Thuỷ. Nên xem như một gợi ý, chưa phải kết quả chắc.
 
 > Vì sao ra kết quả này
 >
@@ -360,6 +364,8 @@ Engine chỉ trả mã và số; mỗi mã dưới đây đổi thành câu như
 > Kim · Quan Sát · Kỵ thần 4%
 >
 > Hoả · Thực Thương · Dụng thần 4%
+>
+> Kết luận này ổn định: đổi sang cách đặt hệ số khác (coi trọng nguyệt lệnh hơn) vẫn cho cùng Dụng thần.
 
 > Vì sao ra kết quả này
 >

@@ -28,7 +28,7 @@
 
 ## 3. Bộ 24 lá số mẫu để chủ dự án/người luận gán nhãn
 
-Mục đích: có "đáp án" độc lập trước khi chốt. Chọn phân tầng theo loại lệch. Cột cuối để trống: điền dụng thần đúng theo người luận (hoặc theo sách Phần 2 trong `docs/`), ghi nguồn.
+Mục đích: có "đáp án" độc lập trước khi chốt. Chọn phân tầng theo loại lệch. Cột cuối để trống: điền dụng thần đúng theo người luận (hoặc theo sách Phần 2 trong `docs/`), ghi nguồn. Đáp án của người luận là một quy ước chuyên môn (sự đồng thuận của nghề), không phải sự thật khách quan; các trường phái có thể cho đáp án khác nhau trên cùng một lá số. Bộ golden vì vậy chỉ là mốc tham chiếu, không phải chuẩn tuyệt đối: khi engine khác đáp án, ghi rõ hai bên và nguồn, không tự coi bên nào là đúng.
 
 | # | Loại | Ngày sinh (dương) | Tứ trụ (Năm · Tháng · Ngày · Giờ) | Legacy | Engine | Đáp án người luận |
 |---|---|---|---|---|---|---|

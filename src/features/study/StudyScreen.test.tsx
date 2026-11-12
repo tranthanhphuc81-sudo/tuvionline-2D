@@ -163,7 +163,7 @@ describe('Ngũ hành ở Tĩnh thất (3C.6)', () => {
     expect(store.getState().nguHanhAnswers.length).toBeGreaterThanOrEqual(1);
     expect(store.getState().nguHanhAnswers[0]).toMatchObject({ profileId: 'a', outcome: 'xau' });
     await waitFor(() => expect(screen.getByRole('button', { name: 'Xong' })).toBeTruthy());
-    expect(screen.getByText(/chưa đủ để|Chưa đủ dữ liệu|Chưa phân định|khớp với/i)).toBeTruthy();
+    expect(screen.getByText(/chưa đủ để|Chưa đủ dữ liệu|Chưa phân định|khớp hơn với/i)).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: 'Xong' }));
     expect(group()).toBeNull();
     expect(screen.getByRole('button', { name: /Thầy đọc/ })).toBeTruthy();

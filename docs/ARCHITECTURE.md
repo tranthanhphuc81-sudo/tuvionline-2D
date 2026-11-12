@@ -1044,6 +1044,8 @@ Kèm mã nguyên nhân theo bảng số đo: `tong-cach`, `dieu-hau`, `trung-hoa
 6. Chỉ xét (A) sau khi (C) đã chạy ổn qua một bản phát hành.
 7. Muốn chuyển: sửa mục này trước, ghi kết quả đối chiếu, và ghi rõ ngoại lệ parity trong CLAUDE.md.
 
+**Đáp án người luận là quy ước.** Đáp án của người luận là một quy ước chuyên môn (sự đồng thuận của nghề), không phải sự thật khách quan; các trường phái có thể cho đáp án khác nhau trên cùng một lá số. Bộ golden vì vậy chỉ là mốc tham chiếu, không phải chuẩn tuyệt đối: khi engine khác đáp án, ghi rõ hai bên và nguồn, không tự coi bên nào là đúng.
+
 ### 14.2 Nơi dùng Dụng thần sau 3C
 
 | Nơi | Nguồn hiện tại | Nguồn sau 3C | Đổi chữ hiển thị? |
@@ -1144,6 +1146,8 @@ Kèm mã nguyên nhân theo bảng số đo: `tong-cach`, `dieu-hau`, `trung-hoa
 - **Sửa ngày giờ sinh:** câu trả lời có `birthKey` khác không còn dùng được (Đại Vận và các năm được hỏi đã khác). Khi lưu hồ sơ có `birthKey` mới, xoá câu trả lời cũ của hồ sơ đó và báo một dòng: "Đã xoá các câu trả lời kiểm chứng ngũ hành cũ vì ngày giờ sinh thay đổi." Sửa tên, quan hệ thì không ảnh hưởng.
 - **Phương án bị loại:** hỏi lại người dùng có giữ câu trả lời cũ không (câu trả lời cũ gắn với lá số cũ, giữ lại là sai); chỉ lưu trong bộ nhớ (mất khi tắt app, người dùng phải trả lời lại).
 
+**Giới hạn của kiểm chứng bằng quá khứ.** (1) Thiên lệch xác nhận: người nhớ lại có xu hướng thấy "khớp" với điều đã đọc. (2) Câu hỏi "thuận hay khó" rất chung, cùng một năm có thể kể thành tốt hoặc xấu tuỳ tâm trạng. (3) Chỉ so được hai cách tính đang có, không chứng minh cách nào đúng. Vì vậy lời trong app chỉ nói "các mốc đã qua khớp hơn với cách luận A", không bao giờ nói "đã xác định đúng"; câu hỏi luôn cho phép chọn "Không nhớ" và nhắc rằng trí nhớ có thể lệch.
+
 ### 14.7 Hiển thị nhiều cách luận
 
 - **Chân** (36/3000 lá): hiện cách thuận thế là chính. Một dòng "Xem cách luận khác" mở cách luận thông thường; thẻ kiểm chứng nằm trong phần mở này.
@@ -1176,6 +1180,12 @@ Kèm mã nguyên nhân theo bảng số đo: `tong-cach`, `dieu-hau`, `trung-hoa
 - **Đối chiếu với bảng so sánh:** chạy `compareWithLegacy` trên 3000 lá (seed 20261111) phải ra đúng 36,1% / 61,2% / 40,5% và bảng nguyên nhân ở đầu mục này.
 - **Parity Bát Tự và Tổng hợp** không đổi một test nào (điều kiện của phương án B).
 - Test nội dung (3C.3): mọi mã có câu; không chuỗi rỗng hay "undefined"; danh sách (i) không xuất hiện; câu chứa từ (ii) có cờ không đọc; lời nhắc ở đầu và cuối.
+
+### 14.11 Kiểm tra độ nhạy theo trường phái
+
+Hai preset của engine (`PRESETS`: mặc định và coi trọng nguyệt lệnh hơn) được chạy trên cùng lá số (`analyzeSensitivity`, `src/core/nguhanh/sensitivity.ts`). Cùng Dụng thần thì báo "Kết luận này ổn định"; khác thì báo "chưa vững", nêu Dụng thần của bộ kia và dặn xem như gợi ý; Thầy nói thêm một câu lưu ý. Đo trên 3000 lá số ngẫu nhiên: 78,7% ổn định, 21,3% chưa vững. Đây là chỉ báo độ tin cậy, không đổi Dụng thần đang hiển thị.
+
+**Mô hình hệ động lực 5 nút** (sinh là cạnh +, khắc là cạnh −, trạng thái cân bằng, can thiệp tối thiểu) chỉ nên làm hình minh hoạ cho Thầy giải thích "vì sao cần thêm hành này", không là phương pháp chọn Dụng thần thứ ba. Đã làm (12/11/2026): khối `cycle` ở mục "Tóm lại" của Phân tích ngũ hành (nét liền sinh, nét đứt khắc, tô đậm hai cạnh vào Dụng thần); Thầy không đọc hình này.
 
 ### 14.10 Thứ tự triển khai
 

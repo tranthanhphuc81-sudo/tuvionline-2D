@@ -9,6 +9,7 @@ import {
 } from '../../core/nguhanh';
 import type { NguHanhAnswer } from '../../state/schema';
 import { TEN_GOD_PRACTICAL, TYPE_VI, msgText, resolutionText, verificationPrompt } from '../../content/nguhanh';
+import { analyzeSensitivity } from '../../core/nguhanh';
 import { LEADS, fill, pick } from '../../content/reader/templates';
 import type { Lead, ScriptInput, Who } from './script';
 
@@ -98,6 +99,8 @@ export function nguHanhScriptInput(input: NguHanhReadInput, who: Who, seed = new
   }
 
   const prose: string[] = [TEN_GOD_PRACTICAL[tenGodOf(dm, ug.dung)].asUseful];
+  // độ nhạy: chỉ nói khi hai cách đặt hệ số cho Dụng thần khác nhau (ARCHITECTURE 14.11)
+  if (analyzeSensitivity(a.chart).byPreset.some((x) => x.dung !== ug.dung)) prose.push(fill(pick(LEADS.nguhanhChuaVung, seed), vars));
   const res = resolutionLine(a, vars, seed);
   if (res) prose.push(res);
   if (ask) {

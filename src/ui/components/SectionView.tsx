@@ -4,6 +4,33 @@ import s from './SectionView.module.css';
 
 const hasList = (nodes: readonly RichNode[]): boolean => nodes.some((n) => typeof n !== 'string' && (n.tag === 'ul' || hasList(n.children)));
 
+/** Vòng 5 hành: nút tròn xếp ngũ giác (kích cỡ theo tỷ lệ), cạnh sinh (+) nét liền, cạnh khắc (−) nét đứt; cạnh liên quan Dụng thần được tô đậm. */
+function CycleView({ b }: { b: Extract<Block, { kind: 'cycle' }> }) {
+  const C = 110, R = 80;
+  const pos = b.nodes.map((_, i) => ({ x: C + R * Math.sin((i * 2 * Math.PI) / 5), y: C - R * Math.cos((i * 2 * Math.PI) / 5) }));
+  const aria = b.nodes.map((n) => n.label + ' ' + n.pct + ' phần trăm' + (n.role ? ', ' + n.role : '')).join('; ');
+  return (
+    <figure className={s.cycle}>
+      <svg viewBox="0 0 220 220" role="img" aria-label={'Vòng tương sinh tương khắc của năm hành. ' + aria}>
+        <defs>
+          <marker id="cy-sinh" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L6 3L0 6z" fill="currentColor" /></marker>
+        </defs>
+        {b.edges.map((e, i) => {
+          const a = pos[e.from], z = pos[e.to], d = Math.hypot(z.x - a.x, z.y - a.y), k = 17 / d;
+          return <line key={i} className={s.cycleEdge} data-kind={e.kind} data-active={e.active} x1={a.x + (z.x - a.x) * k} y1={a.y + (z.y - a.y) * k} x2={z.x - (z.x - a.x) * k} y2={z.y - (z.y - a.y) * k} markerEnd="url(#cy-sinh)" />;
+        })}
+        {b.nodes.map((n, i) => (
+          <g key={n.label} className={s.cycleNode} data-focus={!!n.focus}>
+            <circle cx={pos[i].x} cy={pos[i].y} r={11 + Math.min(n.pct, 40) / 8} />
+            <text x={pos[i].x} y={pos[i].y + 3} textAnchor="middle">{n.label}</text>
+          </g>
+        ))}
+      </svg>
+      <figcaption className={s.note}><span className={s.cycleKey}>Nét liền: sinh (+). Nét đứt: khắc (−).</span> <RichText nodes={b.caption} /></figcaption>
+    </figure>
+  );
+}
+
 function BlockView({ b }: { b: Block }) {
   switch (b.kind) {
     case 'p':
@@ -43,6 +70,7 @@ function BlockView({ b }: { b: Block }) {
           ))}
         </div>
       );
+    case 'cycle': return <CycleView b={b} />;
     case 'swatches':
       return (
         <ul className={s.swatches}>
