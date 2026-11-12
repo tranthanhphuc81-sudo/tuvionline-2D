@@ -4,11 +4,11 @@
    Thầy hỏi một giai đoạn đã qua; người dùng trả lời bằng 4 nút của thẻ kiểm chứng ngay trên màn Bát Tự. */
 import { BatTuEngine } from '../../core';
 import {
-  hiddenStems, seasonalState, tenGodOf, verificationQuestions,
+  hiddenStems, seasonClimate, seasonalState, tenGodOf, verificationQuestions,
   type Msg, type NguHanhAnalysis, type VerificationQuestion,
 } from '../../core/nguhanh';
 import type { NguHanhAnswer } from '../../state/schema';
-import { GRADE_VI, METHOD_VI, TEN_GOD_PRACTICAL, TYPE_VI, msgText, resolutionText, verificationPrompt } from '../../content/nguhanh';
+import { TEN_GOD_PRACTICAL, TYPE_VI, msgText, resolutionText, verificationPrompt } from '../../content/nguhanh';
 import { LEADS, fill, pick } from '../../content/reader/templates';
 import type { Lead, ScriptInput, Who } from './script';
 
@@ -26,16 +26,30 @@ export function nextNguHanhQuestion(base: NguHanhAnalysis, decided: boolean, ans
   return verificationQuestions(base, { nowYear, ...ASK_OPTIONS }).find((q) => !answers.some((x) => same(x.target, q.target)));
 }
 
-/** Một câu nói về cách các chi tác động lẫn nhau (tam hợp, bán hợp, lục hợp, xung), lấy mã đầu tiên trong vết tính. */
-function hopCucText(trace: readonly Msg[]): string | null {
+/** Lời dẫn về cách các chi tác động lẫn nhau (tam hợp, bán hợp, lục hợp, xung), lấy mã đầu tiên trong vết tính. */
+function hopCucLead(trace: readonly Msg[]): Lead | null {
   for (const m of trace) {
-    const p = m.p as Record<string, string> | undefined;
-    if (m.code === 'trace.triad') return `tam hợp cục ${p?.to}, làm hành ${p?.to} mạnh thêm`;
-    if (m.code === 'trace.halfTriad') return `bán hợp hướng ${p?.to}, làm hành ${p?.to} mạnh thêm`;
-    if (m.code === 'trace.sixCombo') return `lục hợp hướng ${p?.to}`;
-    if (m.code === 'trace.clash') return 'hai chi xung nhau, lực của chúng giảm bớt';
+    const p = (m.p ?? {}) as Record<string, string>;
+    if (m.code === 'trace.triad') return { lines: LEADS.nguhanhTamHop, vars: { hanh: p.to }, focus: {} };
+    if (m.code === 'trace.halfTriad') return { lines: LEADS.nguhanhBanHop, vars: { hanh: p.to }, focus: {} };
+    if (m.code === 'trace.sixCombo') return { lines: LEADS.nguhanhLucHop, vars: { hanh: p.to }, focus: {} };
+    if (m.code === 'trace.clash') return { lines: LEADS.nguhanhLucXung, vars: {}, focus: {} };
   }
   return null;
+}
+
+/** Lời Thầy hỏi trước câu hỏi kiểm chứng: khác nhau cho giai đoạn mười năm (Đại Vận) và một năm. */
+export function askIntroLine(q: VerificationQuestion, vars: { goi: string; ta: string }, seed: number): string {
+  return fill(pick(q.target.kind === 'daiVan' ? LEADS.nguhanhHoiDaiVan : LEADS.nguhanhHoiNam, seed), vars);
+}
+
+/** Lời Thầy sau khi đã hỏi: nói kết luận, hoặc nói chưa đủ để chắc, hoặc chưa đủ dữ liệu. Rỗng nếu chưa có câu trả lời nào. */
+export function resolutionLine(a: NguHanhAnalysis, vars: { goi: string; ta: string }, seed: number): string {
+  const r = a.resolution;
+  if (!r) return '';
+  const code = r.conclusion.code;
+  const lead = code === 'resolve.decided' ? LEADS.nguhanhKetLuan : code === 'resolve.insufficient' ? LEADS.nguhanhChuaDu : LEADS.nguhanhChuaChac;
+  return fill(pick(lead, seed), vars) + ' ' + resolutionText(r, a);
 }
 
 export interface NguHanhReadInput {
@@ -57,33 +71,37 @@ export function nguHanhScriptInput(input: NguHanhReadInput, who: Who, seed = new
   const leads: Lead[] = [];
 
   const state = STATE_VI[seasonalState(dm, a.score.seasonElement)];
+  const dacLenh = state === 'vượng' || state === 'tướng';
   leads.push({
-    lines: LEADS.nguhanhNguyetLenh,
+    lines: dacLenh ? LEADS.nguhanhDacLenh : LEADS.nguhanhThatLenh,
     vars: { chi: CHI[monthBranch], tiet: a.score.seasonElement, nhatChu: dm, the: state },
     focus: { pillar: 1, hidden: hiddenStems(monthBranch) },
   });
-  const hop = hopCucText(a.score.trace);
-  if (hop) leads.push({ lines: LEADS.nguhanhHopCuc, vars: { hopcuc: hop }, focus: {} });
-  leads.push({
-    lines: LEADS.nguhanhPhuongPhap,
-    vars: { phuongphap: METHOD_VI[ug.method].split(' (')[0].toLocaleLowerCase('vi'), dung: ug.dung, hy: ug.hy, ky: ug.ky },
-    focus: {},
-  });
+  const hop = hopCucLead(a.score.trace);
+  if (hop) leads.push(hop);
+  const dv = { dung: ug.dung, hy: ug.hy, ky: ug.ky };
+  if (ug.method === 'phu-uc') leads.push({ lines: LEADS.nguhanhPhuUc, vars: dv, focus: {} });
+  else if (ug.method === 'dieu-hau') leads.push({ lines: LEADS.nguhanhDieuHau, vars: { ...dv, khi: seasonClimate(monthBranch) === 'nong' ? 'nóng' : 'lạnh' }, focus: {} });
+  else if (ug.method === 'trung-hoa') leads.push({ lines: LEADS.nguhanhTrungHoa, vars: dv, focus: {} });
+  else leads.push({ lines: LEADS.nguhanhThuanThe, vars: { ...dv, cach: a.follow ? TYPE_VI[a.follow.type] : 'cách cục đặc biệt' }, focus: {} });
+  const bridge = ug.secondary.find((x) => x.method === 'thong-quan');
+  if (bridge) {
+    const p = (bridge.reason.p ?? {}) as Record<string, string>;
+    leads.push({ lines: LEADS.nguhanhThongQuan, vars: { a: p.a, b: p.b, cau: p.bridge }, focus: {} });
+  }
   if (a.follow) {
-    leads.push({
-      lines: LEADS.nguhanhTongCach,
-      vars: { cach: TYPE_VI[a.follow.type], hang: GRADE_VI[a.follow.grade].split(' (')[0].toLocaleLowerCase('vi'), tincay: Math.round(a.follow.confidence * 100) + ' phần trăm' },
-      focus: {},
-    });
+    const lines = a.follow.grade === 'chan' ? LEADS.nguhanhChanTong : a.follow.grade === 'gia' ? LEADS.nguhanhGiaTong : LEADS.nguhanhKhongThanh;
+    leads.push({ lines, vars: { cach: TYPE_VI[a.follow.type], tincay: Math.round(a.follow.confidence * 100) + ' phần trăm' }, focus: {} });
   }
   if (a.readings.length > 1) {
     leads.push({ lines: LEADS.nguhanhHaiCach, vars: { cachchinh: msgText(a.readings[0].label).replace(/^Luận /, '') }, focus: {} });
   }
 
   const prose: string[] = [TEN_GOD_PRACTICAL[tenGodOf(dm, ug.dung)].asUseful];
-  if (a.resolution) prose.push(resolutionText(a.resolution, a));
+  const res = resolutionLine(a, vars, seed);
+  if (res) prose.push(res);
   if (ask) {
-    prose.push(fill(pick(LEADS.nguhanhHoi, seed), vars));
+    prose.push(askIntroLine(ask.question, vars, seed));
     prose.push(verificationPrompt(ask.question, ask.base));
   }
   return { leads, prose, sections: [] };

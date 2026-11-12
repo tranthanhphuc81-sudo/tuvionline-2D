@@ -3,7 +3,7 @@
    phụ đề; câu trả lời lưu vào state như thẻ kiểm chứng ở màn Bát Tự (cùng bộ câu trả lời). Thầy nói kết luận, hoặc nói "chưa đủ để chắc". */
 import { useEffect, useRef, useState } from 'react';
 import type { BatTuChart } from '../../core';
-import { OUTCOME_LABEL, resolutionText, verificationPrompt } from '../../content/nguhanh';
+import { OUTCOME_LABEL, verificationPrompt } from '../../content/nguhanh';
 import { LEADS, fill, pick } from '../../content/reader/templates';
 import { STUDY_NGUHANH, STUDY_READING_ID } from '../../content/study';
 import { useApp, useAppCtx } from '../../app/context';
@@ -14,7 +14,7 @@ import ui from '../../ui/components/ui.module.css';
 import { useNguHanh } from '../battu/useNguHanh';
 import { thayVoice, useReader } from '../reader/hooks';
 import { buildPlainCues, buildScript, type Who } from '../reader/script';
-import { nguHanhScriptInput } from '../reader/nguhanhScript';
+import { askIntroLine, nguHanhScriptInput, resolutionLine } from '../reader/nguhanhScript';
 import s from './study.module.css';
 
 const OUTCOMES: NguHanhOutcome[] = ['tot', 'binh', 'xau', 'khong-nho'];
@@ -44,9 +44,7 @@ export function NguHanhQA({ ch, profileId, who, onClose }: { ch: BatTuChart; pro
   const seen = useRef<number | null>(null);
   const vars = { goi: who.goi, ta: who.ta ?? 'thầy' };
 
-  const conclusion = resolved
-    ? (resolved.decided ? resolutionText(resolved, a) : fill(pick(LEADS.nguhanhChuaChac, 0), vars) + ' ' + resolutionText(resolved, a))
-    : fill(pick(LEADS.nguhanhChuaChac, 0), vars);
+  const conclusion = resolutionLine(a, vars, new Date().getDate()) || fill(pick(LEADS.nguhanhChuaChac, new Date().getDate()), vars);
   const prompt = next ? verificationPrompt(next, base) : '';
 
   // Thầy nói mỗi khi đổi câu hỏi hoặc có câu trả lời mới: lần đầu có lời dẫn, các lần sau có lời cảm ơn
@@ -55,7 +53,7 @@ export function NguHanhQA({ ch, profileId, who, onClose }: { ch: BatTuChart; pro
     const answered = !first && mine.length > (seen.current ?? 0);
     seen.current = mine.length;
     const texts: string[] = [];
-    if (first && next) texts.push(fill(pick(LEADS.nguhanhHoi, new Date().getDate()), vars));
+    if (first && next) texts.push(askIntroLine(next, vars, new Date().getDate()));
     if (answered) texts.push(fill(pick(LEADS.nguhanhCamOn, new Date().getDate()), vars));
     texts.push(next ? prompt : conclusion);
     setLine(texts[0] === (next ? prompt : conclusion) ? '' : texts[0]);
