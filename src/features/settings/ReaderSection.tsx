@@ -143,14 +143,18 @@ export function ReaderSection({ voices }: { voices: readonly string[] }) {
         <p className={ui.muted}>Điện thoại không cho biết giọng nào là nam hay nữ: bạn nghe thử rồi chọn. Cao độ đã tự chỉnh theo người đọc {readerPersona(reader, custom).name}.</p>
         <div role="radiogroup" aria-label="Giọng đọc">
           <div className={s.voiceRow}>
-            <input type="radio" id="voice-auto" name="voice" checked={!voice} onChange={() => setSetting(store, 'ttsVoice', undefined)} />
-            <label htmlFor="voice-auto" style={{ flex: 1 }}>Tự chọn</label>
+            <label className={s.voiceOpt}>
+              <input type="radio" id="voice-auto" name="voice" checked={!voice} onChange={() => setSetting(store, 'ttsVoice', undefined)} />
+              Tự chọn
+            </label>
             <button type="button" className={ui.btn} onClick={() => void listen()}>🔊 Nghe thử</button>
           </div>
           {voices.map((v, i) => (
             <div key={v} className={s.voiceRow}>
-              <input type="radio" id={`voice-${i}`} name="voice" checked={voice === v} onChange={() => setSetting(store, 'ttsVoice', v)} />
-              <label htmlFor={`voice-${i}`} style={{ flex: 1 }}>Giọng {i + 1}</label>
+              <label className={s.voiceOpt}>
+                <input type="radio" id={`voice-${i}`} name="voice" checked={voice === v} onChange={() => setSetting(store, 'ttsVoice', v)} />
+                Giọng {i + 1}
+              </label>
               <button type="button" className={ui.btn} aria-label={`Nghe thử giọng ${i + 1}`} onClick={() => void listen(v)}>🔊 Nghe thử</button>
             </div>
           ))}

@@ -2,7 +2,13 @@
 .label { font-size: var(--fs-sm); color: var(--muted); font-weight: 500; }
 .group { display: flex; gap: 6px; background: var(--surface2); border: 1px solid var(--line); border-radius: 12px; padding: 4px; }
 .opt {
+  position: relative;
   flex: 1; min-height: calc(var(--tap) - 8px); padding: 6px 10px; border: 0; border-radius: 9px;
   background: transparent; color: var(--ink-dim); font-weight: 600; font-size: var(--fs-sm);
 }
+/* Nút trông cao 36px cho gọn, nhưng vùng chạm phủ cả phần đệm 4px của khung (trên, dưới) và nửa khe 6px giữa hai nút,
+   nên mỗi nút nhận chạm trong ô ≥ 44px (CLAUDE.md: vùng chạm tối thiểu 44px). */
+.opt::before { content: ''; position: absolute; inset: -5px -3px; }
+.opt:first-child::before { left: -5px; }
+.opt:last-child::before { right: -5px; }
 .opt[aria-checked='true'] { background: var(--gold); color: var(--on-gold); }
