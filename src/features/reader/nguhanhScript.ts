@@ -4,11 +4,12 @@
    Thầy hỏi một giai đoạn đã qua; người dùng trả lời bằng 4 nút của thẻ kiểm chứng ngay trên màn Bát Tự. */
 import { BatTuEngine } from '../../core';
 import {
-  hiddenStems, seasonClimate, seasonalState, tenGodOf, verificationQuestions,
+  hiddenStems, seasonClimate, seasonalState, verificationQuestions,
   type Msg, type NguHanhAnalysis, type VerificationQuestion,
 } from '../../core/nguhanh';
 import type { NguHanhAnswer } from '../../state/schema';
-import { TEN_GOD_PRACTICAL, TYPE_VI, msgText, resolutionText, verificationPrompt } from '../../content/nguhanh';
+import { TYPE_VI, msgText, plainBlocks, resolutionText, verificationPrompt } from '../../content/nguhanh';
+import { toPlainText } from '../../content/rich';
 import { analyzeSensitivity } from '../../core/nguhanh';
 import { LEADS, fill, pick } from '../../content/reader/templates';
 import type { Lead, ScriptInput, Who } from './script';
@@ -58,6 +59,19 @@ export interface NguHanhReadInput {
   a: NguHanhAnalysis;
   /** câu hỏi kiểm chứng sẽ hỏi cuối bài; bỏ trống thì không hỏi */
   ask?: { question: VerificationQuestion; base: NguHanhAnalysis };
+  /** năm hiện tại cho hai năm ví dụ của mục "Nói dễ hiểu"; mặc định năm của máy */
+  nowYear?: number;
+}
+
+/** Các đoạn của mục "Nói dễ hiểu" mà Thầy đọc: Dụng thần kèm ví dụ, Hỷ thần, Kỵ thần kèm tình huống, hai năm ví dụ.
+    Hai đoạn có phần trăm ("bạn là ai", "hành mạnh nhất") gắn no-speech, chỉ để xem. */
+const SPOKEN_PLAIN = ['nguhanh.plain.dung', 'nguhanh.plain.hy', 'nguhanh.plain.ky', 'nguhanh.plain.years'];
+
+/** Mục "Nói dễ hiểu" viết "bạn"; Thầy đọc thì đổi theo cách gọi đã chọn (con, anh, chị…), giữ nguyên "bạn bè".
+    Đọc cho người khác (hồ sơ người thân) thì giữ "bạn" như phần chữ. */
+export function xungHoPlain(text: string, who: Who): string {
+  if (who.third || who.goi === 'bạn') return text;
+  return text.replace(/(?<!\p{L})([Bb])ạn(?!\p{L})(?! bè)/gu, (_m, b: string) => (b === 'B' ? who.goi.charAt(0).toUpperCase() + who.goi.slice(1) : who.goi));
 }
 
 /**
@@ -98,7 +112,10 @@ export function nguHanhScriptInput(input: NguHanhReadInput, who: Who, seed = new
     leads.push({ lines: LEADS.nguhanhHaiCach, vars: { cachchinh: msgText(a.readings[0].label).replace(/^Luận /, '') }, focus: {} });
   }
 
-  const prose: string[] = [TEN_GOD_PRACTICAL[tenGodOf(dm, ug.dung)].asUseful];
+  // Thay câu chiến lược chung bằng phần giải thích có ví dụ của chính lá số (mục "Nói dễ hiểu")
+  const prose: string[] = plainBlocks(a, a.readings[0], input.nowYear ?? new Date().getFullYear()).blocks
+    .filter((b) => SPOKEN_PLAIN.includes(b.id) && b.kind === 'p' && !b.tags?.includes('no-speech'))
+    .map((b) => xungHoPlain(toPlainText((b as { rich: Parameters<typeof toPlainText>[0] }).rich), who));
   // độ nhạy: chỉ nói khi hai cách đặt hệ số cho Dụng thần khác nhau (ARCHITECTURE 14.11)
   if (analyzeSensitivity(a.chart).byPreset.some((x) => x.dung !== ug.dung)) prose.push(fill(pick(LEADS.nguhanhChuaVung, seed), vars));
   const res = resolutionLine(a, vars, seed);

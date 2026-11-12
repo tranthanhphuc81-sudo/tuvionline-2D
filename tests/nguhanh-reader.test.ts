@@ -67,6 +67,22 @@ describe('Thầy đọc ngũ hành', () => {
     }
   });
 
+  it('đọc phần "Nói dễ hiểu": có ví dụ và hai năm ví dụ, đổi "bạn" theo cách gọi, giữ "bạn bè", không đọc phần trăm', () => {
+    for (const { a } of [...plain.slice(0, 100), ...multi]) {
+      const cues = buildScript('nguhanh', who, nguHanhScriptInput({ a, nowYear: NOW }, who, 0), 0);
+      const text = cues.map((c) => c.caption ?? '').join(' ');
+      expect(text).toMatch(/Ví dụ:/);
+      expect(text).toMatch(/Năm thuận nhất trong 12 năm tới|không có năm nào nghiêng rõ về thuận/);
+      expect(text).toMatch(/Với con,/);
+      expect(text.replace(/bạn bè/g, '')).not.toMatch(/(?<!\p{L})[Bb]ạn(?!\p{L})/u);
+      expect(cues.map((c) => c.text).join(' ')).not.toMatch(/\d+%|phần trăm lực/);
+    }
+    // đọc cho hồ sơ người thân, hay đã chọn gọi "bạn": giữ chữ "bạn" như phần hiển thị
+    const a = plain[0].a;
+    const other: Who = { goi: 'bạn', third: true, name: 'Bình' };
+    expect(buildScript('nguhanh', other, nguHanhScriptInput({ a, nowYear: NOW }, other, 0), 0).map((c) => c.caption ?? '').join(' ')).toMatch(/Với bạn,/);
+  });
+
   it('(d) chỉ có cue hỏi kiểm chứng khi có cách luận thay thế và chưa kết luận', () => {
     const askText = (cues: Cue[]) => cues.some((c) => /Lập Xuân|tuổi mụ|Giai đoạn từ khoảng/.test(c.caption ?? ''));
     for (const { a } of plain.slice(0, 200)) expect(askText(script(a)), 'lá thường').toBe(false);

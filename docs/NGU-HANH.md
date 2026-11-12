@@ -173,7 +173,7 @@ Engine chỉ trả mã và số; mỗi mã dưới đây đổi thành câu như
 >
 > Hành mạnh nhất trong lá số là Mộc (42%): bạn sinh tháng Mão (mùa xuân), đúng lúc Mộc vượng nhất. Ngược lại, Hoả gần như vắng mặt (4%).
 >
-> Vì phe bạn đang yếu, hành có ích là hành tiếp sức cho bạn hoặc giúp bạn gánh bớt: Kim. Với bạn, Kim là Tỷ Kiếp, trong đời sống ứng với chính bạn và những người ngang hàng: anh chị em, bạn bè, đồng nghiệp cùng cấp, sức khoẻ và sự tự lập. "Bổ sung Kim" không phải chuyện đồ vật, mà là đưa thêm những điều đó vào nếp sống, vừa sức mình. Ví dụ: thay vì một mình gánh một việc lớn, rủ một người bạn cùng nghề làm chung và chia rõ phần ai nấy làm; hoặc giữ lịch tập thể dục ba buổi một tuần để có sức bền.
+> Vì phe bạn đang yếu, hành có ích là hành tiếp sức cho bạn hoặc giúp bạn gánh bớt: Kim. Với bạn, Kim là Tỷ Kiếp, trong đời sống ứng với chính bạn và những người ngang hàng: anh chị em, bạn bè, đồng nghiệp cùng cấp, sức khoẻ và sự tự lập. "Bổ sung Kim" không phải chuyện đồ vật, mà là đưa thêm những điều đó vào nếp sống, vừa sức mình. Ví dụ: thay vì một mình gánh một việc lớn, rủ một người quen cùng nghề làm chung và chia rõ phần ai nấy làm; hoặc giữ lịch tập thể dục ba buổi một tuần để có sức bền.
 >
 > Hỗ trợ cho Kim là Thổ (Ấn của bạn): việc học, bằng cấp, người thầy, người đi trước nâng đỡ, và những lúc nghỉ để nạp lại sức. Có thêm phần này thì phần trên bền hơn.
 >
