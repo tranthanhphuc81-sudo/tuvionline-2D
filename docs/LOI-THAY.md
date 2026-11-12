@@ -190,8 +190,8 @@ Giữ trung hoà:
 - Nhật Chủ khá cân bằng nên thầy không cần can thiệp mạnh. Chỉ bù hành yếu nhất là {dung}, bớt hành dư nhất là {ky}.
 - Lá số gần cân bằng. Hành yếu nhất là {dung}, mình bù thêm; hành dư là {ky}, mình bớt lại.
 Thuận thế (tòng cách, chuyên vượng):
-- Với cách cục này, thầy chọn theo thế chung của lá số. Hành cần bổ sung là {dung}, hỗ trợ là {hy}, nên tiết chế {ky}.
-- Lá số theo thế của {cach}. Hành cần bổ sung là {dung}; {hy} hỗ trợ; {ky} nên tiết chế.
+- Với cách cục này, thầy chọn theo thế chung của lá số. Hành nên thuận theo là {dung}, hỗ trợ là {hy}; {ky} đi ngược thế nên tránh.
+- Lá số theo thế của {cach}. Hành nên thuận theo là {dung}; {hy} hỗ trợ; nên tránh {ky}.
 Thông quan (thêm khi có):
 - Hai hành {a} và {b} đang khắc nhau khá mạnh. Thầy lấy {cau} làm cầu nối cho dịu.
 - Giữa {a} và {b} có chỗ căng, hành {cau} đứng giữa làm cầu nối là hợp.

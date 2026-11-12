@@ -225,7 +225,10 @@ export function practicalReport(a: NguHanhAnalysis, o: ReportOptions): Section[]
   const tags: Record<string, string> = { [ug.dung]: 'Dụng thần', [ug.hy]: 'Hỷ thần', [ug.ky]: 'Kỵ thần', ...(ug.cuu ? { [ug.cuu]: 'Cừu thần' } : {}) };
   const balance = (['Mộc', 'Hoả', 'Thổ', 'Kim', 'Thuỷ'] as Element[]).sort((x, y) => a.score.shares[y] - a.score.shares[x]);
   sec('headline', 'Tóm lại', [
-    p('nguhanh.headline.0', `Nhật Chủ <b>${dm}</b> — <b>${STRENGTH_VI[a.dayMaster.strength]}</b>. Hành cần bổ sung: <b>${ug.dung}</b> (hỗ trợ: ${ug.hy}); hành nên tiết chế: ${ug.ky}.`, { pillar: 2 }),
+    p('nguhanh.headline.0', ug.method === 'tong-cach'
+      // Cách luận thuận thế: Dụng thần thường là hành đang mạnh nhất, nói "bổ sung" thì sai ý
+      ? `Nhật Chủ <b>${dm}</b> — <b>${STRENGTH_VI[a.dayMaster.strength]}</b>, luận theo thế chung của lá số. Hành nên thuận theo: <b>${ug.dung}</b> (hỗ trợ: ${ug.hy}); hành đi ngược thế, nên tránh: ${ug.ky}.`
+      : `Nhật Chủ <b>${dm}</b> — <b>${STRENGTH_VI[a.dayMaster.strength]}</b>. Hành cần bổ sung: <b>${ug.dung}</b> (hỗ trợ: ${ug.hy}); hành nên tiết chế: ${ug.ky}.`, { pillar: 2 }),
     { id: 'nguhanh.headline.bars', kind: 'bars', tags: NO_SPEECH, rows: balance.map((e) => ({ label: `${e} · ${TEN_GOD_VI[tenGodOf(dm, e)]}${tags[e] ? ' · ' + tags[e] : ''}`, pct: Math.round(a.score.shares[e] * 100) })) },
     p('nguhanh.headline.sens', sensitivityNote(a.chart, ug.dung)),
   ]);

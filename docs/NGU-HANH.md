@@ -373,7 +373,7 @@ Engine chỉ trả mã và số; mỗi mã dưới đây đổi thành câu như
 
 > Tóm lại
 >
-> Nhật Chủ Mộc — Thân vượng. Hành cần bổ sung: Hoả (hỗ trợ: Mộc); hành nên tiết chế: Kim.
+> Nhật Chủ Mộc — Thân vượng, luận theo thế chung của lá số. Hành nên thuận theo: Hoả (hỗ trợ: Mộc); hành đi ngược thế, nên tránh: Kim.
 >
 > Mộc · Tỷ Kiếp · Hỷ thần 55%
 >

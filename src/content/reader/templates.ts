@@ -153,7 +153,7 @@ export const LEADS = {
   nguhanhPhuUc: ['{Ta} chọn Dụng thần theo cách bù chỗ yếu, tiết chỗ mạnh. Hành cần bổ sung là {dung}, hỗ trợ là {hy}, nên tiết chế {ky}.', 'Theo cách cân bằng mạnh yếu, hành cần bổ sung là {dung}; {hy} hỗ trợ; {ky} nên tiết chế.'],
   nguhanhDieuHau: ['Lá số lệch về nóng lạnh nên {ta} lo điều hậu trước. Hành cần bổ sung là {dung}, hỗ trợ là {hy}, nên tiết chế {ky}.', 'Mùa sinh làm lá số quá {khi}, nên cần điều hậu trước. Hành cần bổ sung là {dung}; nên tiết chế {ky}.'],
   nguhanhTrungHoa: ['Nhật Chủ khá cân bằng nên {ta} không cần can thiệp mạnh. Chỉ bù hành yếu nhất là {dung}, bớt hành dư nhất là {ky}.', 'Lá số gần cân bằng. Hành yếu nhất là {dung}, mình bù thêm; hành dư là {ky}, mình bớt lại.'],
-  nguhanhThuanThe: ['Với cách cục này, {ta} chọn theo thế chung của lá số. Hành cần bổ sung là {dung}, hỗ trợ là {hy}, nên tiết chế {ky}.', 'Lá số theo thế của {cach}. Hành cần bổ sung là {dung}; {hy} hỗ trợ; {ky} nên tiết chế.'],
+  nguhanhThuanThe: ['Với cách cục này, {ta} chọn theo thế chung của lá số. Hành nên thuận theo là {dung}, hỗ trợ là {hy}; {ky} đi ngược thế nên tránh.', 'Lá số theo thế của {cach}. Hành nên thuận theo là {dung}; {hy} hỗ trợ; nên tránh {ky}.'],
   nguhanhThongQuan: ['Hai hành {a} và {b} đang khắc nhau khá mạnh. {Ta} lấy {cau} làm cầu nối cho dịu.', 'Giữa {a} và {b} có chỗ căng, hành {cau} đứng giữa làm cầu nối là hợp.'],
   nguhanhChanTong: ['Lá số này thành {cach} khá rõ, độ tin cậy {tincay}. Các điều kiện đều đạt.', '{Ta} thấy {cach} thành cách rõ ràng, độ tin cậy {tincay}.'],
   nguhanhGiaTong: ['Lá số có dấu hiệu {cach} nhưng chưa trọn, độ tin cậy {tincay}. Nên xem cả hai cách luận.', 'Về cách cục đặc biệt, {ta} thấy {cach} nhưng chưa trọn, độ tin cậy {tincay}.'],
