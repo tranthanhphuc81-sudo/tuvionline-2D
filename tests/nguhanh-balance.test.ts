@@ -52,3 +52,31 @@ describe('Mô hình cân bằng 5 hành', () => {
     expect(BALANCE.EQUILIBRIUM).toBe(0.2);
   });
 });
+
+describe('Điểm cân bằng theo mùa sinh và Nhật Chủ', () => {
+  it('tổng 1; sinh mùa đông, Mộc Thân nhược: Hoả, Mộc, Thuỷ cao hơn 20%; Trung hoà mùa ôn hoà vẫn đều', async () => {
+    const { balanceTarget } = await import('../src/core/nguhanh');
+    const t = balanceTarget({ dayMaster: 'Mộc', strength: 'nhuoc', climate: 'lanh' });
+    expect(Object.values(t).reduce((a, b) => a + b, 0)).toBeCloseTo(1, 12);
+    for (const e of ['Hoả', 'Mộc', 'Thuỷ'] as const) expect(t[e]).toBeGreaterThan(0.2);
+    for (const e of ['Thổ', 'Kim'] as const) expect(t[e]).toBeLessThan(0.2);
+    const v = balanceTarget({ dayMaster: 'Kim', strength: 'vuong', climate: 'nong' });
+    expect(v.Thuỷ).toBeGreaterThan(v.Thổ); // Thuỷ được cả mùa nóng lẫn Kim sinh
+    expect(v.Mộc).toBeGreaterThan(0.2);   // Kim khắc Mộc
+    const u = balanceTarget({ dayMaster: 'Thổ', strength: 'trung-hoa', climate: 'on' });
+    for (const x of Object.values(u)) expect(x).toBeCloseTo(0.2, 12);
+  });
+  it('điểm cân bằng 20% đều cho đúng kết quả cũ; với τ khác, lá số đang ở τ thì không cần bổ sung hành nào nhiều nhất', async () => {
+    const { balanceTarget } = await import('../src/core/nguhanh');
+    const shares = { Mộc: 0.02, Hoả: 0.1, Thổ: 0.2, Kim: 0.18, Thuỷ: 0.5 };
+    const u = balanceTarget({ dayMaster: 'Thổ', strength: 'trung-hoa', climate: 'on' });
+    for (const mode of ['roi-rac', 'vi-phan'] as const) {
+      const a = rankIntervention(shares, 'Mộc', mode), b = rankIntervention(shares, 'Mộc', mode, u);
+      a.scores.forEach((s, i) => expect(b.scores[i]).toBeCloseTo(s, 9));
+    }
+    // lá số thiếu Hoả rõ: khi điểm cân bằng đòi nhiều Hoả hơn (mùa đông), hạng của Hoả không tệ đi
+    const cold = balanceTarget({ dayMaster: 'Mộc', strength: 'nhuoc', climate: 'lanh' });
+    const lowFire = { Mộc: 0.3, Hoả: 0.05, Thổ: 0.25, Kim: 0.2, Thuỷ: 0.2 };
+    expect(rankIntervention(lowFire, 'Hoả', 'roi-rac', cold).rank).toBeLessThanOrEqual(rankIntervention(lowFire, 'Hoả').rank);
+  });
+});

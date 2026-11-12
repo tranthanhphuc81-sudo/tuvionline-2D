@@ -28,11 +28,12 @@ export function NguHanhSection({ ch, nowYear, profileId }: { ch: BatTuChart; now
   const who = useWho();
   const legacy = useMemo(() => batTuReading(ch, nowYear), [ch, nowYear]);
   const [balanceMode, setBalanceMode] = useState<BalanceMode>('roi-rac');
+  const [balanceTarget, setBalanceTarget] = useState<'deu' | 'la-so'>('deu');
   const [picked, setPicked] = useState<Reading['id'] | null>(null);
   const main = a.readings[0], other = a.readings[1];
   const active = picked && a.readings.some((r) => r.id === picked) ? picked : main.id;
   const grade = a.follow?.grade;
-  const sections = useMemo(() => practicalReport(a, { nowYear, legacy, readingId: active, balanceMode }), [a, nowYear, legacy, active, balanceMode]);
+  const sections = useMemo(() => practicalReport(a, { nowYear, legacy, readingId: active, balanceMode, balanceTarget }), [a, nowYear, legacy, active, balanceMode, balanceTarget]);
 
   // Bảng 4 điều kiện hiện rõ khi Chân hoặc Giả; khi Không thành thì nằm trong "Vì sao ra kết quả này" (14.7)
   const patternInFold = grade === 'khong-thanh';
@@ -68,6 +69,11 @@ export function NguHanhSection({ ch, nowYear, profileId }: { ch: BatTuChart; now
               label="Cách viết mô hình"
               options={[{ value: 'roi-rac', label: 'Sai phân (bước rời rạc)' }, { value: 'vi-phan', label: 'Hệ vi phân (liên tục)' }]}
               value={balanceMode} onChange={setBalanceMode}
+            />
+            <Segmented<'deu' | 'la-so'>
+              label="Điểm cân bằng"
+              options={[{ value: 'deu', label: 'Đều 20% mỗi hành' }, { value: 'la-so', label: 'Theo mùa sinh và Nhật Chủ' }]}
+              value={balanceTarget} onChange={setBalanceTarget}
             />
             <SectionView sections={[{ ...balance, title: '' }]} level={4} />
           </details>

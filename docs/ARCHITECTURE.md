@@ -1189,6 +1189,8 @@ Hai preset của engine (`PRESETS`: mặc định và coi trọng nguyệt lện
 
 **Hệ vi phân (tuỳ chọn thứ hai):** cùng mô hình viết liên tục dx/dt = S·(P − I)·x − K·P²·x (P là phép dịch vòng sinh), tích phân RK4 trong 5 đơn vị thời gian rồi chuẩn hoá tổng về 100%; người dùng đổi qua lại bằng nút chọn trong phần gập. Điểm đứng yên vẫn là 20% mỗi hành. Hai cách viết cho cùng hạng ở 99,1% trong 1500 lá số, nên đổi sang vi phân không làm mô hình đáng tin hơn (hệ số vẫn tự đặt); Dụng thần đứng hạng 1 ở 39,0%.
 
+**Điểm cân bằng theo mùa sinh và Nhật Chủ (tuỳ chọn thứ ba):** thay vì 20% đều, điểm cân bằng τ dịch theo mùa (mùa lạnh Hoả +5%, mùa nóng Thuỷ +5%) và vượng suy (Thân nhược hoặc Cực vượng: hành Nhật Chủ và hành sinh ra nó +4% mỗi hành; Thân vượng hoặc Cực nhược: hành Nhật Chủ sinh ra và hành Nhật Chủ khắc +4% mỗi hành), rồi chuẩn hoá. Hệ chạy trên y = x/τ nên τ là điểm đứng yên. Mức dịch là hệ số tự đặt. Đo trên 1500 lá số (sai phân): Dụng thần đứng hạng 1 ở 33,9% (đều 20%: 38,8%), hạng 1 hoặc 2 ở 69,1% (đều: 70,7%). Tức là thêm mùa sinh và Nhật Chủ theo cách này không làm mô hình khớp engine hơn; cần đáp án người luận để biết bên nào gần thực tế.
+
 **Mô hình hệ động lực 5 nút** (sinh là cạnh +, khắc là cạnh −, trạng thái cân bằng, can thiệp tối thiểu) chỉ nên làm hình minh hoạ cho Thầy giải thích "vì sao cần thêm hành này", không là phương pháp chọn Dụng thần thứ ba. Đã làm (12/11/2026): khối `cycle` ở mục "Tóm lại" của Phân tích ngũ hành (nét liền sinh, nét đứt khắc, tô đậm hai cạnh vào Dụng thần); Thầy không đọc hình này.
 
 ### 14.10 Thứ tự triển khai
