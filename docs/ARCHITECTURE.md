@@ -958,3 +958,234 @@ Luồng: **tay nào → chụp → chạm 4 đường → xác nhận số đo �
 | 3B.4 | Đặt hàng hình minh hoạ câu hỏi và đồ vật Tĩnh thất vào `docs/ART-BRIEF.md` | Danh sách hình có kích thước và tên file |
 | 3B.5 | Script sinh `palm-content.vi.json` từ CHI-TAY | Chạy lại ra đúng file hiện có |
 | 3B.6–3B.9 | Thầy đọc chỉ tay, đồ vật Tĩnh thất, lời dẫn, rà chính sách | Theo kit |
+
+## 14. Phân tích ngũ hành (Phase 3C, chốt 11/11/2026)
+
+Căn cứ khi viết: `docs/NGU-HANH-SO-SANH.md` (3000 lá số, seed 20261111), engine tham chiếu `docs/ngu-hanh-engine/` v0.2, `src/core/battu/reading.ts`, `src/content/battu/*`, `src/core/tonghop/reading.ts`, `src/content/tonghop/*`, `src/content/interp/{battu,hanh}.ts`, `src/features/battu/BatTuScreen.tsx`, `src/features/reader/script.ts`, `tests/parity/battu.test.ts`, `tests/snapshot/compute.ts`, sách Phần 2 (mục 6.3 và Chương 7). Thứ tự bước: `docs/PROMPT-KIT-NGU-HANH.md`. Mục này là bước 3C.1, chưa có code.
+
+**Đáp án người luận:** chủ dự án CHƯA điền cột "Đáp án người luận" (mục 3 của `NGU-HANH-SO-SANH.md`). Theo kit, mục này chỉ được chọn phương án đảo ngược được, kèm điều kiện để chuyển phương án (14.1).
+
+**Số đo thêm (11/11/2026, cùng 3000 lá số, cùng seed):** 1216 lá bị đảo chiều (40,5%). Xếp mỗi lá vào một nguyên nhân, xét theo thứ tự trong bảng:
+
+| Nguyên nhân | Lá đảo chiều | Trong các lá đảo chiều | Tỷ lệ đảo chiều của nhóm |
+|---|---|---|---|
+| Engine luận Tòng cách/Chuyên vượng (Chân hoặc Giả) | 100 | 8,2% | 75,8% của 132 lá |
+| Engine dùng Điều hậu | 159 | 13,1% | 34,3% của 463 lá |
+| Engine xếp trung hoà, bù hành yếu nhất | 400 | 32,9% | 66,9% của 598 lá |
+| Hai bên kết luận vượng/nhược ngược nhau (legacy chỉ đếm 3 Can lộ; engine tính cả Tàng Can, hệ số chi tháng) | 504 | 41,4% | 100% của 504 lá |
+| Cùng chiều vượng/nhược nhưng chọn hành khác | 53 | 4,4% | 4,2% của 1272 lá |
+
+- Có cách luận thay thế (Chân 36 + Giả 96): 132 lá, **4,4%**. Chỉ những lá này mới có câu hỏi kiểm chứng (14.6).
+- Có dấu hiệu tòng/chuyên vượng nên engine chấm bảng 4 điều kiện (kể cả Không thành): 688 lá, **22,9%**.
+- Hai nguyên nhân lớn nhất (vượng/nhược ngược và trung hoà) chiếm 74% số lá đảo chiều, đều do legacy không tính Tàng Can.
+
+**Sách nói gì:** Phần 2 mục 6.3 viết rằng một lá số vượng thật thường cần 2 trong 3 yếu tố Đắc Lệnh, Đắc Địa, Đắc Thế, còn tài liệu "ở mức nền tảng" chỉ dùng Đắc Lệnh và đối chiếu nhanh Can lộ. Chương 7 viết rằng luận Dụng thần chuẩn còn phải xét Điều hậu, Thông quan, các Cách cục đặc biệt, và kết luận ở Chương 10 chỉ để minh hoạ. Câu chữ legacy cũng tự ghi giới hạn đó (`batTuVuongSuy`, `batTuDungThan`, `batTuNotes`, `BATTU_NOTE`). Vậy **legacy là bài học nền tảng đúng theo sách, engine là phần "học tiếp" mà sách chỉ nêu tên**. Hai bên đều có căn cứ, khác nhau ở mức độ, nên không bên nào là "sai" cần xoá.
+
+### 14.1 Xung đột Dụng thần với legacy
+
+**Lựa chọn: phương án (B).** Giữ nguyên văn mọi câu chữ legacy về Vượng Suy, Dụng thần, Tổng kết, Tổng hợp. Thêm mục mới **"Phân tích ngũ hành"** trên màn Bát Tự, đặt ngay sau hai hộp "Vượng Suy và Dụng Thần sơ bộ", trước dải Đại Vận. Mục mới chạy engine, tự giới thiệu là phần "học tiếp" của mục 6.3 và Chương 7, và mở đầu bằng **một dòng đối chiếu** với gợi ý sơ bộ.
+
+**Mức đối chiếu** (engine trả mã qua `compareWithLegacy(reading, nguHanh)` ở `src/core/nguhanh`, cùng định nghĩa với `compare-dung-than.ts`):
+
+| Mã | Điều kiện |
+|---|---|
+| `trung` | Dụng thần chính của engine = `primary` của legacy |
+| `gan` | Không đảo chiều, Dụng thần engine nằm trong `dung` của legacy |
+| `khac` | Không đảo chiều, Dụng thần engine không nằm trong `dung` của legacy |
+| `nguoc` | Đảo chiều: Dụng thần engine nằm trong `ky` legacy, hoặc Kỵ thần engine nằm trong `dung` legacy |
+
+Kèm mã nguyên nhân theo bảng số đo: `tong-cach`, `dieu-hau`, `trung-hoa`, `vuong-nhuoc`, `khac-chon`.
+
+**Câu hiện cho người dùng** (nội dung mới; câu cuối cùng chốt ở `docs/NGU-HANH.md` bước 3C.3, giữ đúng ý dưới đây):
+
+- `trung`: "Phân tích định lượng cũng chọn **{X}** là hành cần bổ sung nhất, trùng với gợi ý sơ bộ ở trên."
+- `gan`: "Phân tích định lượng chọn **{X}** làm Dụng thần chính, gợi ý sơ bộ ở trên chọn {Y}. Hai cách cùng một hướng: {X} vẫn nằm trong nhóm hành có lợi của gợi ý sơ bộ."
+- `khac`: "Phân tích định lượng chọn **{X}**, khác các hành gợi ý sơ bộ ({danh sách}), nhưng hai cách không ngược nhau. {lý do}"
+- `nguoc`: "Ở lá số này, hai cách tính cho kết quả gần như ngược nhau: gợi ý sơ bộ nghiêng về {danh sách}, phân tích định lượng nghiêng về **{X}**. {lý do} Sách Phần 2 (mục 6.3 và Chương 7) coi cách sơ bộ là bước nền tảng, còn lá số thực tế cần xét thêm những yếu tố này. Bạn có thể đọc cả hai như hai góc nhìn. Nếu định dựa vào đây để quyết định việc gì, nên nhờ người luận xem trực tiếp."
+- {lý do} theo mã nguyên nhân:
+  - `vuong-nhuoc`: "Gợi ý sơ bộ chỉ đếm mùa sinh và 3 Can lộ nên thấy Thân {vượng/nhược}; khi tính cả Can ẩn trong Chi và sức của chi tháng, Nhật Chủ lại thiên {nhược/vượng}."
+  - `trung-hoa`: "Khi tính đủ 8 chữ, Nhật Chủ gần cân bằng (trung hoà), nên phân tích định lượng chỉ bù hành yếu nhất thay vì bồi thêm hay tiết bớt Nhật Chủ."
+  - `dieu-hau`: "Lá số sinh mùa {lạnh/nóng} mà hành {Hoả/Thuỷ} rất ít, nên phân tích định lượng ưu tiên Điều hậu (cân bằng nóng lạnh) trước việc bồi thêm hay tiết bớt Nhật Chủ."
+  - `tong-cach`: "Lá số có dấu hiệu cách cục đặc biệt ({tên cách}); khi đó nguyên tắc Vượng Suy thông thường không còn áp dụng (Phần 2, Chương 7)."
+  - `khac-chon`: "Hai cách cùng thấy Thân {vượng/nhược} nhưng chọn hành khác: gợi ý sơ bộ lấy hành ít chữ nhất, phân tích định lượng lấy hành chữa đúng nguyên nhân mất cân bằng."
+- Khi `nguoc`, phần Đại Vận và các năm tới của mục mới có thêm dòng: "Đánh giá các năm ở đây có thể khác mục 'Giai đoạn hiện tại' trong Tổng kết, vì hai cách lấy hành có lợi khác nhau."
+
+**So sánh các phương án:**
+
+| | (A) Engine thay legacy | **(B) Giữ legacy, thêm mục riêng** | (C) Engine là nguồn tên hành, câu legacy thành tham số |
+|---|---|---|---|
+| Người dùng thấy gì ở lá đảo chiều | Một kết luận (engine) | Hai kết luận, có dòng đối chiếu giải thích vì sao | Một tên hành (engine) trong câu legacy |
+| `tests/parity` | Đỏ ở Bát Tự (Tổng kết, Vượng Suy, Dụng Thần) và Tổng hợp (Tóm lại, thẻ Bát Tự, hướng "vàng"); phải ghi ngoại lệ trong CLAUDE.md | Giữ nguyên, không ngoại lệ | Phải đổi cách so (so khuôn câu thay vì chữ) hoặc ghi ngoại lệ |
+| `tests/core-snapshot` | Không đổi: bản chụp chỉ có lá số và hằng số, không có `batTuReading` (đã xem `tests/snapshot/compute.ts`) | Không đổi | Không đổi |
+| Quy tắc "nguyên văn legacy" | Phá | Giữ | Phá một phần |
+| Mâu thuẫn trong câu chữ | Không | Có, giữa hai mục (đã có câu giải thích) | **Có, trong cùng một câu**: câu "Thân nhược, bạn tinh tế…" của legacy đi cùng hành dụng của engine khi engine thấy vượng hay trung hoà, sai cả lý luận |
+| Công sửa | Lớn: legacy chỉ có 2 trạng thái và 1 cách chọn, engine có 5 mức và 5 phương pháp, phải viết lại câu cho mọi trường hợp | Vừa: toàn bộ là phần thêm | Lớn nhất: tham số hoá cộng viết câu mới cho trung hoà, Điều hậu, Tòng cách |
+| Đổi phương án về sau | Khó: Dụng thần của 40,5% người dùng đổi qua một lần cập nhật | Dễ: gỡ hoặc nâng mục mới không đụng legacy; sang (C) chỉ là thêm việc | Trung bình |
+| Khớp đáp án người luận | Chưa có đáp án | Chưa có đáp án | Chưa có đáp án |
+
+**Phương án bị loại:**
+
+- **(A):** không đảo ngược được, và chưa có đáp án nào cho thấy engine đúng hơn trên lá số thật.
+- **(C):** tạo mâu thuẫn ngay trong một câu, nặng hơn mâu thuẫn giữa hai mục của (B). Là đích có thể chuyển tới khi đáp án ủng hộ engine.
+- **(D) Cài đặt cho người dùng chọn "Sơ bộ / Định lượng":** người dùng không có căn cứ để chọn; nhân đôi ma trận test và câu chữ ở mọi màn dùng Dụng thần.
+- **(E) Dùng câu hỏi năm đã qua để phân xử legacy với engine:** kiểm chứng của engine chỉ thiết kế cho hai cách luận của chính nó; legacy chỉ có thang 3 mức cho năm; dễ khiến người dùng hiểu là app "đoán đúng". Có thể xem lại khi đã có dữ liệu đáp án.
+
+**Giới hạn để (B) đỡ rối:** engine chỉ hiện ở màn Bát Tự và trong lựa chọn "Ngũ hành" của Thầy đọc. Không đưa vào Tổng hợp, ảnh chia sẻ, kịch bản Bát Tự hiện có (14.2).
+
+**Điều kiện chuyển phương án** (quyết lại bằng tay, không tự động):
+
+1. Chủ dự án điền ít nhất 12/24 lá, ưu tiên nhóm đảo chiều (#8–15) và Điều hậu (#16–18), có ghi nguồn đáp án.
+2. "Khớp" nghĩa là Dụng thần chính của người luận trùng dụng hoặc hỷ của bên đó, và không nằm trong kỵ của bên đó.
+3. Engine khớp ≥ 75% **và** legacy khớp ≤ 50% trên các lá đã điền → chuyển sang (C).
+4. Cả hai dưới 75%, hoặc chênh nhau dưới 25 điểm phần trăm → giữ (B), bổ sung đáp án.
+5. Engine khớp dưới 50% → hiệu chỉnh engine (preset, ngưỡng; xem `config.ts`) và chạy lại so sánh trước khi làm gì khác.
+6. Chỉ xét (A) sau khi (C) đã chạy ổn qua một bản phát hành.
+7. Muốn chuyển: sửa mục này trước, ghi kết quả đối chiếu, và ghi rõ ngoại lệ parity trong CLAUDE.md.
+
+### 14.2 Nơi dùng Dụng thần sau 3C
+
+| Nơi | Nguồn hiện tại | Nguồn sau 3C | Đổi chữ hiển thị? |
+|---|---|---|---|
+| Bát Tự · hộp "Đánh giá Vượng Suy", "Gợi ý Dụng Thần" | legacy (`assessThan`, `dungThanPattern`) | giữ legacy | Không |
+| Bát Tự · Tổng kết: Dụng thần chính, màu, hướng, vật, nghề theo hành, mùa | legacy (`batTuReading.primary/dung/ky`) | giữ legacy | Không |
+| Bát Tự · Tổng kết "Giai đoạn hiện tại" | legacy (`daiVanNow`, `yearNow`, thang 3 mức) | giữ legacy | Không |
+| Bát Tự · dải Đại Vận, thẻ "Tra Lưu Niên" | không dùng Dụng thần (Can Chi, tuổi, Thập Thần) | giữ nguyên ở bản đầu, không tô màu tốt/xấu | Không |
+| Bát Tự · mục "Phân tích ngũ hành" | chưa có | engine | Mục mới |
+| Tổng hợp · thẻ Bát Tự "Dụng Thần nghiêng về", Tóm lại (hành nên bổ sung, màu, nghề), hướng "vàng" (Bát Trạch ∩ `dung` legacy) | legacy | giữ legacy | Không. Thêm một liên kết "Xem phân tích ngũ hành ở tab Bát Tự" ở lớp màn hình, ngoài các Section mà parity so |
+| Ảnh chia sẻ Bát Tự (`cardReading(batTuTongKet)`) | legacy (gián tiếp) | giữ legacy, KHÔNG thêm tóm tắt ngũ hành ở bản đầu | Không |
+| Thầy đọc · Bát Tự (`buildScript('battu')`, cue từ `batTuTongKet`) | legacy (gián tiếp) | giữ legacy | Không |
+| Thầy đọc · Ngũ hành (3C.6) | chưa có | engine | Mục mới |
+| Bát Trạch · hướng, màu | Mệnh Quái | giữ, không thêm Dụng thần | Không |
+| La Bàn | Mệnh Quái, Du Niên | giữ, không thêm | Không |
+| Nạp Âm · màu hợp mệnh | hành Nạp Âm | giữ | Không |
+
+- **Ảnh chia sẻ không thêm ngũ hành:** ảnh rời khỏi app, không mang theo dòng đối chiếu; hai kết luận ngược nhau trên một tấm ảnh là trường hợp khó hiểu nhất. Xét lại khi chuyển sang (C).
+- **Dải Đại Vận không tô màu:** tô theo engine sẽ đặt kết luận của engine ngay cạnh Tổng kết legacy ở cả những lá `nguoc`. Đại Vận theo engine nằm trong mục mới.
+
+### 14.3 Màu sắc và hướng
+
+**Lựa chọn: mỗi màn một nguồn và ghi rõ nguồn. Mục ngũ hành không nêu màu, hướng, vật phẩm cụ thể.**
+
+- Bát Tự (Tổng kết) và Tổng hợp: theo Dụng thần sơ bộ (legacy, như hiện nay).
+- Bát Trạch, La Bàn: theo Mệnh Quái. Nạp Âm: theo hành Nạp Âm.
+- Mục ngũ hành chỉ nêu thói quen, công việc, cách sắp xếp nhịp sống. Nếu nêu màu hướng theo engine thì ở lá `nguoc` sẽ có hai lời khuyên màu ngược nhau cách nhau vài màn cuộn.
+
+**Câu giải thích**, hiện ở cuối mục ngũ hành:
+
+> Màu và hướng gợi ý trong app đến từ ba cách tính khác nhau: theo Dụng thần Bát Tự (tab Bát Tự và Tổng hợp), theo Mệnh Quái (Bát Trạch, La Bàn) và theo Nạp Âm năm sinh. Mỗi cách trả lời một câu hỏi riêng nên có thể không trùng nhau, và mỗi màn hình đã ghi rõ đang theo cách nào. Đây là gợi ý mang tính văn hoá, tham khảo; không cần mua sắm hay thay đổi gì để "hợp mệnh".
+
+**Phương án bị loại:** hiện cả ba nguồn ở mọi màn (dài, rối, nhân mâu thuẫn); gộp thành một "màu tổng hợp" (không có căn cứ trong sách; Tổng hợp đã ghi việc đối chiếu chéo là không chính thống).
+
+**Hệ quả:** bước 3C.8 (nối Dụng thần sang Bát Trạch, La Bàn) **không chạy**.
+
+### 14.4 Port engine vào `src/core/nguhanh`
+
+- **Dùng lại bảng của app:** `CAN`, `CHI` (`src/core/canchi`), `TANG_CAN`, `CAN_HANH`, `CHI_HANH`, `BT_HANH_ORDER`, `seasonHanh` (`src/core/battu/engine.ts`). Ngày 11/11/2026 đã đối chiếu tay: `HIDDEN_STEMS` của engine khớp `TANG_CAN` cả thứ tự Bản/Trung/Dư khí; 3C.2 vẫn phải có test chứng minh trước khi bỏ bảng trùng.
+- **Giữ bảng riêng của engine** ở `src/core/nguhanh/data.ts` khi app không có bảng tương ứng: tam hợp, bán hợp, can hợp, khí hậu theo chi tháng (`SEASON_CLIMATE`). Lục hợp, lục xung đối chiếu với `LUC_HOP`, `LUC_XUNG` trong `src/core/luchao/engine.ts` bằng test, khớp thì dùng chung.
+- **Không gộp hệ số Tàng Can** của engine (`hiddenRatios`, `rootWeights`) với hệ số 1 / 0,5 / 0,3 của `thapThanProfile`: đổi bên nào cũng làm đổi kết quả của bên đó.
+- Chính tả "Hoả", "Thuỷ", "trung hoà" của app. Đầu vào là `BatTuChart` (giờ sinh luôn có, app không có hồ sơ "không rõ giờ", nên bỏ nhánh `hour?` của engine). Engine trả mã và số, không trả câu văn. Năm hiện tại là tham số, không gọi `new Date()`.
+
+**Câu chữ, theo từng loại:**
+
+| Loại | Nguồn | Lý do |
+|---|---|---|
+| Nét và nghề của 5 nhóm Thập Thần | `FAMILY` (`src/content/interp/battu.ts`), import, không chép | Đã có nguyên văn, cùng giọng với Tổng kết |
+| Nghề theo hành | `HANH_INFO.nghe`, import | Như trên |
+| Vai trò của nhóm Thập Thần khi là dụng / là kỵ (`TEN_GOD_PRACTICAL.asUseful/asHarmful`) | Nội dung mới | Legacy không có |
+| Thói quen, dấu hiệu dư, cách tiết chế của hành (`ELEMENT_PRACTICAL`) | Nội dung mới, bỏ ý trùng `HANH_INFO` | Legacy không có |
+| Lý do chọn Dụng thần, điều kiện Tòng cách, câu đối chiếu (14.1), nhãn năm, câu hỏi kiểm chứng | Nội dung mới | Legacy không có |
+| Màu, hướng (`HANH_INFO.mau/huong`), mùa (`HANH_INFO.mua`) | Không dùng trong mục ngũ hành | 14.3 |
+| Vật phẩm (`HANH_INFO.vat`) | **Không hiện** trong mục ngũ hành | Tránh thành gợi ý mua bán (12.8). `HANH_INFO.vat` vẫn ở Tổng kết legacy như hiện nay |
+
+- Nội dung mới đặt ở `src/content/nguhanh`, nguồn câu chữ ở `docs/NGU-HANH.md`, không thuộc `tests/parity` (ngoại lệ giống `src/content/palm`). Chủ dự án đọc duyệt `docs/NGU-HANH.md` trước khi làm giao diện (14.10).
+- **Preset trường phái (`config.ts`): chỉ để nội bộ ở bản đầu**, không có trong Cài đặt. Lý do: người dùng không có căn cứ chọn trường phái; mỗi preset cần snapshot và câu chữ riêng. `MONTH_HEAVY_CONFIG` giữ trong code để so sánh khi hiệu chỉnh.
+
+### 14.5 Thời gian
+
+- **Năm:** thay `yearPillar()` bằng `yearCanChiIndex` của app (theo Lập Xuân). Tuổi tính như `batTuYearLookup` (`year - tietYear + 1`, tuổi mụ theo năm tiết).
+- **Đại Vận:** lấy từ `ch.daiVan`, `ch.khoiVanYears`; Đại Vận thứ `i` ứng với tuổi `khoiVanYears + 10i` đến `+9`. `evaluatePeriod` chấm trụ Đại Vận như trụ năm.
+- **Mục ngũ hành hiện:** Đại Vận đang đi và 5 năm tới (từ năm nay), mỗi năm một nhãn mềm (14.8) và một gợi ý nên làm gì.
+
+**Chọn câu hỏi kiểm chứng:**
+
+- Chỉ khi có cách luận thay thế và chưa kết luận (14.6, 14.7).
+- **Đại Vận trước:** tối đa 2 Đại Vận đã đi **hết**, bắt đầu từ 12 tuổi trở lên, mà hai cách luận chấm ngược dấu. Không hỏi Đại Vận đang đi dở.
+- **Lưu Niên sau:** tối đa 3 năm trong 20 năm gần nhất, từ 18 tuổi trở lên, ngược dấu, ưu tiên năm chênh lệch lớn. Giữ cách chọn của v0.2, chỉ đổi tham số: tuổi tối thiểu 15 → 18 tuổi mụ (người dùng nhớ rõ hơn từ tuổi trưởng thành), số năm tối đa 4 → 3. v0.2 viết cứng `birthYear + 15`, nên 3C.2 thêm tham số `minAge` (mặc định giữ như v0.2 để test so với v0.2 vẫn đúng), app gọi với 18 tuổi mụ, tức từ năm `tietYear + 17`.
+- Tổng tối đa **5 câu**. Không đủ năm (người còn trẻ) thì hiện "Chưa đủ năm đã qua để kiểm chứng".
+- Cách hiện năm: "Năm 2015 (Ất Mùi), lúc bạn 27 tuổi (tuổi mụ). Năm tính từ Lập Xuân, khoảng đầu tháng 2 dương lịch." Đại Vận: "Giai đoạn từ khoảng 23 đến 32 tuổi (khoảng 2011–2020)."
+
+**Tính câu trả lời Đại Vận trong `resolveWithFeedback`:**
+
+- Hệ số `k` của Đại Vận **bằng** của năm (0,7). Một giai đoạn 10 năm dễ nhớ hơn nhưng gộp cả năm tốt lẫn năm xấu, nên không chắc phân biệt tốt hơn; giữ bằng nhau cho tới khi có dữ liệu.
+- Một Đại Vận tính là **một câu** trong ngưỡng kết luận (≥ 3 câu, ≥ 80%, khớp ≥ 75%). Ngưỡng giữ nguyên v0.2.
+- Câu trả lời chỉ có năm phải ra đúng trọng số như v0.2 (test ở 3C.2).
+
+### 14.6 Kiểm chứng bằng quá khứ
+
+- **Nơi hiện:** cả hai, dùng chung một bộ câu trả lời. Màn Bát Tự có thẻ "Kiểm chứng bằng các năm đã qua" nằm trong mục ngũ hành. Tĩnh thất: Thầy hỏi khi đọc phần Ngũ hành (3C.6). Trả lời ở đâu cũng thấy ở nơi kia.
+- **Lựa chọn trả lời:** Thuận lợi / Bình thường / Khó khăn / Không nhớ. "Không nhớ" được lưu để khỏi hỏi lại câu đó, nhưng không truyền vào engine và không đổi trọng số.
+- **Lưu (lược đồ `lyso.state` v3 → v4):** thêm `nguHanhAnswers: NguHanhAnswer[]`:
+
+  ```ts
+  interface NguHanhAnswer {
+    profileId: string;
+    birthKey: string;   // băm các trường ngày giờ sinh của hồ sơ (lịch, ngày, tháng, năm, nhuận, giờ, giờ Tý muộn, giới tính)
+    target: { kind: 'nam'; year: number } | { kind: 'daiVan'; index: number };
+    outcome: 'tot' | 'binh' | 'xau' | 'khong-nho';
+    answeredAt: string; // ISO
+  }
+  ```
+
+  Migration 3 → 4 thêm mảng rỗng, dùng chung `upgradeDoc` khi khởi động và khi khôi phục sao lưu. Có trong file sao lưu. Xoá hồ sơ thì xoá câu trả lời của hồ sơ đó; "Xoá toàn bộ dữ liệu" xoá hết. Không rời máy.
+- **Sửa, làm lại, xoá:** câu đã trả lời vẫn hiện cùng lựa chọn đã chọn; bấm nút khác của câu đó là sửa (ghi đè). Nút "Làm lại" xoá mọi câu trả lời của hồ sơ đó và hỏi lại từ đầu; đây cũng là cách xoá.
+- **Đã kết luận:** không hỏi thêm; thẻ hiện kết luận và nút "Làm lại".
+- **Sửa ngày giờ sinh:** câu trả lời có `birthKey` khác không còn dùng được (Đại Vận và các năm được hỏi đã khác). Khi lưu hồ sơ có `birthKey` mới, xoá câu trả lời cũ của hồ sơ đó và báo một dòng: "Đã xoá các câu trả lời kiểm chứng ngũ hành cũ vì ngày giờ sinh thay đổi." Sửa tên, quan hệ thì không ảnh hưởng.
+- **Phương án bị loại:** hỏi lại người dùng có giữ câu trả lời cũ không (câu trả lời cũ gắn với lá số cũ, giữ lại là sai); chỉ lưu trong bộ nhớ (mất khi tắt app, người dùng phải trả lời lại).
+
+### 14.7 Hiển thị nhiều cách luận
+
+- **Chân** (36/3000 lá): hiện cách thuận thế là chính. Một dòng "Xem cách luận khác" mở cách luận thông thường; thẻ kiểm chứng nằm trong phần mở này.
+- **Giả** (96/3000 lá): hai tab ngang hàng "Cách luận 1 · Cách luận 2", tab đầu là cách có trọng số cao hơn. Thẻ kiểm chứng hiện sẵn, ngay dưới hai tab.
+- **Không thành hoặc không có dấu hiệu:** chỉ một cách luận, không có tab, không có thẻ kiểm chứng.
+- **Trọng số hiện bằng chữ**, phần trăm chỉ có trong "Vì sao ra kết quả này": từ 0,8 trở lên là "nghiêng rõ về", từ 0,6 đến dưới 0,8 là "nghiêng nhẹ về", dưới 0,6 là "hai cách gần ngang nhau". Lý do: các ngưỡng là quy ước, hiện "65%" dễ bị hiểu là xác suất đúng.
+- **Bảng 4 điều kiện Tòng cách:** hiện rõ khi Chân hoặc Giả; khi Không thành thì nằm trong "Vì sao ra kết quả này". Mỗi dòng là một câu hỏi thường ngày kèm tên chuyên môn nhỏ bên dưới:
+  1. "Nhật Chủ có chỗ dựa trong các Chi không?" (Gốc ở địa chi)
+  2. "Có Can nào lộ ra giúp hay chế Nhật Chủ không?" (Can lộ)
+  3. "Phe mạnh có đủ áp đảo không?" (Thế phe được theo)
+  4. "Phe mạnh là một hành hay nhiều hành?" (Hướng)
+
+  Trạng thái là chữ kèm biểu tượng (✓ Đạt, ◐ Một phần, ✗ Không đạt), không chỉ dùng màu. Dòng 1 và 2 có chú thích "điều kiện bắt buộc".
+
+### 14.8 Chính sách nội dung
+
+- **Nhãn năm mềm:** Rất thuận · Thuận · Bình thường · "Nên chậm lại, củng cố" (thay "Kém thuận") · "Nên giữ chắc, chuẩn bị kỹ" (thay "Cần thận trọng"). Mỗi nhãn luôn đi cùng một gợi ý nên làm gì (lấy ý `FAVOR_HINT` của engine, viết lại ở `docs/NGU-HANH.md`).
+- Không lời khuyên y tế, đầu tư tài chính, pháp lý cụ thể. Câu về sức khoẻ chỉ ở mức thói quen (ngủ đủ, vận động), không nêu bệnh, bộ phận cơ thể, thuốc.
+- **Lời nhắc văn hoá** ở đầu mục ngũ hành ("Đây là một cách tính định lượng theo lý số cổ truyền, mang tính văn hoá, tham khảo.") và ở cuối (câu chuẩn "Số là tham khảo, đức năng thắng số." cộng câu 14.3).
+- **Hai danh sách, đặt ở `src/content/nguhanh`, có test:**
+  - **(i) KHÔNG HIỆN** (không được có trong bất kỳ câu mới nào, kể cả chữ chỉ để xem): cúng, giải hạn, hoá giải, trấn yểm, bùa, vật phẩm, kích tài, chiêu tài, mua, đeo để, chính xác, chắc chắn, tuyệt đối, dự đoán đúng, linh nghiệm, cổ phiếu, chứng khoán, tiền ảo, vay, thuốc. So khớp nguyên cụm từ, không phân biệt hoa thường. "Đầu tư" không cấm vì engine dùng nghĩa "đầu tư học thêm"; câu chữ mới không dùng "đầu tư" theo nghĩa tiền bạc.
+  - **(ii) KHÔNG ĐỌC:** `NO_SPEECH_TERMS` ở `src/content/noSpeech.ts` (12.8), không bổ sung từ mới ở bản đầu. Câu chứa từ này vẫn hiện chữ, chỉ không đọc. Ngoài ra **không đọc** (chỉ hiện chữ): bảng 4 điều kiện Tòng cách, các số phần trăm, danh sách thói quen và công việc; Thầy chỉ đọc lý do chính, chiến lược theo Thập Thần và kết luận (3C.6).
+- **Không bao giờ** gợi ý vật phẩm, cúng giải, hay "phải làm thế này mới tránh được".
+
+### 14.9 Kiểm thử
+
+- `tests/fixtures/nguhanh-golden.json`: 24 lá số của `NGU-HANH-SO-SANH.md` mục 3, mỗi lá có tứ trụ, kết quả engine mong đợi (strength, method, dung, hy, ky, grade) và chỗ cho đáp án người luận.
+- **Snapshot riêng** `tests/nguhanh-snapshot.test.ts` (500 lá sinh từ `batTuChart`), cùng cách băm như `core-snapshot`, KHÔNG đụng `tests/fixtures/core-snapshot.json`. Sinh lại chỉ khi cố ý đổi hệ số, có ghi lý do trong commit.
+- **Bất biến** (500 lá): tổng trọng số các cách luận = 1; dụng ≠ kỵ; cừu khác dụng và hỷ (hoặc null); Chân thì không cổng nào trượt; Giả thì cách thuận thế ≤ `giaMaxWeight`; câu hỏi kiểm chứng chỉ trỏ tới năm, Đại Vận đã qua và đúng ngưỡng tuổi 14.5.
+- **Đối chiếu với bảng so sánh:** chạy `compareWithLegacy` trên 3000 lá (seed 20261111) phải ra đúng 36,1% / 61,2% / 40,5% và bảng nguyên nhân ở đầu mục này.
+- **Parity Bát Tự và Tổng hợp** không đổi một test nào (điều kiện của phương án B).
+- Test nội dung (3C.3): mọi mã có câu; không chuỗi rỗng hay "undefined"; danh sách (i) không xuất hiện; câu chứa từ (ii) có cờ không đọc; lời nhắc ở đầu và cuối.
+
+### 14.10 Thứ tự triển khai
+
+| Bước | Việc | Xong khi | Chủ dự án duyệt |
+|---|---|---|---|
+| 3C.2 | `src/core/nguhanh` (port, dùng bảng app, mã thay câu, Đại Vận theo 14.5), `compareWithLegacy`, `scripts/compare-dung-than.ts`, `tsx` vào devDependencies | Test (a)–(d) và (b2) của kit, test 14.9; số so sánh khớp; `npm test`, `npm run build` xanh; `core-snapshot` không đổi | Không |
+| 3C.3 | `docs/NGU-HANH.md` và `src/content/nguhanh` (câu đối chiếu 14.1, nhãn 14.8, hai danh sách) | Test nội dung xanh; 24 lá golden dựng câu không lỗi | **Có:** đọc duyệt `docs/NGU-HANH.md` trước khi sang 3C.4 |
+| 3C.4 | Mục "Phân tích ngũ hành" trên màn Bát Tự; liên kết ở Tổng hợp; KHÔNG đổi ảnh chia sẻ, dải Đại Vận, thẻ Tra Lưu Niên (14.2) | `BatTuScreen.test.tsx` cập nhật; 360px không cuộn ngang, sáng/tối, vùng chạm ≥ 44px, aria cho thanh biểu đồ | **Có:** xem 3 lá (Chân, Giả, thường) và 1 lá `nguoc` trên điện thoại hoặc bản Cloudflare |
+| 3C.5 | Lược đồ v4, thẻ kiểm chứng, xử lý sửa ngày giờ sinh (14.6) | Test (a)–(e) của kit, thêm test `birthKey`; CLAUDE.md ghi lược đồ v4 | Không |
+| 3C.6 | Kịch bản Thầy đọc phần Ngũ hành, hỏi kiểm chứng trong Tĩnh thất. Chạy **sau 3B.6** | Test (a)–(e) của kit | Không |
+| 3C.7 | Lời dẫn và câu hỏi của Thầy. Chạy **sau 3B.8** | Test 3C.6 xanh | **Có:** duyệt `docs/LOI-THAY.md` mục "Ngũ hành" |
+| 3C.8 | Nối Dụng thần sang Bát Trạch, La Bàn | **Không chạy** (14.3) | — |
+| 3C.9 | Data safety, QA checklist (trước 8.1, 9.1) | Theo kit | Không |
+
+Khi chủ dự án điền đáp án: chạy lại so sánh với đáp án, rồi xét điều kiện chuyển phương án ở 14.1 trước bước kế tiếp.
