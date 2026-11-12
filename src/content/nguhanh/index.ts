@@ -8,11 +8,12 @@ import {
   type Element, type Favor, type LegacyComparison, type NguHanhAnalysis, type Pillar, type PeriodTarget, type Reading, type Resolution, type VerificationQuestion,
 } from '../../core/nguhanh';
 import { p, list, note, parseRich, type Block, type Section } from '../rich';
+import { analyzeSensitivity } from '../../core/nguhanh';
 import { FAMILY } from '../interp/battu';
 import { msgText, type RenderCtx } from './render';
 import { ELEMENT_PRACTICAL, TEN_GOD_PRACTICAL } from './practical';
 import {
-  CHECK_QUESTION, CHECK_STATUS, CLOSING_NOTE, COLOR_SOURCE_NOTE, DISCLAIMER, FAVOR_HINT, FAVOR_LABEL, FAVOR_TONE, INTRO_NOTE, METHOD_VI, OUTCOME_LABEL,
+  SENSITIVITY_STABLE, sensitivityUnstable, CHECK_QUESTION, CHECK_STATUS, CLOSING_NOTE, COLOR_SOURCE_NOTE, DISCLAIMER, FAVOR_HINT, FAVOR_LABEL, FAVOR_TONE, INTRO_NOTE, METHOD_VI, OUTCOME_LABEL,
   STRENGTH_VI, TEN_GOD_VI, TYPE_VI,
 } from './vocab';
 
@@ -90,7 +91,13 @@ export function verificationPrompt(q: Pick<VerificationQuestion, 'target' | 'pil
   const s = daiVanYears(a.chart, t.index);
   return `Giai đoạn từ khoảng ${s.fromAge} đến ${s.toAge} tuổi (khoảng ${s.fromYear}–${s.toYear}, Đại Vận ${canChi(q.pillar)}). Nhìn chung giai đoạn đó với bạn là thuận lợi, bình thường hay khó khăn?`;
 }
-export const VERIFICATION_INTRO = 'Hai cách luận cho kết quả khác nhau về lá số này. Nếu bạn nhớ lại một vài giai đoạn đã qua, câu trả lời sẽ giúp thấy cách luận nào hợp hơn. Bạn có thể chọn "Không nhớ" bất cứ lúc nào.';
+/** Ghi chú độ nhạy (ARCHITECTURE 14.11): chạy lại cả hai bộ hệ số trên cùng lá số, so với Dụng thần đang hiển thị. */
+export function sensitivityNote(chart: Parameters<typeof analyzeSensitivity>[0], dung: Element): string {
+  const other = analyzeSensitivity(chart).byPreset.find((x) => x.dung !== dung);
+  return other ? sensitivityUnstable(other.dung, dung) : SENSITIVITY_STABLE;
+}
+
+export const VERIFICATION_INTRO = 'Hai cách luận cho kết quả khác nhau về lá số này. Nếu bạn nhớ lại một vài giai đoạn đã qua, câu trả lời giúp so xem cách luận nào khớp hơn. Đây chỉ là so hai cách tính, không chứng minh cách nào đúng, và trí nhớ có thể lệch. Bạn có thể chọn "Không nhớ" bất cứ lúc nào.';
 export const VERIFICATION_NOT_ENOUGH = 'Chưa đủ giai đoạn đã qua để kiểm chứng.';
 export { OUTCOME_LABEL };
 
@@ -162,6 +169,7 @@ export function practicalReport(a: NguHanhAnalysis, o: ReportOptions): Section[]
   sec('headline', 'Tóm lại', [
     p('nguhanh.headline.0', `Nhật Chủ <b>${dm}</b> — <b>${STRENGTH_VI[a.dayMaster.strength]}</b>. Hành cần bổ sung: <b>${ug.dung}</b> (hỗ trợ: ${ug.hy}); hành nên tiết chế: ${ug.ky}.`, { pillar: 2 }),
     { id: 'nguhanh.headline.bars', kind: 'bars', tags: NO_SPEECH, rows: balance.map((e) => ({ label: `${e} · ${TEN_GOD_VI[tenGodOf(dm, e)]}${tags[e] ? ' · ' + tags[e] : ''}`, pct: Math.round(a.score.shares[e] * 100) })) },
+    p('nguhanh.headline.sens', sensitivityNote(a.chart, ug.dung)),
   ]);
 
   // 3. Vì sao ra kết quả này (cả phần trăm của trọng số)

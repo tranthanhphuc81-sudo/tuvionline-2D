@@ -10,6 +10,7 @@ export * from './engine';
 export * from './follow';
 export * from './period';
 export * from './compare';
+export * from './sensitivity';
 
 /** Đổi lá số Bát Tự của app sang đầu vào của engine ngũ hành (tứ trụ, Đại Vận, năm Lập Xuân). */
 export function toNguHanhChart(ch: BatTuChart): NguHanhChart {

@@ -1,8 +1,8 @@
 /* Thầy đọc phần ngũ hành (Phase 3C.6): các điều kiện (a)–(e) của kit. */
 import { describe, expect, it } from 'vitest';
 import { batTuChart } from '../src/core';
-import { analyze, resolveWithFeedback, toNguHanhChart, type NguHanhAnalysis } from '../src/core/nguhanh';
-import { hasBannedTerm } from '../src/content/nguhanh';
+import { analyze, analyzeSensitivity, resolveWithFeedback, toNguHanhChart, type NguHanhAnalysis } from '../src/core/nguhanh';
+import { hasBannedTerm, sensitivityNote } from '../src/content/nguhanh';
 import { hasNoSpeech } from '../src/content/noSpeech';
 import { CULTURE_LINE, LEADS } from '../src/content/reader/templates';
 import type { NguHanhAnswer } from '../src/state/schema';
@@ -95,10 +95,24 @@ describe('Thầy đọc ngũ hành', () => {
       if (!q) continue;
       const r = resolveWithFeedback(a, [{ target: q.target, outcome: 'xau' }]).analysis;
       const text = script(r, a, [answerFor(q, 'xau')]).map((c) => c.caption ?? '').join(' ');
-      expect(text).toMatch(/Chưa đủ dữ liệu|Chưa phân định|khớp với/);
+      expect(text).toMatch(/Chưa đủ dữ liệu|Chưa phân định|khớp hơn với/);
       seen++;
     }
     expect(seen).toBeGreaterThan(10);
+  });
+
+  it('độ nhạy: chỉ khi hai bộ hệ số cho Dụng thần khác nhau mới có lời lưu ý; ghi chú báo cáo khớp', () => {
+    let unstable = 0, stable = 0;
+    for (const { a } of all.slice(0, 300)) {
+      const diff = analyzeSensitivity(a.chart).byPreset.some((x) => x.dung !== a.usefulGod.dung);
+      const text = script(a).map((c) => c.caption ?? '').join(' ');
+      expect(/đổi cách đặt hệ số/.test(text), 'thầy nói').toBe(diff);
+      expect(sensitivityNote(a.chart, a.usefulGod.dung).startsWith(diff ? 'Kết luận này chưa vững' : 'Kết luận này ổn định')).toBe(true);
+      expect(hasBannedTerm(sensitivityNote(a.chart, a.usefulGod.dung))).toBe(false);
+      diff ? unstable++ : stable++;
+    }
+    expect(stable).toBeGreaterThan(100);
+    expect(unstable).toBeGreaterThan(10);
   });
 
   it('(e) focus.hidden chỉ trỏ tới Can tàng có thật của đúng trụ đó', () => {
@@ -166,7 +180,7 @@ describe('Lời dẫn riêng cho từng loại lý do (3C.7)', () => {
     expect(resolutionLine(few, v, 0)).toMatch(/Mới có ít giai đoạn|Chưa đủ giai đoạn/);
     expect(resolutionLine(a, v, 0)).toBe('');
     const fake = { ...a, resolution: { decided: true, conclusion: { code: 'resolve.decided', p: { reading: 'thong-thuong', wins: 3, total: 3, weight: 0.9 } }, answers: [], log: [] } } as NguHanhAnalysis;
-    expect(resolutionLine(fake, v, 0)).toMatch(/khớp với|hợp hơn hẳn/);
+    expect(resolutionLine(fake, v, 0)).toMatch(/khớp hơn với|khớp hơn/);
     const unsure = { ...fake, resolution: { ...fake.resolution!, decided: false, conclusion: { code: 'resolve.undecided', p: { reading: 'thuan-the', wins: 2, total: 3, weight: 0.6 } } } } as NguHanhAnalysis;
     expect(resolutionLine(unsure, v, 0)).toMatch(/chưa dám nói chắc|Chưa đủ để/i);
   });

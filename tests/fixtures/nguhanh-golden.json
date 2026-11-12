@@ -1,5 +1,5 @@
 {
- "_meta": "24 lá số mẫu của docs/NGU-HANH-SO-SANH.md mục 3 (cùng thứ tự). Cột answer để trống cho tới khi chủ dự án hoặc người luận điền dụng thần đúng kèm nguồn (ARCHITECTURE 14.1).",
+ "_meta": "24 lá số mẫu của docs/NGU-HANH-SO-SANH.md mục 3 (cùng thứ tự). Cột answer để trống cho tới khi chủ dự án hoặc người luận điền dụng thần đúng kèm nguồn (ARCHITECTURE 14.1). Đáp án của người luận là một quy ước chuyên môn (sự đồng thuận của nghề), không phải sự thật khách quan; các trường phái có thể cho đáp án khác nhau trên cùng một lá số. Bộ golden vì vậy chỉ là mốc tham chiếu, không phải chuẩn tuyệt đối: khi engine khác đáp án, ghi rõ hai bên và nguồn, không tự coi bên nào là đúng.",
  "cases": [
   {
    "no": 1,
