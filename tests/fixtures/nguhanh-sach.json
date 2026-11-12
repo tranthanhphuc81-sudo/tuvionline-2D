@@ -9,7 +9,8 @@
     "kind": "Cách sách lấy dụng thần: phu-uc (phù ức, chế hoá theo vượng suy), dieu-hau, tong (tòng, chuyên vượng, thuận thế), hoa-khi (hoá khí cách).",
     "convention": "Đáp án là cách luận của hai trường phái cổ, không phải sự thật khách quan. Tử Bình Chân Thuyên luận theo cách cục ở tháng sinh; Trích Thiên Tủy luận theo vượng suy, gần với cách engine luận hơn. Lệch không có nghĩa engine sai (ARCHITECTURE 14.1).",
     "pillars": "Năm · Tháng · Ngày · Giờ, đúng như sách in (trừ chỗ có trường fix). Sách không cho ngày sinh dương lịch nên engine nhận thẳng tứ trụ, không đi qua lịch.",
-    "batch": "batch 1: 50 lá chọn trước, dùng để hiệu chỉnh (ARCHITECTURE 14.12). batch 2: lá thêm sau khi hiệu chỉnh xong, KHÔNG dùng khi chỉnh, dùng làm tập kiểm tra độc lập (14.13)."
+    "batch": "batch 1: 50 lá dùng để hiệu chỉnh hệ số (ARCHITECTURE 14.12). batch 2: 41 lá Trích Thiên Tủy thêm sau, kiểm tra độc lập hiệu chỉnh và tìm kiểu lệch (14.13). batch 3: 30 lá Tử Bình Chân Thuyên lấy SAU khi đã chốt phương án sửa quy tắc, dùng để thử quy tắc (14.14).",
+    "dropped": "Đã đọc nhưng bỏ (sách in can giờ trái Ngũ Thử Độn, lời luận dựa vào chính chữ đó nên không sửa được): tbct trang 228 lá 1 (Bính Dần, Giáp Ngọ, Bính Thân, Nhâm Thân; ngày Bính giờ Thân phải là Bính Thân) và trang 256 lá 1 (Nhâm Tý, Nhâm Dần, Kỷ Sửu, Mậu Tý; ngày Kỷ giờ Tý phải là Giáp Tý)."
   },
   "cases": [
     {
@@ -1506,6 +1507,461 @@
       "kind": "phu-uc",
       "note": "Can thuỷ suy, chi hoả vượng, lấy kim làm dụng thần",
       "batch": 2
+    },
+    {
+      "id": "tbct-p207-1",
+      "book": "tbct",
+      "page": "207",
+      "pillars": [
+        "Tân Sửu",
+        "Quý Tỵ",
+        "Giáp Tý",
+        "Bính Dần"
+      ],
+      "dung": "Thuỷ",
+      "kind": "dieu-hau",
+      "note": "Giáp có căn, điều hậu dụng Quý, thông căn ở Tý",
+      "batch": 3
+    },
+    {
+      "id": "tbct-p207-2",
+      "book": "tbct",
+      "page": "207",
+      "pillars": [
+        "Quý Mùi",
+        "Đinh Tỵ",
+        "Giáp Ngọ",
+        "Canh Ngọ"
+      ],
+      "dung": "Hoả",
+      "kind": "tong",
+      "note": "Điều hậu vốn dùng Quý nhưng Tỵ Ngọ Mùi hội hoả, kim thuỷ vô căn, luận Tòng Nhi cách",
+      "batch": 3
+    },
+    {
+      "id": "tbct-p212-1",
+      "book": "tbct",
+      "page": "212",
+      "pillars": [
+        "Đinh Dậu",
+        "Tân Hợi",
+        "Giáp Tuất",
+        "Bính Dần"
+      ],
+      "dung": "Hoả",
+      "kind": "dieu-hau",
+      "note": "Điều hậu dụng Bính, Bính căn ở Dần",
+      "batch": 3
+    },
+    {
+      "id": "tbct-p212-2",
+      "book": "tbct",
+      "page": "212",
+      "pillars": [
+        "Đinh Mão",
+        "Tân Hợi",
+        "Giáp Ngọ",
+        "Canh Ngọ"
+      ],
+      "dung": "Hoả",
+      "kind": "dieu-hau",
+      "note": "Tháng đông Giáp mộc thấy Đinh, Hàn mộc hướng dương, hai Đinh gốc ở hai Ngọ",
+      "batch": 3
+    },
+    {
+      "id": "tbct-p215-1",
+      "book": "tbct",
+      "page": "215",
+      "pillars": [
+        "Mậu Tý",
+        "Giáp Dần",
+        "Ất Tỵ",
+        "Bính Tuất"
+      ],
+      "dung": "Hoả",
+      "kind": "dieu-hau",
+      "note": "Điều hậu dụng Bính",
+      "batch": 3
+    },
+    {
+      "id": "tbct-p215-2",
+      "book": "tbct",
+      "page": "215",
+      "pillars": [
+        "Đinh Mùi",
+        "Nhâm Dần",
+        "Ất Sửu",
+        "Đinh Hợi"
+      ],
+      "dung": "Hoả",
+      "kind": "dieu-hau",
+      "note": "Xua lạnh dụng Bính, Bính tàng ở Dần; dụng Đinh thì gặp Nhâm hợp (mệnh bần)",
+      "batch": 3
+    },
+    {
+      "id": "tbct-p220-1",
+      "book": "tbct",
+      "page": "220",
+      "pillars": [
+        "Nhâm Thân",
+        "Mậu Thân",
+        "Ất Mùi",
+        "Canh Thìn"
+      ],
+      "dung": "Kim",
+      "kind": "hoa-khi",
+      "note": "Ất Canh hợp hoá kim rất chuẩn, không có hoả phá cách",
+      "batch": 3
+    },
+    {
+      "id": "tbct-p220-2",
+      "book": "tbct",
+      "page": "220",
+      "pillars": [
+        "Quý Dậu",
+        "Tân Dậu",
+        "Ất Sửu",
+        "Tân Tỵ"
+      ],
+      "dung": "Kim",
+      "kind": "tong",
+      "note": "Chi thành kim cục, hai Tân thấu, tự là Tòng Sát cách",
+      "batch": 3
+    },
+    {
+      "id": "tbct-p225-1",
+      "book": "tbct",
+      "page": "225",
+      "who": "Lương Khải Siêu",
+      "pillars": [
+        "Quý Dậu",
+        "Giáp Dần",
+        "Bính Ngọ",
+        "Quý Tỵ"
+      ],
+      "dung": "Thuỷ",
+      "kind": "phu-uc",
+      "note": "Bính cường dụng Quý thuỷ, vận kim thuỷ",
+      "batch": 3
+    },
+    {
+      "id": "tbct-p225-2",
+      "book": "tbct",
+      "page": "225",
+      "pillars": [
+        "Canh Thìn",
+        "Kỷ Mão",
+        "Bính Thân",
+        "Mậu Tuất"
+      ],
+      "dung": "Mộc",
+      "kind": "phu-uc",
+      "note": "Thực Thương cùng thấy, tiết khí là hại, thủ nguyệt lệnh Mão mộc làm dụng",
+      "batch": 3
+    },
+    {
+      "id": "tbct-p228-2",
+      "book": "tbct",
+      "page": "228",
+      "pillars": [
+        "Mậu Tuất",
+        "Mậu Ngọ",
+        "Bính Thìn",
+        "Kỷ Sửu"
+      ],
+      "dung": "Thổ",
+      "kind": "phu-uc",
+      "note": "Thân cường có thể dụng Kỷ tiết (mệnh bình thường)",
+      "batch": 3
+    },
+    {
+      "id": "tbct-p233-1",
+      "book": "tbct",
+      "page": "233",
+      "pillars": [
+        "Nhâm Tý",
+        "Nhâm Tý",
+        "Bính Tuất",
+        "Mậu Tuất"
+      ],
+      "dung": "Thổ",
+      "kind": "phu-uc",
+      "note": "Sát cường đáng sợ, Bính gặp Tuất có căn, dụng Thực thần chế Sát",
+      "batch": 3
+    },
+    {
+      "id": "tbct-p237-1",
+      "book": "tbct",
+      "page": "237",
+      "pillars": [
+        "Mậu Thìn",
+        "Bính Thìn",
+        "Đinh Sửu",
+        "Đinh Mùi"
+      ],
+      "dung": "Hoả",
+      "kind": "phu-uc",
+      "note": "Mậu thổ thấu tiết nhược Đinh, không Giáp Ất, chỉ thủ trụ giờ Đinh Mùi trợ thân",
+      "batch": 3
+    },
+    {
+      "id": "tbct-p237-2",
+      "book": "tbct",
+      "page": "237",
+      "pillars": [
+        "Nhâm Tuất",
+        "Giáp Thìn",
+        "Đinh Dậu",
+        "Kỷ Dậu"
+      ],
+      "dung": "Mộc",
+      "kind": "phu-uc",
+      "note": "Hoả nhược dụng Giáp, nhưng gặp Kỷ thổ hợp (yểu chiết)",
+      "batch": 3
+    },
+    {
+      "id": "tbct-p243-1",
+      "book": "tbct",
+      "page": "243",
+      "pillars": [
+        "Đinh Mão",
+        "Tân Hợi",
+        "Đinh Dậu",
+        "Giáp Thìn"
+      ],
+      "dung": "Mộc",
+      "kind": "phu-uc",
+      "note": "Một Giáp cao thấu, Hợi Mão bán hợp",
+      "batch": 3
+    },
+    {
+      "id": "tbct-p243-2",
+      "book": "tbct",
+      "page": "243",
+      "pillars": [
+        "Quý Mão",
+        "Quý Hợi",
+        "Đinh Mão",
+        "Tân Hợi"
+      ],
+      "dung": "Mộc",
+      "kind": "phu-uc",
+      "note": "Tựa Tòng Sát nhưng có mộc, không tòng được; hỷ Hợi Mão bán hợp mộc cục",
+      "batch": 3
+    },
+    {
+      "id": "tbct-p246-1",
+      "book": "tbct",
+      "page": "246",
+      "pillars": [
+        "Giáp Dần",
+        "Đinh Mão",
+        "Mậu Thìn",
+        "Kỷ Mùi"
+      ],
+      "dung": "Hoả",
+      "kind": "phu-uc",
+      "note": "Giáp Sát thấu, thủ Đinh Ấn hoá Sát",
+      "batch": 3
+    },
+    {
+      "id": "tbct-p253-1",
+      "book": "tbct",
+      "page": "253",
+      "pillars": [
+        "Quý Mão",
+        "Quý Hợi",
+        "Mậu Thìn",
+        "Mậu Ngọ"
+      ],
+      "dung": "Thổ",
+      "kind": "phu-uc",
+      "note": "Tài nhiều dụng Tỷ",
+      "batch": 3
+    },
+    {
+      "id": "tbct-p256-2",
+      "book": "tbct",
+      "page": "256",
+      "pillars": [
+        "Canh Thìn",
+        "Kỷ Mão",
+        "Kỷ Mão",
+        "Ất Sửu"
+      ],
+      "dung": "Kim",
+      "kind": "phu-uc",
+      "note": "Ất Sát thái cường, dụng Canh chế Ất",
+      "batch": 3
+    },
+    {
+      "id": "tbct-p256-3",
+      "book": "tbct",
+      "page": "256",
+      "pillars": [
+        "Kỷ Hợi",
+        "Đinh Mão",
+        "Kỷ Mùi",
+        "Ất Hợi"
+      ],
+      "dung": "Hoả",
+      "kind": "phu-uc",
+      "note": "Hợi Mão Mùi hội mộc, thủ can tháng Đinh hoả hoá Sát sinh thân",
+      "batch": 3
+    },
+    {
+      "id": "tbct-p265-1",
+      "book": "tbct",
+      "page": "265",
+      "pillars": [
+        "Giáp Thân",
+        "Bính Dần",
+        "Canh Tuất",
+        "Tân Tỵ"
+      ],
+      "dung": "Hoả",
+      "kind": "dieu-hau",
+      "note": "Hàn kim tất thích Bính hoả",
+      "batch": 3
+    },
+    {
+      "id": "tbct-p265-2",
+      "book": "tbct",
+      "page": "265",
+      "pillars": [
+        "Kỷ Dậu",
+        "Bính Dần",
+        "Canh Thân",
+        "Canh Thìn"
+      ],
+      "dung": "Hoả",
+      "kind": "dieu-hau",
+      "note": "Có Bính Dần nhưng Dần gặp Thân xung, vận Tây Bắc quay lưng với dụng thần",
+      "batch": 3
+    },
+    {
+      "id": "tbct-p273-1",
+      "book": "tbct",
+      "page": "273",
+      "who": "Trương Huân",
+      "pillars": [
+        "Giáp Dần",
+        "Bính Tý",
+        "Canh Thân",
+        "Canh Thìn"
+      ],
+      "dung": "Hoả",
+      "kind": "dieu-hau",
+      "note": "Điều hậu dụng Bính, Bính căn ở Dần, được Giáp trợ",
+      "batch": 3
+    },
+    {
+      "id": "tbct-p273-2",
+      "book": "tbct",
+      "page": "273",
+      "pillars": [
+        "Kỷ Dậu",
+        "Bính Tý",
+        "Canh Thân",
+        "Nhâm Ngọ"
+      ],
+      "dung": "Hoả",
+      "kind": "dieu-hau",
+      "note": "Thấy Bính Ngọ vốn tốt, nhưng Bính gặp Nhâm phá (mệnh bần)",
+      "batch": 3
+    },
+    {
+      "id": "tbct-p276-1",
+      "book": "tbct",
+      "page": "276",
+      "pillars": [
+        "Quý Sửu",
+        "Bính Thìn",
+        "Tân Tỵ",
+        "Nhâm Thìn"
+      ],
+      "dung": "Thuỷ",
+      "kind": "phu-uc",
+      "note": "Tân kim không thích nung luyện, chỉ thích Nhâm Quý tẩy rửa",
+      "batch": 3
+    },
+    {
+      "id": "tbct-p283-1",
+      "book": "tbct",
+      "page": "283",
+      "pillars": [
+        "Nhâm Tý",
+        "Nhâm Tý",
+        "Tân Mão",
+        "Tân Mão"
+      ],
+      "dung": "Thuỷ",
+      "accept": [
+        "Mộc"
+      ],
+      "kind": "tong",
+      "note": "Hai Tân vô căn, hai Nhâm thấu, luận Tòng Nhi cách, vận mộc tốt",
+      "batch": 3
+    },
+    {
+      "id": "tbct-p283-2",
+      "book": "tbct",
+      "page": "283",
+      "pillars": [
+        "Bính Ngọ",
+        "Tân Sửu",
+        "Tân Tỵ",
+        "Nhâm Thìn"
+      ],
+      "dung": "Hoả",
+      "kind": "dieu-hau",
+      "note": "Điều hậu dụng Bính",
+      "batch": 3
+    },
+    {
+      "id": "tbct-p286-1",
+      "book": "tbct",
+      "page": "286",
+      "pillars": [
+        "Bính Tý",
+        "Nhâm Thìn",
+        "Nhâm Thân",
+        "Ất Tỵ"
+      ],
+      "dung": "Mộc",
+      "kind": "phu-uc",
+      "note": "Địa chi thành thuỷ cục, hỷ Ất mộc tiết tú, Bính căn ở Tỵ",
+      "batch": 3
+    },
+    {
+      "id": "tbct-p286-2",
+      "book": "tbct",
+      "page": "286",
+      "pillars": [
+        "Mậu Thân",
+        "Bính Thìn",
+        "Nhâm Ngọ",
+        "Ất Tỵ"
+      ],
+      "dung": "Mộc",
+      "kind": "phu-uc",
+      "note": "Mậu thổ thấu, chỉ dụng Ất mộc (mệnh hung yểu)",
+      "batch": 3
+    },
+    {
+      "id": "tbct-p293-1",
+      "book": "tbct",
+      "page": "293",
+      "pillars": [
+        "Đinh Dậu",
+        "Nhâm Tý",
+        "Nhâm Tý",
+        "Đinh Mùi"
+      ],
+      "dung": "Hoả",
+      "kind": "phu-uc",
+      "note": "Hai hoả hai thuỷ, Đinh Nhâm hợp không giao chiến, sau hành hoả vận",
+      "batch": 3
     }
   ]
 }

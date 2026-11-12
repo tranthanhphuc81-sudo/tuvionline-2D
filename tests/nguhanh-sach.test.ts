@@ -5,7 +5,7 @@
    Đổi engine có chủ ý thì chạy `npm run compare:sach`, đọc lại docs/NGU-HANH-SACH.md rồi sửa con số dưới đây. */
 import { describe, expect, it } from 'vitest';
 import { CAN, CHI } from '../src/core/canchi';
-import { ELEMENTS, REFERENCE_CONFIG } from '../src/core/nguhanh';
+import { DEFAULT_CONFIG, ELEMENTS, REFERENCE_CONFIG } from '../src/core/nguhanh';
 import { evaluate, loadSach, type SachResult } from '../scripts/lib/sach';
 
 const { cases } = loadSach();
@@ -15,10 +15,11 @@ const tally = (rs: SachResult[]) => {
 };
 
 describe('bộ lá số mẫu từ sách', () => {
-  it('có 91 lá (đợt 1: 50, đợt 2: 41), mã không trùng, đủ trang và câu sách', () => {
-    expect(cases.length).toBe(91);
+  it('có 121 lá (đợt 1: 50, đợt 2: 41, đợt 3: 30), mã không trùng, đủ trang và câu sách', () => {
+    expect(cases.length).toBe(121);
     expect(cases.filter((c) => c.batch === 1).length).toBe(50);
     expect(cases.filter((c) => c.batch === 2).length).toBe(41);
+    expect(cases.filter((c) => c.batch === 3).length).toBe(30);
     expect(new Set(cases.map((c) => c.id)).size).toBe(cases.length);
     expect(new Set(cases.map((c) => c.pillars.join('|'))).size, 'không trùng tứ trụ').toBe(cases.length);
     for (const c of cases) {
@@ -46,5 +47,37 @@ describe('bộ lá số mẫu từ sách', () => {
     // Đợt 2: hiệu chỉnh 14.12 không đổi lá nào.
     expect(tally(b2.map((c) => evaluate(c)))).toEqual({ trung: 7, gan: 0, khac: 23, nguoc: 11, khop14: 19 });
     expect(tally(b2.map((c) => evaluate(c, REFERENCE_CONFIG)))).toEqual({ trung: 7, gan: 0, khac: 23, nguoc: 11, khop14: 19 });
+    // Đợt 3 (lấy sau khi chốt phương án sửa quy tắc, ARCHITECTURE 14.14): bản app kém v0.2 một lá.
+    const b3 = cases.filter((c) => c.batch === 3);
+    expect(tally(b3.map((c) => evaluate(c)))).toMatchObject({ trung: 4, nguoc: 4, khop14: 11 });
+    expect(tally(b3.map((c) => evaluate(c, REFERENCE_CONFIG)))).toMatchObject({ trung: 4, nguoc: 4, khop14: 12 });
+  });
+});
+
+describe('cờ quy tắc thử nghiệm (ARCHITECTURE 14.14): mặc định tắt, bật thì đổi đúng nhánh', () => {
+  const R = DEFAULT_CONFIG.rules;
+  const byId = (id: string) => cases.find((c) => c.id === id)!;
+  it('mặc định là cách của v0.2', () => {
+    expect(R).toEqual({ trungHoa: 'yeu-nhat', nhuocThucThuong: 'an', anMin: 1, vuongPick: 'diem' });
+    expect(REFERENCE_CONFIG.rules).toEqual(R);
+  });
+  it("trungHoa 'theo-phia': lá trung hoà nghiêng nhược luận như Thân nhược", () => {
+    const c = byId('ttt-41');
+    expect(evaluate(c).a.usefulGod).toMatchObject({ method: 'trung-hoa', dung: 'Thuỷ' });
+    const ug = evaluate(c, { ...DEFAULT_CONFIG, rules: { ...R, trungHoa: 'theo-phia' } }).a.usefulGod;
+    expect(ug).toMatchObject({ method: 'phu-uc', dung: 'Mộc' });
+    expect(ug.reasons.map((m) => m.code)).toContain('reason.trungHoaSide');
+  });
+  it("nhuocThucThuong 'an-hoac-kiep': Thực Thương nặng mà Ấn yếu thì dùng Tỷ Kiếp", () => {
+    const ug = evaluate(byId('ttt-58'), { ...DEFAULT_CONFIG, rules: { ...R, nhuocThucThuong: 'an-hoac-kiep', anMin: 0.5 } }).a.usefulGod;
+    expect(ug.dung).toBe('Thổ');
+    expect(ug.reasons.map((m) => m.code)).toContain('reason.nhuoc.thucThuongKiep');
+  });
+  it("vuongPick 'thau-can': thân vượng chọn nhóm có can lộ", () => {
+    const c = byId('ttt-17');
+    expect(evaluate(c).a.usefulGod.dung).toBe('Mộc');
+    const ug = evaluate(c, { ...DEFAULT_CONFIG, rules: { ...R, vuongPick: 'thau-can' } }).a.usefulGod;
+    expect(ug.dung).toBe('Hoả');
+    expect(ug.reasons.map((m) => m.code)).toContain('reason.vuong.thauCan');
   });
 });

@@ -1,8 +1,8 @@
 # So sánh Dụng thần: engine ngũ hành và lá số mẫu trong sách
 
 > Sinh tự động bằng `npm run compare:sach` (`scripts/compare-sach.ts`) từ `tests/fixtures/nguhanh-sach.json`. Đừng sửa tay.
-> 91 lá số chọn ngày 12/11/2026 từ hai sách chủ dự án cung cấp ở `docs/sach/`: 26 lá *Tử Bình Chân Thuyên* (bản dịch Phương Trọng Thầm), 65 lá *Trích Thiên Tủy* (Nhậm Thiết Tiều bình chú). Chỉ lấy lá sách nói rõ dùng gì.
-> **Đợt 1** (50 lá) dùng để hiệu chỉnh engine (ARCHITECTURE 14.12). **Đợt 2** (41 lá, đều *Trích Thiên Tủy*) thêm sau khi hiệu chỉnh xong, không dùng khi chỉnh: là phép thử độc lập (14.13).
+> 121 lá số chọn ngày 12/11/2026 từ hai sách chủ dự án cung cấp ở `docs/sach/`: 56 lá *Tử Bình Chân Thuyên* (bản dịch Phương Trọng Thầm), 65 lá *Trích Thiên Tủy* (Nhậm Thiết Tiều bình chú). Chỉ lấy lá sách nói rõ dùng gì.
+> **Đợt 1** (50 lá) dùng để hiệu chỉnh engine (ARCHITECTURE 14.12). **Đợt 2** (41 lá, đều *Trích Thiên Tủy*) thêm sau khi hiệu chỉnh xong, không dùng khi chỉnh: là phép thử độc lập (14.13). **Đợt 3** (30 lá, đều phụ lục *Tử Bình Chân Thuyên*) lấy sau khi đã chốt phương án sửa quy tắc, dùng để thử quy tắc (14.14).
 > Sách cho tứ trụ, không cho ngày sinh, nên engine nhận thẳng tứ trụ (không có Đại Vận). Engine = `DEFAULT_CONFIG` (bản app dùng); cột v0.2 = `REFERENCE_CONFIG`.
 
 **Đọc bảng này thế nào:** đáp án là cách luận của hai trường phái cổ, không phải sự thật khách quan (ARCHITECTURE 14.1). *Tử Bình Chân Thuyên* luận theo cách cục ở tháng sinh; *Trích Thiên Tủy* luận theo vượng suy, gần với cách engine luận hơn. Lá "Khác" hay "Ngược" là chỗ cần người luận xem lại, không tự coi bên nào đúng. Tứ trụ do người đọc chép từ sách, chưa có người thứ hai soát.
@@ -20,27 +20,29 @@
 |---|---|---|---|
 | Đợt 1 (dùng để chỉnh) | 50 | 24/50 (48%) · trùng 18 · ngược 10 | 25/50 (50%) · trùng 20 · ngược 9 |
 | **Đợt 2 (kiểm tra độc lập)** | 41 | 19/41 (46%) · trùng 7 · ngược 11 | 19/41 (46%) · trùng 7 · ngược 11 |
-| Tất cả | 91 | 43/91 (47%) · trùng 25 · ngược 21 | 44/91 (48%) · trùng 27 · ngược 20 |
+| **Đợt 3 (thử quy tắc)** | 30 | 12/30 (40%) · trùng 4 · ngược 4 | 11/30 (37%) · trùng 4 · ngược 4 |
+| Tất cả | 121 | 55/121 (45%) · trùng 29 · ngược 25 | 55/121 (45%) · trùng 31 · ngược 24 |
 
 ### Bản app dùng, chia theo nhóm
 
 | Nhóm | Số lá | Trùng | Gần | Khác | Ngược |
 |---|---|---|---|---|---|
-| Tất cả | 91 | 27/91 (30%) | 2/91 (2%) | 42/91 (46%) | 20/91 (22%) |
+| Tất cả | 121 | 31/121 (26%) | 2/121 (2%) | 64/121 (53%) | 24/121 (20%) |
 | Đợt 1 | 50 | 20/50 (40%) | 2/50 (4%) | 19/50 (38%) | 9/50 (18%) |
 | Đợt 2 | 41 | 7/41 (17%) | 0/41 (0%) | 23/41 (56%) | 11/41 (27%) |
-| Tử Bình Chân Thuyên | 26 | 13/26 (50%) | 1/26 (4%) | 9/26 (35%) | 3/26 (12%) |
+| Đợt 3 | 30 | 4/30 (13%) | 0/30 (0%) | 22/30 (73%) | 4/30 (13%) |
+| Tử Bình Chân Thuyên | 56 | 17/56 (30%) | 1/56 (2%) | 31/56 (55%) | 7/56 (13%) |
 | Trích Thiên Tủy | 65 | 14/65 (22%) | 1/65 (2%) | 33/65 (51%) | 17/65 (26%) |
-| Sách dùng phù ức, chế hoá | 66 | 17/66 (26%) | 1/66 (2%) | 32/66 (48%) | 16/66 (24%) |
-| Sách dùng điều hậu | 11 | 5/11 (45%) | 0/11 (0%) | 5/11 (45%) | 1/11 (9%) |
-| Sách dùng tòng, chuyên vượng | 12 | 4/12 (33%) | 1/12 (8%) | 4/12 (33%) | 3/12 (25%) |
-| Sách dùng hoá khí | 2 | 1/2 (50%) | 0/2 (0%) | 1/2 (50%) | 0/2 (0%) |
+| Sách dùng phù ức, chế hoá | 82 | 20/82 (24%) | 1/82 (1%) | 43/82 (52%) | 18/82 (22%) |
+| Sách dùng điều hậu | 21 | 6/21 (29%) | 0/21 (0%) | 13/21 (62%) | 2/21 (10%) |
+| Sách dùng tòng, chuyên vượng | 15 | 4/15 (27%) | 1/15 (7%) | 6/15 (40%) | 4/15 (27%) |
+| Sách dùng hoá khí | 3 | 1/3 (33%) | 0/3 (0%) | 2/3 (67%) | 0/3 (0%) |
 
-Theo định nghĩa "khớp" của ARCHITECTURE 14.1 điều 2 (dụng thần sách trùng dụng **hoặc hỷ** của engine, không nằm trong kỵ): 44/91 (48%); *Tử Bình Chân Thuyên* 16/26 (62%), *Trích Thiên Tủy* 28/65 (43%). Không so được với legacy vì legacy cần ngày sinh để lập lá số.
+Theo định nghĩa "khớp" của ARCHITECTURE 14.1 điều 2 (dụng thần sách trùng dụng **hoặc hỷ** của engine, không nằm trong kỵ): 55/121 (45%); *Tử Bình Chân Thuyên* 27/56 (48%), *Trích Thiên Tủy* 28/65 (43%). Không so được với legacy vì legacy cần ngày sinh để lập lá số.
 
-Dụng thần engine đổi theo preset (`analyzeSensitivity`, ARCHITECTURE 14.11) ở 12/91 (13%) lá; trong đó trùng sách 3 lá.
+Dụng thần engine đổi theo preset (`analyzeSensitivity`, ARCHITECTURE 14.11) ở 20/121 (17%) lá; trong đó trùng sách 4 lá.
 
-## 2. Tử Bình Chân Thuyên
+## 2. Tử Bình Chân Thuyên, đợt 1
 
 | Mã | Trang | Tứ trụ (Năm · Tháng · Ngày · Giờ) | Sách | Engine | Khớp |
 |---|---|---|---|---|---|
@@ -146,8 +148,43 @@ Dụng thần engine đổi theo preset (`analyzeSensitivity`, ARCHITECTURE 14.1
 | ttt-225 | 109 | Bính Tý · Kỷ Hợi · Bính Dần · Mậu Tý | dụng Mộc. Mạnh đông gặp hai Tý, hoả suy thuỷ vượng, lấy mộc làm dụng thần | Thân nhược (39%), Phù ức → dụng Mộc, kỵ Kim · đổi theo preset | Trùng |
 | ttt-226 | 109 | Nhâm Ngọ · Nhâm Dần · Nhâm Tuất · Canh Tuất | dụng Kim. Can thuỷ suy, chi hoả vượng, lấy kim làm dụng thần | Thân nhược (37%), Phù ức → dụng Thuỷ, kỵ Thổ | Khác |
 
+## 5. Tử Bình Chân Thuyên, đợt 3 (lấy sau khi chốt phương án sửa quy tắc)
+
+| Mã | Trang | Tứ trụ (Năm · Tháng · Ngày · Giờ) | Sách | Engine | Khớp |
+|---|---|---|---|---|---|
+| tbct-p207-1 | 207 | Tân Sửu · Quý Tỵ · Giáp Tý · Bính Dần | dụng Thuỷ. Giáp có căn, điều hậu dụng Quý, thông căn ở Tý | Trung hoà (41%), Giữ trung hoà → dụng Mộc, kỵ Hoả · đổi theo preset | Khác |
+| tbct-p207-2 | 207 | Quý Mùi · Đinh Tỵ · Giáp Ngọ · Canh Ngọ | dụng Hoả. Điều hậu vốn dùng Quý nhưng Tỵ Ngọ Mùi hội hoả, kim thuỷ vô căn, luận Tòng Nhi cách | Thân nhược (16%), Phù ức → dụng Thuỷ, kỵ Thổ | Khác |
+| tbct-p212-1 | 212 | Đinh Dậu · Tân Hợi · Giáp Tuất · Bính Dần | dụng Hoả. Điều hậu dụng Bính, Bính căn ở Dần | Trung hoà (51%), Giữ trung hoà → dụng Thổ, kỵ Kim | Khác |
+| tbct-p212-2 | 212 | Đinh Mão · Tân Hợi · Giáp Ngọ · Canh Ngọ | dụng Hoả. Tháng đông Giáp mộc thấy Đinh, Hàn mộc hướng dương, hai Đinh gốc ở hai Ngọ | Thân vượng (58%), Phù ức → dụng Kim, kỵ Hoả | Ngược |
+| tbct-p215-1 | 215 | Mậu Tý · Giáp Dần · Ất Tỵ · Bính Tuất | dụng Hoả. Điều hậu dụng Bính | Trung hoà (51%), Giữ trung hoà → dụng Kim, kỵ Mộc · đổi theo preset | Khác |
+| tbct-p215-2 | 215 | Đinh Mùi · Nhâm Dần · Ất Sửu · Đinh Hợi | dụng Hoả. Xua lạnh dụng Bính, Bính tàng ở Dần; dụng Đinh thì gặp Nhâm hợp (mệnh bần) | Thân vượng (57%), Phù ức → dụng Hoả, kỵ Thuỷ | Trùng |
+| tbct-p220-1 | 220 | Nhâm Thân · Mậu Thân · Ất Mùi · Canh Thìn | dụng Kim. Ất Canh hợp hoá kim rất chuẩn, không có hoả phá cách | Thân nhược (34%), Phù ức → dụng Thuỷ, kỵ Thổ | Khác |
+| tbct-p220-2 | 220 | Quý Dậu · Tân Dậu · Ất Sửu · Tân Tỵ | dụng Kim. Chi thành kim cục, hai Tân thấu, tự là Tòng Sát cách | Thân nhược (18%), Phù ức → dụng Thuỷ, kỵ Thổ | Khác |
+| tbct-p225-1 (Lương Khải Siêu) | 225 | Quý Dậu · Giáp Dần · Bính Ngọ · Quý Tỵ | dụng Thuỷ. Bính cường dụng Quý thuỷ, vận kim thuỷ | Thân vượng (68%), Phù ức → dụng Thuỷ, kỵ Thổ | Trùng |
+| tbct-p225-2 | 225 | Canh Thìn · Kỷ Mão · Bính Thân · Mậu Tuất | dụng Mộc. Thực Thương cùng thấy, tiết khí là hại, thủ nguyệt lệnh Mão mộc làm dụng | Trung hoà (53%), Giữ trung hoà → dụng Hoả, kỵ Mộc · đổi theo preset | Ngược |
+| tbct-p228-2 | 228 | Mậu Tuất · Mậu Ngọ · Bính Thìn · Kỷ Sửu | dụng Thổ. Thân cường có thể dụng Kỷ tiết (mệnh bình thường) | Trung hoà (40%), Điều hậu → dụng Thuỷ, kỵ Hoả | Khác |
+| tbct-p233-1 | 233 | Nhâm Tý · Nhâm Tý · Bính Tuất · Mậu Tuất | dụng Thổ. Sát cường đáng sợ, Bính gặp Tuất có căn, dụng Thực thần chế Sát | Cực nhược (10%), Thuận thế → dụng Thuỷ, kỵ Thổ · Tòng Sát: Giả | Ngược |
+| tbct-p237-1 | 237 | Mậu Thìn · Bính Thìn · Đinh Sửu · Đinh Mùi | dụng Hoả. Mậu thổ thấu tiết nhược Đinh, không Giáp Ất, chỉ thủ trụ giờ Đinh Mùi trợ thân | Thân nhược (40%), Phù ức → dụng Mộc, kỵ Kim | Khác |
+| tbct-p237-2 | 237 | Nhâm Tuất · Giáp Thìn · Đinh Dậu · Kỷ Dậu | dụng Mộc. Hoả nhược dụng Giáp, nhưng gặp Kỷ thổ hợp (yểu chiết) | Thân nhược (23%), Phù ức → dụng Hoả, kỵ Thuỷ · đổi theo preset | Khác |
+| tbct-p243-1 | 243 | Đinh Mão · Tân Hợi · Đinh Dậu · Giáp Thìn | dụng Mộc. Một Giáp cao thấu, Hợi Mão bán hợp | Trung hoà (49%), Điều hậu → dụng Hoả, kỵ Thuỷ | Khác |
+| tbct-p243-2 | 243 | Quý Mão · Quý Hợi · Đinh Mão · Tân Hợi | dụng Mộc. Tựa Tòng Sát nhưng có mộc, không tòng được; hỷ Hợi Mão bán hợp mộc cục | Trung hoà (47%), Điều hậu → dụng Hoả, kỵ Thuỷ | Khác |
+| tbct-p246-1 | 246 | Giáp Dần · Đinh Mão · Mậu Thìn · Kỷ Mùi | dụng Hoả. Giáp Sát thấu, thủ Đinh Ấn hoá Sát | Trung hoà (40%), Giữ trung hoà → dụng Kim, kỵ Mộc · đổi theo preset | Khác |
+| tbct-p253-1 | 253 | Quý Mão · Quý Hợi · Mậu Thìn · Mậu Ngọ | dụng Thổ. Tài nhiều dụng Tỷ | Thân nhược (29%), Điều hậu → dụng Hoả, kỵ Thuỷ | Khác |
+| tbct-p256-2 | 256 | Canh Thìn · Kỷ Mão · Kỷ Mão · Ất Sửu | dụng Kim. Ất Sát thái cường, dụng Canh chế Ất | Thân nhược (23%), Phù ức → dụng Hoả, kỵ Thuỷ | Khác |
+| tbct-p256-3 | 256 | Kỷ Hợi · Đinh Mão · Kỷ Mùi · Ất Hợi | dụng Hoả. Hợi Mão Mùi hội mộc, thủ can tháng Đinh hoả hoá Sát sinh thân | Thân nhược (30%), Phù ức → dụng Hoả, kỵ Thuỷ | Trùng |
+| tbct-p265-1 | 265 | Giáp Thân · Bính Dần · Canh Tuất · Tân Tỵ | dụng Hoả. Hàn kim tất thích Bính hoả | Thân nhược (40%), Phù ức → dụng Thổ, kỵ Mộc · đổi theo preset | Khác |
+| tbct-p265-2 | 265 | Kỷ Dậu · Bính Dần · Canh Thân · Canh Thìn | dụng Hoả. Có Bính Dần nhưng Dần gặp Thân xung, vận Tây Bắc quay lưng với dụng thần | Trung hoà (51%), Giữ trung hoà → dụng Thuỷ, kỵ Kim | Khác |
+| tbct-p273-1 (Trương Huân) | 273 | Giáp Dần · Bính Tý · Canh Thân · Canh Thìn | dụng Hoả. Điều hậu dụng Bính, Bính căn ở Dần, được Giáp trợ | Thân nhược (27%), Phù ức → dụng Thổ, kỵ Mộc · đổi theo preset | Khác |
+| tbct-p273-2 | 273 | Kỷ Dậu · Bính Tý · Canh Thân · Nhâm Ngọ | dụng Hoả. Thấy Bính Ngọ vốn tốt, nhưng Bính gặp Nhâm phá (mệnh bần) | Thân nhược (38%), Phù ức → dụng Thổ, kỵ Mộc | Khác |
+| tbct-p276-1 | 276 | Quý Sửu · Bính Thìn · Tân Tỵ · Nhâm Thìn | dụng Thuỷ. Tân kim không thích nung luyện, chỉ thích Nhâm Quý tẩy rửa | Thân vượng (57%), Phù ức → dụng Mộc, kỵ Kim | Khác |
+| tbct-p283-1 | 283 | Nhâm Tý · Nhâm Tý · Tân Mão · Tân Mão | dụng Thuỷ (cũng tốt: Mộc). Hai Tân vô căn, hai Nhâm thấu, luận Tòng Nhi cách, vận mộc tốt | Thân nhược (16%), Điều hậu → dụng Hoả, kỵ Thuỷ | Ngược |
+| tbct-p283-2 | 283 | Bính Ngọ · Tân Sửu · Tân Tỵ · Nhâm Thìn | dụng Hoả. Điều hậu dụng Bính | Thân vượng (63%), Phù ức → dụng Mộc, kỵ Kim | Khác |
+| tbct-p286-1 | 286 | Bính Tý · Nhâm Thìn · Nhâm Thân · Ất Tỵ | dụng Mộc. Địa chi thành thuỷ cục, hỷ Ất mộc tiết tú, Bính căn ở Tỵ | Trung hoà (52%), Giữ trung hoà → dụng Mộc, kỵ Thuỷ · đổi theo preset | Trùng |
+| tbct-p286-2 | 286 | Mậu Thân · Bính Thìn · Nhâm Ngọ · Ất Tỵ | dụng Mộc. Mậu thổ thấu, chỉ dụng Ất mộc (mệnh hung yểu) | Thân nhược (23%), Phù ức → dụng Kim, kỵ Hoả | Khác |
+| tbct-p293-1 | 293 | Đinh Dậu · Nhâm Tý · Nhâm Tý · Đinh Mùi | dụng Hoả. Hai hoả hai thuỷ, Đinh Nhâm hợp không giao chiến, sau hành hoả vận | Thân vượng (82%), Thuận thế → dụng Mộc, kỵ Thổ · Nhuận Hạ: Giả | Khác |
+
 ¹ tbct-14: Sách in giờ Ất Dậu; ngày Đinh thì giờ Dậu phải là Kỷ Dậu (Ngũ Thử Độn), coi là lỗi in.
 
-## 5. Cách tái tạo
+## 6. Cách tái tạo
 
 Chạy `npm run compare:sach` từ gốc repo. Thêm lá số: sửa `tests/fixtures/nguhanh-sach.json` (ghi trang, câu sách nói về dụng thần), chạy lại lệnh, rồi sửa con số kỳ vọng trong `tests/nguhanh-sach.test.ts`.
