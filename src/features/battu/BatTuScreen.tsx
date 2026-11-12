@@ -78,7 +78,7 @@ export function BatTuScreen() {
       <section className={ui.card}><SectionView sections={[batTuVuongSuy(ch)]} /></section>
       <section className={ui.card}><SectionView sections={[batTuDungThan(ch)]} /></section>
 
-      <NguHanhSection key={ch.pillars.map((x) => x.can + '-' + x.chi).join(',')} ch={ch} nowYear={thisYear()} />
+      <NguHanhSection profileId={profile.id} key={ch.pillars.map((x) => x.can + '-' + x.chi).join(',')} ch={ch} nowYear={thisYear()} />
 
       <h2 className={ui.sectionTitle}>Đại Vận (mỗi chặng 10 năm, khởi từ Trụ Tháng)</h2>
       <div ref={strip} className={s.strip} role="list" aria-label="Các Đại Vận">

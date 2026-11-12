@@ -17,6 +17,8 @@ export const migrations: Record<number, (old: Record<string, unknown>) => Record
   },
   /* Bước 2 → 3 (Phase 3B.3) thêm danh sách lần xem chỉ tay. */
   2: (old) => ({ ...old, version: 3, palmSessions: [] }),
+  /* Bước 3 → 4 (Phase 3C.5) thêm câu trả lời kiểm chứng ngũ hành; giữ nguyên mọi dữ liệu cũ, kể cả palmSessions. */
+  3: (old) => ({ ...old, version: 4, nguHanhAnswers: [] }),
 };
 
 /** Chạy tuần tự các migration tới version hiện tại; dùng chung cho khởi động và khôi phục sao lưu. */

@@ -3,7 +3,7 @@ import { resolveBirth, type BirthError } from '../core';
 import type { Store } from './store';
 import type { Huong } from '../core';
 import { newId } from './ids';
-import { PALM_SESSION_VERSION, type PalmSession, type PersistedState, type Profile, type Settings } from './schema';
+import { PALM_SESSION_VERSION, birthKeyOf, type NguHanhAnswer, type NguHanhOutcome, type NguHanhTarget, type PalmSession, type PersistedState, type Profile, type Settings } from './schema';
 
 export type AppStore = Store<PersistedState>;
 export type ProfileInput = Omit<Profile, 'id' | 'createdAt' | 'updatedAt'>;
@@ -34,8 +34,34 @@ export function updateProfile(store: AppStore, id: string, input: ProfileInput, 
   if (!validateProfile(input).ok) throw new Error('Hồ sơ không hợp lệ');
   store.setState((s) => {
     if (!s.profiles.some((p) => p.id === id)) return s;
-    return { ...s, profiles: s.profiles.map((p) => (p.id === id ? { ...p, ...clean(input), updatedAt: now } : p)) };
+    const old = s.profiles.find((p) => p.id === id)!;
+    const next = { ...old, ...clean(input), updatedAt: now };
+    // Đổi ngày giờ sinh thì câu trả lời kiểm chứng ngũ hành cũ không còn dùng được (ARCHITECTURE 14.6)
+    const nguHanhAnswers = birthKeyOf(next) === birthKeyOf(old) ? s.nguHanhAnswers : s.nguHanhAnswers.filter((a) => a.profileId !== id);
+    return { ...s, profiles: s.profiles.map((p) => (p.id === id ? next : p)), nguHanhAnswers };
   });
+}
+
+/** Ghi câu trả lời kiểm chứng cho một mốc đã qua; trả lời lại cùng mốc thì ghi đè. */
+export function setNguHanhAnswer(store: AppStore, profileId: string, target: NguHanhTarget, outcome: NguHanhOutcome, now = nowIso()): void {
+  store.setState((s) => {
+    const p = s.profiles.find((x) => x.id === profileId);
+    if (!p) return s;
+    const same = (a: NguHanhAnswer) => a.profileId === profileId && a.target.kind === target.kind
+      && (a.target.kind === 'nam' ? a.target.year === (target as { year: number }).year : a.target.index === (target as { index: number }).index);
+    return { ...s, nguHanhAnswers: [...s.nguHanhAnswers.filter((a) => !same(a)), { profileId, birthKey: birthKeyOf(p), target, outcome, answeredAt: now }] };
+  });
+}
+
+/** "Làm lại": xoá mọi câu trả lời kiểm chứng ngũ hành của một hồ sơ. */
+export function clearNguHanhAnswers(store: AppStore, profileId: string): void {
+  store.setState((s) => (s.nguHanhAnswers.some((a) => a.profileId === profileId) ? { ...s, nguHanhAnswers: s.nguHanhAnswers.filter((a) => a.profileId !== profileId) } : s));
+}
+
+/** Câu trả lời còn dùng được của hồ sơ: cùng dấu ngày giờ sinh với hồ sơ hiện tại. */
+export function nguHanhAnswersOf(s: PersistedState, profileId: string): NguHanhAnswer[] {
+  const p = s.profiles.find((x) => x.id === profileId);
+  return p ? s.nguHanhAnswers.filter((a) => a.profileId === profileId && a.birthKey === birthKeyOf(p)) : [];
 }
 
 /** Xoá hồ sơ; nếu đang xem thì chuyển sang hồ sơ đầu tiên còn lại; bỏ cặp hợp hôn có hồ sơ này. */
@@ -46,7 +72,7 @@ export function removeProfile(store: AppStore, id: string): void {
     const activeProfileId = s.activeProfileId === id ? (profiles[0]?.id ?? null) : s.activeProfileId;
     const tools = { ...s.tools };
     if (tools.napAmPair?.includes(id)) delete tools.napAmPair;
-    return { ...s, profiles, activeProfileId, tools, palmSessions: s.palmSessions.filter((x) => x.profileId !== id) };
+    return { ...s, profiles, activeProfileId, tools, palmSessions: s.palmSessions.filter((x) => x.profileId !== id), nguHanhAnswers: s.nguHanhAnswers.filter((x) => x.profileId !== id) };
   });
 }
 

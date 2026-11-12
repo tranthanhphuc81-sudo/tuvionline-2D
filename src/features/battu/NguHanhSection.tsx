@@ -3,8 +3,11 @@
    Chân: một nút "Xem cách luận khác". Giả: hai lựa chọn ngang hàng. Không thành hoặc không có dấu hiệu: một cách luận. */
 import { useMemo, useState } from 'react';
 import { batTuReading, type BatTuChart } from '../../core';
-import { analyze, toNguHanhChart, type Reading } from '../../core/nguhanh';
-import { practicalReport, readingLabel, weightPhrase } from '../../content/nguhanh';
+import { analyze, resolveWithFeedback, toNguHanhChart, verificationQuestions, type Reading } from '../../core/nguhanh';
+import { OUTCOME_LABEL, VERIFICATION_INTRO, VERIFICATION_NOT_ENOUGH, practicalReport, readingLabel, resolutionText, verificationPrompt, weightPhrase } from '../../content/nguhanh';
+import { useApp, useAppCtx } from '../../app/context';
+import { clearNguHanhAnswers, setNguHanhAnswer } from '../../state/actions';
+import { birthKeyOf, type NguHanhOutcome } from '../../state/schema';
 import { SectionView } from '../../ui/components/SectionView';
 import { Segmented } from '../../ui/components/Segmented';
 import ui from '../../ui/components/ui.module.css';
@@ -12,8 +15,25 @@ import s from './battu.module.css';
 
 const FOLD_IDS = new Set(['nguhanh.why', 'nguhanh.notes']);
 
-export function NguHanhSection({ ch, nowYear }: { ch: BatTuChart; nowYear: number }) {
-  const a = useMemo(() => analyze(toNguHanhChart(ch)), [ch]);
+/** Tham số chọn câu hỏi của app (ARCHITECTURE 14.5): tối đa 2 Đại Vận đã đi hết và 3 năm từ 18 tuổi mụ. */
+const ASK = { minAge: 18, maxYears: 3, maxDaiVan: 2 } as const;
+const OUTCOMES: NguHanhOutcome[] = ['tot', 'binh', 'xau', 'khong-nho'];
+
+export function NguHanhSection({ ch, nowYear, profileId }: { ch: BatTuChart; nowYear: number; profileId: string }) {
+  const { store } = useAppCtx();
+  const allAnswers = useApp((x) => x.nguHanhAnswers);
+  const birthKey = useApp((x) => { const p = x.profiles.find((q) => q.id === profileId); return p ? birthKeyOf(p) : ''; });
+  const mine = useMemo(() => allAnswers.filter((x) => x.profileId === profileId && x.birthKey === birthKey), [allAnswers, profileId, birthKey]);
+  const base = useMemo(() => analyze(toNguHanhChart(ch)), [ch]);
+  // "Không nhớ" được lưu để khỏi hỏi lại nhưng không đưa vào engine, không đổi trọng số
+  const resolved = useMemo(() => {
+    const fb = mine.filter((x) => x.outcome !== 'khong-nho').map((x) => ({ target: x.target, outcome: x.outcome as 'tot' | 'binh' | 'xau' }));
+    return fb.length ? resolveWithFeedback(base, fb) : null;
+  }, [base, mine]);
+  const a = resolved ? resolved.analysis : base;
+  const questions = useMemo(() => verificationQuestions(base, { nowYear, ...ASK }), [base, nowYear]);
+  const next = resolved?.decided ? undefined : questions.find((q) => !mine.some((x) => x.target.kind === q.target.kind
+    && (x.target.kind === 'nam' ? x.target.year === (q.target as { year: number }).year : x.target.index === (q.target as { index: number }).index)));
   const legacy = useMemo(() => batTuReading(ch, nowYear), [ch, nowYear]);
   const [picked, setPicked] = useState<Reading['id'] | null>(null);
   const main = a.readings[0], other = a.readings[1];
@@ -50,6 +70,24 @@ export function NguHanhSection({ ch, nowYear }: { ch: BatTuChart; nowYear: numbe
           <button type="button" className={`${ui.btn} ${ui.block}`} onClick={() => setPicked(viewingOther ? main.id : other.id)}>
             {viewingOther ? 'Quay lại cách luận chính' : 'Xem cách luận khác'}
           </button>
+        )}
+        {base.readings.length > 1 && (
+          <section className={s.verify} aria-labelledby="battu-kiemchung">
+            <h3 id="battu-kiemchung" className={s.verifyTitle}>Kiểm chứng bằng các năm đã qua</h3>
+            {questions.length === 0 && mine.length === 0 ? <p className={ui.muted}>{VERIFICATION_NOT_ENOUGH}</p> : <p className={ui.muted}>{VERIFICATION_INTRO}</p>}
+            {resolved && <p role="status">{resolutionText(resolved, a)}</p>}
+            {next && (
+              <>
+                <p>{verificationPrompt(next, base)}</p>
+                <div className={s.verifyBtns}>
+                  {OUTCOMES.map((o) => (
+                    <button key={o} type="button" className={ui.btn} onClick={() => setNguHanhAnswer(store, profileId, next.target, o)}>{OUTCOME_LABEL[o]}</button>
+                  ))}
+                </div>
+              </>
+            )}
+            {mine.length > 0 && <button type="button" className={`${ui.btn} ${ui.block}`} onClick={() => clearNguHanhAnswers(store, profileId)}>Làm lại</button>}
+          </section>
         )}
         <SectionView sections={rest} />
       </div>

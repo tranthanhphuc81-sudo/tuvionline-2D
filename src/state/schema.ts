@@ -2,7 +2,7 @@
    Đổi lược đồ thì tăng SCHEMA_VERSION và thêm migration trong migrations.ts. */
 import type { Gender, Huong, PalmPt } from '../core';
 
-export const SCHEMA_VERSION = 3 as const;
+export const SCHEMA_VERSION = 4 as const;
 export const STATE_KEY = 'lyso.state';
 
 export type Relation = 'self' | 'spouse' | 'child' | 'parent' | 'sibling' | 'other';
@@ -93,6 +93,22 @@ export interface PalmSession {
 }
 export const PALM_SESSION_VERSION = 1;
 
+/** Câu trả lời kiểm chứng bằng quá khứ cho phân tích ngũ hành (lược đồ 4, ARCHITECTURE 14.6). Lưu trên máy, không rời máy. */
+export type NguHanhTarget = { kind: 'nam'; year: number } | { kind: 'daiVan'; index: number };
+export type NguHanhOutcome = 'tot' | 'binh' | 'xau' | 'khong-nho';
+export interface NguHanhAnswer {
+  profileId: string;
+  /** dấu của ngày giờ sinh lúc trả lời; hồ sơ đổi ngày giờ sinh thì câu trả lời cũ không còn dùng được */
+  birthKey: string;
+  target: NguHanhTarget;
+  outcome: NguHanhOutcome;
+  answeredAt: string;
+}
+
+/** Dấu các trường ngày giờ sinh của hồ sơ (đổi tên hay quan hệ thì không đổi). */
+export const birthKeyOf = (p: Pick<Profile, 'gender' | 'calendar' | 'day' | 'month' | 'year' | 'leapMonth' | 'hourIdx' | 'lateTy'>): string =>
+  [p.gender, p.calendar, p.day, p.month, p.year, p.leapMonth ? 1 : 0, p.hourIdx, p.lateTy ? 1 : 0].join('|');
+
 export interface PersistedState {
   version: typeof SCHEMA_VERSION;
   profiles: Profile[];
@@ -101,12 +117,14 @@ export interface PersistedState {
   tools: Tools;
   /** các lần xem chỉ tay, thêm ở lược đồ 3 */
   palmSessions: PalmSession[];
+  /** câu trả lời kiểm chứng ngũ hành, thêm ở lược đồ 4 */
+  nguHanhAnswers: NguHanhAnswer[];
 }
 
 export const DEFAULT_SETTINGS: Settings = { theme: 'system', ttsRate: 1, ttsPitch: 1, entryMode: 'auto', journeySound: true, xungHo: 'tu-dong' };
 
 export function emptyState(): PersistedState {
-  return { version: SCHEMA_VERSION, profiles: [], activeProfileId: null, settings: { ...DEFAULT_SETTINGS }, tools: {}, palmSessions: [] };
+  return { version: SCHEMA_VERSION, profiles: [], activeProfileId: null, settings: { ...DEFAULT_SETTINGS }, tools: {}, palmSessions: [], nguHanhAnswers: [] };
 }
 
 /* ===== Kiểm tra hình dạng dữ liệu (viết tay, báo lỗi rõ ràng) ===== */
@@ -214,5 +232,22 @@ export function parsePersisted(raw: unknown): ParseResult {
     const e = checkPalmSession(raw.palmSessions[i], i, ids);
     if (e) return { ok: false, error: e };
   }
+  if (!Array.isArray(raw.nguHanhAnswers)) return { ok: false, error: 'nguHanhAnswers không phải mảng' };
+  for (let i = 0; i < raw.nguHanhAnswers.length; i++) {
+    const e = checkNguHanhAnswer(raw.nguHanhAnswers[i], i, ids);
+    if (e) return { ok: false, error: e };
+  }
   return { ok: true, state: raw as unknown as PersistedState };
+}
+
+function checkNguHanhAnswer(a: unknown, i: number, profileIds: ReadonlySet<string>): string | null {
+  const at = `nguHanhAnswers[${i}]`;
+  if (!isObj(a)) return `${at} không phải object`;
+  if (!isStr(a.profileId) || !profileIds.has(a.profileId)) return `${at}.profileId không trỏ tới hồ sơ nào`;
+  if (!isStr(a.birthKey) || !a.birthKey) return `${at}.birthKey thiếu`;
+  if (!isStr(a.answeredAt)) return `${at}.answeredAt thiếu`;
+  if (!['tot', 'binh', 'xau', 'khong-nho'].includes(a.outcome as string)) return `${at}.outcome không hợp lệ`;
+  const t = a.target;
+  const ok = isObj(t) && ((t.kind === 'nam' && isInt(t.year, 1800, 2300)) || (t.kind === 'daiVan' && isInt(t.index, 0, 20)));
+  return ok ? null : `${at}.target không hợp lệ`;
 }

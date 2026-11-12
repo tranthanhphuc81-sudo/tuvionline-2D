@@ -11,6 +11,7 @@ function setup(p?: { day: number; month: number; year: number; hourIdx: number }
   const store = createStore<PersistedState>(emptyState());
   if (p) addProfile(store, { name: 'An', gender: 'M', calendar: 'solar', leapMonth: false, lateTy: false, ...p });
   render(<AppProvider store={store}><BatTuScreen /></AppProvider>);
+  return store;
 }
 afterEach(cleanup);
 
@@ -100,5 +101,62 @@ describe('Mục Phân tích ngũ hành (3C.4)', () => {
     setup({ day: 6, month: 2, year: 2021, hourIdx: 6 });
     const sec = screen.getByRole('heading', { name: 'Phân tích ngũ hành' }).closest('section')!;
     expect(sec.textContent).not.toMatch(/hướng (Đông|Tây|Nam|Bắc)|màu (xanh|đỏ|vàng|trắng|đen)|vật phẩm/i);
+  });
+});
+
+describe('Thẻ kiểm chứng bằng các năm đã qua (3C.5)', () => {
+  const GIA = { day: 13, month: 3, year: 1986, hourIdx: 3 };
+  const btn = (n: string) => screen.queryByRole('button', { name: n });
+
+  it('chỉ hiện khi có cách luận thay thế: lá Giả có, lá thường không', () => {
+    setup(GIA);
+    expect(screen.getByRole('heading', { name: 'Kiểm chứng bằng các năm đã qua' })).toBeTruthy();
+    for (const n of ['Thuận lợi', 'Bình thường', 'Khó khăn', 'Không nhớ']) expect(btn(n), n).toBeTruthy();
+    cleanup();
+    setup({ day: 6, month: 2, year: 2021, hourIdx: 6 });
+    expect(screen.queryByRole('heading', { name: 'Kiểm chứng bằng các năm đã qua' })).toBeNull();
+  });
+
+  it('mỗi lần trả lời được lưu vào state, đúng loại mốc đang hỏi (thứ tự Đại Vận trước đã kiểm ở test engine)', () => {
+    const store = setup(GIA);
+    const first = screen.getByText(/^(Giai đoạn từ khoảng|Năm [0-9]{4})/).textContent ?? '';
+    fireEvent.click(btn('Thuận lợi')!);
+    const st = store.getState().nguHanhAnswers;
+    expect(st).toHaveLength(1);
+    expect(st[0]).toMatchObject({ outcome: 'tot', target: { kind: first.startsWith('Giai đoạn') ? 'daiVan' : 'nam' } });
+    expect(st[0].birthKey).toBe('M|solar|13|3|1986|0|3|0');
+  });
+
+  it('"Không nhớ" được lưu để khỏi hỏi lại nhưng không đổi kết luận', () => {
+    const store = setup(GIA);
+    const q1 = screen.getByText(/^(Giai đoạn từ khoảng|Năm [0-9]{4})/).textContent;
+    fireEvent.click(btn('Không nhớ')!);
+    expect(store.getState().nguHanhAnswers[0].outcome).toBe('khong-nho');
+    expect(screen.queryByRole('status')).toBeNull();
+    expect(screen.getByText(/^(Giai đoạn từ khoảng|Năm [0-9]{4})/).textContent).not.toBe(q1);
+  });
+
+  it('trả lời hết thì không hỏi thêm, có kết luận hoặc nói chưa phân định; Làm lại xoá và hỏi lại từ đầu', () => {
+    const store = setup(GIA);
+    let guard = 0;
+    while (btn('Thuận lợi') && guard++ < 8) fireEvent.click(btn('Thuận lợi')!);
+    expect(btn('Thuận lợi')).toBeNull();
+    expect(screen.getByRole('status').textContent).toMatch(/Chưa phân định|Các mốc đã qua khớp|Chưa đủ dữ liệu/);
+    expect(store.getState().nguHanhAnswers.length).toBeGreaterThanOrEqual(1);
+    fireEvent.click(screen.getByRole('button', { name: 'Làm lại' }));
+    expect(store.getState().nguHanhAnswers).toEqual([]);
+    expect(btn('Thuận lợi')).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Làm lại' })).toBeNull();
+  });
+
+  it('câu trả lời đổi trọng số: trả lời "khó khăn" cho mọi mốc làm báo cáo đổi so với ban đầu', () => {
+    const store = setup(GIA);
+    const before = screen.getByText((_, el) => el?.tagName === 'P' && /^Hiện .* về /.test(el.textContent ?? '')).textContent;
+    fireEvent.click(btn('Khó khăn')!);
+    fireEvent.click(btn('Khó khăn')!);
+    fireEvent.click(btn('Khó khăn')!);
+    expect(store.getState().nguHanhAnswers.length).toBe(3);
+    expect(screen.getByRole('status')).toBeTruthy();
+    expect(typeof before).toBe('string');
   });
 });

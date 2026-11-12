@@ -11,11 +11,13 @@ export function ProfileEditScreen({ id }: { id?: string }) {
   const nav = useNav();
   const profile = useApp((x) => (id ? x.profiles.find((p) => p.id === id) : undefined));
   const [confirm, setConfirm] = useState(false);
+  const hasAnswers = useApp((x) => !!id && x.nguHanhAnswers.some((a) => a.profileId === id));
 
   if (id && !profile) return <p className={ui.muted}>Hồ sơ này đã bị xoá.</p>;
 
   return (
     <div className={ui.stack}>
+      {hasAnswers && <p className={ui.muted} role="note">Nếu sửa ngày giờ sinh hay giới tính, các câu trả lời kiểm chứng ngũ hành đã lưu cho hồ sơ này sẽ bị xoá, vì lá số đổi thì các giai đoạn đã hỏi cũng đổi.</p>}
       <ProfileForm
         key={id ?? 'new'}
         initial={profile}
