@@ -134,3 +134,57 @@ describe('Nhãn thanh trên', () => {
     expect(studyTitle(new Date(2026, 1, 17))).toBe('1/1 Bính Ngọ');
   });
 });
+
+describe('Ngũ hành ở Tĩnh thất (3C.6)', () => {
+  const GIA: Profile = { ...person, day: 13, month: 3, year: 1986, hourIdx: 3 };
+  const group = () => screen.queryByRole('group', { name: 'Hỏi về các giai đoạn đã qua' });
+  const nghe = () => screen.getByRole('button', { name: /Nghe phần ngũ hành/ });
+
+  it('lá số có hai cách luận: đọc xong thì Thầy hỏi, 4 nút trả lời trong khung phụ đề', async () => {
+    plugin.speak.mockResolvedValue(undefined);
+    setup(withProfile(GIA));
+    fireEvent.click(nghe());
+    await waitFor(() => expect(group()).toBeTruthy());
+    for (const n of ['Thuận lợi', 'Bình thường', 'Khó khăn', 'Không nhớ']) expect(screen.getByRole('button', { name: n })).toBeTruthy();
+    expect(screen.getByText(/tuổi mụ|Giai đoạn từ khoảng/)).toBeTruthy();
+    expect(screen.queryByRole('button', { name: /Tạm dừng|Thầy đọc/ })).toBeNull();
+  });
+
+  it('trả lời được lưu cùng bộ câu trả lời với màn Bát Tự; hỏi hết thì Thầy nói kết luận hoặc chưa đủ để chắc', async () => {
+    plugin.speak.mockResolvedValue(undefined);
+    const { store } = setup(withProfile(GIA));
+    fireEvent.click(nghe());
+    await waitFor(() => expect(group()).toBeTruthy());
+    let guard = 0;
+    while (screen.queryByRole('button', { name: 'Khó khăn' }) && guard++ < 8) {
+      fireEvent.click(screen.getByRole('button', { name: 'Khó khăn' }));
+      await waitFor(() => expect(store.getState().nguHanhAnswers.length).toBeGreaterThan(guard - 1));
+    }
+    expect(store.getState().nguHanhAnswers.length).toBeGreaterThanOrEqual(1);
+    expect(store.getState().nguHanhAnswers[0]).toMatchObject({ profileId: 'a', outcome: 'xau' });
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Xong' })).toBeTruthy());
+    expect(screen.getByText(/chưa đủ để|Chưa đủ dữ liệu|Chưa phân định|khớp với/i)).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: 'Xong' }));
+    expect(group()).toBeNull();
+    expect(screen.getByRole('button', { name: /Thầy đọc/ })).toBeTruthy();
+  });
+
+  it('"Để Thầy hỏi sau" đóng khung hỏi đáp mà không lưu gì', async () => {
+    plugin.speak.mockResolvedValue(undefined);
+    const { store } = setup(withProfile(GIA));
+    fireEvent.click(nghe());
+    await waitFor(() => expect(group()).toBeTruthy());
+    fireEvent.click(screen.getByRole('button', { name: /hỏi sau/ }));
+    expect(group()).toBeNull();
+    expect(store.getState().nguHanhAnswers).toEqual([]);
+  });
+
+  it('lá số thường không có cách luận thay thế: đọc xong không hỏi', async () => {
+    plugin.speak.mockResolvedValue(undefined);
+    setup(withProfile({ ...person, day: 6, month: 2, year: 2021, hourIdx: 6 }));
+    fireEvent.click(nghe());
+    await waitFor(() => expect(plugin.speak).toHaveBeenCalled());
+    await new Promise((r) => setTimeout(r, 50));
+    expect(group()).toBeNull();
+  });
+});

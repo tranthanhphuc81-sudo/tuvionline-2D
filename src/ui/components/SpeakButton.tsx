@@ -8,7 +8,7 @@ import { useApp } from '../../app/context';
 import ui from './ui.module.css';
 
 /** Nút Đọc/Dừng. `getText`, `getCues` chỉ chạy khi bấm nên màn hình không tốn công dựng chữ khi chưa cần. Có `getCues` thì thầy đọc theo kịch bản. */
-export function SpeakButton({ id, getText, getCues }: { id: string; getText?(): string; getCues?(): Cue[] }) {
+export function SpeakButton({ id, getText, getCues, label }: { id: string; getText?(): string; getCues?(): Cue[]; /** chữ trên nút khi chưa đọc (mặc định "Thầy đọc") */ label?: string }) {
   const rate = useApp((x) => x.settings.ttsRate);
   const pitch = useApp((x) => x.settings.ttsPitch);
   const speaking = useSyncExternalStore(subscribeReading, readingOwner) === id;
@@ -26,7 +26,7 @@ export function SpeakButton({ id, getText, getCues }: { id: string; getText?(): 
   return (
     <div className={ui.stack}>
       <button type="button" className={`${ui.btn} ${ui.block}`} aria-pressed={speaking} onClick={() => void toggle()}>
-        {speaking ? '⏹ Dừng đọc' : getCues ? `🔊 ${Ta} đọc` : '🔊 Đọc kết quả'}
+        {speaking ? '⏹ Dừng đọc' : label ? `🔊 ${label}` : getCues ? `🔊 ${Ta} đọc` : '🔊 Đọc kết quả'}
       </button>
       {note && (
         <div className={ui.info} role="status">

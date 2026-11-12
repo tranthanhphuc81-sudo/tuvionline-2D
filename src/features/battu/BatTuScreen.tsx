@@ -28,7 +28,8 @@ export function BatTuScreen() {
   const nav = useNav();
   const profile = useApp(selectActiveProfile);
   const who = useWho();
-  const cueFocus = useCueFocus('battu');
+  const bt = useCueFocus('battu'), ng = useCueFocus('nguhanh');
+  const cueFocus = ng ?? bt;
   const res = useMemo(() => (profile ? profileSummary(profile) : null), [profile]);
   const [yearInput, setYearInput] = useState(String(thisYear()));
   const [year, setYear] = useState(thisYear());

@@ -3,37 +3,29 @@
    Chân: một nút "Xem cách luận khác". Giả: hai lựa chọn ngang hàng. Không thành hoặc không có dấu hiệu: một cách luận. */
 import { useMemo, useState } from 'react';
 import { batTuReading, type BatTuChart } from '../../core';
-import { analyze, resolveWithFeedback, toNguHanhChart, verificationQuestions, type Reading } from '../../core/nguhanh';
+import type { Reading } from '../../core/nguhanh';
+import { useNguHanh } from './useNguHanh';
 import { OUTCOME_LABEL, VERIFICATION_INTRO, VERIFICATION_NOT_ENOUGH, practicalReport, readingLabel, resolutionText, verificationPrompt, weightPhrase } from '../../content/nguhanh';
 import { useApp, useAppCtx } from '../../app/context';
 import { clearNguHanhAnswers, setNguHanhAnswer } from '../../state/actions';
 import { birthKeyOf, type NguHanhOutcome } from '../../state/schema';
 import { SectionView } from '../../ui/components/SectionView';
+import { SpeakButton } from '../../ui/components/SpeakButton';
+import { useWho } from '../reader/hooks';
+import { buildScript } from '../reader/script';
+import { nguHanhScriptInput } from '../reader/nguhanhScript';
 import { Segmented } from '../../ui/components/Segmented';
 import ui from '../../ui/components/ui.module.css';
 import s from './battu.module.css';
 
 const FOLD_IDS = new Set(['nguhanh.why', 'nguhanh.notes']);
 
-/** Tham số chọn câu hỏi của app (ARCHITECTURE 14.5): tối đa 2 Đại Vận đã đi hết và 3 năm từ 18 tuổi mụ. */
-const ASK = { minAge: 18, maxYears: 3, maxDaiVan: 2 } as const;
 const OUTCOMES: NguHanhOutcome[] = ['tot', 'binh', 'xau', 'khong-nho'];
 
 export function NguHanhSection({ ch, nowYear, profileId }: { ch: BatTuChart; nowYear: number; profileId: string }) {
   const { store } = useAppCtx();
-  const allAnswers = useApp((x) => x.nguHanhAnswers);
-  const birthKey = useApp((x) => { const p = x.profiles.find((q) => q.id === profileId); return p ? birthKeyOf(p) : ''; });
-  const mine = useMemo(() => allAnswers.filter((x) => x.profileId === profileId && x.birthKey === birthKey), [allAnswers, profileId, birthKey]);
-  const base = useMemo(() => analyze(toNguHanhChart(ch)), [ch]);
-  // "Không nhớ" được lưu để khỏi hỏi lại nhưng không đưa vào engine, không đổi trọng số
-  const resolved = useMemo(() => {
-    const fb = mine.filter((x) => x.outcome !== 'khong-nho').map((x) => ({ target: x.target, outcome: x.outcome as 'tot' | 'binh' | 'xau' }));
-    return fb.length ? resolveWithFeedback(base, fb) : null;
-  }, [base, mine]);
-  const a = resolved ? resolved.analysis : base;
-  const questions = useMemo(() => verificationQuestions(base, { nowYear, ...ASK }), [base, nowYear]);
-  const next = resolved?.decided ? undefined : questions.find((q) => !mine.some((x) => x.target.kind === q.target.kind
-    && (x.target.kind === 'nam' ? x.target.year === (q.target as { year: number }).year : x.target.index === (q.target as { index: number }).index)));
+  const { base, a, mine, resolved, questions, next } = useNguHanh(ch, nowYear, profileId);
+  const who = useWho();
   const legacy = useMemo(() => batTuReading(ch, nowYear), [ch, nowYear]);
   const [picked, setPicked] = useState<Reading['id'] | null>(null);
   const main = a.readings[0], other = a.readings[1];
@@ -54,6 +46,7 @@ export function NguHanhSection({ ch, nowYear, profileId }: { ch: BatTuChart; now
     <section aria-labelledby="battu-nguhanh" className={ui.stack}>
       <h2 id="battu-nguhanh" className={ui.sectionTitle}>Phân tích ngũ hành</h2>
       <div className={ui.card}>
+        <SpeakButton id="nguhanh" label="Nghe phần ngũ hành" getCues={() => buildScript('nguhanh', who, nguHanhScriptInput({ a, ask: next ? { question: next, base } : undefined }, who))} />
         {grade === 'gia' && other && (
           <Segmented<Reading['id']>
             label="Cách luận (hai cách cho kết quả khác nhau)"

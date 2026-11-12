@@ -9,7 +9,7 @@ import type { Relation, XungHoSetting } from '../../state/schema';
 
 /** Phần bàn tay Thầy đang nói tới: gò, đường chính, dấu (ARCHITECTURE 13.1). Sơ đồ tô sáng phần này, phần còn lại mờ đi. */
 export interface PalmFocus { zones?: readonly MountId[]; lines?: readonly ('sinh' | 'tri' | 'tam' | 'dinh')[]; marks?: readonly MarkType[] }
-export interface CueFocus { palace?: number; hao?: number; pillar?: number; huong?: Huong; line?: 'sinh' | 'tri' | 'tam' | 'dinh'; palm?: PalmFocus }
+export interface CueFocus { palace?: number; hao?: number; pillar?: number; huong?: Huong; line?: 'sinh' | 'tri' | 'tam' | 'dinh'; palm?: PalmFocus; /** chỉ số Can tàng của trụ `pillar` được tô, dùng khi Thầy giải thích gốc của Nhật Chủ (3C.6) */ hidden?: number[] }
 export type CueGesture = 'point' | 'turnPage' | 'nod';
 export interface Cue extends SpeechItem { id: string; focus?: CueFocus; gesture?: CueGesture }
 
@@ -92,6 +92,11 @@ export interface PalmScriptInput {
   lines: readonly { line: NonNullable<CueFocus['line']>; name: string; items: readonly PalmSpoken[] }[];
   /** các mục còn lại: tổng quan bàn tay, ngón, đường phụ, gò */
   sections: readonly { title: string; items: readonly PalmSpoken[] }[];
+}
+
+/** Vài câu rời (không có câu mở, câu kết): lời hỏi đáp của Thầy ở Tĩnh thất. Câu dính từ cấm đọc thì im lặng, chỉ hiện chữ. */
+export function buildPlainCues(who: Who, texts: readonly string[], id: string): Cue[] {
+  return texts.flatMap((t) => proseCues(t, who.goi)).map((c, i) => ({ ...c, id: `${id}-${i}` }));
 }
 
 /** Kịch bản thầy đọc chỉ tay: câu mở → tóm tắt → từng đường chính (có tô sáng) → các mục còn lại → câu kết. */

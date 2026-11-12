@@ -7,7 +7,7 @@ import { tongHopParts } from '../../content/tonghop/explain';
 import { CULTURAL_NOTE } from '../../content/common/notes';
 import { useApp, useNav } from '../../app/context';
 import type { Route, TabId } from '../../app/routes';
-import { lastSpeechError, pauseReading, readAloud, readingState, resumeReading, setReadingOptions, skipReading, subscribeReading, vietnameseVoice } from '../../platform/tts';
+import { lastSpeechError, pauseReading, readAloud, readingState, resumeReading, setReadingOptions, skipReading, stopReading, subscribeReading, vietnameseVoice } from '../../platform/tts';
 import { selectActiveProfile } from '../../state/actions';
 import { BootNoticeBanner } from '../home/HomeScreen';
 import ui from '../../ui/components/ui.module.css';
@@ -20,6 +20,7 @@ import type { Cue } from '../reader/script';
 import { IncenseStick, useIncense } from '../journey/incense';
 import { requestStarReveal } from '../tuvi/reveal';
 import { Intake } from './Intake';
+import { NguHanhButton, NguHanhQA } from './NguHanhTalk';
 import s from './study.module.css';
 
 const art = import.meta.glob('../../assets/journey/art/{room,obj-*}.svg', { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
@@ -47,6 +48,7 @@ export function StudyScreen() {
   const mine = reading?.id === STUDY_READING_ID ? reading : null;
   const [slow, setSlow] = useState(false);
   const [note, setNote] = useState<string | null>(null);
+  const [qa, setQa] = useState(false);
   const who = useWho();
   const { Ta } = useReader();
 
@@ -92,7 +94,9 @@ export function StudyScreen() {
       </div>
 
       <BootNoticeBanner />
-      {profile ? (
+      {profile && res?.ok && qa ? (
+        <NguHanhQA ch={res.summary.battu.chart} profileId={profile.id} who={who} onClose={() => { stopReading(); setQa(false); }} />
+      ) : profile ? (
         <div className={s.panel}>
           <p className={s.subtitle} data-speaking={!!mine}>{note ?? mine?.text ?? (invalid ? STUDY_INVALID : studyGreeting(who.goi, who.name, who.third, new Date().getDate(), who.ta))}</p>
           <div className={s.controls} role="group" aria-label={`Điều khiển ${Ta} đọc`}>
@@ -103,6 +107,7 @@ export function StudyScreen() {
             <button type="button" className={s.ctl} aria-label="Đoạn sau" disabled={!mine || mine.index >= mine.total - 1} onClick={() => void skipReading(1)}>⏭</button>
             <button type="button" className={s.ctl} aria-label="Nói chậm" aria-pressed={slow} onClick={toggleSlow}>🐢</button>
           </div>
+          {res?.ok && <NguHanhButton ch={res.summary.battu.chart} profileId={profile.id} who={who} slow={slow} disabled={invalid} onAsk={() => setQa(true)} />}
           <p className={`${ui.muted} ${s.note}`}>{CULTURAL_NOTE}</p>
         </div>
       ) : <Intake />}

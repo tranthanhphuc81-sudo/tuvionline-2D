@@ -3,7 +3,7 @@
    Biến: {goi} tiếng gọi người xem · {ta}/{Ta} người đọc tự xưng (theo nhân vật đã chọn) · {cuaAi} "của con" hoặc "của Lan" · {cung} {sao} {nhatChu} {hao} {huong} {duong}. */
 export const CULTURE_LINE = 'Số là tham khảo, đức năng thắng số.';
 
-export type ReaderTool = 'tuvi' | 'battu' | 'luchao' | 'battrach' | 'laban' | 'napam' | 'tonghop' | 'chitay';
+export type ReaderTool = 'tuvi' | 'battu' | 'luchao' | 'battrach' | 'laban' | 'napam' | 'tonghop' | 'chitay' | 'nguhanh';
 
 const C = CULTURE_LINE;
 
@@ -107,6 +107,20 @@ export const TOOL_LINES: Record<ReaderTool, { open: readonly string[]; close: re
     cells: ['Trước hết, {ta} điểm qua các chỉ số.', 'Mình nhìn tóm tắt đã.'],
     sections: ['Giờ {ta} đọc từng phần.', '{Ta} đọc tiếp phần tổng hợp.'],
   },
+  nguhanh: {
+    open: [
+      `{Ta} chào {goi}. Mình xem thêm phần phân tích ngũ hành của lá số {cuaAi}. ${C}`,
+      `Phần này {ta} đếm kỹ năm hành trong tám chữ {cuaAi}. Đây chỉ là một cách tính thêm. ${C}`,
+      `{goi} nghe {ta} đọc phần ngũ hành nhé. Cách tính này mang tính tham khảo. ${C}`,
+    ],
+    close: [
+      `Phần ngũ hành {ta} đọc đến đây. Chữ trên màn hình còn đủ các chi tiết. ${C}`,
+      `{Ta} đọc xong rồi. Cách tính nào cũng chỉ để mình tự soi lại nếp sống. ${C}`,
+      `Đọc đến đây thôi. Việc sắp xếp ngày tháng vẫn do mình quyết. ${C}`,
+    ],
+    cells: ['Trước hết {ta} nói qua mấy ý chính.', 'Mình nghe phần kết quả trước đã.'],
+    sections: ['Giờ {ta} nói về cách sắp xếp nhịp sống.', '{Ta} gom lại thành lời khuyên ngắn.'],
+  },
   chitay: {
     open: [
       `{Ta} chào {goi}. Mình cùng xem bàn tay {cuaAi}. Đường chỉ đổi theo cách mình sống. ${C}`,
@@ -130,6 +144,14 @@ export const LEADS = {
   luchaoThe: ['{goi} xem hào {hao}, đó là hào Thế.', 'Hào Thế nằm ở hào {hao}.'],
   battrachHuong: ['{goi} xem hướng {huong}, sao {sao}, là hướng tốt nhất.', 'Hướng hợp nhất là {huong}, ứng với sao {sao}.'],
   labanHuong: ['Hướng {huong} {ta} tô sáng trên vòng la bàn đây.', '{goi} nhìn trên vòng la bàn, hướng {huong} đang sáng lên.'],
+  nguhanhNguyetLenh: ['{goi} xem trụ tháng, chi {chi} thuộc mùa {tiet}. Nhật Chủ {nhatChu} ở thế {the} trong mùa này.', 'Chi tháng là {chi}, mùa {tiet}. Nhật Chủ {nhatChu} đang ở thế {the}.'],
+  nguhanhHopCuc: ['Trong các chi có {hopcuc}.', 'Các chi trên lá số có {hopcuc}.'],
+  nguhanhPhuongPhap: ['{Ta} chọn Dụng thần theo phương pháp {phuongphap}. Hành cần bổ sung là {dung}, hỗ trợ là {hy}, nên tiết chế {ky}.', 'Theo phương pháp {phuongphap}, hành cần bổ sung là {dung}; {hy} hỗ trợ; {ky} nên tiết chế.'],
+  nguhanhTongCach: ['Lá số có dấu hiệu {cach}: {hang}, độ tin cậy {tincay}.', 'Về cách cục đặc biệt, {ta} thấy {cach}, kết quả {hang}, độ tin cậy {tincay}.'],
+  nguhanhHaiCach: ['Với lá số này có hai cách luận. {Ta} nghiêng nhiều hơn về {cachchinh}, nhưng cách còn lại cũng đáng xem.', 'Có hai cách luận cho lá số này, hiện {ta} nghiêng về {cachchinh}.'],
+  nguhanhCamOn: ['Cảm ơn {goi}, {ta} ghi lại rồi.', '{Ta} ghi nhận rồi, cảm ơn {goi}.'],
+  nguhanhChuaChac: ['Chưa đủ để {ta} nói chắc cách luận nào hợp hơn. {goi} cứ xem cả hai như hai góc nhìn.', '{Ta} chưa dám nói chắc cách nào hợp hơn. Cứ xem cả hai cách luận như hai góc nhìn.'],
+  nguhanhHoi: ['Để biết cách luận nào hợp hơn, {ta} xin hỏi {goi} về một giai đoạn đã qua.', '{goi} nhớ lại giúp {ta} một giai đoạn đã qua nhé. Không nhớ thì cứ bỏ qua.'],
   chitayDuong: ['{goi} xem {duong}, {ta} tô sáng trên tay đây.', 'Đây là {duong}.'],
 } as const;
 

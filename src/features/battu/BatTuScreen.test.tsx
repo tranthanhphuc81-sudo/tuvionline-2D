@@ -160,3 +160,11 @@ describe('Thẻ kiểm chứng bằng các năm đã qua (3C.5)', () => {
     expect(typeof before).toBe('string');
   });
 });
+
+describe('Thầy đọc phần ngũ hành (3C.6)', () => {
+  it('có nút riêng để nghe phần ngũ hành, tách khỏi nút đọc Bát Tự', () => {
+    setup({ day: 13, month: 3, year: 1986, hourIdx: 3 });
+    expect(screen.getByRole('button', { name: /Nghe phần ngũ hành/ })).toBeTruthy();
+    expect(screen.getAllByRole('button', { name: /đọc/i }).length).toBeGreaterThanOrEqual(1);
+  });
+});
