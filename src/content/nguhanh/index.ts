@@ -8,7 +8,7 @@ import {
   type Element, type Favor, type LegacyComparison, type NguHanhAnalysis, type Pillar, type PeriodTarget, type Reading, type Resolution, type VerificationQuestion,
 } from '../../core/nguhanh';
 import { p, list, note, parseRich, type Block, type Section } from '../rich';
-import { analyzeSensitivity } from '../../core/nguhanh';
+import { analyzeSensitivity, rankIntervention, BALANCE } from '../../core/nguhanh';
 import { FAMILY } from '../interp/battu';
 import { msgText, type RenderCtx } from './render';
 import { ELEMENT_PRACTICAL, TEN_GOD_PRACTICAL } from './practical';
@@ -95,6 +95,22 @@ export function verificationPrompt(q: Pick<VerificationQuestion, 'target' | 'pil
 export function sensitivityNote(chart: Parameters<typeof analyzeSensitivity>[0], dung: Element): string {
   const other = analyzeSensitivity(chart).byPreset.find((x) => x.dung !== dung);
   return other ? sensitivityUnstable(other.dung, dung) : SENSITIVITY_STABLE;
+}
+
+/** Lời giải thích phương trình và kết quả xếp hạng "can thiệp tối thiểu" (ARCHITECTURE 14.11). */
+export function balanceBlocks(shares: Record<Element, number>, dung: Element): Block[] {
+  const r = rankIntervention(shares, dung);
+  const pc = (v: number) => Math.round(v * 100);
+  const model = `Mô hình đơn giản: mỗi bước, mỗi hành nhận thêm ${pc(BALANCE.S)}% phần chênh so với hành sinh ra nó và bị hành khắc nó trừ ${pc(BALANCE.K)}%; hệ đứng yên khi cả năm hành đều ${pc(BALANCE.EQUILIBRIUM)}%. "Can thiệp tối thiểu": thử thêm ${pc(BALANCE.DELTA)}% vào từng hành một, cho chạy ${BALANCE.STEPS} bước, hành nào đưa lá số về gần mức cân bằng nhất thì xếp hạng 1.`;
+  const result = r.rank === 1
+    ? `Theo mô hình này, bổ sung <b>${dung}</b> là cách bù chỗ lệch hiệu quả nhất, khớp với Dụng thần ở trên.`
+    : `Theo mô hình này, <b>${dung}</b> xếp thứ ${r.rank}/5; hành bù chỗ lệch hiệu quả nhất là <b>${r.best}</b>. Mô hình bỏ qua mùa sinh và Nhật Chủ nên Dụng thần vẫn lấy theo cách luận ở trên.`;
+  const source = 'Lưu ý: chỉ vòng sinh khắc là kiến thức cổ truyền. Phương trình và các hệ số là mô hình tự đặt để minh hoạ, không lấy từ sách hay trường phái nào, chưa được kiểm chứng; đừng dùng nó để luận đoán.';
+  return [
+    { ...note('nguhanh.balance.source', source), tags: NO_SPEECH },
+    { ...note('nguhanh.balance.model', model), tags: NO_SPEECH },
+    { ...p('nguhanh.balance.rank', result), tags: NO_SPEECH },
+  ];
 }
 
 const CYCLE: Element[] = ['Mộc', 'Hoả', 'Thổ', 'Kim', 'Thuỷ'];
@@ -195,9 +211,11 @@ export function practicalReport(a: NguHanhAnalysis, o: ReportOptions): Section[]
   sec('headline', 'Tóm lại', [
     p('nguhanh.headline.0', `Nhật Chủ <b>${dm}</b> — <b>${STRENGTH_VI[a.dayMaster.strength]}</b>. Hành cần bổ sung: <b>${ug.dung}</b> (hỗ trợ: ${ug.hy}); hành nên tiết chế: ${ug.ky}.`, { pillar: 2 }),
     { id: 'nguhanh.headline.bars', kind: 'bars', tags: NO_SPEECH, rows: balance.map((e) => ({ label: `${e} · ${TEN_GOD_VI[tenGodOf(dm, e)]}${tags[e] ? ' · ' + tags[e] : ''}`, pct: Math.round(a.score.shares[e] * 100) })) },
-    cycleBlock(a.score.shares, ug.dung, tags),
     p('nguhanh.headline.sens', sensitivityNote(a.chart, ug.dung)),
   ]);
+
+  // 2b. Mô hình cân bằng (tuỳ chọn, gập sẵn): hình 5 nút và xếp hạng "can thiệp tối thiểu"
+  sec('balance', 'Mô hình cân bằng 5 hành (tuỳ chọn)', [cycleBlock(a.score.shares, ug.dung, tags), ...balanceBlocks(a.score.shares, ug.dung)]);
 
   // 3. Vì sao ra kết quả này (cả phần trăm của trọng số)
   const why = reasons(reading, ctx);
