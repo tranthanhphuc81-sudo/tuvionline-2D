@@ -31,6 +31,7 @@ export const PRIVACY_POINTS: readonly string[] = [
   'Tên, giới tính và ngày giờ sinh bạn nhập chỉ lưu trên máy này, chỉ dùng để tính kết quả ngay trên máy.',
   'Cảm biến la bàn chỉ dùng khi bạn mở La Bàn. Số đo không được lưu, trừ độ hiệu chỉnh bạn tự đặt.',
   'Xem chỉ tay: ảnh lòng bàn tay chỉ xử lý ngay trên máy, không gửi đi đâu và không được lưu lại. App chỉ giữ các nét bạn đã chạm cùng 21 điểm khớp bàn tay, và xoá chúng khi bạn xoá kết quả hoặc hồ sơ.',
+  'Phân tích ngũ hành: nếu bạn trả lời các câu hỏi về những giai đoạn đã qua, câu trả lời chỉ lưu trên máy này, nằm trong file sao lưu, và bị xoá khi bạn xoá hồ sơ, sửa ngày giờ sinh hoặc bấm "Làm lại".',
   'Ảnh người đọc bạn tự chọn trong Cài đặt chỉ lưu trên máy này, không gửi đi đâu và không nằm trong file sao lưu.',
   'Giọng đọc dùng bộ đọc tiếng Việt có sẵn trên máy, nội dung đọc không gửi ra ngoài.',
   'Ảnh chia sẻ và file sao lưu chỉ rời khỏi app khi bạn bấm chia sẻ và tự chọn nơi nhận. Ảnh có tên và ngày sinh của hồ sơ, bạn xem kỹ trước khi gửi cho người khác.',

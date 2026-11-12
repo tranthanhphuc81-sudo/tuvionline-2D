@@ -81,6 +81,8 @@ Rà tĩnh, chưa bắt gói tin khi chạy.
 | Font, tranh, âm thanh | Đóng gói trong app |
 | Giọng đọc | Android chỉ dùng giọng `…-local`, không có thì báo, không lùi sang mạng |
 
+**Rà lại ngày 12/11/2026 sau Phase 3C (phân tích ngũ hành):** quét `src/core/nguhanh`, `src/content/nguhanh`, `src/features/battu`, `src/features/study`, `src/features/reader/nguhanhScript.ts`, `src/state` tìm `fetch`, `XMLHttpRequest`, `WebSocket`, `sendBeacon`, `axios`: KHÔNG có lệnh gọi mạng nào. Không thêm thư viện, SDK hay quyền Android nào (chỉ thêm `tsx` ở devDependencies, không vào bản build). Engine ngũ hành chạy thuần trên máy, câu hỏi và câu trả lời kiểm chứng không rời máy.
+
 Phase 9 phải chạy lại ở chế độ máy bay và soi lưu lượng trên bản release thật.
 
 ### Quyền Android
@@ -104,12 +106,19 @@ Hiện `android:allowBackup="true"`. Android có thể tự sao lưu dữ liệu
 |---|---|---|
 | App có thu thập hoặc chia sẻ dữ liệu thuộc các loại bắt buộc không? | **Không** | "Thu thập" là truyền dữ liệu ra khỏi máy. Mọi dữ liệu xử lý và lưu trên máy |
 | Chia sẻ ảnh, gửi file sao lưu | Không khai | Người dùng bấm và tự chọn nơi nhận, đúng kỳ vọng của họ. Google miễn khai trường hợp này |
-| Hồ sơ, ngày sinh, cài đặt, quẻ đã gieo, hương đã thắp, độ hiệu chỉnh la bàn | Không khai | Chỉ lưu trên máy, xoá được bằng "Xoá toàn bộ dữ liệu" hoặc gỡ app |
+| Hồ sơ, ngày sinh, cài đặt, quẻ đã gieo, hương đã thắp, độ hiệu chỉnh la bàn, câu trả lời kiểm chứng ngũ hành | Không khai | Chỉ lưu trên máy, xoá được bằng "Xoá toàn bộ dữ liệu" hoặc gỡ app |
 | Mã hoá khi truyền, yêu cầu xoá tài khoản | Không áp dụng | Không truyền dữ liệu, không có tài khoản |
 
 Điều kiện để các câu trên đúng: đã tắt Auto Backup, bản phát hành không đặt `LYSO_LIVE_URL`, không thêm SDK nào. Thêm tính năng gửi dữ liệu hoặc SDK bất kỳ thì phải khai lại.
 
 **Chỉ tay (3B.3, đã có trong code):** chụp ảnh bằng `<input type="file" accept="image/*" capture="environment">`, WebView giao việc cho app máy ảnh của hệ thống nên KHÔNG khai quyền `CAMERA`. CHƯA THỬ trên APK: nếu nút chụp không mở được máy ảnh thì phải thêm quyền `CAMERA` (và khai lại Data safety, chính sách quyền riêng tư) trước khi phát hành. Ảnh chỉ xử lý trên máy, không lưu; app lưu các nét đã chạm và 21 điểm khớp bàn tay, xoá cùng hồ sơ. Mô hình MediaPipe Hand Landmarker (Apache 2.0) đóng gói trong app (~22 MB gồm WASM), cần ghi công ở mục Giới thiệu.
+
+**Phân tích ngũ hành (3C.5, đã có trong code):** lược đồ `lyso.state` lên v4, thêm `nguHanhAnswers`: mỗi câu trả lời kiểm chứng gồm hồ sơ, dấu ngày giờ sinh, mốc năm hoặc Đại Vận (số, không phải ngày cụ thể của người dùng), kết quả (thuận lợi, bình thường, khó khăn, không nhớ) và giờ trả lời. Câu trả lời:
+- chỉ lưu trên máy trong `lyso.state`, KHÔNG gửi đi đâu (đã rà mạng ở trên);
+- có trong file sao lưu "Sao lưu ra file" (người dùng tự bấm và tự chọn nơi nhận, cùng diện miễn khai như file sao lưu hiện có);
+- bị xoá khi xoá hồ sơ, khi sửa ngày giờ sinh hay giới tính của hồ sơ, bấm "Làm lại", hoặc "Xoá toàn bộ dữ liệu";
+- không nằm ngoài `lyso.state`, nên cùng chế độ Auto Backup đã tắt ở 8.2.
+Tính năng này không đổi câu trả lời nào trên form Data safety. Việc nâng dữ liệu v3 lên v4 chạy khi mở app và khi khôi phục sao lưu; **trước khi phát hành cần thử khôi phục một file sao lưu v3 thật** (tab Cài đặt, mục dữ liệu).
 
 ### Chính sách quyền riêng tư
 
@@ -132,6 +141,7 @@ Không tìm thấy điều riêng về tử vi, phong thủy trong các trang đ
 
 - Luôn nói rõ là nội dung văn hoá, tham khảo. Không dùng "dự đoán chính xác", "đổi vận", "chữa", "chẩn đoán", "cam kết".
 - Không ghi "số 1", "tốt nhất", giá, khuyến mãi, lời khen không rõ nguồn. Không dùng tên người nổi tiếng hay logo khác.
+- **Mô tả phần phân tích ngũ hành (khi viết mô tả ở 8.3; chưa có file STORE-LISTING):** được nêu "phân tích ngũ hành định lượng, giải thích vì sao", "nhiều cách luận, kèm lời nhắc tham khảo". KHÔNG dùng "chính xác", "dự đoán đúng", "kiểm chứng bằng quá khứ cho kết quả đúng"; thẻ kiểm chứng chỉ giúp xem cách luận nào hợp hơn, không chứng minh app đoán đúng.
 - Ảnh chụp phải đúng trải nghiệm thật trong app.
 
 ### Rủi ro cần xem ở Phase 9
