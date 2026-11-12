@@ -989,10 +989,12 @@ Căn cứ khi viết: `docs/NGU-HANH-SO-SANH.md` (3000 lá số, seed 20261111),
 
 | Mã | Điều kiện |
 |---|---|
-| `trung` | Dụng thần chính của engine = `primary` của legacy |
+| `nguoc` | Đảo chiều: Dụng thần engine nằm trong `ky` legacy, hoặc Kỵ thần engine nằm trong `dung` legacy. **Xét trước**, để không báo "trùng" khi kỵ của engine lại là hành legacy khuyên dùng (chốt khi làm 3C.2) |
+| `trung` | Không đảo chiều, Dụng thần chính của engine = `primary` của legacy |
 | `gan` | Không đảo chiều, Dụng thần engine nằm trong `dung` của legacy |
 | `khac` | Không đảo chiều, Dụng thần engine không nằm trong `dung` của legacy |
-| `nguoc` | Đảo chiều: Dụng thần engine nằm trong `ky` legacy, hoặc Kỵ thần engine nằm trong `dung` legacy |
+
+Số "trùng 36,1%" của `NGU-HANH-SO-SANH.md` đếm riêng theo `primary` (chưa loại ca đảo chiều), nên không bằng số ca `trung` ở đây.
 
 Kèm mã nguyên nhân theo bảng số đo: `tong-cach`, `dieu-hau`, `trung-hoa`, `vuong-nhuoc`, `khac-chon`.
 

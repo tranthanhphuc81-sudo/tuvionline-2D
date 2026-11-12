@@ -42,11 +42,11 @@ Mục đích: có "đáp án" độc lập trước khi chốt. Chọn phân t�
 | 8 | Đảo chiều | 12/10/1963 giờ Mùi | Quý Mão · Nhâm Tuất · Mậu Tý · Kỷ Mùi | Nhược (Vượng, đắc lệnh, giúp 1/hao 2) → dụng Hoả, Thổ; kỵ Mộc, Thuỷ | Thân vượng (57%), Phù ức → dụng Mộc, hỷ Thuỷ; kỵ Kim |  |
 | 9 | Đảo chiều | 08/12/1968 giờ Mùi | Mậu Thân · Giáp Tý · Nhâm Tý · Đinh Mùi | Nhược (Vượng, đắc lệnh, giúp 0/hao 3) → dụng Kim, Thuỷ; kỵ Thổ, Hoả | Thân vượng (71%), Phù ức → dụng Thổ, hỷ Hoả; kỵ Mộc |  |
 | 10 | Đảo chiều | 24/12/1969 giờ Ngọ | Kỷ Dậu · Bính Tý · Quý Dậu · Mậu Ngọ | Nhược (Vượng, đắc lệnh, giúp 0/hao 3) → dụng Kim, Thuỷ; kỵ Thổ, Hoả | Thân vượng (70%), Phù ức → dụng Thổ, hỷ Hoả; kỵ Mộc |  |
-| 11 | Đảo chiều | 05/03/1980 giờ Hợi | Canh Thân · Kỷ Mão · Đinh Sửu · Tân Hợi | Nhược (Tướng, đắc lệnh, giúp 0/hao 3) → dụng Mộc, Hoả; kỵ Thuỷ, Kim | Trung hòa (53%), Giữ trung hòa → dụng Hoả, hỷ Thổ; kỵ Mộc |  |
+| 11 | Đảo chiều | 05/03/1980 giờ Hợi | Canh Thân · Kỷ Mão · Đinh Sửu · Tân Hợi | Nhược (Tướng, đắc lệnh, giúp 0/hao 3) → dụng Mộc, Hoả; kỵ Thuỷ, Kim | Trung hoà (53%), Giữ trung hoà → dụng Hoả, hỷ Thổ; kỵ Mộc |  |
 | 12 | Đảo chiều | 15/08/1982 giờ Tuất | Nhâm Tuất · Mậu Thân · Canh Ngọ · Bính Tuất | Nhược (Vượng, đắc lệnh, giúp 1/hao 2) → dụng Thổ, Kim; kỵ Hoả, Mộc | Thân vượng (62%), Phù ức → dụng Hoả, hỷ Mộc; kỵ Thuỷ |  |
 | 13 | Đảo chiều | 26/12/1959 giờ Dần | Kỷ Hợi · Bính Tý · Nhâm Ngọ · Nhâm Dần | Nhược (Vượng, đắc lệnh, giúp 1/hao 2) → dụng Kim, Thuỷ; kỵ Thổ, Hoả | Thân vượng (58%), Phù ức → dụng Thổ, hỷ Hoả; kỵ Mộc |  |
 | 14 | Đảo chiều | 02/09/1996 giờ Dần | Bính Tý · Bính Thân · Nhâm Dần · Nhâm Dần | Nhược (Tướng, đắc lệnh, giúp 1/hao 2) → dụng Kim, Thuỷ; kỵ Thổ, Hoả | Thân vượng (64%), Phù ức → dụng Mộc, hỷ Hoả; kỵ Kim |  |
-| 15 | Đảo chiều | 11/10/2004 giờ Hợi | Giáp Thân · Giáp Tuất · Quý Hợi · Quý Hợi | Nhược (Tử, giúp 1/hao 2) → dụng Kim, Thuỷ; kỵ Thổ, Hoả | Trung hòa (51%), Giữ trung hòa → dụng Hoả, hỷ Kim; kỵ Mộc |  |
+| 15 | Đảo chiều | 11/10/2004 giờ Hợi | Giáp Thân · Giáp Tuất · Quý Hợi · Quý Hợi | Nhược (Tử, giúp 1/hao 2) → dụng Kim, Thuỷ; kỵ Thổ, Hoả | Trung hoà (51%), Giữ trung hoà → dụng Hoả, hỷ Kim; kỵ Mộc |  |
 | 16 | Engine dùng Điều hậu | 19/11/2009 giờ Dậu | Kỷ Sửu · Ất Hợi · Mậu Thìn · Tân Dậu | Nhược (Tù, giúp 1/hao 2) → dụng Hoả, Thổ; kỵ Mộc, Thuỷ | Thân nhược (26%), Điều hậu → dụng Hoả, hỷ Mộc; kỵ Thuỷ |  |
 | 17 | Engine dùng Điều hậu | 15/06/1987 giờ Tuất | Đinh Mão · Bính Ngọ · Ất Mùi · Bính Tuất | Nhược (Hưu, giúp 0/hao 3) → dụng Thuỷ, Mộc; kỵ Kim, Thổ | Thân nhược (19%), Điều hậu → dụng Thuỷ, hỷ Kim; kỵ Hoả · Tòng Nhi: Không thành cách |  |
 | 18 | Engine dùng Điều hậu | 27/05/1988 giờ Ngọ | Mậu Thìn · Đinh Tỵ · Nhâm Ngọ · Bính Ngọ | Nhược (Tù, giúp 0/hao 3) → dụng Kim, Thuỷ; kỵ Thổ, Hoả | Cực nhược (13%), Điều hậu → dụng Thuỷ, hỷ Kim; kỵ Hoả · Tòng Tài: Không thành cách |  |
@@ -59,4 +59,4 @@ Mục đích: có "đáp án" độc lập trước khi chốt. Chọn phân t�
 
 ## 4. Cách tái tạo
 
-Chạy từ gốc repo: `npx tsx docs/ngu-hanh-engine/compare-dung-than.ts` (seed cố định nên ra đúng bảng này). Bước 3C.2 chuyển script vào `scripts/` và trỏ sang engine đã port.
+Chạy từ gốc repo: `npm run compare:dungthan` (seed cố định nên ra đúng bảng này). Script ở `scripts/compare-dung-than.ts`, chạy engine đã port ở `src/core/nguhanh`; bản tham chiếu `docs/ngu-hanh-engine` giữ nguyên để đối chiếu.
