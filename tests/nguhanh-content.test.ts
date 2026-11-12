@@ -5,7 +5,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { batTuChart, batTuReading } from '../src/core';
-import { analyze, resolveWithFeedback, toNguHanhChart, verificationQuestions, type Msg, type NguHanhAnalysis } from '../src/core/nguhanh';
+import { analyze, hiddenStems, resolveWithFeedback, stemElement, toNguHanhChart, verificationQuestions, type Msg, type NguHanhAnalysis } from '../src/core/nguhanh';
 import * as NH from '../src/content/nguhanh';
 import { hasNoSpeech } from '../src/content/noSpeech';
 import { sectionPlainText, toPlainText, type Section } from '../src/content/rich';
@@ -163,6 +163,57 @@ describe('Lời nhắc văn hoá và cấu trúc báo cáo', () => {
     expect(head('thuan-the')).toMatch(/Hành nên thuận theo: Mộc/);
     expect(head('thuan-the')).not.toMatch(/cần bổ sung/);
     expect(head('thong-thuong')).toMatch(/Hành cần bổ sung: Hoả/);
+  });
+  it('mục "Nói dễ hiểu" phủ đủ mọi trường hợp: mọi nhánh đều gặp trong mẫu, mọi câu có chữ, không từ cấm, không màu hướng', () => {
+    let seed = 20261112; const rnd = () => (seed = (seed * 1103515245 + 12345) % 2147483648) / 2147483648;
+    const seen = new Map<string, number>();
+    const COLOR = /màu|hướng (bắc|nam|đông|tây)|đá phong thuỷ|vòng tay/i;
+    for (let i = 0; i < 3000; i++) {
+      const yy = 1940 + Math.floor(rnd() * 80), mm = 1 + Math.floor(rnd() * 12), dd = 1 + Math.floor(rnd() * 28), h = Math.floor(rnd() * 12);
+      const a = analyze(toNguHanhChart(batTuChart({ gender: rnd() < 0.5 ? 'M' : 'F', dd, mm, yy, hourIdx: h } as never)));
+      for (const r of a.readings) {
+        const { blocks, keys } = NH.plainBlocks(a, r, 2026);
+        for (const k of keys) seen.set(k, (seen.get(k) ?? 0) + 1);
+        expect(keys.filter((k) => k.startsWith('self.')).length, 'đúng một câu "bạn là ai"').toBe(1);
+        expect(keys.filter((k) => k.startsWith('method.')).length, 'đúng một lý do chọn hành').toBe(1);
+        const text = sectionPlainText({ id: 'x', title: '', blocks });
+        expect(text).not.toMatch(BAD);
+        expect(NH.hasBannedTerm(text), text).toBe(false);
+        expect(text).not.toMatch(COLOR);
+        expect(blocks.length).toBe(6);
+      }
+    }
+    const missing = NH.PLAIN_KEYS.filter((k) => !seen.has(k) && !NH.PLAIN_RARE_KEYS.includes(k));
+    expect(missing, `nhánh chưa gặp: ${missing.join(', ')}`).toEqual([]);
+  });
+  it('mục "Nói dễ hiểu": các nhánh hiếm (dựng tình huống) cũng ra câu đúng', () => {
+    const seen = new Set<string>();
+    const check = (a: NguHanhAnalysis, r: NguHanhAnalysis['readings'][number]) => {
+      const { blocks, keys } = NH.plainBlocks(a, r, 2026);
+      keys.forEach((k) => seen.add(k));
+      const text = sectionPlainText({ id: 'x', title: '', blocks });
+      expect(text).not.toMatch(BAD);
+      expect(NH.hasBannedTerm(text)).toBe(false);
+      return text;
+    };
+    const a = analyze(toNguHanhChart(batTuChart({ gender: 'M', dd: 11, mm: 3, yy: 1985, hourIdx: 0 } as never)));
+    // Hành mạnh nhất không lộ ở can, không là bản khí của chi nào, không phải hành của mùa: chỉ đến từ can ẩn
+    const els = ['Mộc', 'Hoả', 'Thổ', 'Kim', 'Thuỷ'] as const;
+    const present = new Set<string>([a.score.seasonElement, ...(['year', 'month', 'hour'] as const).map((k) => stemElement(a.chart[k].stem)),
+      ...(['year', 'month', 'day', 'hour'] as const).map((k) => stemElement(hiddenStems(a.chart[k].branch)[0]))]);
+    const hiddenOnly = els.find((e) => !present.has(e))!;
+    expect(hiddenOnly).toBeTruthy();
+    const shares = Object.fromEntries(els.map((e) => [e, e === hiddenOnly ? 0.6 : 0.1])) as typeof a.score.shares;
+    expect(check({ ...a, score: { ...a.score, shares } }, a.readings[0])).toMatch(/can ẩn trong địa chi/);
+    // 12 năm không có năm thuận / không có năm cần giữ nhịp: trên lá số thật gần như không xảy ra (hành Dụng thần và Kỵ thần
+    // luôn gặp ở can hay chi vài năm), nên truyền thẳng tình huống "không có năm nào" để chạy qua câu chữ của hai nhánh này.
+    const none = NH.plainBlocks(a, a.readings[0], 2026, () => ({}));
+    none.keys.forEach((k) => seen.add(k));
+    const noneText = sectionPlainText({ id: 'x', title: '', blocks: none.blocks });
+    expect(noneText).toMatch(/không có năm nào nghiêng rõ về thuận/);
+    expect(noneText).toMatch(/không có năm nào nghiêng rõ về khó/);
+    expect(noneText).not.toMatch(BAD);
+    for (const r of NH.PLAIN_RARE_KEYS) expect(seen.has(r), `nhánh hiếm ${r} chưa kiểm`).toBe(true);
   });
   it('lá số thường không có mục cách cục đặc biệt hay cách luận khác', () => {
     const plain = analyses.find((a) => !a.follow)!;

@@ -63,7 +63,12 @@ export const ELEMENT_PRACTICAL: Record<Element, ElementPractical> = {
   },
 };
 
-export interface TenGodPractical { asUseful: string; asHarmful: string; actions: string[] }
+/**
+ * meaning: nhóm này ứng với điều gì trong đời sống (nói thường, không thuật ngữ).
+ * example: một việc cụ thể khi nhóm này là hành cần thêm; harmExample: một tình huống cụ thể khi nhóm này là hành nên tiết chế.
+ * Dùng ở mục "Nói dễ hiểu" (plain.ts). Không nêu màu, hướng, vật phẩm (14.3), không dùng từ cấm (vocab.ts).
+ */
+export interface TenGodPractical { asUseful: string; asHarmful: string; actions: string[]; meaning: string; example: string; harmExample: string }
 
 /** Vai trò của hành so với bản thân khi là hành có lợi (asUseful) hay cần cân nhắc (asHarmful): lớp chạm vào đời sống nhiều nhất. */
 export const TEN_GOD_PRACTICAL: Record<TenGodGroup, TenGodPractical> = {
@@ -71,25 +76,40 @@ export const TEN_GOD_PRACTICAL: Record<TenGodGroup, TenGodPractical> = {
     asUseful: 'Sức mạnh đến từ bản thân và đồng đội. Nên xây đội nhóm, cộng sự, mạng lưới ngang hàng; tự tin đứng tên việc của mình.',
     asHarmful: 'Dễ cạnh tranh, bị chia phần; khi hợp tác về tiền bạc nên thoả thuận rõ ràng ngay từ đầu.',
     actions: ['Tìm cộng sự bù trừ năng lực', 'Tham gia cộng đồng nghề nghiệp', 'Rèn sức bền thể chất'],
+    meaning: 'chính bạn và những người ngang hàng: anh chị em, bạn bè, đồng nghiệp cùng cấp, sức khoẻ và sự tự lập',
+    example: 'thay vì một mình gánh một việc lớn, rủ một người bạn cùng nghề làm chung và chia rõ phần ai nấy làm; hoặc giữ lịch tập thể dục ba buổi một tuần để có sức bền',
+    harmExample: 'góp tiền làm ăn chung với bạn mà không ghi rõ ai góp bao nhiêu, ai hưởng bao nhiêu; hoặc ganh đua với đồng nghiệp đến mức mệt mỏi',
   },
   An: {
     asUseful: 'Được nâng đỡ qua học vấn, người thầy, tổ chức che chở. Nên dành thời gian học thêm, lấy chứng chỉ, tìm người hướng dẫn.',
     asHarmful: 'Dễ ỷ lại, học mãi không làm, chần chừ hành động. Cần chuyển kiến thức thành sản phẩm cụ thể.',
     actions: ['Học một chứng chỉ chuyên môn', 'Tìm một hai người hướng dẫn', 'Làm việc trong tổ chức có hệ thống đào tạo'],
+    meaning: 'việc học, bằng cấp, người thầy, người đi trước nâng đỡ, và những lúc nghỉ để nạp lại sức',
+    example: 'đăng ký một khoá học có chứng chỉ trong ba đến sáu tháng tới, hoặc nhờ một người đi trước trong nghề góp ý cho mình mỗi tháng một buổi',
+    harmExample: 'học hết khoá này sang khoá khác mà chưa làm ra sản phẩm nào; hoặc chờ có người sắp xếp sẵn rồi mới bắt tay vào việc',
   },
   ThucThuong: {
     asUseful: 'Thành công đến từ thể hiện và sáng tạo: làm sản phẩm, viết, dạy, nói. Nên có "đầu ra" công khai đều đặn.',
     asHarmful: 'Dễ tiêu hao sức, nói nhiều thì mệt, dễ va chạm với cấp trên, chi tiêu theo hứng.',
     actions: ['Xây sản phẩm hay hồ sơ cá nhân', 'Chia sẻ chuyên môn công khai', 'Biến kỹ năng thành dịch vụ'],
+    meaning: 'khả năng thể hiện và làm ra cái mới: nói, viết, dạy, sáng tạo, tay nghề',
+    example: 'mỗi tuần viết một bài chia sẻ điều mình làm tốt, hoặc nhận dạy kèm một kỹ năng mình có cho vài người quen',
+    harmExample: 'nói thẳng trong cuộc họp làm mất lòng cấp trên, hoặc chi tiêu theo hứng rồi cuối tháng thấy hụt',
   },
   Tai: {
     asUseful: 'Hợp với hành động hướng kết quả, kinh doanh, quản lý nguồn lực. Nên đặt mục tiêu thu nhập cụ thể và theo dõi dòng tiền.',
     asHarmful: 'Dễ bị tiền bạc, công việc vật chất kéo quá sức. Nên giữ gìn sức khoẻ và không mở rộng quá năng lực.',
     actions: ['Lập ngân sách và theo dõi dòng tiền', 'Thử một nguồn thu nhập phụ quy mô nhỏ', 'Học kỹ năng thương lượng, bán hàng'],
+    meaning: 'tiền bạc, tài sản, kết quả cụ thể đo đếm được và cách bạn quản lý nguồn lực',
+    example: 'đặt một mục tiêu thu nhập cho sáu tháng tới rồi ghi chép thu chi mỗi tuần; hoặc thử bán một món hàng nhỏ, làm một việc dịch vụ nhỏ để quen với chuyện làm ra tiền',
+    harmExample: 'nhận thêm việc làm thêm đến mức thiếu ngủ, hoặc mở rộng buôn bán khi vốn còn mỏng',
   },
   QuanSat: {
     asUseful: 'Hợp với môi trường có cấu trúc, trách nhiệm, chức danh. Áp lực vừa phải giúp phát triển; nên nhận vai trò quản lý, tuân thủ quy chuẩn.',
     asHarmful: 'Áp lực, kiểm soát, cấp trên khắt khe dễ gây căng thẳng. Cần ranh giới rõ, tránh nhận quá nhiều trách nhiệm cùng lúc.',
     actions: ['Nhận một vai trò có trách nhiệm rõ ràng', 'Xây kỷ luật cá nhân bằng lịch cố định', 'Làm việc trong tổ chức có quy chế minh bạch'],
+    meaning: 'khuôn khổ và trách nhiệm: cấp trên, chức danh, nội quy, kỷ luật, danh tiếng',
+    example: 'nhận làm trưởng nhóm một dự án có thời hạn rõ, hoặc tự đặt giờ làm, giờ ngủ cố định và giữ đúng trong ba tháng',
+    harmExample: 'nhận cùng lúc nhiều chức danh, hoặc làm dưới quyền người quá khắt khe mà không nói ra cho đến lúc kiệt sức',
   },
 };
