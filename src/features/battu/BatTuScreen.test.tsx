@@ -52,6 +52,15 @@ describe('Màn hình Bát Tự', () => {
 });
 
 describe('Mục Phân tích ngũ hành (3C.4)', () => {
+  it('mô hình cân bằng: mặc định sai phân, đổi sang hệ vi phân thì lời giải thích đổi theo', () => {
+    setup({ day: 6, month: 2, year: 2021, hourIdx: 6 });
+    expect(screen.getByText(/mỗi bước, mỗi hành nhận thêm/)).toBeTruthy();
+    fireEvent.click(screen.getByRole('radio', { name: /Hệ vi phân/ }));
+    expect(screen.getByText(/Hệ vi phân liên tục: tốc độ đổi/)).toBeTruthy();
+    expect(screen.queryByText(/mỗi bước, mỗi hành nhận thêm/)).toBeNull();
+    expect(screen.getByText(/tự đặt/)).toBeTruthy();
+  });
+
   it('hình 5 nút: có nhãn truy cập đủ 5 hành, 10 cạnh, chú thích nét liền/nét đứt và ghi chú độ nhạy', () => {
     setup({ day: 6, month: 2, year: 2021, hourIdx: 6 });
     const fig = screen.getByRole('img', { name: /Vòng tương sinh tương khắc của năm hành/ });

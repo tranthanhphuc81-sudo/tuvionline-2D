@@ -1187,6 +1187,8 @@ Hai preset của engine (`PRESETS`: mặc định và coi trọng nguyệt lện
 
 **Nguồn gốc mô hình cân bằng (nói thẳng):** chỉ vòng sinh khắc là kiến thức cổ truyền; dạng phương trình tuyến tính, các hệ số (S 0,30, K 0,05, DELTA 0,10, 5 bước) do dự án tự đặt, K được chọn nhỏ để hệ hội tụ về 20% mỗi hành (K 0,15 thì không), không từ sách hay tác giả nào, chưa kiểm chứng với người luận. Trên 1500 lá số ngẫu nhiên, Dụng thần của engine đứng hạng 1 theo mô hình chỉ khoảng 39% (hạng 2: 32%, 3: 18%, 4: 10%, 5: 1%). Vì vậy mô hình nằm trong phần gập "tuỳ chọn" ở mục Phân tích ngũ hành, ghi rõ là mô hình tự đặt, và không bao giờ đổi Dụng thần.
 
+**Hệ vi phân (tuỳ chọn thứ hai):** cùng mô hình viết liên tục dx/dt = S·(P − I)·x − K·P²·x (P là phép dịch vòng sinh), tích phân RK4 trong 5 đơn vị thời gian rồi chuẩn hoá tổng về 100%; người dùng đổi qua lại bằng nút chọn trong phần gập. Điểm đứng yên vẫn là 20% mỗi hành. Hai cách viết cho cùng hạng ở 99,1% trong 1500 lá số, nên đổi sang vi phân không làm mô hình đáng tin hơn (hệ số vẫn tự đặt); Dụng thần đứng hạng 1 ở 39,0%.
+
 **Mô hình hệ động lực 5 nút** (sinh là cạnh +, khắc là cạnh −, trạng thái cân bằng, can thiệp tối thiểu) chỉ nên làm hình minh hoạ cho Thầy giải thích "vì sao cần thêm hành này", không là phương pháp chọn Dụng thần thứ ba. Đã làm (12/11/2026): khối `cycle` ở mục "Tóm lại" của Phân tích ngũ hành (nét liền sinh, nét đứt khắc, tô đậm hai cạnh vào Dụng thần); Thầy không đọc hình này.
 
 ### 14.10 Thứ tự triển khai

@@ -8,7 +8,7 @@ import {
   type Element, type Favor, type LegacyComparison, type NguHanhAnalysis, type Pillar, type PeriodTarget, type Reading, type Resolution, type VerificationQuestion,
 } from '../../core/nguhanh';
 import { p, list, note, parseRich, type Block, type Section } from '../rich';
-import { analyzeSensitivity, rankIntervention, BALANCE } from '../../core/nguhanh';
+import { analyzeSensitivity, rankIntervention, BALANCE, type BalanceMode } from '../../core/nguhanh';
 import { FAMILY } from '../interp/battu';
 import { msgText, type RenderCtx } from './render';
 import { ELEMENT_PRACTICAL, TEN_GOD_PRACTICAL } from './practical';
@@ -98,10 +98,12 @@ export function sensitivityNote(chart: Parameters<typeof analyzeSensitivity>[0],
 }
 
 /** Lời giải thích phương trình và kết quả xếp hạng "can thiệp tối thiểu" (ARCHITECTURE 14.11). */
-export function balanceBlocks(shares: Record<Element, number>, dung: Element): Block[] {
-  const r = rankIntervention(shares, dung);
+export function balanceBlocks(shares: Record<Element, number>, dung: Element, mode: BalanceMode = 'roi-rac'): Block[] {
+  const r = rankIntervention(shares, dung, mode);
   const pc = (v: number) => Math.round(v * 100);
-  const model = `Mô hình đơn giản: mỗi bước, mỗi hành nhận thêm ${pc(BALANCE.S)}% phần chênh so với hành sinh ra nó và bị hành khắc nó trừ ${pc(BALANCE.K)}%; hệ đứng yên khi cả năm hành đều ${pc(BALANCE.EQUILIBRIUM)}%. "Can thiệp tối thiểu": thử thêm ${pc(BALANCE.DELTA)}% vào từng hành một, cho chạy ${BALANCE.STEPS} bước, hành nào đưa lá số về gần mức cân bằng nhất thì xếp hạng 1.`;
+  const model = mode === 'vi-phan'
+    ? `Hệ vi phân liên tục: tốc độ đổi của mỗi hành = ${pc(BALANCE.S)}% × (hành sinh ra nó − chính nó) − ${pc(BALANCE.K)}% × hành khắc nó, tích phân trong ${BALANCE.STEPS} đơn vị thời gian rồi chuẩn hoá tổng về 100%; điểm đứng yên là mỗi hành ${pc(BALANCE.EQUILIBRIUM)}%. "Can thiệp tối thiểu": thử thêm ${pc(BALANCE.DELTA)}% vào từng hành một, hành nào đưa lá số về gần mức cân bằng nhất thì xếp hạng 1.`
+    : `Mô hình đơn giản: mỗi bước, mỗi hành nhận thêm ${pc(BALANCE.S)}% phần chênh so với hành sinh ra nó và bị hành khắc nó trừ ${pc(BALANCE.K)}%; hệ đứng yên khi cả năm hành đều ${pc(BALANCE.EQUILIBRIUM)}%. "Can thiệp tối thiểu": thử thêm ${pc(BALANCE.DELTA)}% vào từng hành một, cho chạy ${BALANCE.STEPS} bước, hành nào đưa lá số về gần mức cân bằng nhất thì xếp hạng 1.`;
   const result = r.rank === 1
     ? `Theo mô hình này, bổ sung <b>${dung}</b> là cách bù chỗ lệch hiệu quả nhất, khớp với Dụng thần ở trên.`
     : `Theo mô hình này, <b>${dung}</b> xếp thứ ${r.rank}/5; hành bù chỗ lệch hiệu quả nhất là <b>${r.best}</b>. Mô hình bỏ qua mùa sinh và Nhật Chủ nên Dụng thần vẫn lấy theo cách luận ở trên.`;
@@ -179,6 +181,8 @@ export interface ReportOptions {
   nowYear: number;
   /** xem cách luận khác cách chính (người dùng chọn tab) */
   readingId?: Reading['id'];
+  /** cách viết mô hình cân bằng (tuỳ chọn); mặc định sai phân */
+  balanceMode?: BalanceMode;
   /** số năm tới, mặc định 5 */
   years?: number;
   /** gợi ý sơ bộ của legacy để dựng dòng đối chiếu; bỏ trống thì không có dòng đối chiếu */
@@ -215,7 +219,7 @@ export function practicalReport(a: NguHanhAnalysis, o: ReportOptions): Section[]
   ]);
 
   // 2b. Mô hình cân bằng (tuỳ chọn, gập sẵn): hình 5 nút và xếp hạng "can thiệp tối thiểu"
-  sec('balance', 'Mô hình cân bằng 5 hành (tuỳ chọn)', [cycleBlock(a.score.shares, ug.dung, tags), ...balanceBlocks(a.score.shares, ug.dung)]);
+  sec('balance', 'Mô hình cân bằng 5 hành (tuỳ chọn)', [cycleBlock(a.score.shares, ug.dung, tags), ...balanceBlocks(a.score.shares, ug.dung, o.balanceMode)]);
 
   // 3. Vì sao ra kết quả này (cả phần trăm của trọng số)
   const why = reasons(reading, ctx);

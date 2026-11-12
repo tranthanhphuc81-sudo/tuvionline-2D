@@ -21,6 +21,23 @@ export function balanceStep(x: Vec, S: number = BALANCE.S, K: number = BALANCE.K
 /** Khoảng cách Euclid tới điểm cân bằng 20% mỗi hành. */
 export const distanceToEquilibrium = (x: Vec): number => Math.sqrt(x.reduce((a, v) => a + (v - BALANCE.EQUILIBRIUM) ** 2, 0));
 
+/** Cách viết mô hình: sai phân (bước rời rạc) hoặc hệ vi phân liên tục dx/dt = S·(P − I)·x − K·P²·x, tích phân bằng RK4 trong STEPS đơn vị thời gian. */
+export type BalanceMode = 'roi-rac' | 'vi-phan';
+
+const deriv = (x: Vec, S: number, K: number): Vec => x.map((v, i) => S * (x[(i + 4) % 5] - v) - K * x[(i + 3) % 5]);
+const addScaled = (x: Vec, d: Vec, h: number): Vec => x.map((v, i) => v + h * d[i]);
+
+/** Chạy hệ vi phân từ x trong thời gian T (RK4, bước DT), trả về tỷ lệ đã chuẩn hoá. Tổng thô giảm theo e^(−K·t) nên phải chuẩn hoá. */
+export function flowContinuous(x0: Vec, T: number = BALANCE.STEPS, S: number = BALANCE.S, K: number = BALANCE.K, DT = 0.05): Vec {
+  let x = x0.slice();
+  const n = Math.round(T / DT);
+  for (let t = 0; t < n; t++) {
+    const k1 = deriv(x, S, K), k2 = deriv(addScaled(x, k1, DT / 2), S, K), k3 = deriv(addScaled(x, k2, DT / 2), S, K), k4 = deriv(addScaled(x, k3, DT), S, K);
+    x = x.map((v, i) => v + (DT / 6) * (k1[i] + 2 * k2[i] + 2 * k3[i] + k4[i]));
+  }
+  return norm(x.map((v) => Math.max(0, v)));
+}
+
 export interface InterventionRank {
   /** hạng của hành đã cho trong 5 lựa chọn, 1 = đưa về gần cân bằng nhất */
   rank: number;
@@ -31,11 +48,12 @@ export interface InterventionRank {
 }
 
 /** Xếp hạng việc "thêm một ít hành e" (e là Dụng thần) theo mô hình cân bằng. */
-export function rankIntervention(shares: Record<Element, number>, e: Element): InterventionRank {
+export function rankIntervention(shares: Record<Element, number>, e: Element, mode: BalanceMode = 'roi-rac'): InterventionRank {
   const x0 = norm(CYCLE_ORDER.map((el) => shares[el]));
   const scores = CYCLE_ORDER.map((_, i) => {
     let x = norm(x0.map((v, j) => v + (i === j ? BALANCE.DELTA : 0)));
-    for (let t = 0; t < BALANCE.STEPS; t++) x = balanceStep(x);
+    if (mode === 'vi-phan') x = flowContinuous(x);
+    else for (let t = 0; t < BALANCE.STEPS; t++) x = balanceStep(x);
     return distanceToEquilibrium(x);
   });
   const idx = CYCLE_ORDER.indexOf(e);
