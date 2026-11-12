@@ -109,9 +109,9 @@ export const TOOL_LINES: Record<ReaderTool, { open: readonly string[]; close: re
   },
   chitay: {
     open: [
-      `{Ta} chào {goi}. Mình cùng xem bàn tay {cuaAi}. ${C}`,
-      `Bàn tay là tấm gương soi lại mình. {Ta} đọc tay {cuaAi}. ${C}`,
-      `{Ta} thấy các đường chỉ {cuaAi} rồi. Mình đọc từ từ nhé. ${C}`,
+      `{Ta} chào {goi}. Mình cùng xem bàn tay {cuaAi}. Đường chỉ đổi theo cách mình sống. ${C}`,
+      `Bàn tay là tấm gương soi lại mình. {Ta} đọc tay {cuaAi}, nhớ là đường chỉ đổi theo cách mình sống. ${C}`,
+      `{Ta} thấy các đường chỉ {cuaAi} rồi. Đường chỉ đổi theo cách mình sống, mình đọc từ từ nhé. ${C}`,
     ],
     close: [
       `Tay {ta} đọc đến đây. Đường chỉ đổi theo cách mình sống, sáu tháng một năm xem lại cũng được. ${C}`,

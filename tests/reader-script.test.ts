@@ -1,6 +1,9 @@
 /* Kịch bản Thầy đọc (ARCHITECTURE.md mục 12.6–12.8; các điều kiện a–e của Phase 6.5). */
 import { describe, it, expect } from 'vitest';
-import { batTrachReading, castContext, castHexagram, profileSummary } from '../src/core';
+import { analyzePalm, batTrachReading, castContext, castHexagram, profileSummary } from '../src/core';
+import { PALM_TTS_FORBIDDEN, getReading, palmMetas, palmView, type PalmView } from '../src/content/palm/index';
+import { PALM_QUESTIONS } from '../src/content/palm/questions';
+import { palmScriptInput } from '../src/features/palm/script';
 import { NO_SPEECH_TERMS, hasNoSpeech } from '../src/content/noSpeech';
 import { CULTURE_LINE, DONG_LINES, LEADS, TOOL_LINES, allLines, fill } from '../src/content/reader/templates';
 import { sectionsSpeech, speechOf } from '../src/content/speech';
@@ -8,7 +11,7 @@ import { batTrachTongKet } from '../src/content/battrach/tongket';
 import { batTuTongKet } from '../src/content/battu/tongket';
 import { lucHaoTongKet } from '../src/content/luchao/tongket';
 import { tuViTongKet } from '../src/content/tuvi/tongket';
-import { buildScript, laBanLead, xungHo, type Cue, type Who } from '../src/features/reader/script';
+import { buildPalmScript, buildScript, laBanLead, xungHo, type Cue, type Who } from '../src/features/reader/script';
 
 const YEAR = 2026;
 const who: Who = { goi: 'con', third: false, name: 'An' };
@@ -190,5 +193,89 @@ describe('Kịch bản La Bàn', () => {
   it('câu dính từ cấm đọc thì chỉ hiện chữ', () => {
     const s = buildScript('laban', who, { prose: ['Hướng này dễ gặp tai nạn.'], sections: [] }, 0);
     expect(s.find((c) => c.caption?.includes('tai nạn'))?.text).toBe('');
+  });
+});
+
+/* ===== Chỉ tay (Phase 3B.6): các điều kiện (a)–(e) ===== */
+describe('Kịch bản Thầy đọc chỉ tay', () => {
+  // vài bộ câu trả lời khác nhau để phủ nhiều câu luận: bộ thứ k chọn lựa chọn thứ k của mỗi câu
+  function views(): PalmView[] {
+    const extra = palmView(analyzePalm({ dominant: 'right', method: 'dominant', current: { answers: { Q02: 'H01', Q14: 'T01', Q17: 'SD02', Q20: 'TD16', 'Q21-dai': 'TD05', Q23: 'TAM02', Q28: 'HN09' } } }, palmMetas()));
+    return [extra, ...[0, 1, 2, 3].map((k) => {
+      const answers: Record<string, string | string[]> = {};
+      for (const q of PALM_QUESTIONS) {
+        const o = q.options[k % q.options.length];
+        if (o) answers[q.id] = q.multi ? [o.value] : o.value;
+      }
+      return palmView(analyzePalm({ dominant: 'right', method: 'dominant', current: { answers } }, palmMetas()));
+    })];
+  }
+  const scriptsOf = () => views().map((v) => ({ v, cues: buildPalmScript(who, palmScriptInput(v), 0) }));
+  const forbidden = [...NO_SPEECH_TERMS, ...PALM_TTS_FORBIDDEN];
+  const hasForbidden = (t: string) => forbidden.some((w) => new RegExp('(?<![\p{L}\p{N}])' + w.replace(/[.*+?^${}()|[]\]/g, '\$&') + '(?![\p{L}\p{N}])', 'iu').test(t.normalize('NFC')));
+
+  it('(a) mọi cue chỉ tay dài tối đa 180 ký tự', () => {
+    for (const { cues } of scriptsOf()) {
+      expect(cues.length).toBeGreaterThan(5);
+      for (const c of cues) expect(c.text.length, c.text).toBeLessThanOrEqual(180);
+    }
+  });
+
+  it('(b) không cue nào được đọc thành lời lại chứa từ cấm đọc', () => {
+    for (const { cues } of scriptsOf()) for (const c of cues) if (c.text) expect(hasForbidden(c.text), c.text).toBe(false);
+  });
+
+  it('(c) câu luận tts=false không sinh cue đọc, chỉ hiện chữ kèm lời báo xem trên màn hình', () => {
+    let quiet = 0;
+    for (const { v, cues } of scriptsOf()) {
+      for (const r of v.sections.flatMap((x) => x.items).filter((x) => !x.tts)) {
+        quiet++;
+        const hit = cues.filter((c) => !!c.caption?.includes(r.text));
+        expect(hit.length, r.id).toBeGreaterThan(0);
+        for (const c of hit) { expect(c.text, r.id).toBe(''); expect(c.caption).toContain('xem chữ trên màn hình'); }
+      }
+    }
+    expect(quiet).toBeGreaterThan(0);
+  });
+
+  it('(d) câu mở và câu kết luôn có lời nhắc: đường chỉ đổi theo cách sống, văn hoá, xem lại sau 6–12 tháng', () => {
+    for (const seed of [0, 1, 2, 3, 4, 5]) {
+      for (const w of [who, { goi: 'bạn', third: true, name: 'Lan' }]) {
+        const cues = buildPalmScript(w, palmScriptInput(views()[0]), seed);
+        expect(cues[0].caption).toContain(CULTURE_LINE);
+        expect(cues[0].caption).toMatch(/[Đđ]ường chỉ đổi theo cách mình sống/);
+        expect(cues.at(-1)!.caption).toContain(CULTURE_LINE);
+      }
+    }
+    // ít nhất một câu kết nhắc xem lại sau 6–12 tháng (ba biến thể, đổi theo ngày)
+    const closes = [0, 1, 2].map((i) => buildPalmScript(who, palmScriptInput(views()[0]), i).at(-1)!.caption!);
+    expect(closes.some((c) => /sáu tháng một năm|6.{0,3}12 tháng/.test(c))).toBe(true);
+  });
+
+  it('(e) mỗi cue của câu luận có đường chính, gò hay dấu thì có focus.palm tương ứng', () => {
+    let checked = 0;
+    for (const { v, cues } of scriptsOf()) {
+      for (const r of v.sections.flatMap((x) => x.items)) {
+        const hit = cues.filter((c) => !!c.caption?.includes(r.text.slice(0, 40)));
+        const main = ['sinh', 'tri', 'tam', 'dinhmang'].includes(r.line ?? '');
+        if (!main && !r.mount && !r.mark) continue;
+        // câu luận có thể xuất hiện cả ở phần tóm tắt theo chủ đề (không tô) lẫn ở phần đường, gò (có tô); phần tô phải đúng
+        expect(hit.some((c) => !!c.focus?.palm), r.id).toBe(true);
+        for (const c of hit.filter((x) => !!x.focus?.palm)) {
+          checked++;
+          const p = c.focus!.palm;
+          if (r.mount) expect(p!.zones).toContain(r.mount);
+          if (r.mark) expect(p!.marks).toContain(r.mark);
+          if (main) expect(p!.lines).toContain(r.line === 'dinhmang' ? 'dinh' : r.line);
+        }
+      }
+    }
+    expect(checked).toBeGreaterThan(5);
+  });
+
+  it('cue của đường chính vẫn giữ focus.line để tô đường như trước', () => {
+    const { cues } = scriptsOf()[0];
+    expect(cues.some((c) => c.focus?.line === 'sinh')).toBe(true);
+    expect(getReading).toBeTruthy();
   });
 });

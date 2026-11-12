@@ -4,10 +4,12 @@ import { LEADS, NO_SPEECH_LINE, TOOL_LINES, fill, pick, type ReaderTool } from '
 import type { Section } from '../../content/rich';
 import { cellsSpeech, chunkSpeech, normalizeForSpeech, sectionsSpeech, splitSentences } from '../../content/speech';
 import type { SpeechItem } from '../../platform/tts';
-import type { Huong } from '../../core';
+import type { Huong, MarkType, MountId } from '../../core';
 import type { Relation, XungHoSetting } from '../../state/schema';
 
-export interface CueFocus { palace?: number; hao?: number; pillar?: number; huong?: Huong; line?: 'sinh' | 'tri' | 'tam' | 'dinh' }
+/** Phần bàn tay Thầy đang nói tới: gò, đường chính, dấu (ARCHITECTURE 13.1). Sơ đồ tô sáng phần này, phần còn lại mờ đi. */
+export interface PalmFocus { zones?: readonly MountId[]; lines?: readonly ('sinh' | 'tri' | 'tam' | 'dinh')[]; marks?: readonly MarkType[] }
+export interface CueFocus { palace?: number; hao?: number; pillar?: number; huong?: Huong; line?: 'sinh' | 'tri' | 'tam' | 'dinh'; palm?: PalmFocus }
 export type CueGesture = 'point' | 'turnPage' | 'nod';
 export interface Cue extends SpeechItem { id: string; focus?: CueFocus; gesture?: CueGesture }
 
@@ -82,7 +84,7 @@ export const laBanLead = (huong: Huong): Lead => ({ lines: LEADS.labanHuong, var
 export const batTrachLead = (huong: Huong, sao: string): Lead => ({ lines: LEADS.battrachHuong, vars: { huong, sao }, focus: { huong } });
 
 /** Một câu luận chỉ tay: `speak` false thì chỉ hiện chữ (câu nhạy cảm hoặc dữ liệu đánh dấu không đọc). */
-export interface PalmSpoken { text: string; speak: boolean }
+export interface PalmSpoken { text: string; speak: boolean; /** gò, đường, dấu mà câu này nói tới */ focus?: PalmFocus }
 export interface PalmScriptInput {
   /** tóm tắt theo chủ đề */
   summary: readonly { title: string; items: readonly PalmSpoken[] }[];
@@ -97,7 +99,10 @@ export function buildPalmScript(who: Who, input: PalmScriptInput, seed = new Dat
   const lines = TOOL_LINES.chitay;
   const vars = { goi: who.goi, cuaAi: who.third ? 'của ' + who.name : 'của ' + who.goi, ten: who.name, ta: who.ta ?? 'thầy' };
   const say = (text: string, focus?: CueFocus, gesture?: CueGesture): SpeechItemDraft[] => chunkSpeech(normalizeForSpeech(text)).map((t) => ({ text: t, caption: text, focus, gesture }));
-  const read = (items: readonly PalmSpoken[], focus?: CueFocus) => items.flatMap((it) => (it.speak ? proseCues(it.text, who.goi, focus) : [{ text: '', caption: it.text + ' ' + fill(NO_SPEECH_LINE, { goi: who.goi }), focus }]));
+  const read = (items: readonly PalmSpoken[], focus?: CueFocus) => items.flatMap((it) => {
+    const f: CueFocus | undefined = it.focus ? { ...focus, palm: it.focus } : focus;
+    return it.speak ? proseCues(it.text, who.goi, f) : [{ text: '', caption: it.text + ' ' + fill(NO_SPEECH_LINE, { goi: who.goi }), focus: f }];
+  });
   const draft: SpeechItemDraft[] = [
     ...say(fill(pick(lines.open, seed), vars)),
     ...(input.summary.length ? [...say(fill(pick(lines.cells, seed), vars)), ...input.summary.flatMap((x) => [...say(x.title + '.'), ...read(x.items)])] : []),

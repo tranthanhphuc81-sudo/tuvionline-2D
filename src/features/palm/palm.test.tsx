@@ -69,6 +69,18 @@ describe('QuestionField', () => {
 });
 
 describe('PalmDiagram', () => {
+  it('tô sáng gò Thầy đang nói tới, các gò khác mờ đi; không có zones thì không gò nào sáng', () => {
+    const { container, rerender } = render(<PalmDiagram session={session()} zones={['kim', 'hoaam']} />);
+    const lit = [...container.querySelectorAll('[data-lit]')].map((e) => e.getAttribute('data-mount'));
+    expect(lit.sort()).toEqual(['Gò Hỏa Tinh', 'Gò Kim Tinh']);
+    expect(Number(container.querySelector('[data-mount="Gò Thổ Tinh"]')!.getAttribute('opacity'))).toBeLessThan(0.3);
+    rerender(<PalmDiagram session={session()} zones={['donghoa']} />);
+    expect(container.querySelectorAll('[data-lit]')).toHaveLength(0);
+    rerender(<PalmDiagram session={session()} />);
+    expect(container.querySelectorAll('[data-lit]')).toHaveLength(0);
+    expect(Number(container.querySelector('[data-mount="Gò Thổ Tinh"]')!.getAttribute('opacity'))).toBeGreaterThan(0.4);
+  });
+
   it('vẽ từng đoạn của mỗi đường, đọc được bằng trình đọc màn hình, tay trái được lật', () => {
     const { container, rerender } = render(<PalmDiagram session={session()} />);
     expect(screen.getByRole('img').getAttribute('aria-label')).toContain('Sinh đạo, Tâm đạo');
