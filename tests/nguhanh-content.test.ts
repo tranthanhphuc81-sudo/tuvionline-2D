@@ -209,3 +209,16 @@ describe('Hình 5 nút minh hoạ (ARCHITECTURE 14.11)', () => {
     }
   });
 });
+
+describe('Màu 5 nút minh hoạ', () => {
+  it('mỗi hành một màu riêng, chữ đủ tương phản (≥ 4,5) trên nền', async () => {
+    const { cycleBlock } = await import('../src/content/nguhanh');
+    const b = cycleBlock({ Mộc: 0.2, Hoả: 0.2, Thổ: 0.2, Kim: 0.2, Thuỷ: 0.2 } as never, 'Mộc', {}) as never as { nodes: { fill: string; ink: string }[] };
+    const lum = (h: string) => { const c = [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255).map((v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4)); return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]; };
+    expect(new Set(b.nodes.map((n) => n.fill)).size).toBe(5);
+    for (const n of b.nodes) {
+      const [x, y] = [lum(n.fill), lum(n.ink)].sort((p, q) => q - p);
+      expect((x + 0.05) / (y + 0.05), n.fill).toBeGreaterThanOrEqual(4.5);
+    }
+  });
+});
