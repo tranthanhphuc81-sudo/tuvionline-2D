@@ -1,17 +1,26 @@
 /* Bộ lá số mẫu lấy từ sách (Tử Bình Chân Thuyên, Trích Thiên Tủy): kiểm dữ liệu chép từ sách và ghi lại mức khớp của engine.
    Con số khớp KHÔNG phải mục tiêu phải đạt: nó chỉ để biết khi engine đổi thì kết quả so với sách đổi thế nào.
+   Đợt 1 dùng để hiệu chỉnh (ARCHITECTURE 14.12); đợt 2 thêm sau, là tập kiểm tra độc lập (14.13): đừng chỉnh engine cho vừa đợt 2
+   mà không có lá mới để thử lại.
    Đổi engine có chủ ý thì chạy `npm run compare:sach`, đọc lại docs/NGU-HANH-SACH.md rồi sửa con số dưới đây. */
 import { describe, expect, it } from 'vitest';
 import { CAN, CHI } from '../src/core/canchi';
-import { ELEMENTS } from '../src/core/nguhanh';
-import { evaluate, loadSach } from '../scripts/lib/sach';
+import { ELEMENTS, REFERENCE_CONFIG } from '../src/core/nguhanh';
+import { evaluate, loadSach, type SachResult } from '../scripts/lib/sach';
 
 const { cases } = loadSach();
+const tally = (rs: SachResult[]) => {
+  const n = (m: string) => rs.filter((r) => r.match === m).length;
+  return { trung: n('trung'), gan: n('gan'), khac: n('khac'), nguoc: n('nguoc'), khop14: rs.filter((r) => r.rule14).length };
+};
 
 describe('bộ lá số mẫu từ sách', () => {
-  it('có 50 lá, mã không trùng, đủ trang và câu sách', () => {
-    expect(cases.length).toBe(50);
+  it('có 91 lá (đợt 1: 50, đợt 2: 41), mã không trùng, đủ trang và câu sách', () => {
+    expect(cases.length).toBe(91);
+    expect(cases.filter((c) => c.batch === 1).length).toBe(50);
+    expect(cases.filter((c) => c.batch === 2).length).toBe(41);
     expect(new Set(cases.map((c) => c.id)).size).toBe(cases.length);
+    expect(new Set(cases.map((c) => c.pillars.join('|'))).size, 'không trùng tứ trụ').toBe(cases.length);
     for (const c of cases) {
       expect(c.page, c.id).toBeTruthy();
       expect(c.note.length, c.id).toBeGreaterThan(10);
@@ -30,11 +39,12 @@ describe('bộ lá số mẫu từ sách', () => {
     }
   });
 
-  it('engine chạy được trên mọi lá; mức khớp hiện tại (ghi lại, không phải mục tiêu)', () => {
-    const rs = cases.map(evaluate);
-    const n = (m: string) => rs.filter((r) => r.match === m).length;
-    // v0.2 (trước hiệu chỉnh 14.12): trùng 18, gần 2, khác 20, ngược 10; khớp 14.1 là 24.
-    expect({ trung: n('trung'), gan: n('gan'), khac: n('khac'), nguoc: n('nguoc') }).toEqual({ trung: 20, gan: 2, khac: 19, nguoc: 9 });
-    expect(rs.filter((r) => r.rule14).length).toBe(25);
+  it('mức khớp hiện tại theo từng đợt, bản app dùng và bản v0.2 (ghi lại, không phải mục tiêu)', () => {
+    const b1 = cases.filter((c) => c.batch === 1), b2 = cases.filter((c) => c.batch === 2);
+    expect(tally(b1.map((c) => evaluate(c)))).toEqual({ trung: 20, gan: 2, khac: 19, nguoc: 9, khop14: 25 });
+    expect(tally(b1.map((c) => evaluate(c, REFERENCE_CONFIG)))).toEqual({ trung: 18, gan: 2, khac: 20, nguoc: 10, khop14: 24 });
+    // Đợt 2: hiệu chỉnh 14.12 không đổi lá nào.
+    expect(tally(b2.map((c) => evaluate(c)))).toEqual({ trung: 7, gan: 0, khac: 23, nguoc: 11, khop14: 19 });
+    expect(tally(b2.map((c) => evaluate(c, REFERENCE_CONFIG)))).toEqual({ trung: 7, gan: 0, khac: 23, nguoc: 11, khop14: 19 });
   });
 });

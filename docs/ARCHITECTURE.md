@@ -1227,6 +1227,34 @@ Hai preset của engine (`PRESETS`: mặc định và coi trọng nguyệt lện
 
 Sau hiệu chỉnh vẫn khớp đúng 50% (25/50), vừa chạm ngưỡng của điều 5; khác biệt so với v0.2 là 1 lá, tập thử không đổi, nên **không coi là engine đã đáng tin hơn**. Muốn tiến xa hơn cần thêm dữ liệu (thêm lá số từ sách, hoặc người luận) và quyết định về các điểm thuật toán ở trên.
 
+### 14.13 Kiểm tra độc lập sau hiệu chỉnh (12/11/2026)
+
+Sau 14.12, lấy thêm 41 lá *Trích Thiên Tủy* nói rõ dụng thần mà chưa dùng khi hiệu chỉnh (đợt 2 trong `tests/fixtures/nguhanh-sach.json`, trường `batch`). Đây là phép thử thật của hiệu chỉnh, vì không lá nào trong đó ảnh hưởng tới việc chọn tham số.
+
+| | Số lá | Khớp 14.1 | Trùng | Ngược |
+|---|---|---|---|---|
+| Đợt 2, v0.2 | 41 | 19 (46%) | 7 (17%) | 11 (27%) |
+| Đợt 2, sau hiệu chỉnh | 41 | 19 (46%) | 7 (17%) | 11 (27%) |
+| Cả 91 lá, sau hiệu chỉnh | 91 | 44 (48%) | 27 (30%) | 20 (22%) |
+
+**Kết luận:** hiệu chỉnh 14.12 không đổi lá nào ở đợt 2, tức là không cải thiện được trên dữ liệu mới; nó vẫn đúng về lý (gốc yếu không chặn Tòng) nên giữ, nhưng không được coi là bằng chứng engine tốt hơn. Khớp vẫn dưới 50%, điều 5 của 14.1 chưa thoát.
+
+**Khớp theo phương pháp engine dùng (91 lá, bản app):**
+
+| Phương pháp | Số lá | Trùng | Khớp 14.1 | Ngược |
+|---|---|---|---|---|
+| Thuận thế (Tòng, Chuyên vượng) | 13 | 8 | 9 | 1 |
+| Phù ức | 52 | 16 | 25 | 11 |
+| Trung hoà (bù hành yếu nhất) | 13 | 2 | 5 | 5 |
+| Điều hậu được ưu tiên | 13 | 1 | 5 | 3 |
+
+Hai nhánh yếu nhất giống nhau ở cả hai đợt:
+1. **Trung hoà:** "bù hành yếu nhất" trùng sách 2/13 lá, ngược 5/13. Sách với lá cân bằng vẫn chọn theo cách cục và chữ thấu can, không bù hành ít điểm nhất.
+2. **Điều hậu được ưu tiên** (hành cần dưới 6%): trùng 1/13. Ở đợt 2, chín lá engine lấy Điều hậu, sách đều dùng hành khác (thường là chế hoá theo vượng suy). Ở đợt 1, nới rộng Điều hậu lại có lợi một lá: hai đợt chỉ hai hướng khác nhau, nên chưa đủ căn cứ đổi ngưỡng.
+3. **Thương quan dụng kiếp** (ttt-168, 169, 172; giống tbct-16 dùng Tài): thân nhược vì Thực Thương nặng mà Ấn yếu hoặc không có, sách dùng Tỷ Kiếp hoặc Tài; engine luôn dùng Ấn.
+
+Đây là thay đổi thuật toán (không phải hệ số), ảnh hưởng nhiều lá số của người dùng, nên **chưa làm**: cần chủ dự án quyết và nên có người luận duyệt quy tắc mới. Nếu làm, phải có thêm lá số mới chưa dùng (đợt 3) để thử lại, vì đợt 2 đã được nhìn khi tìm ra các kiểu lệch này.
+
 ### 14.10 Thứ tự triển khai
 
 | Bước | Việc | Xong khi | Chủ dự án duyệt |
