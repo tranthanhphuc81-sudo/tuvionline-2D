@@ -25,7 +25,7 @@ Ký hiệu model giữ như kit chính (đổi bằng `/model`):
 |---|---|
 | `docs/ngu-hanh-engine/` | Engine tham chiếu v0.2: `data.ts`, `config.ts`, `engine.ts`, `follow.ts`, `advice.ts`, `README.md`, `demo.ts`. TypeScript thuần, KHÔNG nằm trong `tsconfig`/vitest, KHÔNG đóng gói vào app. Bước 3C.2 sẽ port vào `src/core`. |
 | `docs/NGU-HANH-SO-SANH.md` | So sánh Dụng Thần legacy và engine trên 3000 lá số dùng chung tứ trụ của app, kèm bộ 24 lá số mẫu để gán nhãn. |
-| `docs/ngu-hanh-engine/compare-dung-than.ts` | Script tái tạo bảng so sánh: `npx tsx docs/ngu-hanh-engine/compare-dung-than.ts`. |
+| `scripts/compare-dung-than.ts` | Script tái tạo bảng so sánh (đã chuyển từ `docs/ngu-hanh-engine/` ở 3C.2): `npm run compare:dungthan`. |
 
 **Cách chạy (đã thử 11/11/2026):**
 

@@ -1,14 +1,22 @@
 /**
- * So sánh Dụng Thần legacy (src/core/battu/reading.ts) với engine ngũ hành trên 3000 lá số.
- * Chạy từ gốc repo: npx tsx docs/ngu-hanh-engine/compare-dung-than.ts  → ghi docs/NGU-HANH-SO-SANH.md
+ * So sánh Dụng Thần legacy (src/core/battu/reading.ts) với engine ngũ hành đã port (src/core/nguhanh) trên 3000 lá số.
+ * Chạy từ gốc repo: npm run compare:dungthan  → ghi docs/NGU-HANH-SO-SANH.md
+ * Engine trả mã nên nhãn chữ ở mục 3 lấy từ bảng tạm bên dưới (TODO 3C.3: thay bằng src/content/nguhanh).
  */
 import { writeFileSync } from "node:fs";
-import { batTuChart, batTuReading } from "../../src/core/index.ts";
-import { CAN, CHI } from "../../src/core/canchi/index.ts";
-import { analyze, STEMS, BRANCHES, ELEMENT_VI, STRENGTH_VI, METHOD_VI, FOLLOW_GRADE_VI, type Chart, type Element } from "./src/index.ts";
+import { fileURLToPath } from "node:url";
+import { batTuChart, batTuReading } from "../src/core/index";
+import { CAN, CHI } from "../src/core/canchi/index";
+import { analyze, compareWithLegacy, toNguHanhChart, type FollowGrade, type FollowType, type Method, type Strength } from "../src/core/nguhanh/index";
 
-const norm = (h: string): Element => (({ "Mộc": "Moc", "Hoả": "Hoa", "Thổ": "Tho", "Kim": "Kim", "Thuỷ": "Thuy" } as Record<string, Element>)[h]);
-const vi = (e: Element) => ELEMENT_VI[e].replace("Hỏa", "Hoả").replace("Thủy", "Thuỷ");
+// TODO 3C.3: bảng nhãn tạm, thay bằng src/content/nguhanh. Chính tả theo app (Hoả, Thuỷ, hoà).
+const STRENGTH_VI: Record<Strength, string> = { "tong-nhuoc": "Cực nhược", nhuoc: "Thân nhược", "trung-hoa": "Trung hoà", vuong: "Thân vượng", "chuyen-vuong": "Cực vượng" };
+const METHOD_VI: Record<Method, string> = { "phu-uc": "Phù ức", "dieu-hau": "Điều hậu", "thong-quan": "Thông quan", "tong-cach": "Thuận thế", "trung-hoa": "Giữ trung hoà" };
+const GRADE_VI: Record<FollowGrade, string> = { chan: "Chân", gia: "Giả", "khong-thanh": "Không thành cách" };
+const TYPE_VI: Record<FollowType, string> = {
+  "tong-sat": "Tòng Sát", "tong-tai": "Tòng Tài", "tong-nhi": "Tòng Nhi", "tong-the": "Tòng Thế", "khuc-truc": "Khúc Trực", "viem-thuong": "Viêm Thượng",
+  "gia-sac": "Giá Sắc", "tong-cach-kim": "Tòng Cách (Kim chuyên vượng)", "nhuan-ha": "Nhuận Hạ", "tong-cuong": "Tòng Cường",
+};
 let seed = 20261111; const rnd = () => (seed = (seed * 1103515245 + 12345) % 2147483648) / 2147483648;
 const HOURS = ["Tý","Sửu","Dần","Mão","Thìn","Tỵ","Ngọ","Mùi","Thân","Dậu","Tuất","Hợi"];
 
@@ -21,17 +29,12 @@ const methods: Record<string, number> = {}; const fol = { chan: 0, gia: 0, khong
 for (let i = 0; i < N; i++) {
   const yy = 1950 + Math.floor(rnd() * 60), mm = 1 + Math.floor(rnd() * 12), dd = 1 + Math.floor(rnd() * 28), h = Math.floor(rnd() * 12);
   rnd();
-  const ch = batTuChart({ gender: "nam", dd, mm, yy, hourIdx: h } as any);
+  const ch = batTuChart({ gender: "M", dd, mm, yy, hourIdx: h } as any);
   const r = batTuReading(ch, 2026);
-  const chart: Chart = {
-    year: { stem: STEMS[ch.yearCC.can], branch: BRANCHES[ch.yearCC.chi] },
-    month: { stem: STEMS[ch.monthCanIdx], branch: BRANCHES[ch.monthChiIdx] },
-    day: { stem: STEMS[ch.dayCC.can], branch: BRANCHES[ch.dayCC.chi] },
-    hour: { stem: STEMS[ch.gioCanIdx], branch: BRANCHES[ch.hourChiIdx] },
-  };
-  const a = analyze(chart); const ug = a.usefulGod; const dm = a.dayMaster;
-  const lD = r.dung.map(norm), lK = r.ky.map(norm), lP = norm(r.primary);
-  const isFlip = lK.includes(ug.dung) || lD.includes(ug.ky);
+  const a = analyze(toNguHanhChart(ch)); const ug = a.usefulGod; const dm = a.dayMaster;
+  const cmp = compareWithLegacy(r, ug, dm.strength);
+  const isFlip = cmp.match === "nguoc";
+  const lP = r.primary, lD = r.dung;
   if (lP === ug.dung) same++; if (lD.includes(ug.dung)) inDung++; if (isFlip) flip++;
   const engStrong = dm.strength === "vuong" || dm.strength === "chuyen-vuong";
   const engWeak = dm.strength === "nhuoc" || dm.strength === "tong-nhuoc";
@@ -42,14 +45,15 @@ for (let i = 0; i < N; i++) {
   if (!r.assessment.dacLenh && engWeak) outSeasonEngW++;
   methods[ug.method] = (methods[ug.method] ?? 0) + 1;
   const f = a.follow; const fk = !f ? "none" : f.grade === "chan" ? "chan" : f.grade === "gia" ? "gia" : "khong"; (fol as any)[fk]++;
-  const cat = f && f.grade !== "khong-thanh" ? `tong-${f.grade}` : ug.method === "dieu-hau" ? "dieu-hau" : isFlip ? "dao-chieu" : lP === ug.dung ? "trung" : "lech-nhe";
   rows.push({
     key: `${dd}/${mm}/${yy}`, date: `${String(dd).padStart(2,"0")}/${String(mm).padStart(2,"0")}/${yy} giờ ${HOURS[h]}`,
     tru: ch.pillars.map((p) => `${CAN[p.can]} ${CHI[p.chi]}`).join(" · "),
     legacy: `${r.assessment.thanVuong ? "Vượng" : "Nhược"} (${r.assessment.trangThai}${r.assessment.dacLenh ? ", đắc lệnh" : ""}, giúp ${r.assessment.giup}/hao ${r.assessment.hao}) → dụng ${r.dung.join(", ")}; kỵ ${r.ky.join(", ")}`,
-    engine: `${STRENGTH_VI[dm.strength]} (${Math.round(dm.supportRatio * 100)}%), ${METHOD_VI[ug.method].split(" (")[0]} → dụng ${vi(ug.dung)}, hỷ ${vi(ug.hy)}; kỵ ${vi(ug.ky)}${f ? ` · ${f.typeName}: ${FOLLOW_GRADE_VI[f.grade].split(" (")[0]}` : ""}`,
-    cat, follow: fk, dacLenh: r.assessment.dacLenh, legacyVuong: r.assessment.thanVuong, ratio: dm.supportRatio, method: ug.method,
+    engine: `${STRENGTH_VI[dm.strength]} (${Math.round(dm.supportRatio * 100)}%), ${METHOD_VI[ug.method]} → dụng ${ug.dung}, hỷ ${ug.hy}; kỵ ${ug.ky}${f ? ` · ${TYPE_VI[f.type]}: ${GRADE_VI[f.grade]}` : ""}`,
+    cat: "", follow: fk, dacLenh: r.assessment.dacLenh, legacyVuong: r.assessment.thanVuong, ratio: dm.supportRatio, method: ug.method,
   });
+  const row = rows[rows.length - 1];
+  row.cat = f && f.grade !== "khong-thanh" ? `tong-${f.grade}` : ug.method === "dieu-hau" ? "dieu-hau" : isFlip ? "dao-chieu" : lP === ug.dung ? "trung" : "lech-nhe";
 }
 const p = (n: number, d = N) => `${(100 * n / d).toFixed(1)}%`;
 // stratified golden sample: 24 charts
@@ -95,8 +99,8 @@ ${golden.map((r, i) => `| ${i + 1} | ${CAT_VI[r.cat]} | ${r.date} | ${r.tru} | $
 
 ## 4. Cách tái tạo
 
-Chạy từ gốc repo: \`npx tsx docs/ngu-hanh-engine/compare-dung-than.ts\` (seed cố định nên ra đúng bảng này). Bước 3C.2 chuyển script vào \`scripts/\` và trỏ sang engine đã port.
+Chạy từ gốc repo: \`npm run compare:dungthan\` (seed cố định nên ra đúng bảng này). Script ở \`scripts/compare-dung-than.ts\`, chạy engine đã port ở \`src/core/nguhanh\`; bản tham chiếu \`docs/ngu-hanh-engine\` giữ nguyên để đối chiếu.
 `;
-writeFileSync(new URL("../NGU-HANH-SO-SANH.md", import.meta.url), md);
+writeFileSync(fileURLToPath(new URL("../docs/NGU-HANH-SO-SANH.md", import.meta.url)), md);
 console.log("Đã ghi docs/NGU-HANH-SO-SANH.md");
 console.log("golden", golden.length);

@@ -15,7 +15,8 @@
     "cap:sync": "npm run build && npx cap sync android",
     "android:debug": "npm run cap:sync && node scripts/gradle.mjs assembleDebug app/build/outputs/apk/debug/app-debug.apk",
     "android:release": "npm run cap:sync && node scripts/gradle.mjs bundleRelease app/build/outputs/bundle/release/app-release.aab",
-    "prebuild": "node scripts/copy-palm-assets.mjs"
+    "prebuild": "node scripts/copy-palm-assets.mjs",
+    "compare:dungthan": "tsx scripts/compare-dung-than.ts"
   },
   "dependencies": {
     "@capacitor-community/text-to-speech": "~8.0.2",
@@ -42,6 +43,7 @@
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^6.2.1",
     "jsdom": "^30.1.3",
+    "tsx": "4.23.15",
     "typescript": "^5.9.0",
     "vite": "^8.3.5",
     "vitest": "^5.1.0"

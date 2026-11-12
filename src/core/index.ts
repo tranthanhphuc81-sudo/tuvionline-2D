@@ -50,6 +50,8 @@ export type {
   HoaKey, Tone, TuViReading, TuViYearReading, TuViYearLookup, AreaReading, AreaKey, DaiHanNow, LuuHoa, ChiRelKind, CucMenhRel,
 } from './tuvi/reading';
 export type { BatTuChart, BatTuInput, Pillar, ThapThan, TangCanRole } from './battu/types';
+/** Engine phân tích ngũ hành (Phase 3C): dùng NguHanh.analyze(NguHanh.toNguHanhChart(chart)); tên trong namespace tránh trùng Pillar, Element... của phần khác. */
+export * as NguHanh from './nguhanh';
 export {
   assessThan, locThapThan, muaOf, dungThanPattern, thapThanProfile, batTuReading, batTuYearLookup, tangCanOf, familyOf, FAMILY_GODS,
 } from './battu/reading';
