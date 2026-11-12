@@ -1,6 +1,6 @@
 # So sánh Dụng thần: engine ngũ hành và lá số mẫu trong sách
 
-> Sinh tự động bằng `npm run compare:sach` (`scripts/compare-sach.ts`) từ `tests/fixtures/nguhanh-sach.json`. Đừng sửa tay.
+> Sinh tự động bằng `npm run compare:sach` (`scripts/compare-sach.ts`) từ `src/content/nguhanh/sach.json`. Đừng sửa tay.
 > 121 lá số chọn ngày 12/11/2026 từ hai sách chủ dự án cung cấp ở `docs/sach/`: 56 lá *Tử Bình Chân Thuyên* (bản dịch Phương Trọng Thầm), 65 lá *Trích Thiên Tủy* (Nhậm Thiết Tiều bình chú). Chỉ lấy lá sách nói rõ dùng gì.
 > **Đợt 1** (50 lá) dùng để hiệu chỉnh engine (ARCHITECTURE 14.12). **Đợt 2** (41 lá, đều *Trích Thiên Tủy*) thêm sau khi hiệu chỉnh xong, không dùng khi chỉnh: là phép thử độc lập (14.13). **Đợt 3** (30 lá, đều phụ lục *Tử Bình Chân Thuyên*) lấy sau khi đã chốt phương án sửa quy tắc, dùng để thử quy tắc (14.14).
 > Sách cho tứ trụ, không cho ngày sinh, nên engine nhận thẳng tứ trụ (không có Đại Vận). Engine = `DEFAULT_CONFIG` (bản app dùng); cột v0.2 = `REFERENCE_CONFIG`.
@@ -187,4 +187,4 @@ Dụng thần engine đổi theo preset (`analyzeSensitivity`, ARCHITECTURE 14.1
 
 ## 6. Cách tái tạo
 
-Chạy `npm run compare:sach` từ gốc repo. Thêm lá số: sửa `tests/fixtures/nguhanh-sach.json` (ghi trang, câu sách nói về dụng thần), chạy lại lệnh, rồi sửa con số kỳ vọng trong `tests/nguhanh-sach.test.ts`.
+Chạy `npm run compare:sach` từ gốc repo. Thêm lá số: sửa `src/content/nguhanh/sach.json` (ghi trang, câu sách nói về dụng thần), chạy lại lệnh, rồi sửa con số kỳ vọng trong `tests/nguhanh-sach.test.ts`.

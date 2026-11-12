@@ -1,5 +1,5 @@
 /**
- * So Dụng thần của engine ngũ hành với lá số mẫu trong sách (tests/fixtures/nguhanh-sach.json).
+ * So Dụng thần của engine ngũ hành với lá số mẫu trong sách (src/content/nguhanh/sach.json).
  * Chạy từ gốc repo: npm run compare:sach  → ghi docs/NGU-HANH-SACH.md
  */
 import { writeFileSync } from "node:fs";
@@ -47,7 +47,7 @@ const table = (rs: SachResult[]) => [
 
 const md = `# So sánh Dụng thần: engine ngũ hành và lá số mẫu trong sách
 
-> Sinh tự động bằng \`npm run compare:sach\` (\`scripts/compare-sach.ts\`) từ \`tests/fixtures/nguhanh-sach.json\`. Đừng sửa tay.
+> Sinh tự động bằng \`npm run compare:sach\` (\`scripts/compare-sach.ts\`) từ \`src/content/nguhanh/sach.json\`. Đừng sửa tay.
 > ${res.length} lá số chọn ngày 12/11/2026 từ hai sách chủ dự án cung cấp ở \`docs/sach/\`: ${byBook("tbct").length} lá *${BOOK_VI.tbct}* (bản dịch Phương Trọng Thầm), ${byBook("ttt").length} lá *${BOOK_VI.ttt}* (Nhậm Thiết Tiều bình chú). Chỉ lấy lá sách nói rõ dùng gì.
 > **Đợt 1** (${b1.length} lá) dùng để hiệu chỉnh engine (ARCHITECTURE 14.12). **Đợt 2** (${b2.length} lá, đều *${BOOK_VI.ttt}*) thêm sau khi hiệu chỉnh xong, không dùng khi chỉnh: là phép thử độc lập (14.13). **Đợt 3** (${b3.length} lá, đều phụ lục *${BOOK_VI.tbct}*) lấy sau khi đã chốt phương án sửa quy tắc, dùng để thử quy tắc (14.14).
 > Sách cho tứ trụ, không cho ngày sinh, nên engine nhận thẳng tứ trụ (không có Đại Vận). Engine = \`DEFAULT_CONFIG\` (bản app dùng); cột v0.2 = \`REFERENCE_CONFIG\`.
@@ -106,7 +106,7 @@ ${res.some((r) => r.c.fix) ? `¹ ${res.filter((r) => r.c.fix).map((r) => `${r.c.
 
 ## 6. Cách tái tạo
 
-Chạy \`npm run compare:sach\` từ gốc repo. Thêm lá số: sửa \`tests/fixtures/nguhanh-sach.json\` (ghi trang, câu sách nói về dụng thần), chạy lại lệnh, rồi sửa con số kỳ vọng trong \`tests/nguhanh-sach.test.ts\`.
+Chạy \`npm run compare:sach\` từ gốc repo. Thêm lá số: sửa \`src/content/nguhanh/sach.json\` (ghi trang, câu sách nói về dụng thần), chạy lại lệnh, rồi sửa con số kỳ vọng trong \`tests/nguhanh-sach.test.ts\`.
 `;
 writeFileSync(fileURLToPath(new URL("../docs/NGU-HANH-SACH.md", import.meta.url)), md);
 console.log(`Đã ghi docs/NGU-HANH-SACH.md: ${res.length} lá, trùng ${count(res, "trung")}, gần ${count(res, "gan")}, khác ${count(res, "khac")}, ngược ${count(res, "nguoc")}, khớp theo 14.1 ${res.filter((r) => r.rule14).length}`);

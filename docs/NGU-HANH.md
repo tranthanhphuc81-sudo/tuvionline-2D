@@ -261,6 +261,16 @@ Engine chỉ trả mã và số; mỗi mã dưới đây đổi thành câu như
 >
 > Năm tính theo Lập Xuân (khoảng đầu tháng 2 dương lịch). Nhãn chỉ để gợi ý cách sắp xếp nhịp làm việc, không phải lời báo trước.
 
+> Lá số cổ giống bạn
+>
+> Trong 121 lá số ví dụ của Tử Bình Chân Thuyên và Trích Thiên Tủy, đây là những lá gần với lá của bạn nhất (cùng Nhật chủ, cùng tháng hay cùng mùa sinh). Hai lá số chỉ giống nhau một phần, nên đây là ví dụ để học cách người xưa luận, không phải kết luận cho lá của bạn. Câu "sách luận" là tóm tắt, xem nguyên văn theo số trang.
+>
+> Kỷ Hợi · Đinh Mão · Canh Thân · Canh Thìn (Trích Thiên Tủy, lá số số 26, trang 33): cùng Nhật chủ Canh, cùng sinh tháng Mão, trùng cả trụ ngày Canh Thân. Sách luận: Canh kim lộc vượng ở Thân, có Kỷ ấn, dụng Đinh làm dụng thần; dùng Hoả. Lá của bạn nghiêng về Kim: hai lá chỉ giống một phần nên khác nhau là thường.
+>
+> Kỷ Hợi · Đinh Mão · Canh Dần · Bính Tý (Trích Thiên Tủy, lá số số 116, trang 70): cùng Nhật chủ Canh, cùng sinh tháng Mão. Sách luận: Dụng thần mộc; vận mộc (tài) tốt, vận thuỷ trung bình, vận hoả kém; dùng Mộc. Lá của bạn nghiêng về Kim: hai lá chỉ giống một phần nên khác nhau là thường.
+>
+> Kỷ Dậu · Đinh Mão · Canh Thìn · Giáp Thân (Trích Thiên Tủy, lá số số 27, trang 33): cùng Nhật chủ Canh, cùng sinh tháng Mão. Sách luận: Dụng quan tinh Đinh hoả, Mão mộc tài tinh; dùng Hoả. Lá của bạn nghiêng về Kim: hai lá chỉ giống một phần nên khác nhau là thường.
+
 > Số là tham khảo, đức năng thắng số.
 >
 > Màu và hướng gợi ý trong app đến từ ba cách tính khác nhau: theo Dụng thần Bát Tự (tab Bát Tự và Tổng hợp), theo Mệnh Quái (Bát Trạch, La Bàn) và theo Nạp Âm năm sinh. Mỗi cách trả lời một câu hỏi riêng nên có thể không trùng nhau, và mỗi màn hình đã ghi rõ đang theo cách nào. Đây là gợi ý mang tính văn hoá, tham khảo; không cần thay đổi hay sắm sửa gì để "hợp mệnh".
@@ -386,6 +396,16 @@ Engine chỉ trả mã và số; mỗi mã dưới đây đổi thành câu như
 > Năm tính theo Lập Xuân (khoảng đầu tháng 2 dương lịch). Nhãn chỉ để gợi ý cách sắp xếp nhịp làm việc, không phải lời báo trước.
 >
 > Đánh giá các năm ở đây có thể khác mục "Giai đoạn hiện tại" trong Tổng kết, vì hai cách lấy hành có lợi khác nhau.
+
+> Lá số cổ giống bạn
+>
+> Trong 121 lá số ví dụ của Tử Bình Chân Thuyên và Trích Thiên Tủy, đây là những lá gần với lá của bạn nhất (cùng Nhật chủ, cùng tháng hay cùng mùa sinh). Hai lá số chỉ giống nhau một phần, nên đây là ví dụ để học cách người xưa luận, không phải kết luận cho lá của bạn. Câu "sách luận" là tóm tắt, xem nguyên văn theo số trang.
+>
+> Đinh Sửu · Canh Tuất · Canh Tý · Giáp Thân (Trích Thiên Tủy, lá số số 71, trang 49): cùng Nhật chủ Canh, cùng sinh tháng Tuất. Sách luận: Kim cần hoả luyện; Đinh có gốc ở Tuất làm dụng thần; dùng Hoả. Lá của bạn nghiêng về Thuỷ: hai lá chỉ giống một phần nên khác nhau là thường.
+>
+> Nhâm Tuất · Mậu Thân · Canh Dần · Bính Tuất (Trích Thiên Tủy, lá số số 201, trang 99): cùng Nhật chủ Canh, cùng sinh mùa thu (lá này tháng Thân, bạn tháng Tuất), trùng 2 trụ. Sách luận: Chi toàn thổ kim vượng cực, Bính thấu, Dần Tuất hợp, lấy Bính hoả làm dụng; dùng Hoả. Lá của bạn nghiêng về Thuỷ: hai lá chỉ giống một phần nên khác nhau là thường.
+>
+> Tân Dậu · Bính Thân · Canh Tý · Bính Tuất (mệnh Vương Sĩ Trân, Tử Bình Chân Thuyên, trang 270): cùng Nhật chủ Canh, cùng sinh mùa thu (lá này tháng Thân, bạn tháng Tuất). Sách luận: Thân cường dụng Bính, Bính hoả thấu hai vị; dùng Hoả. Lá của bạn nghiêng về Thuỷ: hai lá chỉ giống một phần nên khác nhau là thường.
 
 > Số là tham khảo, đức năng thắng số.
 >
@@ -562,6 +582,16 @@ Engine chỉ trả mã và số; mỗi mã dưới đây đổi thành câu như
 > Năm tính theo Lập Xuân (khoảng đầu tháng 2 dương lịch). Nhãn chỉ để gợi ý cách sắp xếp nhịp làm việc, không phải lời báo trước.
 >
 > Đánh giá các năm ở đây có thể khác mục "Giai đoạn hiện tại" trong Tổng kết, vì hai cách lấy hành có lợi khác nhau.
+
+> Lá số cổ giống bạn
+>
+> Trong 121 lá số ví dụ của Tử Bình Chân Thuyên và Trích Thiên Tủy, đây là những lá gần với lá của bạn nhất (cùng Nhật chủ, cùng tháng hay cùng mùa sinh). Hai lá số chỉ giống nhau một phần, nên đây là ví dụ để học cách người xưa luận, không phải kết luận cho lá của bạn. Câu "sách luận" là tóm tắt, xem nguyên văn theo số trang.
+>
+> Quý Tỵ · Quý Hợi · Giáp Dần · Nhâm Thân (Trích Thiên Tủy, lá số số 12, trang 25): cùng Nhật chủ Giáp, cùng sinh tháng Hợi, trùng cả trụ ngày Giáp Dần. Sách luận: Giáp mộc sinh mùa đông, hàn tất lấy hoả làm dụng thần; dùng Hoả. Lá của bạn cũng nghiêng về Hoả.
+>
+> Đinh Dậu · Tân Hợi · Giáp Tuất · Bính Dần (Tử Bình Chân Thuyên, trang 212): cùng Nhật chủ Giáp, cùng sinh tháng Hợi. Sách luận: Điều hậu dụng Bính, Bính căn ở Dần; dùng Hoả. Lá của bạn cũng nghiêng về Hoả.
+>
+> Đinh Mão · Tân Hợi · Giáp Ngọ · Canh Ngọ (Tử Bình Chân Thuyên, trang 212): cùng Nhật chủ Giáp, cùng sinh tháng Hợi. Sách luận: Tháng đông Giáp mộc thấy Đinh, Hàn mộc hướng dương, hai Đinh gốc ở hai Ngọ; dùng Hoả. Lá của bạn cũng nghiêng về Hoả.
 
 > Ghi chú thêm
 >

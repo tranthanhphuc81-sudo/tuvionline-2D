@@ -13,6 +13,7 @@ import { FAMILY } from '../interp/battu';
 import { msgText, type RenderCtx } from './render';
 import { ELEMENT_PRACTICAL, TEN_GOD_PRACTICAL } from './practical';
 import { plainBlocks } from './plain';
+import { bookBlocks } from './books';
 import {
   SENSITIVITY_STABLE, sensitivityUnstable, CHECK_QUESTION, CHECK_STATUS, CLOSING_NOTE, COLOR_SOURCE_NOTE, DISCLAIMER, FAVOR_HINT, FAVOR_LABEL, FAVOR_TONE, INTRO_NOTE, METHOD_VI, OUTCOME_LABEL,
   STRENGTH_VI, TEN_GOD_VI, TYPE_VI,
@@ -23,6 +24,7 @@ export { msgText } from './render';
 export type { RenderCtx } from './render';
 export { ELEMENT_PRACTICAL, TEN_GOD_PRACTICAL } from './practical';
 export { plainBlocks, PLAIN_KEYS, PLAIN_RARE_KEYS } from './plain';
+export { bookBlocks, bookSource, similarBookCharts, seasonOf, BOOK_CHARTS, BOOK_NAME, type BookChart, type SimilarChart } from './books';
 
 const { CAN, CHI } = BatTuEngine;
 const NO_SPEECH = ['no-speech'];
@@ -307,6 +309,10 @@ export function practicalReport(a: NguHanhAnalysis, o: ReportOptions): Section[]
   timing.push(note('nguhanh.timing.note', 'Năm tính theo Lập Xuân (khoảng đầu tháng 2 dương lịch). Nhãn chỉ để gợi ý cách sắp xếp nhịp làm việc, không phải lời báo trước.'));
   if (cmp?.match === 'nguoc') timing.push(note('nguhanh.timing.legacy', LEGACY_TIMING_NOTE));
   sec('timing', 'Giai đoạn hiện tại và các năm tới', timing);
+
+  // 9b. Lá số cổ giống bạn: lá cùng Nhật chủ, gần tháng sinh nhất trong 121 lá ví dụ của hai sách
+  const books = bookBlocks(a.chart, reading).blocks;
+  if (books.length) sec('books', 'Lá số cổ giống bạn', books.map((b) => ({ ...b, tags: NO_SPEECH })));
 
   // 10. Ghi chú phụ
   const notes = secondaryNotes(reading, ctx);
