@@ -83,7 +83,14 @@ export interface SwatchesBlock extends BlockBase { kind: 'swatches'; items: { la
 export interface CardsBlock extends BlockBase { kind: 'cards'; cards: { label: string; value: string; rich: RichNode[] }[] }
 /** Bảng có tiêu đề cột (ví dụ so sánh 4 hệ thống) */
 export interface TableBlock extends BlockBase { kind: 'table'; head: string[]; rows: RichNode[][][] }
-export type Block = PBlock | ListBlock | VerdictBlock | ItemBlock | ChipsBlock | NoteBlock | KvBlock | BarsBlock | SwatchesBlock | CardsBlock | TableBlock;
+/** Vòng 5 hành minh hoạ: cạnh sinh (+) và khắc (−) giữa 5 nút; chỉ để giải thích, không chọn Dụng thần (ARCHITECTURE 14.11) */
+export interface CycleBlock extends BlockBase {
+  kind: 'cycle';
+  nodes: { label: string; pct: number; role?: string; focus?: boolean }[];
+  edges: { from: number; to: number; kind: 'sinh' | 'khac'; active: boolean }[];
+  caption: RichNode[];
+}
+export type Block = PBlock | ListBlock | VerdictBlock | ItemBlock | ChipsBlock | NoteBlock | KvBlock | BarsBlock | SwatchesBlock | CardsBlock | TableBlock | CycleBlock;
 
 export interface Section { id: string; title: string; icon?: string; tone?: Tone; blocks: Block[] }
 
@@ -105,6 +112,7 @@ export function sectionPlainText(s: Section, withTitle = true, { how = true }: {
       case 'bars': parts.push(b.rows.map((r) => r.label + ' ' + r.pct + '%').join('\n')); break;
       case 'swatches': parts.push(b.items.map((i) => i.label).join('\n')); break;
       case 'cards': parts.push(b.cards.map((c) => c.label + '\n' + c.value + '\n' + toPlainText(c.rich)).join('\n')); break;
+      case 'cycle': parts.push(toPlainText(b.caption)); break;
       case 'table': parts.push(b.head.join('\n'), b.rows.map((r) => r.map((c) => toPlainText(c)).join('\n')).join('\n')); break;
     }
   }

@@ -97,6 +97,24 @@ export function sensitivityNote(chart: Parameters<typeof analyzeSensitivity>[0],
   return other ? sensitivityUnstable(other.dung, dung) : SENSITIVITY_STABLE;
 }
 
+const CYCLE: Element[] = ['Mộc', 'Hoả', 'Thổ', 'Kim', 'Thuỷ'];
+
+/** Hình 5 nút minh hoạ vì sao cần thêm Dụng thần (ARCHITECTURE 14.11): chỉ vẽ lại quan hệ sinh khắc quanh Dụng thần, không tham gia chọn Dụng thần. */
+export function cycleBlock(shares: Record<Element, number>, dung: Element, tags: Record<string, string>): Block {
+  const i = CYCLE.indexOf(dung), mother = CYCLE[(i + 4) % 5], foe = CYCLE[(i + 3) % 5];
+  const edges: Extract<Block, { kind: 'cycle' }>['edges'] = [];
+  CYCLE.forEach((_, k) => {
+    edges.push({ from: k, to: (k + 1) % 5, kind: 'sinh', active: (k + 1) % 5 === i });
+    edges.push({ from: k, to: (k + 2) % 5, kind: 'khac', active: (k + 2) % 5 === i });
+  });
+  const caption = `Hình minh hoạ, không dùng để chọn Dụng thần. Muốn bổ sung <b>${dung}</b>: nuôi <b>${mother}</b> (sinh ${dung}) và bớt <b>${foe}</b> (khắc ${dung}).`;
+  return {
+    id: 'nguhanh.headline.cycle', kind: 'cycle', tags: NO_SPEECH,
+    nodes: CYCLE.map((e) => ({ label: e, pct: Math.round(shares[e] * 100), role: tags[e], focus: e === dung })),
+    edges, caption: parseRich(caption),
+  };
+}
+
 export const VERIFICATION_INTRO = 'Hai cách luận cho kết quả khác nhau về lá số này. Nếu bạn nhớ lại một vài giai đoạn đã qua, câu trả lời giúp so xem cách luận nào khớp hơn. Đây chỉ là so hai cách tính, không chứng minh cách nào đúng, và trí nhớ có thể lệch. Bạn có thể chọn "Không nhớ" bất cứ lúc nào.';
 export const VERIFICATION_NOT_ENOUGH = 'Chưa đủ giai đoạn đã qua để kiểm chứng.';
 export { OUTCOME_LABEL };
@@ -169,6 +187,7 @@ export function practicalReport(a: NguHanhAnalysis, o: ReportOptions): Section[]
   sec('headline', 'Tóm lại', [
     p('nguhanh.headline.0', `Nhật Chủ <b>${dm}</b> — <b>${STRENGTH_VI[a.dayMaster.strength]}</b>. Hành cần bổ sung: <b>${ug.dung}</b> (hỗ trợ: ${ug.hy}); hành nên tiết chế: ${ug.ky}.`, { pillar: 2 }),
     { id: 'nguhanh.headline.bars', kind: 'bars', tags: NO_SPEECH, rows: balance.map((e) => ({ label: `${e} · ${TEN_GOD_VI[tenGodOf(dm, e)]}${tags[e] ? ' · ' + tags[e] : ''}`, pct: Math.round(a.score.shares[e] * 100) })) },
+    cycleBlock(a.score.shares, ug.dung, tags),
     p('nguhanh.headline.sens', sensitivityNote(a.chart, ug.dung)),
   ]);
 

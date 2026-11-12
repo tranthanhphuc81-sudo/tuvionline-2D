@@ -1185,7 +1185,7 @@ Kèm mã nguyên nhân theo bảng số đo: `tong-cach`, `dieu-hau`, `trung-hoa
 
 Hai preset của engine (`PRESETS`: mặc định và coi trọng nguyệt lệnh hơn) được chạy trên cùng lá số (`analyzeSensitivity`, `src/core/nguhanh/sensitivity.ts`). Cùng Dụng thần thì báo "Kết luận này ổn định"; khác thì báo "chưa vững", nêu Dụng thần của bộ kia và dặn xem như gợi ý; Thầy nói thêm một câu lưu ý. Đo trên 3000 lá số ngẫu nhiên: 78,7% ổn định, 21,3% chưa vững. Đây là chỉ báo độ tin cậy, không đổi Dụng thần đang hiển thị.
 
-**Mô hình hệ động lực 5 nút** (sinh là cạnh +, khắc là cạnh −, trạng thái cân bằng, can thiệp tối thiểu) chỉ nên làm hình minh hoạ cho Thầy giải thích "vì sao cần thêm hành này", không là phương pháp chọn Dụng thần thứ ba. Chưa làm.
+**Mô hình hệ động lực 5 nút** (sinh là cạnh +, khắc là cạnh −, trạng thái cân bằng, can thiệp tối thiểu) chỉ nên làm hình minh hoạ cho Thầy giải thích "vì sao cần thêm hành này", không là phương pháp chọn Dụng thần thứ ba. Đã làm (12/11/2026): khối `cycle` ở mục "Tóm lại" của Phân tích ngũ hành (nét liền sinh, nét đứt khắc, tô đậm hai cạnh vào Dụng thần); Thầy không đọc hình này.
 
 ### 14.10 Thứ tự triển khai
 
