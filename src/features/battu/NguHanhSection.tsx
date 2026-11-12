@@ -3,7 +3,7 @@
    Chân: một nút "Xem cách luận khác". Giả: hai lựa chọn ngang hàng. Không thành hoặc không có dấu hiệu: một cách luận. */
 import { useMemo, useState } from 'react';
 import { batTuReading, type BatTuChart } from '../../core';
-import type { Reading } from '../../core/nguhanh';
+import type { BalanceMode, Reading } from '../../core/nguhanh';
 import { useNguHanh } from './useNguHanh';
 import { OUTCOME_LABEL, VERIFICATION_INTRO, VERIFICATION_NOT_ENOUGH, practicalReport, readingLabel, resolutionText, verificationPrompt, weightPhrase } from '../../content/nguhanh';
 import { useApp, useAppCtx } from '../../app/context';
@@ -27,11 +27,12 @@ export function NguHanhSection({ ch, nowYear, profileId }: { ch: BatTuChart; now
   const { base, a, mine, resolved, questions, next } = useNguHanh(ch, nowYear, profileId);
   const who = useWho();
   const legacy = useMemo(() => batTuReading(ch, nowYear), [ch, nowYear]);
+  const [balanceMode, setBalanceMode] = useState<BalanceMode>('roi-rac');
   const [picked, setPicked] = useState<Reading['id'] | null>(null);
   const main = a.readings[0], other = a.readings[1];
   const active = picked && a.readings.some((r) => r.id === picked) ? picked : main.id;
   const grade = a.follow?.grade;
-  const sections = useMemo(() => practicalReport(a, { nowYear, legacy, readingId: active }), [a, nowYear, legacy, active]);
+  const sections = useMemo(() => practicalReport(a, { nowYear, legacy, readingId: active, balanceMode }), [a, nowYear, legacy, active, balanceMode]);
 
   // Bảng 4 điều kiện hiện rõ khi Chân hoặc Giả; khi Không thành thì nằm trong "Vì sao ra kết quả này" (14.7)
   const patternInFold = grade === 'khong-thanh';
@@ -63,6 +64,11 @@ export function NguHanhSection({ ch, nowYear, profileId }: { ch: BatTuChart; now
         {balance && (
           <details className={s.ngFold}>
             <summary><span>Mô hình cân bằng 5 hành (tuỳ chọn)</span></summary>
+            <Segmented<BalanceMode>
+              label="Cách viết mô hình"
+              options={[{ value: 'roi-rac', label: 'Sai phân (bước rời rạc)' }, { value: 'vi-phan', label: 'Hệ vi phân (liên tục)' }]}
+              value={balanceMode} onChange={setBalanceMode}
+            />
             <SectionView sections={[{ ...balance, title: '' }]} level={4} />
           </details>
         )}

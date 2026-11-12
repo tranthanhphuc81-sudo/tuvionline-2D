@@ -1,7 +1,23 @@
 import { describe, expect, it } from 'vitest';
-import { BALANCE, balanceStep, distanceToEquilibrium, rankIntervention } from '../src/core/nguhanh';
+import { BALANCE, balanceStep, distanceToEquilibrium, flowContinuous, rankIntervention } from '../src/core/nguhanh';
 
 import { balanceBlocks } from '../src/content/nguhanh';
+
+describe('Hệ vi phân liên tục', () => {
+  it('mỗi hành 20% đứng yên; lá số lệch được kéo về gần cân bằng; tổng 1', () => {
+    flowContinuous([0.2, 0.2, 0.2, 0.2, 0.2]).forEach((v) => expect(v).toBeCloseTo(0.2, 9));
+    const x0 = [0.7, 0.1, 0.1, 0.05, 0.05];
+    const x = flowContinuous(x0, 60);
+    expect(x.reduce((a, b) => a + b, 0)).toBeCloseTo(1, 12);
+    expect(distanceToEquilibrium(x)).toBeLessThan(distanceToEquilibrium(x0) * 0.1);
+  });
+  it('xếp hạng liên tục là hoán vị 1..5 và tương đồng với sai phân (hành tốt nhất giống nhau ở lá số lệch rõ)', () => {
+    const shares = { Mộc: 0.02, Hoả: 0.1, Thổ: 0.2, Kim: 0.18, Thuỷ: 0.5 };
+    const ranks = (['Mộc', 'Hoả', 'Thổ', 'Kim', 'Thuỷ'] as const).map((e) => rankIntervention(shares, e, 'vi-phan').rank).sort();
+    expect(ranks).toEqual([1, 2, 3, 4, 5]);
+    expect(rankIntervention(shares, 'Mộc', 'vi-phan').best).toBe(rankIntervention(shares, 'Mộc', 'roi-rac').best);
+  });
+});
 
 describe('Mô hình cân bằng 5 hành', () => {
   it('lời trong app nói rõ đây là mô hình tự đặt, chưa kiểm chứng', () => {
