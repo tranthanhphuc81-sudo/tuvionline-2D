@@ -25,6 +25,7 @@ import { cachCucSection, cachCucSpeech } from '../../content/cachcuc/text';
 import { quanHeSection } from '../../content/cachcuc/quanhe';
 import { dongKhiSection, tinhTinhSection } from '../../content/cachcuc/dongkhi';
 import { lucThanSection } from '../../content/cachcuc/lucthan';
+import { thuongLySection, thuongLySpeech } from '../../content/cachcuc/thuongly';
 import s from './battu.module.css';
 
 const { CAN, CHI } = BatTuEngine;
@@ -78,7 +79,7 @@ export function BatTuScreen() {
       <dl className={s.summary}>
         {summary.map(([k, v]) => <div key={k} className={s.cell} data-wide={k === 'Bát Tự' || k === 'Âm/Dương Nam Nữ'}><dt>{k}</dt><dd>{v}</dd></div>)}
       </dl>
-      <SpeakButton id="battu" getCues={() => buildScript('battu', who, { cells: summary, leads: [batTuLead(ch.pillars.findIndex((p) => p.isNhatChu), res.summary.battu.nhatChu)], prose: [cachCucSpeech(cc)], sections: batTuTongKet(ch, thisYear()) })} />
+      <SpeakButton id="battu" getCues={() => buildScript('battu', who, { cells: summary, leads: [batTuLead(ch.pillars.findIndex((p) => p.isNhatChu), res.summary.battu.nhatChu)], prose: [cachCucSpeech(cc), thuongLySpeech(ch.nhatChu, ch.monthChiIdx)], sections: batTuTongKet(ch, thisYear()) })} />
       <ShareButton getCard={() => ({ slug: 'bat-tu', title: 'Bát Tự Tứ Trụ', ...cardWho(profile), groups: [{ cells: summary }], reading: cardReading(batTuTongKet(ch, thisYear())) })} />
       {lx && <p className={ui.info} role="note"><RichText nodes={parseRich(lx)} /></p>}
 
@@ -98,6 +99,10 @@ export function BatTuScreen() {
 
       <h2 className={ui.sectionTitle}>Cách cục theo Tử Bình Chân Thuyên</h2>
       <section className={ui.card}><SectionView sections={[cachCucSection(cc, ch.pillars.map((x) => x.can), ch.monthChiIdx, nh.usefulGod.dung)]} /></section>
+      <details className={s.fold}>
+        <summary><h2 className={ui.sectionTitle}>Lời sách cho Can ngày theo tháng sinh</h2><span className={ui.muted}>lẽ thường trong phụ lục sách</span></summary>
+        <section className={ui.card}><SectionView sections={[thuongLySection(ch.nhatChu, ch.monthChiIdx, cc.dung)]} /></section>
+      </details>
 
       <details className={s.fold}>
         <summary><h2 className={ui.sectionTitle}>Dòng chảy của khí</h2><span className={ui.muted}>khí bắt đầu và dừng ở đâu</span></summary>

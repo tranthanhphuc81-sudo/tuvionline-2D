@@ -19,6 +19,7 @@
     "compare:dungthan": "tsx scripts/compare-dung-than.ts",
     "compare:sach": "tsx scripts/compare-sach.ts",
     "compare:cachcuc": "tsx scripts/compare-cachcuc.ts",
+    "compare:thuongly": "tsx scripts/compare-thuongly.ts",
     "doc:nguhanh": "tsx scripts/export-nguhanh-doc.ts"
   },
   "dependencies": {

@@ -1372,6 +1372,10 @@ Khi chủ dự án điền đáp án: chạy lại so sánh với đáp án, r�
 - Chỉ phần giáo dục: KHÔNG có câu đoán sức khoẻ, sinh tử, hôn nhân hay con cái. Sao vắng thì nói rõ "không xem là điều xấu". Test quét câu chữ không chứa từ trong `NO_SPEECH_TERMS`.
 - Khối gập "Lục thân trong lá số" trên màn Bát Tự, sau Tính tình. Thầy không đọc; không vào "Tóm lại về bạn", ảnh chia sẻ.
 
-### 15.9 Chưa làm: lời sách cho Can ngày theo tháng sinh (TU-VAN-SACH 3G)
+### 15.9 Lời sách cho Can ngày theo tháng sinh (TU-VAN-SACH 3G)
 
-Phần cuối bản quét TBCT (khoảng trang 192–303) luận từng Can ngày sinh mỗi tháng, kèm lá số ví dụ. Muốn làm phải đọc bằng mắt khoảng 110 trang ảnh, tóm tắt 120 ô (10 Can × 12 tháng) bằng lời của app, rồi chủ dự án duyệt. Việc tốn công và dễ lệch nguyên ý, nên tạm hoãn tới khi chủ dự án quyết có làm không.
+- Nguồn: phụ lục "Bát tự dụng thần đề yếu" cuối bản dịch TBCT, trang 204–303, phần "Thường lý" của mỗi Can ngày trong mỗi tháng (tháng giêng là Dần). Đã đọc bằng mắt toàn bộ 100 trang ảnh (13/11/2026).
+- Dữ liệu: `src/content/cachcuc/thuongly.ts`, bảng `THUONG_LY[can][tháng]` 120 ô, mỗi ô có trang sách, chữ nắm lệnh, `uu` (can sách xét trước, theo thứ tự), `cuong` / `nhuoc` (can sách nêu riêng cho thân mạnh / thân yếu, nếu có) và một lời tóm tắt bằng lời của app (dưới 300 chữ, không chép bản dịch). Phần "Biến lý" chỉ lấy ý chính khi cần. Đây là câu chữ, nên nằm ở `src/content`, engine không đọc.
+- Hiển thị: khối gập "Lời sách cho Can ngày theo tháng sinh" ngay sau mục Cách cục trên màn Bát Tự; nói hành đứng đầu lời sách có trùng Dụng thần của mục Cách cục không, kèm trang sách và lời nhắc tham khảo. Thầy đọc đọc thêm lời tóm tắt.
+- Đo (`npm run compare:thuongly`): lấy hành của can đứng đầu `uu` làm Dụng thần thì khớp 31/56 lá TBCT và 21/65 lá TTT. 50/56 lá TBCT lấy từ chính phụ lục này nên con số TBCT chỉ là kiểm tra nhất quán; TTT là nguồn độc lập và cao hơn cả mục Cách cục lẫn engine ngũ hành (cùng 14/65). Chọn theo thân mạnh/yếu của engine ngũ hành lại kém hơn (28/56, 20/65), nên app không tự chọn nhánh mạnh/yếu mà liệt kê cả hai. App KHÔNG dùng bảng này để đổi Dụng thần của engine nào; muốn làm thì đổi quyết định ở đây trước.
+- Chủ dự án cần duyệt 120 lời tóm tắt (đối chiếu trang sách ghi kèm). Test: `tests/thuongly.test.ts`.

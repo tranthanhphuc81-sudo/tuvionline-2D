@@ -1,7 +1,7 @@
 # Tư vấn tính năng từ hai sách trong `docs/sach/`
 
 > Viết ngày 12/11/2026, theo yêu cầu của chủ dự án. Bản tư vấn trước đó (trên máy cơ quan) không được lưu lại, nên đây là bản làm lại.
-> Trạng thái (13/11/2026): đã làm A, B, C, D, E, F, H (ARCHITECTURE mục 15). G tạm hoãn (15.9).
+> Trạng thái (13/11/2026): đã làm A, B, C, D, E, F, G, H (ARCHITECTURE mục 15; G ở 15.9, chờ chủ dự án duyệt lời tóm tắt).
 
 ## 1. Hai sách và cách đã đọc
 
