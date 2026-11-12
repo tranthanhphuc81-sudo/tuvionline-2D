@@ -38,8 +38,9 @@ export function NguHanhSection({ ch, nowYear, profileId }: { ch: BatTuChart; now
   const inFold = (id: string) => FOLD_IDS.has(id) || (patternInFold && id === 'nguhanh.pattern');
   const head = sections.filter((x) => ['nguhanh.intro', 'nguhanh.headline'].includes(x.id) || (!patternInFold && x.id === 'nguhanh.pattern'));
   const fold = sections.filter((x) => inFold(x.id));
+  const balance = sections.find((x) => x.id === 'nguhanh.balance');
   // Chân: cách luận khác chỉ hiện khi người dùng bấm xem; Giả: luôn có ở lựa chọn ngang hàng
-  const rest = sections.filter((x) => !head.includes(x) && !fold.includes(x) && (x.id !== 'nguhanh.alt' || grade !== 'chan' || active !== main.id));
+  const rest = sections.filter((x) => !head.includes(x) && !fold.includes(x) && x !== balance && (x.id !== 'nguhanh.alt' || grade !== 'chan' || active !== main.id));
 
   const viewingOther = other && active === other.id;
   return (
@@ -59,6 +60,12 @@ export function NguHanhSection({ ch, nowYear, profileId }: { ch: BatTuChart; now
           <summary><span>Vì sao ra kết quả này</span></summary>
           <SectionView sections={fold.map((x) => (x.id === 'nguhanh.why' ? { ...x, title: '' } : x))} level={4} />
         </details>
+        {balance && (
+          <details className={s.ngFold}>
+            <summary><span>Mô hình cân bằng 5 hành (tuỳ chọn)</span></summary>
+            <SectionView sections={[{ ...balance, title: '' }]} level={4} />
+          </details>
+        )}
         {grade === 'chan' && other && (
           <button type="button" className={`${ui.btn} ${ui.block}`} onClick={() => setPicked(viewingOther ? main.id : other.id)}>
             {viewingOther ? 'Quay lại cách luận chính' : 'Xem cách luận khác'}
