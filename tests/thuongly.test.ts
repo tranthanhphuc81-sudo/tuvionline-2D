@@ -1,6 +1,6 @@
 /* Lời sách cho Can ngày theo tháng sinh (src/content/cachcuc/thuongly.ts). ARCHITECTURE 15.9. */
 import { describe, it, expect } from 'vitest';
-import { THUONG_LY, THUONG_LY_NOTE, canList, thangOfChi, thuongLyOf, thuongLySection, thuongLySpeech } from '../src/content/cachcuc/thuongly';
+import { THUONG_LY, THUONG_LY_NOTE, canList, thangOfChi, thuongLyOf, thuongLySection, thuongLySpeech, viDuOf } from '../src/content/cachcuc/thuongly';
 import { sectionPlainText } from '../src/content/rich';
 import { NO_SPEECH_TERMS } from '../src/content/noSpeech';
 import { loadSach } from '../scripts/lib/sach';
@@ -30,6 +30,24 @@ describe('bảng lẽ thường', () => {
     expect([thangOfChi(2), thangOfChi(1), thangOfChi(0)]).toEqual([0, 11, 10]);
     expect(thuongLyOf(0, 2).p).toBe(204); // Giáp tháng giêng
     expect(thuongLyOf(9, 1).p).toBe(302); // Quý tháng chạp
+  });
+});
+
+describe('lá ví dụ của phụ lục', () => {
+  it('mỗi lá ví dụ nằm ở trang của đúng ô Can × tháng (kiểm chéo số trang của bảng)', () => {
+    let n = 0;
+    for (let dm = 0; dm < 10; dm++) for (let m = 0; m < 12; m++) for (const c of viDuOf(dm, m)) {
+      n++;
+      const pg = parseInt(c.page, 10), start = thuongLyOf(dm, m).p;
+      expect(pg).toBeGreaterThanOrEqual(start);
+      expect(pg).toBeLessThanOrEqual(start + 3);
+    }
+    expect(n).toBe(50);
+  });
+  it('ô có lá ví dụ thì khối lời sách liệt kê lá đó', () => {
+    const vd = viDuOf(0, 5); // Giáp tháng Tỵ, trang 207
+    expect(vd.length).toBeGreaterThan(0);
+    expect(sectionPlainText(thuongLySection(0, 5, 'Thuỷ'))).toContain(vd[0].pillars.join(' · '));
   });
 });
 

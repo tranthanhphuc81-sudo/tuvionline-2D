@@ -5,6 +5,7 @@
    uu: can sách xét trước tiên (theo thứ tự); cuong / nhuoc: can sách nêu riêng cho thân mạnh / thân yếu (nếu có). */
 import type { Hanh } from '../../core';
 import { note, p, type Block, type Section } from '../rich';
+import { BOOK_CHARTS, type BookChart } from '../nguhanh/books';
 
 export interface ThuongLy { p: number; lenh: string; uu: string; cuong?: string; nhuoc?: string; tom: string }
 
@@ -183,6 +184,10 @@ export function thuongLySection(dm: number, monthChi: number, cachDung: Hanh): S
           : canList(t.uu).some((c) => hanhOfCan(c) === cachDung) ? 'Hành ' + cachDung + ' cũng có trong các can sách xét. ' : '')
         + 'Lời sách ở đây là lẽ chung theo tháng, mục Cách cục xét riêng cả bốn trụ, nên có lúc khác nhau.'),
     p('thuongly.trang', 'Nguồn: phụ lục "Bát tự dụng thần đề yếu" trong bản dịch Tử Bình Chân Thuyên, trang ' + t.p + '.'),
+    ...(() => {
+      const vd = viDuOf(dm, monthChi);
+      return vd.length ? [p('thuongly.vidu', 'Lá ví dụ sách in ở phần này: ' + vd.map((c) => '<b>' + c.pillars.join(' · ') + '</b> (trang ' + c.page + ', sách dùng ' + c.dung + ')').join('; ') + '. Lời sách luận từng lá có ở mục "Lá số cổ giống bạn" khi lá đó gần với lá của bạn.')] : [];
+    })(),
     note('thuongly.note', THUONG_LY_NOTE),
   ];
   return { id: 'thuongly', title: '', blocks };
@@ -193,3 +198,10 @@ export function thuongLySpeech(dm: number, monthChi: number): string {
   const t = thuongLyOf(dm, monthChi);
   return 'Phụ lục của sách nói chung về ' + CAN[dm] + ' sinh ' + THANG_TEN[thangOfChi(monthChi)].replace(/ \(.*\)/, '') + ': ' + t.tom;
 }
+
+/** Lá ví dụ của phụ lục TBCT (trang 204 trở đi trong sach.json) cùng Can ngày, cùng chi tháng. */
+export function viDuOf(dm: number, monthChi: number): BookChart[] {
+  return BOOK_CHARTS.filter((c) => c.book === 'tbct' && parseInt(c.page, 10) >= 204
+    && CAN.indexOf(c.pillars[2].split(' ')[0]) === dm && CHI_TEN.indexOf(c.pillars[1].split(' ')[1]) === monthChi);
+}
+const CHI_TEN = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
