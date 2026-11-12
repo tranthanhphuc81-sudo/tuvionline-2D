@@ -22,6 +22,6 @@ export function palmScriptInput(view: PalmView): PalmScriptInput {
     // Câu tổng kết là câu luận viết lại ("Có xu hướng…"), nên so phần thân câu với các câu không được đọc
     summary: view.topics.map((t) => ({ title: t.title, items: t.lines.map((text) => ({ text, speak: !quiet(text) && !silentTexts.some((x) => text.includes(x)) })) })),
     lines: MAIN.map(([id, line]) => ({ line, name: PALM_LINE_NAME[line], items: readings.filter((r) => r.line === id).map(spoken) })),
-    sections: view.sections.map((s) => ({ title: s.title, items: s.items.filter((r) => !MAIN.some(([id]) => id === r.line)).map(spoken) })),
+    sections: view.sections.map((s) => ({ key: s.key, title: s.title, items: s.items.filter((r) => !MAIN.some(([id]) => id === r.line)).map(spoken) })),
   };
 }

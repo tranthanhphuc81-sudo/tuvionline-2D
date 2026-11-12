@@ -91,12 +91,19 @@ export interface PalmScriptInput {
   /** bốn đường chính theo thứ tự đọc: tô sáng đường trên sơ đồ rồi đọc các câu của đường đó */
   lines: readonly { line: NonNullable<CueFocus['line']>; name: string; items: readonly PalmSpoken[] }[];
   /** các mục còn lại: tổng quan bàn tay, ngón, đường phụ, gò */
-  sections: readonly { title: string; items: readonly PalmSpoken[] }[];
+  sections: readonly { /** tổng-quan, ngon, duong-phu, go-dau: chọn lời dẫn của mục */ key?: string; title: string; items: readonly PalmSpoken[] }[];
 }
 
 /** Vài câu rời (không có câu mở, câu kết): lời hỏi đáp của Thầy ở Tĩnh thất. Câu dính từ cấm đọc thì im lặng, chỉ hiện chữ. */
 export function buildPlainCues(who: Who, texts: readonly string[], id: string): Cue[] {
   return texts.flatMap((t) => proseCues(t, who.goi)).map((c, i) => ({ ...c, id: `${id}-${i}` }));
+}
+
+const SECTION_LEADS = { 'tong-quan': 'chitayTongQuan', ngon: 'chitayNgon', 'duong-phu': 'chitayDuongPhu', 'go-dau': 'chitayGoDau' } as const;
+/** Lời dẫn của một mục: mẫu theo loại mục; mục lạ thì đọc tiêu đề. */
+function sectionLead(x: { key?: string; title: string }, vars: Record<string, string | number>, seed: number): string {
+  const k = SECTION_LEADS[x.key as keyof typeof SECTION_LEADS];
+  return k ? fill(pick(LEADS[k], seed), vars) : x.title + '.';
 }
 
 /** Kịch bản thầy đọc chỉ tay: câu mở → tóm tắt → từng đường chính (có tô sáng) → các mục còn lại → câu kết. */
@@ -111,9 +118,10 @@ export function buildPalmScript(who: Who, input: PalmScriptInput, seed = new Dat
   const draft: SpeechItemDraft[] = [
     ...say(fill(pick(lines.open, seed), vars)),
     ...(input.summary.length ? [...say(fill(pick(lines.cells, seed), vars)), ...input.summary.flatMap((x) => [...say(x.title + '.'), ...read(x.items)])] : []),
+    ...(input.lines.some((l) => l.items.length) ? say(fill(pick(LEADS.chitayBaDuong, seed), vars)) : []),
     ...input.lines.flatMap((l) => (l.items.length ? [...say(fill(pick(LEADS.chitayDuong, seed), { ...vars, duong: l.name }), { line: l.line }, 'point'), ...read(l.items, { line: l.line })] : [])),
     ...(input.sections.some((x) => x.items.length) ? say(fill(pick(lines.sections, seed), vars), undefined, 'turnPage') : []),
-    ...input.sections.flatMap((x) => (x.items.length ? [...say(x.title + '.'), ...read(x.items)] : [])),
+    ...input.sections.flatMap((x) => (x.items.length ? [...say(sectionLead(x, vars, seed)), ...read(x.items)] : [])),
     ...say(fill(pick(lines.close, seed), vars), undefined, 'nod'),
   ];
   return draft.map((c, i) => ({ ...c, id: `chitay-${i}` }));
