@@ -220,7 +220,7 @@ nguyên. CSS Modules tránh đụng tên class mà không cần gói nào.
 **Lựa chọn:** dùng font giống legacy, **đóng gói offline** qua `@fontsource` (5.3.x):
 - **Be Vietnam Pro** cho chữ thường, các độ đậm 400, 500, 600, 700.
 - **Noto Serif** cho tiêu đề và tên sao, quẻ, trụ, các độ đậm 600, 700.
-- Chỉ import tập ký tự `latin` + `vietnamese` (file `woff2`), `font-display: swap`. Ước khoảng 300 KB. Đo lại ở Phase 9.
+- Chỉ import tập ký tự `latin` + `vietnamese` (file `woff2`), `font-display: swap`. Ước khoảng 300 KB. Đo ở Phase 9 (12/11/2026, `npm run build`): 12 file `woff2`, tổng 174 KB. Cả `dist/` 24,5 MB, trong đó `palm/` (mô hình MediaPipe và WASM) 22,7 MB, JS 1,6 MB (gói chính 845 KB, nén gzip 267 KB), tranh và âm thanh khác 114 KB.
 
 **Lý do:** legacy đang tải hai font này từ Google Fonts, nên app sẽ giống bản web đã quen mắt. Cả hai có đủ dấu tiếng Việt và
 giấy phép OFL. Đóng gói offline giữ cam kết "không gửi request mạng" (Phase 8, Data safety).
