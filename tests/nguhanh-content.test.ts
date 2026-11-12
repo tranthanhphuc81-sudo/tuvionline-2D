@@ -156,6 +156,14 @@ describe('Lời nhắc văn hoá và cấu trúc báo cáo', () => {
     }
     expect(NH.resolutionText(resolveWithFeedback(multi, []).analysis.resolution!, multi)).toMatch(/Chưa đủ dữ liệu/);
   });
+  it('câu Tóm lại: cách luận thuận thế nói "thuận theo", không nói "cần bổ sung" hành đang mạnh', () => {
+    const a = analyze(toNguHanhChart(batTuChart({ gender: 'M', dd: 11, mm: 3, yy: 1985, hourIdx: 0 } as never)));
+    expect(a.readings.map((r) => r.id)).toEqual(['thuan-the', 'thong-thuong']);
+    const head = (id?: 'thuan-the' | 'thong-thuong') => sectionPlainText(NH.practicalReport(a, { nowYear: 2026, readingId: id }).find((x) => x.id === 'nguhanh.headline')!);
+    expect(head('thuan-the')).toMatch(/Hành nên thuận theo: Mộc/);
+    expect(head('thuan-the')).not.toMatch(/cần bổ sung/);
+    expect(head('thong-thuong')).toMatch(/Hành cần bổ sung: Hoả/);
+  });
   it('lá số thường không có mục cách cục đặc biệt hay cách luận khác', () => {
     const plain = analyses.find((a) => !a.follow)!;
     const ids = NH.practicalReport(plain, { nowYear: 2026 }).map((x) => x.id);
