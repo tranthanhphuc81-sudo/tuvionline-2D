@@ -2,7 +2,7 @@
    và các đường chỉ người dùng đã chạm. Nét chạm được đặt lên tranh theo tỉ lệ bàn tay thật qua ba mốc cổ tay, gốc ngón trỏ,
    gốc ngón út. Không dùng ảnh chụp. Tay trái được lật để nhìn như đang xem lòng bàn tay mình. */
 import { useId } from 'react';
-import type { PalmPt } from '../../core';
+import type { MountId, PalmPt } from '../../core';
 import { PALM_LINE_NAME } from '../../content/palm/ui';
 import type { PalmLineKey, PalmSession } from '../../state/schema';
 import handArt from '../../assets/palm/palm-hand.webp';
@@ -125,7 +125,13 @@ function labelAt(segs: readonly P[][], taken: P[]): P | null {
   return best?.p ?? null;
 }
 
-export function PalmDiagram({ session, focus }: { session: Pick<PalmSession, 'hand' | 'landmarks' | 'lines'>; focus?: PalmLineKey }) {
+/** Gò của sơ đồ ứng với mã gò của nội dung (Hỏa Tinh Dương và Âm cùng vẽ một gò; Đông Hoả và Khảm chưa có trên sơ đồ). */
+export const MOUNT_ON_DIAGRAM: Partial<Record<MountId, string>> = {
+  kim: 'Gò Kim Tinh', moc: 'Gò Mộc Tinh', tho: 'Gò Thổ Tinh', thaiduong: 'Gò Thái Dương', thuy: 'Gò Thủy Tinh', hoaduong: 'Gò Hỏa Tinh', hoaam: 'Gò Hỏa Tinh', thaiam: 'Gò Thái Âm',
+};
+
+export function PalmDiagram({ session, focus, zones }: { session: Pick<PalmSession, 'hand' | 'landmarks' | 'lines'>; focus?: PalmLineKey; /** gò Thầy đang nói tới: sáng lên, các gò khác mờ đi */ zones?: readonly MountId[] }) {
+  const litMounts = new Set((zones ?? []).map((z) => MOUNT_ON_DIAGRAM[z]).filter(Boolean));
   const lm = session.landmarks;
   const mirror = session.hand === 'left';
   const shown = Object.keys(session.lines) as PalmLineKey[];
@@ -185,7 +191,7 @@ export function PalmDiagram({ session, focus }: { session: Pick<PalmSession, 'ha
               <image href={handArt} x={art.tl.x} y={art.tl.y} width={art.w} height={art.h} clipPath={`url(#${uid}-f-${g.name})`} style={ART_STYLE} preserveAspectRatio="none" />
             </g>
           ))}
-          {MOUNTS.map((mt) => <ellipse key={mt.name} cx={mt.at.x} cy={mt.at.y} rx={10} ry={6.5} stroke={INK} strokeWidth={0.5} strokeDasharray="1.5 3" opacity={0.45} />)}
+          {MOUNTS.map((mt) => <ellipse key={mt.name} data-mount={mt.name} data-lit={litMounts.has(mt.name) || undefined} cx={mt.at.x} cy={mt.at.y} rx={litMounts.has(mt.name) ? 13 : 10} ry={litMounts.has(mt.name) ? 8.5 : 6.5} stroke={litMounts.has(mt.name) ? '#b5361f' : INK} strokeWidth={litMounts.has(mt.name) ? 1.6 : 0.5} strokeDasharray={litMounts.has(mt.name) ? undefined : '1.5 3'} opacity={litMounts.has(mt.name) ? 0.95 : litMounts.size ? 0.2 : 0.45} />)}
           <g clipPath={ref('clip')}>
             {lines.map(({ k, segs }) => segs.map((seg, i) => (
               <path key={k + i} data-line={k} d={smoothPath(seg)} stroke={PALM_LINE_COLOR[k]} strokeWidth={dim(k) ? 1.6 : 3} opacity={dim(k) ? 0.35 : 0.9} />

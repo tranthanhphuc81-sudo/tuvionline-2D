@@ -72,7 +72,9 @@ export function PalmResultScreen({ id }: { id?: string }) {
   const who = useWho();
   const readId = old ? 'chitay-' + old.id : 'chitay';
   // Thầy đọc tới đường nào thì đường đó sáng lên trên ảnh hoặc sơ đồ
-  const focus = useCueFocus(readId)?.line;
+  const cueFocus = useCueFocus(readId);
+  const focus = cueFocus?.line ?? cueFocus?.palm?.lines?.[0];
+  const zones = cueFocus?.palm?.zones;
   // Rời màn kết quả mới nhất là bỏ ảnh khỏi bộ nhớ (màn xem lại lần cũ không giữ ảnh nên không đụng tới)
   useEffect(() => (id ? undefined : dropPhoto), [id]);
 
@@ -128,7 +130,7 @@ export function PalmResultScreen({ id }: { id?: string }) {
             <Segmented<'photo' | 'art'> label="Cách xem" hideLabel value={look} onChange={setLook} options={[{ value: 'photo', label: 'Ảnh tay của bạn' }, { value: 'art', label: 'Tranh sơ đồ' }]} />
           </div>
         )}
-        {photo && look === 'photo' ? <PalmPhoto session={shown} url={photo} focus={focus} /> : <PalmDiagram session={shown} focus={focus} />}
+        {photo && look === 'photo' ? <PalmPhoto session={shown} url={photo} focus={focus} /> : <PalmDiagram session={shown} focus={focus} zones={zones} />}
         {photo && look === 'photo' && <p className={ui.muted}>Ảnh chỉ hiện lúc này và không được lưu. Mở lại kết quả sau sẽ thấy tranh sơ đồ.</p>}
         {current && innate && <p className={ui.muted}>Có cả hai tay nên phần so sánh nằm ở cuối kết quả.</p>}
       </section>

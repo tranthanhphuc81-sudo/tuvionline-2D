@@ -2,12 +2,18 @@
    hoặc dính từ cấm đọc riêng của chỉ tay (PALM_TTS_FORBIDDEN) thì chỉ hiện chữ. Từ cấm chung đã được lọc trong kịch bản. */
 import { PALM_TTS_FORBIDDEN, type PalmReading, type PalmView } from '../../content/palm/index';
 import { PALM_LINE_NAME } from '../../content/palm/ui';
-import type { PalmScriptInput, PalmSpoken } from '../reader/script';
+import type { PalmFocus, PalmScriptInput, PalmSpoken } from '../reader/script';
 
 const MAIN = [['sinh', 'sinh'], ['tri', 'tri'], ['tam', 'tam'], ['dinhmang', 'dinh']] as const;
 
 const quiet = (text: string) => { const t = text.toLocaleLowerCase('vi'); return PALM_TTS_FORBIDDEN.some((w) => t.includes(w.toLocaleLowerCase('vi'))); };
-const spoken = (r: PalmReading): PalmSpoken => ({ text: r.text, speak: r.tts && !quiet(r.text) });
+/** Phần bàn tay mà câu luận nói tới: đường chính, gò, dấu (đường phụ chưa có trên sơ đồ nên không tô). */
+const focusOf = (r: PalmReading): PalmFocus | undefined => {
+  const main = MAIN.find(([id]) => id === r.line)?.[1];
+  if (!main && !r.mount && !r.mark) return undefined;
+  return { ...(main ? { lines: [main] } : {}), ...(r.mount ? { zones: [r.mount] } : {}), ...(r.mark ? { marks: [r.mark] } : {}) };
+};
+const spoken = (r: PalmReading): PalmSpoken => ({ text: r.text, speak: r.tts && !quiet(r.text), focus: focusOf(r) });
 
 export function palmScriptInput(view: PalmView): PalmScriptInput {
   const readings = view.sections.flatMap((s) => s.items);
