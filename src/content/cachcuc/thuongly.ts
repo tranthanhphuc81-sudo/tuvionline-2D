@@ -3,8 +3,8 @@
    (lẽ thường) của từng Can ngày sinh trong từng tháng. Câu chữ dưới đây là lời TÓM TẮT của app, không chép bản dịch;
    số trang để người đọc mở sách đối chiếu. Phần "Biến lý" (các ngoại lệ) chỉ nêu ý chính khi cần.
    uu: can sách xét trước tiên (theo thứ tự); cuong / nhuoc: can sách nêu riêng cho thân mạnh / thân yếu (nếu có). */
-import type { Hanh } from '../../core';
-import { note, p, type Block, type Section } from '../rich';
+import { BatTuEngine, type Hanh } from '../../core';
+import { list, note, p, type Block, type Section } from '../rich';
 import { BOOK_CHARTS, type BookChart } from '../nguhanh/books';
 
 export interface ThuongLy { p: number; lenh: string; uu: string; cuong?: string; nhuoc?: string; tom: string }
@@ -165,10 +165,46 @@ export const hanhOfCan = (c: number): Hanh => HANH_CAN[c];
 
 export const THUONG_LY_NOTE = 'Đây là lẽ thường sách nêu chung cho mọi người cùng Can ngày, cùng tháng sinh; chính sách cũng kể nhiều ngoại lệ tuỳ cả lá số. App tóm tắt bằng lời của mình, xem nguyên văn ở trang sách ghi kèm. Nội dung mang tính văn hoá, để tham khảo.';
 
+/* ===== Đối chiếu với lá số: can sách nêu đã có trong lá chưa, lộ ở đâu hay ẩn trong chi nào ===== */
+export interface PillarLike { can: number; chi: number }
+const POS_VI = ['năm', 'tháng', 'ngày', 'giờ'];
+const KHI_VI: Record<string, string> = { 'Bản khí': 'bản khí', 'Trung khí': 'trung khí', 'Dư khí': 'dư khí' };
+/** Can c có mặt ở đâu: lộ ra can các trụ (trừ can ngày, là chính mình) và ẩn trong chi (tàng can). */
+export interface CanPresence { can: number; lo: string[]; tang: string[] }
+export function presenceOf(pillars: readonly PillarLike[], c: number): CanPresence {
+  const lo: string[] = [], tang: string[] = [];
+  pillars.forEach((pl, i) => {
+    if (i !== 2 && pl.can === c) lo.push('can ' + POS_VI[i]);
+    const t = (BatTuEngine.TANG_CAN[pl.chi] || []).find((x) => x[0] === c);
+    if (t) tang.push('chi ' + POS_VI[i] + ' ' + BatTuEngine.CHI[pl.chi] + ' (' + KHI_VI[t[1]] + ')');
+  });
+  return { can: c, lo, tang };
+}
+/** Mức có mặt: 'lo' lộ ra can, 'tang' chỉ ẩn trong chi, 'khong' chưa có. */
+export const presenceLevel = (x: CanPresence): 'lo' | 'tang' | 'khong' => (x.lo.length ? 'lo' : x.tang.length ? 'tang' : 'khong');
+export const presenceText = (x: CanPresence): string => {
+  const name = CAN[x.can] + ' (' + hanhOfCan(x.can) + ')';
+  if (x.lo.length) return name + ': lộ ra ở ' + x.lo.join(', ') + (x.tang.length ? ', có gốc trong ' + x.tang.join(', ') : '') + '.';
+  if (x.tang.length) return name + ': chưa lộ ra can nào, chỉ ẩn trong ' + x.tang.join(', ') + '.';
+  return name + ': lá số chưa có.';
+};
+/** Các can sách nêu cho ô này (xét trước, rồi thân mạnh, thân yếu), không lặp. */
+export function bookCans(t: ThuongLy): number[] {
+  return [...new Set([...canList(t.uu), ...canList(t.cuong), ...canList(t.nhuoc)])];
+}
+/** Câu tóm tắt cho can sách xét trước tiên. */
+export function firstCanVerdict(t: ThuongLy, pillars: readonly PillarLike[]): string {
+  const c = canList(t.uu)[0];
+  const lv = presenceLevel(presenceOf(pillars, c));
+  return lv === 'lo' ? 'Can sách xét trước tiên là ' + CAN[c] + ', và lá của bạn đã có ' + CAN[c] + ' lộ ra: theo lẽ sách, đây là chữ dùng được ngay.'
+    : lv === 'tang' ? 'Can sách xét trước tiên là ' + CAN[c] + '; lá của bạn có ' + CAN[c] + ' nhưng chỉ ẩn trong chi, sách thường coi là có mà yếu hơn chữ lộ ra.'
+    : 'Can sách xét trước tiên là ' + CAN[c] + ', lá của bạn chưa có chữ này: theo lẽ sách, đây là chỗ lá số còn thiếu, thường được bù khi gặp năm hay vận có ' + CAN[c] + ' (' + hanhOfCan(c) + ').';
+}
+
 const canHanh = (s: string) => canList(s).map((c) => CAN[c] + ' (' + hanhOfCan(c) + ')').join(', ');
 
 /** Mục "Lời sách cho Can ngày theo tháng sinh". cachDung: Dụng thần của mục Cách cục, để nói hai bên có cùng hướng không. */
-export function thuongLySection(dm: number, monthChi: number, cachDung: Hanh): Section {
+export function thuongLySection(dm: number, monthChi: number, cachDung: Hanh, pillars?: readonly PillarLike[]): Section {
   const t = thuongLyOf(dm, monthChi);
   const first = hanhOfCan(canList(t.uu)[0]);
   const blocks: Block[] = [
@@ -183,6 +219,10 @@ export function thuongLySection(dm: number, monthChi: number, cachDung: Hanh): S
           : canList(t.nhuoc).some((c) => hanhOfCan(c) === cachDung) ? 'Hành ' + cachDung + ' cũng có trong lời sách cho người thân yếu. '
           : canList(t.uu).some((c) => hanhOfCan(c) === cachDung) ? 'Hành ' + cachDung + ' cũng có trong các can sách xét. ' : '')
         + 'Lời sách ở đây là lẽ chung theo tháng, mục Cách cục xét riêng cả bốn trụ, nên có lúc khác nhau.'),
+    ...(pillars ? [
+      p('thuongly.co', '<b>Lá của bạn có các can này chưa?</b> ' + firstCanVerdict(t, pillars)),
+      list('thuongly.co.list', bookCans(t).map((c) => presenceText(presenceOf(pillars, c)))),
+    ] : []),
     p('thuongly.trang', 'Nguồn: phụ lục "Bát tự dụng thần đề yếu" trong bản dịch Tử Bình Chân Thuyên, trang ' + t.p + '.'),
     ...(() => {
       const vd = viDuOf(dm, monthChi);
@@ -194,9 +234,10 @@ export function thuongLySection(dm: number, monthChi: number, cachDung: Hanh): S
 }
 
 /** Một câu cho Thầy đọc. */
-export function thuongLySpeech(dm: number, monthChi: number): string {
+export function thuongLySpeech(dm: number, monthChi: number, pillars?: readonly PillarLike[]): string {
   const t = thuongLyOf(dm, monthChi);
-  return 'Phụ lục của sách nói chung về ' + CAN[dm] + ' sinh ' + THANG_TEN[thangOfChi(monthChi)].replace(/ \(.*\)/, '') + ': ' + t.tom;
+  return 'Phụ lục của sách nói chung về ' + CAN[dm] + ' sinh ' + THANG_TEN[thangOfChi(monthChi)].replace(/ \(.*\)/, '') + ': ' + t.tom
+    + (pillars ? ' ' + firstCanVerdict(t, pillars) : '');
 }
 
 /** Lá ví dụ của phụ lục TBCT (trang 204 trở đi trong sach.json) cùng Can ngày, cùng chi tháng. */

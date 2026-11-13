@@ -79,7 +79,7 @@ export function BatTuScreen() {
       <dl className={s.summary}>
         {summary.map(([k, v]) => <div key={k} className={s.cell} data-wide={k === 'Bát Tự' || k === 'Âm/Dương Nam Nữ'}><dt>{k}</dt><dd>{v}</dd></div>)}
       </dl>
-      <SpeakButton id="battu" getCues={() => buildScript('battu', who, { cells: summary, leads: [batTuLead(ch.pillars.findIndex((p) => p.isNhatChu), res.summary.battu.nhatChu)], prose: [cachCucSpeech(cc), thuongLySpeech(ch.nhatChu, ch.monthChiIdx)], sections: batTuTongKet(ch, thisYear()) })} />
+      <SpeakButton id="battu" getCues={() => buildScript('battu', who, { cells: summary, leads: [batTuLead(ch.pillars.findIndex((p) => p.isNhatChu), res.summary.battu.nhatChu)], prose: [cachCucSpeech(cc), thuongLySpeech(ch.nhatChu, ch.monthChiIdx, ch.pillars)], sections: batTuTongKet(ch, thisYear()) })} />
       <ShareButton getCard={() => ({ slug: 'bat-tu', title: 'Bát Tự Tứ Trụ', ...cardWho(profile), groups: [{ cells: summary }], reading: cardReading(batTuTongKet(ch, thisYear())) })} />
       {lx && <p className={ui.info} role="note"><RichText nodes={parseRich(lx)} /></p>}
 
@@ -101,7 +101,7 @@ export function BatTuScreen() {
       <section className={ui.card}><SectionView sections={[cachCucSection(cc, ch.pillars.map((x) => x.can), ch.monthChiIdx, nh.usefulGod.dung)]} /></section>
       <details className={s.fold}>
         <summary><h2 className={ui.sectionTitle}>Lời sách cho Can ngày theo tháng sinh</h2><span className={ui.muted}>lẽ thường trong phụ lục sách</span></summary>
-        <section className={ui.card}><SectionView sections={[thuongLySection(ch.nhatChu, ch.monthChiIdx, cc.dung)]} /></section>
+        <section className={ui.card}><SectionView sections={[thuongLySection(ch.nhatChu, ch.monthChiIdx, cc.dung, ch.pillars)]} /></section>
       </details>
 
       <details className={s.fold}>

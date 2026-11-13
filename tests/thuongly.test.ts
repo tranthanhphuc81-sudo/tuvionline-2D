@@ -1,6 +1,7 @@
 /* Lời sách cho Can ngày theo tháng sinh (src/content/cachcuc/thuongly.ts). ARCHITECTURE 15.9. */
 import { describe, it, expect } from 'vitest';
-import { THUONG_LY, THUONG_LY_NOTE, canList, thangOfChi, thuongLyOf, thuongLySection, thuongLySpeech, viDuOf } from '../src/content/cachcuc/thuongly';
+import { THUONG_LY, THUONG_LY_NOTE, bookCans, canList, firstCanVerdict, presenceLevel, presenceOf, thangOfChi, thuongLyOf, thuongLySection, thuongLySpeech, viDuOf } from '../src/content/cachcuc/thuongly';
+import { batTuChart } from '../src/core';
 import { sectionPlainText } from '../src/content/rich';
 import { NO_SPEECH_TERMS } from '../src/content/noSpeech';
 import { loadSach } from '../scripts/lib/sach';
@@ -72,5 +73,44 @@ describe('câu chữ', () => {
       const s = thuongLySpeech(dm, m).toLowerCase();
       for (const w of NO_SPEECH_TERMS) expect(s).not.toContain(w);
     }
+  });
+});
+
+describe('đối chiếu với lá số: can sách nêu có trong lá chưa', () => {
+  // Giáp Thìn · Đinh Mão · Giáp Tý · Mậu Thìn: Giáp sinh tháng Mão, sách xét Bính Quý trước, thân mạnh Canh Mậu Đinh
+  const pl = [{ can: 0, chi: 4 }, { can: 3, chi: 3 }, { can: 0, chi: 0 }, { can: 4, chi: 4 }];
+  it('phân biệt lộ ra can, chỉ ẩn trong chi, và chưa có', () => {
+    expect(presenceOf(pl, 3)).toEqual({ can: 3, lo: ['can tháng'], tang: [] }); // Đinh lộ ở can tháng
+    expect(presenceLevel(presenceOf(pl, 9))).toBe('tang'); // Quý: Tý (bản khí), Thìn (dư khí)
+    expect(presenceOf(pl, 9).tang).toEqual(['chi năm Thìn (dư khí)', 'chi ngày Tý (bản khí)', 'chi giờ Thìn (dư khí)']);
+    expect(presenceLevel(presenceOf(pl, 6))).toBe('khong'); // Canh
+    expect(presenceOf(pl, 0).lo).toEqual(['can năm']); // can ngày là chính mình, không tính
+    const t = sectionPlainText(thuongLySection(0, 3, 'Hoả', pl));
+    expect(t).toContain('Lá của bạn có các can này chưa?');
+    expect(t).toContain('Bính (Hoả): lá số chưa có.');
+    expect(t).toContain('Đinh (Hoả): lộ ra ở can tháng.');
+    expect(t).toContain('Quý (Thuỷ): chưa lộ ra can nào, chỉ ẩn trong chi năm Thìn');
+    expect(bookCans(thuongLyOf(0, 3)).length).toBe(5); // Bính Quý Canh Mậu Đinh, không lặp
+  });
+  it('lá số thật: câu "can xét trước" gặp đủ ba trường hợp, mọi can sách nêu đều có một dòng, lời Thầy không có từ cấm', () => {
+    let seed = 20261113; const rnd = () => (seed = (seed * 1103515245 + 12345) % 2147483648) / 2147483648;
+    const seen = new Set<string>();
+    for (let i = 0; i < 1500; i++) {
+      const ch = batTuChart({ gender: 'M', dd: 1 + Math.floor(rnd() * 28), mm: 1 + Math.floor(rnd() * 12), yy: 1940 + Math.floor(rnd() * 80), hourIdx: Math.floor(rnd() * 12) } as never);
+      const t = thuongLyOf(ch.nhatChu, ch.monthChiIdx);
+      const first = canList(t.uu)[0];
+      seen.add(presenceLevel(presenceOf(ch.pillars, first)));
+      const sec = thuongLySection(ch.nhatChu, ch.monthChiIdx, 'Mộc', ch.pillars);
+      const li = sec.blocks.find((b) => b.id === 'thuongly.co.list') as { items: unknown[] };
+      expect(li.items.length).toBe(bookCans(t).length);
+      expect(sectionPlainText(sec)).not.toMatch(/undefined|NaN/);
+      const sp = thuongLySpeech(ch.nhatChu, ch.monthChiIdx, ch.pillars).toLowerCase();
+      expect(sp).toContain(firstCanVerdict(t, ch.pillars).toLowerCase());
+      for (const w of NO_SPEECH_TERMS) expect(sp).not.toContain(w);
+    }
+    expect([...seen].sort()).toEqual(['khong', 'lo', 'tang']);
+  });
+  it('không truyền lá số thì giữ nguyên như trước (không có phần đối chiếu)', () => {
+    expect(sectionPlainText(thuongLySection(0, 2, 'Hoả'))).not.toMatch(/Lá của bạn có các can này chưa/);
   });
 });
