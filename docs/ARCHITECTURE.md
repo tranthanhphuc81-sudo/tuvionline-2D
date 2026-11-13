@@ -1369,8 +1369,9 @@ Khi chủ dự án điền đáp án: chạy lại so sánh với đáp án, r�
 ### 15.8 Lục thân trong lá số (TU-VAN-SACH 3F)
 
 - `src/core/cachcuc/lucthan.ts`: cung vị của bốn trụ, và sao đại diện cho cha, mẹ, anh chị em, người bạn đời, con cái theo quy ước truyền thống (khác nhau theo giới tính, như sách cổ). Tìm sao ở can năm, tháng, giờ và can tàng của bốn chi; can ngày là chính mình.
-- Chỉ phần giáo dục: KHÔNG có câu đoán sức khoẻ, sinh tử, hôn nhân hay con cái. Sao vắng thì nói rõ "không xem là điều xấu". Test quét câu chữ không chứa từ trong `NO_SPEECH_TERMS`.
+- Ban đầu chỉ phần giáo dục: KHÔNG có câu đoán sức khoẻ, sinh tử, hôn nhân hay con cái (đổi một phần ngày 13/11/2026, xem dưới). Sao vắng thì nói rõ "không xem là điều xấu". Test quét câu chữ không chứa từ trong `NO_SPEECH_TERMS`.
 - Khối gập "Lục thân trong lá số" trên màn Bát Tự, sau Tính tình. Thầy không đọc; không vào "Tóm lại về bạn", ảnh chia sẻ.
+- **Đổi 13/11/2026 (chủ dự án quyết): thêm lời luận của sách, viết nhẹ.** Engine `lucThanDau` trả mã cho từng người thân: sao rõ (lộ và có gốc) / chỉ ẩn / vắng; bị chế (nhóm khắc sao đó có lực ≥ 2,5 mà sao dưới 1,5; nam: vợ bị Tỷ Kiếp tranh, con bị Thực Thương chế; nữ: chồng bị Thực Thương chế, con bị Ấn chế; cha bị Tỷ Kiếp, mẹ bị Tài, anh em bị Quan Sát); nữ có Chính Quan và Thất Sát cùng lộ; anh em vượng mà Tài yếu; chi ngày hay chi tháng xung với chi kề bên. Câu chữ ở `src/content/cachcuc/lucthan.ts` diễn đạt điều sách thấy kèm việc nên làm, mở đầu bằng "sách xưa xem", KHÔNG dùng: khắc, hình khắc, goá, yểu, mất, chết, ly hôn, ly dị, chia ly, hiếm muộn, tuyệt tự, cô độc, bệnh, tai và các từ trong `NO_SPEECH_TERMS`, `BANNED_TERMS`; không nói sinh tử, bệnh tật. Vẫn không vào Tóm lại, ảnh chia sẻ, Thầy không đọc. **Tắt được bằng một công tắc** `LUC_THAN_LOI_LUAN` trong file câu chữ (false thì mục trở về chỉ có quy ước), phòng khi Google Play hay chủ dự án thấy không hợp. Câu mẫu ở `docs/LOI-THAY.md` mục Lục thân để duyệt.
 
 ### 15.9 Lời sách cho Can ngày theo tháng sinh (TU-VAN-SACH 3G)
 

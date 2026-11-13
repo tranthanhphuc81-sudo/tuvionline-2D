@@ -19,7 +19,7 @@ import { cardReading, cardWho } from '../share/card';
 import ui from '../../ui/components/ui.module.css';
 import { Pillars, hanhAmDuong } from './Pillars';
 import { NguHanhSection } from './NguHanhSection';
-import { cachCucOfBirth, dongKhi, lucThan, noiVang, quanHe, BatTuEngine as BTE } from '../../core';
+import { cachCucOfBirth, dongKhi, lucThan, lucThanDau, noiVang, quanHe, BatTuEngine as BTE } from '../../core';
 import { analyze, toNguHanhChart } from '../../core/nguhanh';
 import { cachCucSection, cachCucSpeech } from '../../content/cachcuc/text';
 import { quanHeSection } from '../../content/cachcuc/quanhe';
@@ -114,7 +114,7 @@ export function BatTuScreen() {
       </details>
       <details className={s.fold}>
         <summary><h2 className={ui.sectionTitle}>Lục thân trong lá số</h2><span className={ui.muted}>trụ nào, sao nào ứng với ai</span></summary>
-        <section className={ui.card}><SectionView sections={[lucThanSection(lucThan(ch, profile.gender), profile.gender)]} /></section>
+        <section className={ui.card}><SectionView sections={[lucThanSection(lucThan(ch, profile.gender), profile.gender, lucThanDau(ch, profile.gender))]} /></section>
       </details>
 
       <h2 className={ui.sectionTitle}>Đại Vận (mỗi chặng 10 năm, khởi từ Trụ Tháng)</h2>
