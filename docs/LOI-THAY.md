@@ -330,3 +330,36 @@ Câu luận đọc nguyên văn từ `palm-content.vi.json`. Câu đánh dấu k
 - Dạ, hồ sơ này là của nam hay nữ ạ?
 - Dạ, ngày tháng năm sinh là khi nào ạ?
 - Dạ, sinh vào giờ nào ạ? Không nhớ rõ thì chọn giờ gần nhất.
+
+## Lục thân (13/11/2026, chờ duyệt)
+
+> Hiện ở khối gập "Lục thân trong lá số" trên màn Bát Tự, dưới phần quy ước, tiêu đề "Sách xưa luận thêm (viết nhẹ, để tham khảo)". Thầy KHÔNG đọc mục này. Mỗi câu nói điều sách thấy kèm một việc nên làm; không dùng khắc, goá, yểu, mất, chết, ly hôn, chia ly, hiếm muộn, cô độc, bệnh, tai hoạ (test chặn). Sao vắng thì không nhắc lại (đã nói ở phần quy ước). Muốn bỏ cả phần này: đặt `LUC_THAN_LOI_LUAN = false` trong `src/content/cachcuc/lucthan.ts`.
+
+**Cha**
+- Sao của cha lộ ra và có gốc trong chi: sách xưa xem người cha có vai trò rõ trong đời bạn; nên trân trọng và giữ gìn mối gắn bó này.
+- Sao của cha chỉ ẩn trong chi: sách xưa xem mối gắn bó với người cha là kín đáo, cần thời gian và sự chủ động để bộc lộ.
+- Sao của cha bị Tỷ Kiếp (anh em, bạn bè) chế mạnh: sách xưa xem là ít được dựa vào cha, nên sớm tự lập và chủ động thăm hỏi.
+**Mẹ**
+- Sao của mẹ lộ ra và có gốc trong chi: sách xưa xem người mẹ có vai trò rõ trong đời bạn; nên trân trọng và giữ gìn mối gắn bó này.
+- Sao của mẹ chỉ ẩn trong chi: sách xưa xem mối gắn bó với người mẹ là kín đáo, cần thời gian và sự chủ động để bộc lộ.
+- Sao của mẹ bị Tài chế mạnh: sách xưa xem là công việc, tiền bạc dễ cuốn bạn xa mẹ; nên dành thời gian gần gũi, chăm lo cho mẹ.
+**Anh chị em**
+- Sao anh chị em lộ ra và có gốc trong chi: sách xưa xem anh chị em, bạn bè có vai trò rõ trong đời bạn; nên trân trọng và giữ gìn mối gắn bó này.
+- Sao anh chị em chỉ ẩn trong chi: sách xưa xem mối gắn bó với anh chị em, bạn bè là kín đáo, cần thời gian và sự chủ động để bộc lộ.
+- Sao anh chị em bị Quan Sát chế mạnh: sách xưa xem là anh chị em mỗi người một hướng, ít dựa vào nhau; nên chủ động giữ liên lạc.
+- Sao anh em vượng mà sao Tài yếu: sách xưa khuyên rõ ràng chuyện tiền bạc với anh em, bạn bè, có thoả thuận từ đầu.
+**Người bạn đời**
+- Sao người bạn đời lộ ra và có gốc trong chi: sách xưa xem người bạn đời có vai trò rõ trong đời bạn; nên trân trọng và giữ gìn mối gắn bó này.
+- Sao người bạn đời chỉ ẩn trong chi: sách xưa xem mối gắn bó với người bạn đời là kín đáo, cần thời gian và sự chủ động để bộc lộ.
+- (lá số nam) Sao người bạn đời bị Tỷ Kiếp (anh em, bạn bè) tranh: sách xưa xem đây là mối quan hệ cần vun đắp và nhường nhịn nhiều hơn; nên rõ ràng chuyện tiền bạc chung và dành thời gian riêng cho hai người.
+- (lá số nữ) Sao người bạn đời bị Thực Thương chế: sách xưa xem là hai người dễ có lời qua tiếng lại; nên giữ lời nói mềm mỏng và tôn trọng ý kiến của nhau.
+- (lá số nữ) Chính Quan và Thất Sát cùng lộ: sách xưa xem là chuyện tình cảm dễ phân vân giữa nhiều lựa chọn; nên thong thả, rõ ràng trước khi quyết định.
+**Con cái**
+- Sao con cái lộ ra và có gốc trong chi: sách xưa xem con cái có vai trò rõ trong đời bạn; nên trân trọng và giữ gìn mối gắn bó này.
+- Sao con cái chỉ ẩn trong chi: sách xưa xem mối gắn bó với con cái là kín đáo, cần thời gian và sự chủ động để bộc lộ.
+- (lá số nam) Sao con cái bị Thực Thương chế: sách xưa xem chuyện con cái là phần cần kiên nhẫn chăm lo; nên dành nhiều thời gian cho con.
+- (lá số nữ) Sao con cái bị Ấn chế: sách xưa xem chuyện con cái là phần cần kiên nhẫn chăm lo; nên bớt lo xa và để con tự lập dần.
+**Cung vị gặp xung**
+- Chi ngày (cung bạn đời) gặp xung với chi tháng: sách xưa xem là hai người dễ khác nhịp; nên dành thời gian cho nhau và tránh quyết định khi đang giận.
+- Chi ngày (cung bạn đời) gặp xung với chi giờ (cung con cái): sách xưa xem là việc nhà dễ bận rộn, mỗi người một nhịp; nên dành thời gian cố định cho gia đình.
+- Chi tháng (cung cha mẹ, anh em) gặp xung với chi năm: sách xưa xem là sớm rời nhà hoặc mỗi người một nơi; nên giữ thói quen thăm hỏi.
