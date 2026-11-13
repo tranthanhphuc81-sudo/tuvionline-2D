@@ -1,0 +1,87 @@
+// @vitest-environment jsdom
+/* Kiểm truy cập tự động bằng axe-core (CLAUDE.md: nhãn aria cho nút chỉ có biểu tượng; 13/11/2026).
+   Chạy offline trong jsdom nên KHÔNG kiểm được độ tương phản (jsdom không tính màu, đã có tests/contrast-tokens.test.ts)
+   và vùng chạm 44px (jsdom không dàn trang). Các luật còn lại của WCAG 2.0/2.1 A, AA: nhãn nút và ô nhập, vai trò và
+   thuộc tính ARIA hợp lệ, id không trùng, danh sách đúng cấu trúc, ảnh có chữ thay thế… */
+import { describe, it, expect, afterEach } from 'vitest';
+import { render, screen, fireEvent, cleanup, act } from '@testing-library/react';
+import axe from 'axe-core';
+import { App } from './App';
+import { AppProvider } from './context';
+import { createStore } from '../state/store';
+import { emptyState, type PersistedState } from '../state/schema';
+import { addProfile } from '../state/actions';
+import { initialRouter } from './router';
+
+function setup(withProfile = true) {
+  const store = createStore<PersistedState>(emptyState());
+  if (withProfile) addProfile(store, { name: 'An', gender: 'M', calendar: 'solar', day: 15, month: 6, year: 1996, leapMonth: false, hourIdx: 6, lateTy: false });
+  const nav = createStore(initialRouter());
+  render(<AppProvider store={store} nav={nav}><App /></AppProvider>);
+}
+
+afterEach(cleanup);
+
+/** Chạy axe trên cả trang, mở hết khối gập trước. Trả về danh sách lỗi dạng "luật: phần tử" để thông báo dễ đọc. */
+async function violations(): Promise<string[]> {
+  document.querySelectorAll('details').forEach((d) => { d.open = true; });
+  const r = await axe.run(document.body, {
+    runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'] },
+    rules: { 'color-contrast': { enabled: false } },
+  });
+  return r.violations.flatMap((v) => v.nodes.map((n) => `${v.id}: ${n.target.join(' ')} — ${n.html.slice(0, 120)}`));
+}
+
+const TABS = [/Tĩnh thất/, /Tử Vi/, /Bát Tự/, /Lục Hào/, /Phong thủy/];
+
+/* axe quét cả trang mất 1–3 giây mỗi lần, chậm hơn khi cả bộ test chạy song song: nới thời gian chờ. */
+describe('truy cập (axe-core)', { timeout: 30000 }, () => {
+  it('chưa có hồ sơ: màn mời thêm hồ sơ', async () => {
+    setup(false);
+    expect(await violations()).toEqual([]);
+  });
+
+  for (const tab of TABS) {
+    it(`tab ${tab.source}`, async () => {
+      setup();
+      await act(async () => { fireEvent.click(screen.getByRole('tab', { name: tab })); });
+      expect(await violations()).toEqual([]);
+    });
+  }
+
+  it('Phong thủy: La Bàn và Nạp Âm', async () => {
+    setup();
+    await act(async () => { fireEvent.click(screen.getByRole('tab', { name: /Phong thủy/ })); });
+    for (const sub of ['La Bàn', 'Nạp Âm']) {
+      const opt = screen.queryAllByRole('radio', { name: new RegExp(sub) })[0];
+      if (opt) await act(async () => { fireEvent.click(opt); });
+      expect(await violations(), sub).toEqual([]);
+    }
+  });
+
+  it('Cài đặt và màn chọn hồ sơ', async () => {
+    setup();
+    await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Cài đặt' })); });
+    expect(await violations(), 'Cài đặt').toEqual([]);
+    await act(async () => { fireEvent.click(screen.getByRole('button', { name: /Đang xem: An/ })); });
+    expect(await violations(), 'Hồ sơ').toEqual([]);
+  });
+
+  it('Quản lý hồ sơ và form hồ sơ', async () => {
+    setup();
+    await act(async () => { fireEvent.click(screen.getByRole('button', { name: /Đang xem: An/ })); });
+    await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Quản lý hồ sơ' })); });
+    expect(await violations(), 'Quản lý hồ sơ').toEqual([]);
+    cleanup();
+    setup(false);
+    await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Điền cả hồ sơ một lần' })); });
+    expect(await violations(), 'Form hồ sơ').toEqual([]);
+  });
+
+  it('Xem chỉ tay (màn nạp khi cần)', async () => {
+    setup();
+    await act(async () => { fireEvent.click(screen.getByRole('button', { name: /mở xem chỉ tay/ })); });
+    await screen.findByRole('heading', { name: /Xem chỉ tay/ }, { timeout: 5000 });
+    expect(await violations()).toEqual([]);
+  });
+});
