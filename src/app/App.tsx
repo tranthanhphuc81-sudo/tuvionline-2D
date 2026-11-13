@@ -26,8 +26,22 @@ import s from './App.module.css';
 
 /* Xem chỉ tay nạp khi cần: câu luận (palm-content.vi.json), xử lý ảnh và sơ đồ bàn tay chỉ dùng ở hai màn này,
    tách ra khỏi gói chính để app mở nhanh hơn trên máy yếu (ARCHITECTURE 4, đo 13/11/2026). */
-const PalmScreen = lazy(() => import('../features/palm/PalmScreen').then((m) => ({ default: m.PalmScreen })));
-const PalmResultScreen = lazy(() => import('../features/palm/PalmResultScreen').then((m) => ({ default: m.PalmResultScreen })));
+const loadPalm = () => import('../features/palm/PalmScreen');
+const loadPalmResult = () => import('../features/palm/PalmResultScreen');
+const PalmScreen = lazy(() => loadPalm().then((m) => ({ default: m.PalmScreen })));
+const PalmResultScreen = lazy(() => loadPalmResult().then((m) => ({ default: m.PalmResultScreen })));
+/** Tải sẵn gói chỉ tay khi app rảnh (vài giây sau khi mở) để lần đầu bấm vào không khựng. Lỗi mạng thì bỏ qua:
+    lúc mở màn sẽ tải lại. Chỉ tải mã JS, không tải mô hình MediaPipe. */
+const PREFETCH_DELAY_MS = 4000;
+function prefetchPalm(): () => void {
+  let idle: number | undefined;
+  const run = () => { loadPalm().catch(() => {}); loadPalmResult().catch(() => {}); };
+  const timer = setTimeout(() => {
+    if (typeof window.requestIdleCallback === 'function') idle = window.requestIdleCallback(run, { timeout: 5000 });
+    else run();
+  }, PREFETCH_DELAY_MS);
+  return () => { clearTimeout(timer); if (idle !== undefined) window.cancelIdleCallback?.(idle); };
+}
 const opening = (what: string) => <p className={s.screen} role="status">Đang mở {what}…</p>;
 
 function routeTitle(r: Route): string {
@@ -154,6 +168,7 @@ export function App({ journey = false }: { journey?: boolean }) {
   useEffect(() => onPause(stopReading), []);
   const ttsVoice = useApp((x) => x.settings.ttsVoice);
   useEffect(() => setPreferredVoice(ttsVoice ?? null), [ttsVoice]);
+  useEffect(() => (journey ? prefetchPalm() : undefined), [journey]);
   return (
     <div className={s.shell}>
       <TopBar />
