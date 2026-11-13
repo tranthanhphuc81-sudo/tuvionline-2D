@@ -1,6 +1,6 @@
 .wrap { display: grid; gap: var(--space-4); }
 .section { display: grid; gap: var(--space-2); }
-.title { font-family: var(--font-serif); font-size: var(--fs-md); color: var(--gold); }
+.title { font-family: var(--font-serif); font-size: var(--fs-md); color: var(--gold-text); }
 .p { line-height: 1.6; }
 .p ul, .list { margin: var(--space-1) 0; padding-left: 1.2em; display: grid; gap: 4px; }
 .note { color: var(--muted); font-size: var(--fs-sm); font-style: italic; }
@@ -18,15 +18,15 @@
 .itemBody { font-size: var(--fs-sm); line-height: 1.6; }
 .tag { flex: none; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 99px; border: 1px solid currentColor; }
 .tag[data-tone='ok'], .chip[data-tone='ok'] { color: var(--jade); }
-.tag[data-tone='mid'], .chip[data-tone='mid'] { color: var(--gold); }
-.tag[data-tone='warn'], .chip[data-tone='warn'] { color: var(--vermillion); }
+.tag[data-tone='mid'], .chip[data-tone='mid'] { color: var(--gold-text); }
+.tag[data-tone='warn'], .chip[data-tone='warn'] { color: var(--vermillion-text); }
 .chips { display: inline-flex; flex-wrap: wrap; gap: 6px; vertical-align: middle; }
 .chip { font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 99px; border: 1px solid currentColor; }
 .p small { color: var(--muted); }
 .kv { display: grid; }
 .kvRow { display: flex; justify-content: space-between; gap: var(--space-3); padding: 6px 0; border-bottom: 1px dashed var(--line); font-size: var(--fs-sm); }
 .kvRow:last-child { border-bottom: 0; }
-.kvRow dd { font-weight: 700; color: var(--gold); text-align: right; }
+.kvRow dd { font-weight: 700; color: var(--gold-text); text-align: right; }
 .bars { display: grid; gap: 6px; }
 .barRow { display: grid; grid-template-columns: 7.2em 1fr 3em; align-items: center; gap: var(--space-2); font-size: var(--fs-sm); }
 .barName { font-weight: 600; white-space: nowrap; }
@@ -43,11 +43,11 @@
 .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-2); }
 .card { border: 1px solid var(--line); border-radius: 10px; padding: var(--space-3); background: var(--surface2); display: grid; gap: 4px; }
 .cardLabel { font-size: 12px; color: var(--muted); }
-.cardValue { font-family: var(--font-serif); font-size: var(--fs-lg); font-weight: 700; color: var(--gold); }
+.cardValue { font-family: var(--font-serif); font-size: var(--fs-lg); font-weight: 700; color: var(--gold-text); }
 .cardBody { font-size: var(--fs-sm); line-height: 1.6; color: var(--ink-dim); }
 .table { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); }
 .table th, .table td { padding: var(--space-2); border: 1px solid var(--line); text-align: left; vertical-align: top; }
-.table th { background: var(--surface2); color: var(--gold); font-size: 12px; }
+.table th { background: var(--surface2); color: var(--gold-text); font-size: 12px; }
 .table td { color: var(--ink-dim); }
 .table td b { color: var(--ink); }
 /* Máy hẹp: mỗi hàng thành một thẻ, ô tự mang nhãn cột để không phải cuộn ngang. */
@@ -66,7 +66,7 @@
 .cycle svg { width: min(100%, 280px); height: auto; color: var(--muted); }
 .cycleEdge { stroke: currentColor; stroke-width: 1; opacity: 0.45; fill: none; }
 .cycleEdge[data-kind='khac'] { stroke-dasharray: 3 3; }
-.cycleEdge[data-active='true'] { stroke: var(--gold); opacity: 1; stroke-width: 2; color: var(--gold); }
+.cycleEdge[data-active='true'] { stroke: var(--gold); opacity: 1; stroke-width: 2; color: var(--gold-text); }
 .cycleNode circle { stroke: var(--line-strong); stroke-width: 1; }
 .cycleNode[data-focus='true'] circle { stroke: var(--gold); stroke-width: 3; }
 .cycleNode text { font-size: 10px; font-weight: 600; }

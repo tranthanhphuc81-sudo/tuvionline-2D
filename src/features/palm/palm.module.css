@@ -40,7 +40,7 @@
 .item:last-child { border-bottom: 0; }
 .tone { display: inline-block; margin-right: 6px; padding: 0 8px; border-radius: 99px; font-size: 12px; font-weight: 600; border: 1px solid var(--line-strong); }
 .tone[data-tone='+'] { color: var(--jade); border-color: var(--jade); }
-.tone[data-tone='!'] { color: var(--vermillion); border-color: var(--vermillion); }
+.tone[data-tone='!'] { color: var(--vermillion-text); border-color: var(--vermillion); }
 .why { justify-self: start; min-height: var(--tap); padding: 0; border: 0; background: transparent; color: var(--blue); font: inherit; font-size: var(--fs-sm); text-decoration: underline; }
 .feature { margin: 0; font-size: var(--fs-sm); color: var(--muted); }
 .topicTitle { margin: 0; font-size: var(--fs-md); }

@@ -215,6 +215,8 @@ nguyên. CSS Modules tránh đụng tên class mà không cần gói nào.
 - *Tailwind:* phải ánh xạ lại toàn bộ token, chép kiểu legacy sang không còn là "chép", thêm bước build và plugin.
 - *CSS-in-JS (styled-components, Emotion):* tốn chi phí lúc chạy trong WebView máy yếu, và React 19 không cần.
 
+**Độ tương phản chữ (13/11/2026).** Bảng màu chép nguyên từ legacy nên vài màu dùng làm chữ dưới 4,5:1: ở chế độ sáng `--gold` #a1732c 3,3–4,1:1, `--muted` #786f57 3,9–4,9:1, chữ `--on-gold` trên nút vàng 4,08:1; ở chế độ tối `--vermillion` #c9603f 3,45–4,32:1 trên nền nổi, huy hiệu "Thân" chữ trắng trên `--vermillion` 4,02:1. Cách sửa giữ nguyên màu nền, viền, kim la bàn và chỉ thêm token cho CHỮ: `--gold-text` (tối = `--gold`, sáng #7f5a20), `--vermillion-text` (tối #e07c5a, sáng #a8402a), `--vermillion-badge` #a8402a cho nền có chữ trắng; chế độ sáng đổi `--muted` thành #6b634d và `--on-gold` thành #120c02. Mọi `color: var(--gold)` (35 chỗ) và `color: var(--vermillion)` (7 chỗ) đổi sang token chữ. Rà bằng trình duyệt ở 360px trên 5 tab, La Bàn, Nạp Âm, Cài đặt, cả thanh trên và thanh tab, hai chế độ: không còn chữ nào dưới 4,5:1. Khi thêm màn mới, chữ màu dùng `--gold-text` / `--vermillion-text`, không dùng thẳng `--gold` / `--vermillion`.
+
 ### 4.2 Font chữ
 
 **Lựa chọn:** dùng font giống legacy, **đóng gói offline** qua `@fontsource` (5.3.x):

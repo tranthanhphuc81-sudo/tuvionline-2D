@@ -6,7 +6,7 @@
 }
 .item[aria-checked='true'], .item[aria-current='true'] { border-color: var(--gold); }
 .avatar {
-  width: 36px; height: 36px; flex: none; border-radius: 50%; background: var(--surface3); color: var(--gold);
+  width: 36px; height: 36px; flex: none; border-radius: 50%; background: var(--surface3); color: var(--gold-text);
   display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-family: var(--font-serif);
 }
 .itemText { display: grid; min-width: 0; flex: 1; }

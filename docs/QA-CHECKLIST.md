@@ -158,6 +158,15 @@ Lấy từ ARCHITECTURE mục 7.3 và kết quả lần thử trên S25 Ultra (P
 - [ ] Dải Đại Vận cuộn ngang bằng ngón tay, giai đoạn hiện tại được đánh dấu; Tra Lưu Niên đổi năm được.
 - [ ] Thầy đọc: trụ đang nói tới sáng lên.
 
+## Bát Tự: các mục thêm từ hai sách (13/11/2026)
+
+- [ ] Mở hết các khối gập (Cách cục, Hình xung hội hợp, Dòng khí, Tính tình, Lục thân, Lời sách theo tháng) ở 360dp và cỡ chữ lớn nhất: không cuộn ngang, chữ không bị cắt.
+- [ ] Lời sách theo tháng: phần "Lá của bạn có các can này chưa?" khớp với tứ trụ trên màn (can lộ ở trụ nào, ẩn trong chi nào).
+- [ ] Lục thân: phần "Sách xưa luận thêm" đọc có nhẹ nhàng không, có chỗ nào gây lo lắng không (ghi lại câu cụ thể để sửa); hồ sơ người thân (vợ, con…) cũng xem lại.
+- [ ] Phân tích ngũ hành: mục "Nói dễ hiểu" và "Lá số cổ giống bạn" hiện đúng chỗ; đổi cách luận (lá có hai cách) thì "Nói dễ hiểu" đổi theo.
+- [ ] Nút "Nghe phần ngũ hành": Thầy đọc phần ví dụ và hai năm ví dụ, xưng hô (con, anh, chị…) tự nhiên; bài không quá dài.
+- [ ] Chế độ sáng: chữ vàng, chữ xám đọc rõ ngoài trời (màu đã đậm hơn bản cũ).
+
 ## Lục Hào
 
 - [ ] "Gieo quẻ" bằng nút và bằng **lắc máy**: gieo đủ 6 hào, có rung nhẹ; lắc nhẹ khi đi bộ không tự gieo (ngưỡng lắc 22 m/s² là số tạm, ghi lại cảm nhận).
