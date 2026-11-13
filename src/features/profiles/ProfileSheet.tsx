@@ -17,7 +17,7 @@ export function ProfileSheet({ open, onClose }: { open: boolean; onClose(): void
       {profiles.length === 0 && <p className={ui.muted}>Chưa có hồ sơ nào. Thêm hồ sơ để các công cụ tự tính theo ngày giờ sinh.</p>}
       <ul className={s.list} role="radiogroup" aria-label="Chọn hồ sơ">
         {profiles.map((p) => (
-          <li key={p.id}>
+          <li key={p.id} role="none">
             <button type="button" role="radio" aria-checked={p.id === activeId} className={s.item} onClick={() => { setActiveProfile(store, p.id); onClose(); }}>
               <span className={s.avatar} aria-hidden="true">{initials(p.name)}</span>
               <span className={s.itemText}>
