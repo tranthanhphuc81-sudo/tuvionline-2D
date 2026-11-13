@@ -109,11 +109,11 @@ export function TuViScreen() {
       </div>
 
       <h2 className={ui.sectionTitle}>Đại Hạn (mỗi giai đoạn 10 năm, khởi từ cung Mệnh)</h2>
-      <div ref={strip} className={s.strip} role="list" aria-label="Các Đại Hạn">
+      <div ref={strip} className={s.strip} role="group" aria-label="Các Đại Hạn">
         {ch.daiHan.map((d) => {
           const cur = curAge != null && curAge >= d.tuoiStart && curAge <= d.tuoiEnd;
           return (
-            <button key={d.chi} type="button" role="listitem" className={s.dh} data-cur={cur} aria-current={cur || undefined} onClick={() => { setPicked(d.chi); setMode('chart'); }}>
+            <button key={d.chi} type="button" className={s.dh} data-cur={cur} aria-current={cur || undefined} onClick={() => { setPicked(d.chi); setMode('chart'); }}>
               <b>{CHI[d.chi]}</b><span>{d.cungTen}</span><span>{d.tuoiStart}–{d.tuoiEnd} tuổi</span>
             </button>
           );
@@ -138,16 +138,16 @@ export function TuViScreen() {
             ['Tứ Hoá lưu niên', 'L:' + lookup.tuHoa.loc + ' · Q:' + lookup.tuHoa.quyen + ' · K:' + lookup.tuHoa.khoa + ' · Ky:' + lookup.tuHoa.ky],
           ] as [string, string][]).map(([k, v]) => <div key={k} className={s.cell}><dt>{k}</dt><dd>{v}</dd></div>)}
         </dl>
-        <SectionView sections={tuViYearSections(ch, tuViYear(ch, year))} level={4} />
+        <SectionView sections={tuViYearSections(ch, tuViYear(ch, year))} />
       </section>
 
       <details className={s.fold}>
         <summary><h2 className={ui.sectionTitle}>Giải thích chỉ số</h2><span className={s.muted}>6 bài học nhỏ</span></summary>
-        <section className={ui.card}><SectionView sections={tuViExplain(ch)} level={4} /></section>
+        <section className={ui.card}><SectionView sections={tuViExplain(ch)} /></section>
       </details>
 
       <h2 className={ui.sectionTitle}>Tổng kết</h2>
-      <section className={ui.card}><SectionView sections={tuViTongKet(ch, thisYear())} level={4} /></section>
+      <section className={ui.card}><SectionView sections={tuViTongKet(ch, thisYear())} /></section>
 
       <section className={s.notes}><SectionView sections={[tuViNotes()]} /></section>
 

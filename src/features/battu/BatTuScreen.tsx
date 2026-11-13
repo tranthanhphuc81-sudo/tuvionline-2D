@@ -152,11 +152,11 @@ export function BatTuScreen() {
 
       <details className={s.fold}>
         <summary><h2 className={ui.sectionTitle}>Giải thích chỉ số</h2><span className={ui.muted}>6 bài học nhỏ</span></summary>
-        <section className={ui.card}><SectionView sections={batTuExplain(ch)} level={4} /></section>
+        <section className={ui.card}><SectionView sections={batTuExplain(ch)} /></section>
       </details>
 
       <h2 className={ui.sectionTitle}>Tổng kết</h2>
-      <section className={ui.card}><SectionView sections={batTuTongKet(ch, thisYear())} level={4} /></section>
+      <section className={ui.card}><SectionView sections={batTuTongKet(ch, thisYear())} /></section>
 
       <section className={s.notes}><SectionView sections={[batTuNotes()]} /></section>
 

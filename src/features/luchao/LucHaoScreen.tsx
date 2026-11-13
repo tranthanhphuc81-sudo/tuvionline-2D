@@ -134,11 +134,11 @@ export function LucHaoScreen() {
 
           <details className={s.fold}>
             <summary><h2 className={ui.sectionTitle}>Giải thích chỉ số</h2><span className={ui.muted}>6 bài học nhỏ</span></summary>
-            <section className={ui.card}><SectionView sections={lucHaoExplain(result.r, key)} level={4} /></section>
+            <section className={ui.card}><SectionView sections={lucHaoExplain(result.r, key)} /></section>
           </details>
 
           <h2 className={ui.sectionTitle}>Tổng kết</h2>
-          <section className={ui.card}><SectionView sections={lucHaoTongKet(result.r, result.ctx, key)} level={4} /></section>
+          <section className={ui.card}><SectionView sections={lucHaoTongKet(result.r, result.ctx, key)} /></section>
 
           <section className={s.notes}><SectionView sections={[lucHaoNotes()]} /></section>
         </div>

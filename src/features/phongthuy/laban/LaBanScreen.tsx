@@ -146,7 +146,7 @@ export function LaBanScreen({ active }: { active: boolean }) {
 
       <details className={s.fold}>
         <summary><h2 className={ui.sectionTitle}>Cách đọc la bàn này</h2><span className={ui.muted}>4 bài học nhỏ</span></summary>
-        <section className={ui.card}><SectionView sections={laBanLessons()} level={4} /></section>
+        <section className={ui.card}><SectionView sections={laBanLessons()} /></section>
       </details>
 
       <p className={ui.muted}>{LABAN_FOOT}</p>

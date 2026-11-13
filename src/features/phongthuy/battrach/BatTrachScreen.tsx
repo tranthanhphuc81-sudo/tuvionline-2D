@@ -84,11 +84,11 @@ export function BatTrachScreen() {
 
       <details className={s.fold}>
         <summary><h2 className={ui.sectionTitle}>Giải thích chỉ số</h2><span className={ui.muted}>5 bài học nhỏ</span></summary>
-        <section className={ui.card}><SectionView sections={batTrachExplain(r)} level={4} /></section>
+        <section className={ui.card}><SectionView sections={batTrachExplain(r)} /></section>
       </details>
 
       <h2 className={ui.sectionTitle}>Tổng kết</h2>
-      <section className={ui.card}><SectionView sections={batTrachTongKet(r)} level={4} /></section>
+      <section className={ui.card}><SectionView sections={batTrachTongKet(r)} /></section>
 
       <section className={s.notes}><SectionView sections={[batTrachNotes()]} /></section>
       <p className={ui.muted}>{CULTURAL_NOTE}</p>
