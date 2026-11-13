@@ -10,12 +10,12 @@ body {
 h1, h2, h3, h4 { font-family: var(--font-serif); line-height: 1.3; margin: 0; }
 ul, ol, dl, dd { margin: 0; }
 h1 { font-size: var(--fs-xl); }
-h2 { font-size: var(--fs-lg); color: var(--gold); }
+h2 { font-size: var(--fs-lg); color: var(--gold-text); }
 h3 { font-size: var(--fs-md); }
 p { margin: 0; }
 button, input, select, textarea { font: inherit; color: inherit; }
 button { cursor: pointer; }
-a { color: var(--gold); }
+a { color: var(--gold-text); }
 :focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 [hidden] { display: none !important; }
 .visually-hidden {

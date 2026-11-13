@@ -37,7 +37,7 @@
   min-height: var(--tabbar-h); border: 0; background: transparent; color: var(--muted);
   display: grid; justify-items: center; align-content: center; gap: 2px; padding: 6px 2px; position: relative;
 }
-.tab[aria-selected='true'] { color: var(--gold); }
+.tab[aria-selected='true'] { color: var(--gold-text); }
 .tab[aria-selected='true']::before {
   content: ''; position: absolute; top: 0; left: 25%; right: 25%; height: 3px; border-radius: 0 0 3px 3px; background: var(--gold);
 }

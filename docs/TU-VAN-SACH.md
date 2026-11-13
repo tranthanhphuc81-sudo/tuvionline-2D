@@ -93,6 +93,8 @@ Hai sách đã dùng trong app: 121 lá số mẫu (`src/content/nguhanh/sach.js
 
 **Không làm:** đoán sinh tử, ly hôn, khắc chồng khắc vợ, hiếm muộn. Các phần này vướng danh sách từ cấm (ARCHITECTURE 12.8), chính sách Google Play, và dễ gây tổn thương.
 
+**Đổi 13/11/2026 (chủ dự án quyết):** thêm lời luận của sách nhưng viết nhẹ: nói điều sách thấy kèm việc nên làm ("sách xưa xem… nên…"), không dùng từ nặng, không nói sinh tử, bệnh tật; tắt được bằng `LUC_THAN_LOI_LUAN` (ARCHITECTURE 15.8, câu mẫu ở LOI-THAY mục Lục thân).
+
 ### G. Lời sách cho Can ngày theo tháng sinh
 
 **Nguồn:** phần cuối TBCT, khoảng từ trang 200 tới 303: từng Can ngày sinh mỗi tháng, có ý chính và lá số ví dụ.

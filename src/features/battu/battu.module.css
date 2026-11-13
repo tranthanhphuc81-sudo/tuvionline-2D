@@ -3,7 +3,7 @@
 .cell { background: var(--surface); padding: 10px 12px; min-width: 0; }
 @media (max-width: 559px) { .cell[data-wide='true'] { grid-column: 1 / -1; } }
 .cell dt { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
-.cell dd { margin: 2px 0 0; font-family: var(--font-serif); font-weight: 700; color: var(--gold); overflow-wrap: anywhere; }
+.cell dd { margin: 2px 0 0; font-family: var(--font-serif); font-weight: 700; color: var(--gold-text); overflow-wrap: anywhere; }
 .pillars { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-2); }
 @media (min-width: 640px) { .pillars { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 .pillar { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px; min-width: 0; display: flex; flex-direction: column; }
@@ -11,16 +11,16 @@
 .pillar[data-focus='true'] { box-shadow: inset 0 0 0 2.5px var(--jade); }
 .role { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: 6px; }
 .cc { font-family: var(--font-serif); font-weight: 700; font-size: 1.35rem; line-height: 1.15; margin-bottom: 2px; }
-.can { color: var(--gold); }
+.can { color: var(--gold-text); }
 .meta { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
 .loTag { align-self: flex-start; font-size: 11.5px; font-weight: 700; padding: 2px 8px; border-radius: 99px; background: var(--surface2); color: var(--blue); border: 1px solid var(--line-strong); margin-bottom: 8px; }
-.loTag[data-nhatchu='true'] { color: var(--gold); }
+.loTag[data-nhatchu='true'] { color: var(--gold-text); }
 .tangTitle { font-size: 10.5px; text-transform: uppercase; color: var(--muted); letter-spacing: .06em; margin-bottom: 4px; border-top: 1px dashed var(--line); padding-top: 6px; }
 .tangRow { display: grid; gap: 0; font-size: 12px; padding: 3px 0; color: var(--ink-dim); line-height: 1.35; }
 .tangRow + .tangRow { border-top: 1px dotted var(--line); }
 .tangRow small { color: var(--muted); }
 .tt { color: var(--jade); font-weight: 600; }
-.tangRow[data-dominant='true'] .tt { color: var(--vermillion); }
+.tangRow[data-dominant='true'] .tt { color: var(--vermillion-text); }
 .strip { position: relative; display: flex; gap: var(--space-2); overflow-x: auto; padding-bottom: 4px; scroll-snap-type: x proximity; }
 .dv { flex: none; min-width: 100px; scroll-snap-align: start; display: grid; justify-items: center; gap: 2px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px; font-size: 12px; color: var(--muted); }
 .dv b { font-family: var(--font-serif); font-size: var(--fs-md); color: var(--ink); }
@@ -29,7 +29,7 @@
 .notes { font-size: var(--fs-sm); color: var(--ink-dim); border-top: 1px dashed var(--line-strong); padding-top: var(--space-3); }
 .fold > summary { list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: var(--tap); cursor: pointer; }
 .fold > summary::-webkit-details-marker { display: none; }
-.fold > summary::after { content: '▾'; color: var(--gold); transition: transform .15s; }
+.fold > summary::after { content: '▾'; color: var(--gold-text); transition: transform .15s; }
 .fold[open] > summary::after { transform: rotate(180deg); }
 .fold[open] > summary { margin-bottom: var(--space-2); }
 .fold > summary h2 { flex: 1; }
@@ -38,12 +38,12 @@
 .ngFold { border: 1px solid var(--line); border-radius: 10px; padding: 0 var(--space-3); background: var(--surface); }
 .ngFold > summary { list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: var(--tap); cursor: pointer; font-weight: 600; }
 .ngFold > summary::-webkit-details-marker { display: none; }
-.ngFold > summary::after { content: '▾'; color: var(--gold); transition: transform .15s; }
+.ngFold > summary::after { content: '▾'; color: var(--gold-text); transition: transform .15s; }
 .ngFold[open] > summary::after { transform: rotate(180deg); }
 .ngFold[open] { padding-bottom: var(--space-3); }
 .tangRow[data-focus='true'] { background: var(--surface3); box-shadow: inset 0 0 0 1.5px var(--jade); border-radius: 6px; }
 
 /* Thẻ kiểm chứng bằng các năm đã qua (3C.5) */
 .verify { display: grid; gap: var(--space-2); border: 1px solid var(--line); border-radius: 10px; padding: var(--space-3); background: var(--surface); }
-.verifyTitle { margin: 0; font-family: var(--font-serif); font-size: var(--fs-md); color: var(--gold); }
+.verifyTitle { margin: 0; font-family: var(--font-serif); font-size: var(--fs-md); color: var(--gold-text); }
 .verifyBtns { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2); }

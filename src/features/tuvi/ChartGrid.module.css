@@ -12,13 +12,13 @@
 .sel { box-shadow: inset 0 0 0 2.5px var(--gold); background: var(--surface3); }
 .hd { display: flex; flex-direction: column; line-height: 1.15; }
 .hd b { font-family: var(--font-serif); font-size: 0.82rem; }
-.cg { font-size: 0.66rem; color: var(--gold); font-weight: 700; }
+.cg { font-size: 0.66rem; color: var(--gold-text); font-weight: 700; }
 .stars { display: flex; flex-direction: column; font-size: 0.7rem; font-weight: 700; line-height: 1.25; }
 .stars .star { overflow-wrap: anywhere; }
 .vcd { color: var(--muted); font-weight: 500; font-size: 0.66rem; }
 .age { margin-top: auto; font-size: 0.62rem; color: var(--muted); font-variant-numeric: tabular-nums; }
 .than {
-  align-self: flex-start; font-size: 0.56rem; line-height: 1.5; background: var(--vermillion); color: #fff;
+  align-self: flex-start; font-size: 0.56rem; line-height: 1.5; background: var(--vermillion-badge); color: #fff;
   padding: 0 5px; border-radius: 99px; font-weight: 700; margin-bottom: 1px;
 }
 .center {
@@ -27,7 +27,7 @@
   font-size: 0.7rem; padding: 6px; color: var(--ink-dim);
 }
 .cname { font-family: var(--font-serif); font-size: 0.85rem; color: var(--ink); overflow-wrap: anywhere; }
-.cuc { color: var(--gold); font-weight: 700; font-size: 0.8rem; margin-top: 4px; }
+.cuc { color: var(--gold-text); font-weight: 700; font-size: 0.8rem; margin-top: 4px; }
 .muted { color: var(--muted); }
 .lines { position: absolute; z-index: 1; inset: 3px; width: calc(100% - 6px); height: calc(100% - 6px); pointer-events: none; }
 .lines line { stroke: var(--gold); stroke-width: 1.5; stroke-dasharray: 4 3; opacity: .8; vector-effect: non-scaling-stroke; }
