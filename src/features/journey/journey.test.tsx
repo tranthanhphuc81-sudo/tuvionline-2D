@@ -7,6 +7,7 @@ import { adaptCount, particleAlpha, spawnParticle, stepParticle } from './partic
 import { entryPlan, lunarEventOf, skipJourney, startJourney, stepJourney } from './plan';
 import { SCENES } from './scenes';
 import { layerTransform } from './SceneEngine';
+import { VIDEO_SEGMENTS, videoAction } from './video';
 import { AppProvider } from '../../app/context';
 import { createStore } from '../../state/store';
 import { emptyState, type PersistedState } from '../../state/schema';
@@ -158,5 +159,42 @@ describe('màn hình hành trình', () => {
     act(() => { vi.advanceTimersByTime(400); });
     act(() => { vi.advanceTimersByTime(400); });
     expect(onDone).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('video nền lối vào (ARCHITECTURE 12.12)', () => {
+  afterEach(cleanup);
+  it('mỗi trạm có một đoạn 4 giây, nối liền nhau, đủ 5 trạm', () => {
+    expect(SCENES.map((x) => VIDEO_SEGMENTS[x.id])).toEqual([[0, 4], [4, 8], [8, 12], [12, 16], [16, 20]]);
+  });
+  it('tua về đầu đoạn khi lệch, phát trong đoạn, dừng ở khung cuối', () => {
+    expect(videoAction(0, [4, 8])).toBe('seek');
+    expect(videoAction(4, [4, 8])).toBe('play');
+    expect(videoAction(7.5, [4, 8])).toBe('play');
+    expect(videoAction(8, [4, 8])).toBe('hold');
+    expect(videoAction(8.2, [4, 8])).toBe('hold');
+    expect(videoAction(9, [4, 8])).toBe('seek');
+  });
+  it('chỉ bản đầy đủ có video; rút gọn và giảm chuyển động giữ tranh vẽ', () => {
+    const { unmount } = render(withStore(<Journey plan="full" onDone={() => {}} />));
+    const v = document.querySelector('video');
+    expect(v?.muted).toBe(true);
+    expect(v?.getAttribute('aria-hidden')).toBe('true');
+    expect(document.querySelectorAll('[data-scene] img').length).toBeGreaterThan(0); // chưa phát được: tranh vẽ vẫn hiện
+    unmount();
+    for (const plan of ['short', 'fade'] as const) {
+      const r = render(withStore(<Journey plan={plan} onDone={() => {}} />));
+      expect(document.querySelector('video'), plan).toBeNull();
+      r.unmount();
+    }
+  });
+  it('video phát được thì thôi vẽ lớp tranh; video lỗi thì tranh vẽ quay lại', () => {
+    render(withStore(<Journey plan="full" onDone={() => {}} />));
+    const v = document.querySelector('video')!;
+    act(() => { fireEvent.playing(v); });
+    expect(document.querySelectorAll('[data-scene] img').length).toBe(0);
+    act(() => { fireEvent.error(v); });
+    expect(document.querySelector('video')).toBeNull();
+    expect(document.querySelectorAll('[data-scene] img').length).toBeGreaterThan(0);
   });
 });

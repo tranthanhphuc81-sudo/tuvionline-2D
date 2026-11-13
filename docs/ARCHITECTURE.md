@@ -832,6 +832,20 @@ Câu dính từ cấm: `text` rỗng, `caption` là chữ gốc kèm lời "(Ph�
 3. Dùng Lottie; không đặt tên riêng cho thầy và đạo quán.
 4. Thêm mục chọn giọng trong Cài đặt: liệt kê giọng `-local`, có nút nghe thử (bổ sung cho 12.9).
 
+### 12.12 Video nền lối vào (13/11/2026)
+
+Chủ dự án tạo video bằng công cụ AI (20 giây, 1280×720, 24 khung/giây): một người mặc áo dài nhìn từ sau lưng đi qua cầu gỗ vào cổng, qua vườn, chính điện, hành lang, rồi ngồi trước cửa sổ tròn. Thứ tự trùng 5 trạm của 12.1 nên dùng làm nền thay tranh vẽ, phần còn lại của hành trình giữ nguyên.
+
+- **Cách ghép** (`src/features/journey/video.tsx`): một thẻ `<video>` nằm dưới trạm, không gắn lại khi đổi trạm. Mỗi trạm có một đoạn 4 giây (`VIDEO_SEGMENTS`: cổng 0–4, vườn 4–8, chính điện 8–12, hành lang 12–16, tĩnh thất 16–20); vào trạm thì phát đoạn của mình (lệch quá 0,25 giây thì tua về đầu đoạn), hết đoạn thì dừng ở khung cuối chờ sang trạm sau. Nhờ vậy chính điện dài 9 giây vẫn chờ thắp hương, chạm để bước tới vẫn chạy. Khi video đã phát (`playing`) thì trạm thôi vẽ lớp tranh, vẫn giữ màu theo giờ và hạt lá, khói.
+- **Chỉ bản đầy đủ:** bản rút gọn mỗi trạm 0,5 giây, giảm chuyển động chỉ mờ dần, nên giữ tranh vẽ. Video lỗi (`error`) thì gỡ video, tranh vẽ quay lại. Video luôn tắt tiếng, có `playsInline`, ẩn với trình đọc màn hình; tiếng nền vẫn do `ambientAudio`.
+- **Nén** (ffmpeg 6, gói `ffmpeg-static` 5.2.0 cài ngoài dự án, chủ dự án cho phép chạy): cắt giữa khung theo 9:16 vì người đi luôn ở giữa hình và app chạy màn dọc, bỏ tiếng, H.264 CRF 23, mỗi giây một khung khoá để tua nhanh, `faststart`. Từ 9,1 MB còn 1,72 MB; cả `src/assets/journey` khoảng 2 MB, trong ngân sách 3 MB của 12.4.
+
+```
+ffmpeg -i goc.mp4 -vf "crop=406:720:437:0" -an -c:v libx264 -preset slow -crf 23 -profile:v high -pix_fmt yuv420p -g 24 -movflags +faststart src/assets/journey/video/loi-vao.mp4
+```
+
+Bản gốc không commit. Thay video khác thì giữ 5 đoạn 4 giây theo đúng thứ tự trạm, hoặc sửa `VIDEO_SEGMENTS`. Chưa thử trên APK: tự phát trong WebView, độ mượt trên máy tầm thấp.
+
 ## 13. Xem chỉ tay (chốt cách nhập liệu 05/11/2026)
 
 Căn cứ nội dung: `docs/CHI-TAY.md`, `src/content/palm/palm-content.vi.json`. Thứ tự bước: `docs/PROMPT-KIT-CHI-TAY.md`. Mục này là quyết định cho bước 3B.1, các ý còn lại của 3B.1 sẽ bổ sung khi có số đo.

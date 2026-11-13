@@ -9,6 +9,7 @@ import { skipJourney, startJourney, stepJourney, type EntryPlan } from './plan';
 import { SceneView } from './SceneEngine';
 import { SCENES, preloadScene } from './scenes';
 import { IncenseControl } from './incense';
+import { JourneyVideo } from './video';
 import { Character } from '../reader/Character';
 import { DONG_LINES, fill, pick } from '../../content/reader/templates';
 import { useReader } from '../reader/hooks';
@@ -29,6 +30,7 @@ export function Journey({ plan, sound = false, onDone }: { plan: Exclude<EntryPl
   sceneRef.current = scene;
   const animate = plan !== 'fade';
   const durationMs = plan === 'full' ? scene.durationMs.full : scene.durationMs.short;
+  const [videoReady, setVideoReady] = useState(false);
 
   useEffect(() => backStack.register(() => { setSt((x) => skipJourney(x, COUNT)); return true; }), []);
   useEffect(() => { preloadScene(SCENES[st.index + 1]); }, [st.index]);
@@ -70,7 +72,8 @@ export function Journey({ plan, sound = false, onDone }: { plan: Exclude<EntryPl
 
   return (
     <div className={s.journey} data-done={st.done} role="dialog" aria-label="Lối vào đạo quán" onPointerDown={(e) => { startY.current = e.clientY; audio.current?.unlock(); }} onPointerUp={onUp}>
-      <SceneView key={scene.id} scene={scene} ambience={ambience} durationMs={durationMs} animate={animate} />
+      {plan === 'full' && <JourneyVideo sceneId={scene.id} onReady={setVideoReady} />}
+      <SceneView key={scene.id} scene={scene} ambience={ambience} durationMs={durationMs} animate={animate} hideLayers={videoReady} />
       <button type="button" className={s.skip} onPointerUp={(e) => e.stopPropagation()} onClick={() => setSt((x) => skipJourney(x, COUNT))}>Bỏ qua</button>
       {plan === 'full' && (scene.id === 'gate' || scene.id === 'corridor') && <Character name="daodong" state={scene.id === 'gate' ? 'nod' : 'point'} className={s.dong} />}
       {plan === 'full' && (scene.id === 'gate' || scene.id === 'corridor') && <p className={s.speech}>{fill(pick(DONG_LINES[scene.id], new Date().getDate()), { ta: persona.ta })}</p>}
