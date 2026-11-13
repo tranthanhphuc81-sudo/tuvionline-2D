@@ -14,21 +14,23 @@ Hai sách đã dùng trong app: 121 lá số mẫu (`src/content/nguhanh/sach.js
 
 ## 2. App đã có gì so với hai sách
 
-| Nội dung trong sách | App |
-|---|---|
-| Can chi, âm dương, sinh vượng tử tuyệt, tàng can (TBCT ch.1–3; TTT ch.7–9) | Có: engine Bát Tự |
-| Suy vượng của Nhật Chủ (TBCT ch.6; TTT ch.17) | Có: chấm điểm 5 hành, vượng/nhược |
-| Phù ức, Điều hậu, Thông quan (TTT ch.18, 20, 29, 30; TBCT ch.14) | Có: các cách luận của engine ngũ hành |
-| Tòng cách, chuyên vượng (TBCT ch.22; TTT II ch.12, 14) | Có: Tòng cách 4 điều kiện |
-| Hành vận, Đại Vận, lưu niên (TBCT ch.25; TTT II ch.28) | Có: Đại Vận, năm, kiểm chứng bằng các năm đã qua |
-| Can hợp, lục hợp, tam hợp, lục xung | Có trong bảng tính điểm, nhưng KHÔNG hiện cho người dùng |
-| **Cách cục theo tháng sinh** (TBCT ch.8–21, 31–48; TTT ch.12, 15) | **Chưa có.** Đây là phần lớn nhất của TBCT |
-| **Nhân nguyên tư lệnh** (TBCT phụ lục ch.3) | **Chưa có** |
-| **Hình, xung, hội, hợp và cách giải** (TBCT ch.5, 7, 17; TTT ch.11, II ch.18–19) | **Chưa có** phần giải thích |
-| Thanh trọc, chân thần, giả thần, nguyên lưu (TTT ch.19, 23–26) | Chưa có |
-| Lục thân theo cung vị và thập thần (TBCT ch.23–24; TTT II ch.1–4) | Chưa có |
-| Tính tình (TBCT ch.4; TTT II ch.24) | Chỉ có nét của Can ngày (legacy) |
-| Hoá khí cách (TTT II ch.13, 15) | Chưa có |
+Bảng dưới là tình trạng khi viết tài liệu này (12/11/2026). Cột "Bây giờ" cập nhật ngày 13/11/2026.
+
+| Nội dung trong sách | App (12/11) | Bây giờ (13/11) |
+|---|---|---|
+| Can chi, âm dương, sinh vượng tử tuyệt, tàng can (TBCT ch.1–3; TTT ch.7–9) | Có: engine Bát Tự | Như cũ |
+| Suy vượng của Nhật Chủ (TBCT ch.6; TTT ch.17) | Có: chấm điểm 5 hành, vượng/nhược | Như cũ |
+| Phù ức, Điều hậu, Thông quan (TTT ch.18, 20, 29, 30; TBCT ch.14) | Có: các cách luận của engine ngũ hành | Như cũ; thêm "Nói dễ hiểu" và "Lá số cổ giống bạn" |
+| Tòng cách, chuyên vượng (TBCT ch.22; TTT II ch.12, 14) | Có: Tòng cách 4 điều kiện | Như cũ |
+| Hành vận, Đại Vận, lưu niên (TBCT ch.25; TTT II ch.28) | Có: Đại Vận, năm, kiểm chứng bằng các năm đã qua | Như cũ |
+| Can hợp, lục hợp, tam hợp, lục xung | Có trong bảng tính điểm, nhưng KHÔNG hiện cho người dùng | Đã hiện: khối Hình, xung, hội, hợp (mục C) |
+| **Cách cục theo tháng sinh** (TBCT ch.8–21, 31–48; TTT ch.12, 15) | **Chưa có.** Đây là phần lớn nhất của TBCT | Đã làm (mục A, ARCHITECTURE 15) |
+| **Nhân nguyên tư lệnh** (TBCT phụ lục ch.3) | **Chưa có** | Đã làm (mục B); bảng tư lệnh không đối chiếu được trang sách (15.2) |
+| **Hình, xung, hội, hợp và cách giải** (TBCT ch.5, 7, 17; TTT ch.11, II ch.18–19) | **Chưa có** phần giải thích | Đã làm (mục C, 15.6) |
+| Thanh trọc, chân thần, giả thần, nguyên lưu (TTT ch.19, 23–26) | Chưa có | Nguyên lưu đã làm (mục D, 15.7); thanh trọc cố ý không làm (xem mục D) |
+| Lục thân theo cung vị và thập thần (TBCT ch.23–24; TTT II ch.1–4) | Chưa có | Đã làm, kèm lời luận viết nhẹ, tắt được (mục F, 15.8) |
+| Tính tình (TBCT ch.4; TTT II ch.24) | Chỉ có nét của Can ngày (legacy) | Đã thêm tính tình theo ngũ hành, thập thần (mục E) |
+| Hoá khí cách (TTT II ch.13, 15) | Chưa có | Đã làm (mục H) |
 
 **Điều số liệu cho thấy:** engine chỉ khớp sách 45% (`docs/NGU-HANH-SACH.md`). Với *Tử Bình Chân Thuyên*, 55% lá số ở nhóm "khác", vì sách luận theo cách cục ở tháng sinh, còn engine chọn Dụng thần theo cân bằng 5 hành. Phiên trước đã thử sửa quy tắc phù ức mà không cải thiện được (ARCHITECTURE 14.14). Nghĩa là muốn gần sách hơn thì phải thêm một cách luận khác, không phải chỉnh tiếp con số.
 
@@ -108,6 +110,8 @@ Hai sách đã dùng trong app: 121 lá số mẫu (`src/content/nguhanh/sach.js
 **Nguồn:** TTT II ch.13 "Hoá tượng", ch.15 "Giả hoá"; TBCT ch.22 "ngoại cách".
 
 **Làm gì:** nhận ra lá số Can ngày hợp hoá thành công, như Tòng cách đang làm. Sách mẫu chỉ có 3 lá thuộc loại này nên khó kiểm, vì vậy để sau.
+
+**13/11/2026:** đã làm đủ A đến H, thêm mục G (lời sách cho Can ngày theo tháng sinh, 15.9). Còn chờ chủ dự án đọc duyệt: 120 lời tóm tắt của mục G và 28 câu Lục thân (LOI-THAY mục Lục thân).
 
 ## 4. Không nên thêm
 
