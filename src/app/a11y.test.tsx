@@ -6,13 +6,15 @@
    (thứ tự tiêu đề không nhảy cấp, vai trò ARIA không đè lên nút bấm). */
 import { describe, it, expect, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup, act } from '@testing-library/react';
-import axe from 'axe-core';
+import { axeViolations } from '../../tests/axe';
 import { App } from './App';
 import { AppProvider } from './context';
 import { createStore } from '../state/store';
 import { emptyState, type PersistedState } from '../state/schema';
 import { addProfile } from '../state/actions';
 import { initialRouter } from './router';
+import { Journey } from '../features/journey/Journey';
+import { SCENES } from '../features/journey/scenes';
 
 type Birth = { day: number; month: number; year: number; hourIdx: number };
 function setup(withProfile: boolean | Birth = true) {
@@ -25,15 +27,7 @@ function setup(withProfile: boolean | Birth = true) {
 
 afterEach(cleanup);
 
-/** Chạy axe trên cả trang, mở hết khối gập trước. Trả về danh sách lỗi dạng "luật: phần tử" để thông báo dễ đọc. */
-async function violations(): Promise<string[]> {
-  document.querySelectorAll('details').forEach((d) => { d.open = true; });
-  const r = await axe.run(document.body, {
-    runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice'] },
-    rules: { 'color-contrast': { enabled: false } },
-  });
-  return r.violations.flatMap((v) => v.nodes.map((n) => `${v.id}: ${n.target.join(' ')} — ${n.html.slice(0, 120)}`));
-}
+const violations = axeViolations;
 
 const TABS = [/Tĩnh thất/, /Tử Vi/, /Bát Tự/, /Lục Hào/, /Phong thủy/];
 
@@ -120,6 +114,19 @@ describe('truy cập (axe-core)', { timeout: 30000 }, () => {
     await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Lưu hồ sơ' })); });
     expect(screen.getAllByRole('alert').length).toBeGreaterThan(0);
     expect(await violations()).toEqual([]);
+  });
+
+  it('lối vào: từng cảnh của hành trình đầy đủ', async () => {
+    render(<AppProvider store={createStore<PersistedState>(emptyState())}><Journey plan="full" onDone={() => {}} /></AppProvider>);
+    const seen: string[] = [];
+    for (let i = 0; i < SCENES.length; i++) {
+      const id = document.querySelector('[data-scene]')?.getAttribute('data-scene') ?? '?';
+      seen.push(id);
+      expect(await violations(), id).toEqual([]);
+      const d = screen.getByRole('dialog');
+      await act(async () => { fireEvent.pointerDown(d, { clientY: 300 }); fireEvent.pointerUp(d, { clientY: 300 }); });
+    }
+    expect(new Set(seen).size).toBeGreaterThan(1);
   });
 
   it('Xem chỉ tay (màn nạp khi cần)', async () => {
