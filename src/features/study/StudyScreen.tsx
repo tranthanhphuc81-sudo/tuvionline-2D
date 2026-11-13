@@ -23,7 +23,9 @@ import { Intake } from './Intake';
 import { NguHanhButton, NguHanhQA } from './NguHanhTalk';
 import s from './study.module.css';
 
-const art = import.meta.glob('../../assets/journey/art/{room,obj-*}.svg', { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
+const art = import.meta.glob('../../assets/journey/art/obj-*.svg', { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
+/* Nền phòng: ảnh chủ dự án tạo cùng phong cách video lối vào (ARCHITECTURE 12.12), thay room.svg vẽ bằng code. */
+import roomPhoto from '../../assets/journey/art/room-photo.webp';
 const file = (name: string) => art[`../../assets/journey/art/${name}.svg`];
 
 const OBJECTS: readonly { id: StudyObjectId; tab?: TabId; route?: Route }[] = [
@@ -77,9 +79,11 @@ export function StudyScreen() {
   return (
     <div className={s.study} data-intake={!profile}>
       <div className={s.room}>
-        <img className={s.art} src={file('room')} alt="" draggable={false} />
+        <img className={s.art} src={roomPhoto} alt="" draggable={false} />
         <div className={s.glow} aria-hidden="true" />
         {profile ? <ReaderFigure state={pose} className={s.thay} /> : <Character name="daodong" state="nod" className={s.dong} />}
+        {/* Án thư cắt từ chính ảnh nền, đặt đè lên Thầy để Thầy ngồi SAU bàn, không ngồi trên bàn. */}
+        {profile && <div className={s.deskFront} aria-hidden="true"><img src={roomPhoto} alt="" draggable={false} /></div>}
         {incense.kind !== 'none' && <div className={s.incense}><IncenseStick state={incense} /></div>}
         {profile && (
           <nav className={s.desk} aria-label="Đồ vật trên án thư">
