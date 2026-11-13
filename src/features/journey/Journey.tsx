@@ -16,6 +16,8 @@ import { useReader } from '../reader/hooks';
 import s from './journey.module.css';
 
 const FADE_MS = 400;
+/** Có video thì mờ dần chậm vào app: cắt ngang từ cảnh quay sang phòng vẽ nhìn gắt (chủ dự án, 13/11/2026). */
+const VIDEO_FADE_MS = 1200;
 const SWIPE_PX = 40;
 const COUNT = SCENES.length;
 
@@ -30,20 +32,22 @@ export function Journey({ plan, sound = false, onDone }: { plan: Exclude<EntryPl
   sceneRef.current = scene;
   const animate = plan !== 'fade';
   const durationMs = plan === 'full' ? scene.durationMs.full : scene.durationMs.short;
-  const [videoReady, setVideoReady] = useState(false);
+  /** loading: đang chờ video phát (chưa hẹn giờ trạm); on: video dẫn hành trình; off: tranh vẽ và hẹn giờ như cũ. */
+  const [video, setVideo] = useState<'loading' | 'on' | 'off'>(plan === 'full' ? 'loading' : 'off');
+  const videoOn = video === 'on';
 
   useEffect(() => backStack.register(() => { setSt((x) => skipJourney(x, COUNT)); return true; }), []);
   useEffect(() => { preloadScene(SCENES[st.index + 1]); }, [st.index]);
   useEffect(() => {
-    if (st.done) return;
+    if (st.done || video === 'on') return; // video đang phát thì video dẫn nhịp; đang chờ video vẫn hẹn giờ phòng khi video không lên
     const t = setTimeout(() => setSt((x) => stepJourney(x, COUNT)), plan === 'fade' ? FADE_MS : durationMs);
     return () => clearTimeout(t);
-  }, [st, plan, durationMs]);
+  }, [st, plan, durationMs, video]);
   useEffect(() => {
     if (!st.done) return;
-    const t = setTimeout(onDone, FADE_MS);
+    const t = setTimeout(onDone, videoOn ? VIDEO_FADE_MS : FADE_MS);
     return () => clearTimeout(t);
-  }, [st.done, onDone]);
+  }, [st.done, onDone, videoOn]);
 
   // Chỉ bản đầy đủ mới có tiếng: rút gọn quá ngắn, tiếng bật lên rồi tắt ngay chỉ gây khó chịu.
   useEffect(() => {
@@ -71,12 +75,18 @@ export function Journey({ plan, sound = false, onDone }: { plan: Exclude<EntryPl
   };
 
   return (
-    <div className={s.journey} data-done={st.done} role="dialog" aria-label="Lối vào đạo quán" onPointerDown={(e) => { startY.current = e.clientY; audio.current?.unlock(); }} onPointerUp={onUp}>
-      {plan === 'full' && <JourneyVideo sceneId={scene.id} onReady={setVideoReady} />}
-      <SceneView key={scene.id} scene={scene} ambience={ambience} durationMs={durationMs} animate={animate} hideLayers={videoReady} />
+    <div className={s.journey} data-done={st.done} data-video={videoOn} role="dialog" aria-label="Lối vào đạo quán" onPointerDown={(e) => { startY.current = e.clientY; audio.current?.unlock(); }} onPointerUp={onUp}>
+      {video !== 'off' && (
+        <JourneyVideo
+          index={st.index} onIndex={(i) => setSt((x) => (x.done ? x : { index: i, done: false }))}
+          onReady={() => setVideo('on')} onFail={() => setVideo('off')} onEnded={() => setSt((x) => skipJourney(x, COUNT))}
+        />
+      )}
+      {/* Có video thì thôi vẽ tranh, hạt lá, khói và đạo đồng: lớp vẽ bằng code chồng lên cảnh quay nhìn gượng. */}
+      <SceneView key={scene.id} scene={scene} ambience={ambience} durationMs={durationMs} animate={animate && !videoOn} hideLayers={videoOn} />
       <button type="button" className={s.skip} onPointerUp={(e) => e.stopPropagation()} onClick={() => setSt((x) => skipJourney(x, COUNT))}>Bỏ qua</button>
-      {plan === 'full' && (scene.id === 'gate' || scene.id === 'corridor') && <Character name="daodong" state={scene.id === 'gate' ? 'nod' : 'point'} className={s.dong} />}
-      {plan === 'full' && (scene.id === 'gate' || scene.id === 'corridor') && <p className={s.speech}>{fill(pick(DONG_LINES[scene.id], new Date().getDate()), { ta: persona.ta })}</p>}
+      {plan === 'full' && !videoOn && (scene.id === 'gate' || scene.id === 'corridor') && <Character name="daodong" state={scene.id === 'gate' ? 'nod' : 'point'} className={s.dong} />}
+      {plan === 'full' && !videoOn && (scene.id === 'gate' || scene.id === 'corridor') && <p className={s.speech}>{fill(pick(DONG_LINES[scene.id], new Date().getDate()), { ta: persona.ta })}</p>}
       <div className={s.foot} onPointerUp={(e) => e.stopPropagation()}>
         {scene.interaction === 'incense' && plan === 'full' && <IncenseControl />}
         {scene.interaction === 'incense' && <button type="button" className={s.action} onClick={step}>Đi tiếp</button>}

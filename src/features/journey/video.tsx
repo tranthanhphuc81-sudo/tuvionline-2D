@@ -1,48 +1,59 @@
-/* Nền video cho lối vào (ARCHITECTURE 12.12, 13/11/2026). Video do chủ dự án tạo: một người đi qua cổng, vườn, chính điện,
-   hành lang rồi ngồi vào tĩnh thất, 20 giây, chia 5 đoạn 4 giây khớp 5 trạm. Mỗi trạm phát đoạn của mình rồi dừng ở khung
-   cuối, chờ người dùng hoặc hẹn giờ sang trạm sau, nên thắp hương, "Đi tiếp", lời đạo đồng giữ nguyên.
-   Chỉ dùng cho bản đầy đủ: bản rút gọn mỗi trạm 0,5 giây, giảm chuyển động chỉ mờ dần, nên giữ tranh vẽ. Video lỗi hoặc
-   chưa phát được thì tranh vẽ vẫn ở dưới, không ai bị chặn lại. Video luôn tắt tiếng: tiếng nền vẫn do ambientAudio. */
-import { useEffect, useRef, useState } from 'react';
+/* Nền video cho lối vào (ARCHITECTURE 12.12, 13/11/2026). Video do chủ dự án tạo: một người đi qua cầu vào cổng, vườn,
+   chính điện, hành lang rồi ngồi vào tĩnh thất, 20 giây, chia 5 đoạn 4 giây khớp 5 trạm.
+   Video chạy LIỀN MỘT MẠCH và quyết định đang ở trạm nào (bản đầu dừng ở cuối mỗi đoạn chờ trạm sau, chủ dự án thấy
+   gượng). Chạm, "Đi tiếp", "Vào tĩnh thất" thì tua sang đầu đoạn sau; hết video thì hành trình xong.
+   Chỉ dùng cho bản đầy đủ: rút gọn mỗi trạm 0,5 giây, giảm chuyển động chỉ mờ dần, nên giữ tranh vẽ. Video lỗi, hoặc
+   quá VIDEO_START_MS chưa phát được, thì quay về tranh vẽ và hẹn giờ như cũ. Video luôn tắt tiếng: tiếng nền do ambientAudio. */
+import { useEffect, useRef } from 'react';
 import src from '../../assets/journey/video/loi-vao.mp4';
 import s from './journey.module.css';
 
 export const JOURNEY_VIDEO_SRC: string = src;
+/** Chờ video phát tối đa bấy nhiêu, quá thì dùng tranh vẽ. */
+export const VIDEO_START_MS = 2500;
 
-/** Đoạn [bắt đầu, kết thúc] (giây) của từng trạm trong video. */
-export const VIDEO_SEGMENTS: Readonly<Record<string, readonly [number, number]>> = {
-  gate: [0, 4], garden: [4, 8], hall: [8, 12], corridor: [12, 16], study: [16, 20],
-};
+/** Đoạn [bắt đầu, kết thúc] (giây) của từng trạm trong video, theo đúng thứ tự trạm. */
+export const VIDEO_SEGMENTS: readonly (readonly [number, number])[] = [[0, 4], [4, 8], [8, 12], [12, 16], [16, 20]];
 
-/** Việc cần làm với video khi đang ở `t` giây trong trạm có đoạn `seg`: tua về đầu đoạn, phát tiếp, hay dừng ở khung cuối. */
-export function videoAction(t: number, seg: readonly [number, number]): 'seek' | 'play' | 'hold' {
-  const [a, b] = seg;
-  if (t < a - 0.25 || t > b + 0.25) return 'seek';
-  return t >= b - 0.05 ? 'hold' : 'play';
+/** Trạm ứng với giây `t` của video. */
+export function segmentAt(t: number): number {
+  const i = VIDEO_SEGMENTS.findIndex(([, b]) => t < b);
+  return i < 0 ? VIDEO_SEGMENTS.length - 1 : i;
 }
 
-/** Lớp video nằm dưới trạm. `onReady(true)` khi đã phát được khung đầu, để trạm thôi vẽ lớp tranh. */
-export function JourneyVideo({ sceneId, onReady }: { sceneId: string; onReady(ready: boolean): void }) {
+/**
+ * Lớp video nằm dưới trạm. `index` là trạm hiện tại: video tự báo trạm qua `onIndex` khi chạy tới; khi `index` đổi vì
+ * người dùng bước tới thì video tua tới đầu đoạn đó. `onReady` khi đã phát khung đầu; `onFail` khi lỗi hoặc quá hạn.
+ */
+export function JourneyVideo({ index, onIndex, onReady, onFail, onEnded }: {
+  index: number; onIndex(i: number): void; onReady(): void; onFail(): void; onEnded(): void;
+}) {
   const ref = useRef<HTMLVideoElement>(null);
-  const [failed, setFailed] = useState(false);
-  const seg = VIDEO_SEGMENTS[sceneId];
+  const started = useRef(false);
 
   useEffect(() => {
     const v = ref.current;
-    if (!v || !seg) return;
-    const play = () => { try { void v.play()?.catch(() => {}); } catch { /* jsdom và máy chặn tự phát */ } };
-    if (videoAction(v.currentTime, seg) === 'seek') v.currentTime = seg[0];
-    play();
-    const check = () => { if (videoAction(v.currentTime, seg) === 'hold') v.pause(); };
-    v.addEventListener('timeupdate', check);
-    return () => v.removeEventListener('timeupdate', check);
-  }, [seg]);
+    if (!v) return;
+    try { void v.play()?.catch(() => {}); } catch { /* jsdom, hoặc máy chặn tự phát: hẹn giờ dưới sẽ lo */ }
+    const t = setTimeout(() => { if (!started.current) onFail(); }, VIDEO_START_MS);
+    return () => clearTimeout(t);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (failed || !seg) return null;
+  useEffect(() => {
+    const v = ref.current;
+    const seg = VIDEO_SEGMENTS[index];
+    if (!v || !seg || !started.current) return;
+    if (segmentAt(v.currentTime) !== index) v.currentTime = seg[0];
+  }, [index]);
+
   return (
     <video
       ref={ref} className={s.video} src={JOURNEY_VIDEO_SRC} muted playsInline preload="auto" aria-hidden="true" tabIndex={-1}
-      disablePictureInPicture onPlaying={() => onReady(true)} onError={() => { setFailed(true); onReady(false); }}
+      disablePictureInPicture
+      onPlaying={() => { if (!started.current) { started.current = true; onReady(); } }}
+      onTimeUpdate={(e) => { const i = segmentAt(e.currentTarget.currentTime); if (i !== index) onIndex(i); }}
+      onEnded={onEnded}
+      onError={onFail}
     />
   );
 }
