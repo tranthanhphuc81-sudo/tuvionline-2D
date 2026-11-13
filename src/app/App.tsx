@@ -1,5 +1,5 @@
 /* Khung app: thanh trên (tiêu đề, chip người đang xem, ⚙) + 5 tab giữ nguyên khi ẩn + thanh tab dưới. */
-import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
+import { Suspense, lazy, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { useAppCtx, useApp, useNav } from './context';
 import { TABS, type Route, type TabId } from './routes';
 import { useStore } from '../state/store';
@@ -15,8 +15,6 @@ import { PhongThuyScreen } from '../features/phongthuy/PhongThuyScreen';
 import { TuViScreen } from '../features/tuvi/TuViScreen';
 import { BatTuScreen } from '../features/battu/BatTuScreen';
 import { LucHaoScreen } from '../features/luchao/LucHaoScreen';
-import { PalmScreen } from '../features/palm/PalmScreen';
-import { PalmResultScreen } from '../features/palm/PalmResultScreen';
 import { PALM_RESULT_TITLE, PALM_TITLE } from '../content/palm/ui';
 import { initials } from '../features/profiles/format';
 import { Journey } from '../features/journey/Journey';
@@ -25,6 +23,12 @@ import { onPause } from '../platform/lifecycle';
 import { setPreferredVoice, stopReading } from '../platform/tts';
 import { ReadingBar } from '../ui/components/ReadingBar';
 import s from './App.module.css';
+
+/* Xem chỉ tay nạp khi cần: câu luận (palm-content.vi.json), xử lý ảnh và sơ đồ bàn tay chỉ dùng ở hai màn này,
+   tách ra khỏi gói chính để app mở nhanh hơn trên máy yếu (ARCHITECTURE 4, đo 13/11/2026). */
+const PalmScreen = lazy(() => import('../features/palm/PalmScreen').then((m) => ({ default: m.PalmScreen })));
+const PalmResultScreen = lazy(() => import('../features/palm/PalmResultScreen').then((m) => ({ default: m.PalmResultScreen })));
+const opening = (what: string) => <p className={s.screen} role="status">Đang mở {what}…</p>;
 
 function routeTitle(r: Route): string {
   switch (r.name) {
@@ -50,8 +54,8 @@ function renderRoute(r: Route): ReactNode {
     case 'battu': return <BatTuScreen />;
     case 'luchao': return <LucHaoScreen />;
     case 'phongthuy': return <PhongThuyScreen sub={r.sub} />;
-    case 'palm': return <PalmScreen />;
-    case 'palm.result': return <PalmResultScreen id={r.id} />;
+    case 'palm': return <Suspense fallback={opening('Xem chỉ tay')}><PalmScreen /></Suspense>;
+    case 'palm.result': return <Suspense fallback={opening('kết quả chỉ tay')}><PalmResultScreen id={r.id} /></Suspense>;
     case 'profiles': return <ProfilesScreen />;
     case 'profiles.edit': return <ProfileEditScreen id={r.id} />;
     case 'settings': return <SettingsScreen />;
