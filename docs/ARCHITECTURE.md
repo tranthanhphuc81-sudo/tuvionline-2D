@@ -832,6 +832,21 @@ Câu dính từ cấm: `text` rỗng, `caption` là chữ gốc kèm lời "(Ph�
 3. Dùng Lottie; không đặt tên riêng cho thầy và đạo quán.
 4. Thêm mục chọn giọng trong Cài đặt: liệt kê giọng `-local`, có nút nghe thử (bổ sung cho 12.9).
 
+### 12.12 Video nền lối vào (13/11/2026)
+
+Chủ dự án tạo video bằng công cụ AI (20 giây, 1280×720, 24 khung/giây): một người mặc áo dài nhìn từ sau lưng đi qua cầu gỗ vào cổng, qua vườn, chính điện, hành lang, rồi ngồi trước cửa sổ tròn. Thứ tự trùng 5 trạm của 12.1 nên dùng làm nền thay tranh vẽ, phần còn lại của hành trình giữ nguyên.
+
+- **Cách ghép** (`src/features/journey/video.tsx`): một thẻ `<video>` nằm dưới trạm. Mỗi trạm ứng một đoạn 4 giây (`VIDEO_SEGMENTS`: cổng 0–4, vườn 4–8, chính điện 8–12, hành lang 12–16, tĩnh thất 16–20). Video chạy liền một mạch và quyết định trạm (`segmentAt`); hẹn giờ trạm tắt khi video đang phát. Chạm, "Đi tiếp", "Vào tĩnh thất" thì tua tới đầu đoạn sau; hết video thì hành trình xong và mờ dần 1,2 giây (không có video vẫn 0,4 giây). Nút thắp hương vẫn hiện trong đoạn chính điện nhưng không giữ video lại, đúng nguyên tắc không chặn ai (12.1).
+- **Bản đầu bị chê gượng (13/11/2026):** bản đầu dừng video ở cuối mỗi đoạn chờ hẹn giờ trạm, hình khựng lại liên tục; tranh, hạt lá, khói và đạo đồng vẽ bằng code chồng lên cảnh quay; hết video thì cắt ngang sang phòng vẽ. Đã sửa: chạy liền, có video thì không vẽ lớp tranh, hạt và đạo đồng (giữ màu theo giờ), mờ dần chậm. Phòng Tĩnh thất vẽ bằng code (`room.svg`) lệch phong cách với cảnh cuối của video, nên chủ dự án tạo thêm ảnh phòng cùng phong cách (`src/assets/journey/art/room-photo.webp`, 572×1024, 159 KB: cửa sổ tròn nhìn ra trúc, hai đèn lồng, án thư thấp, chiếu cói, không người). `StudyScreen` dùng ảnh này thay `room.svg`; đơn vị `--u` tính theo điểm ảnh của ảnh (phủ kín, neo đáy), Thầy đặt thấp hơn mép án thư (226 điểm tính từ đáy) và lớp `.deskFront` (chính ảnh nền, cắt theo mặt bàn và diềm bàn) đè lên Thầy, để Thầy ngồi sau bàn (bản đầu không có lớp này, chủ dự án thấy Thầy như ngồi trên bàn). Án thư trong ảnh hẹp (khoảng 225px ở màn 360px), chỉ đặt được 4 món, 3 món kia rơi xuống chiếu; nên `.deskFront` cắt án thư (gồm chân bàn) rồi phóng to 1,55 lần làm bàn gần người xem, rộng gần hết màn hình, và 7 món xếp một hàng trên mặt bàn (mỗi ô khoảng 46×79px ở 360px). Đã xem ở 360×740 và 768×1024. Thầy vẫn là hình vẽ bằng code nên còn khác nét với nền. Ảnh có dấu ngôi sao của Gemini ở góc dưới phải, để nguyên.
+- **Chỉ bản đầy đủ:** bản rút gọn mỗi trạm 0,5 giây, giảm chuyển động chỉ mờ dần, nên giữ tranh vẽ. Video lỗi, hoặc quá `VIDEO_START_MS` (2,5 giây) chưa phát, thì gỡ video, tranh vẽ và hẹn giờ chạy như cũ (lúc chờ video vẫn hẹn giờ). Video luôn tắt tiếng, có `playsInline`, ẩn với trình đọc màn hình; tiếng nền vẫn do `ambientAudio`.
+- **Nén** (ffmpeg 6, gói `ffmpeg-static` 5.2.0 cài ngoài dự án, chủ dự án cho phép chạy): cắt giữa khung theo 9:16 vì người đi luôn ở giữa hình và app chạy màn dọc, bỏ tiếng, H.264 CRF 23, mỗi giây một khung khoá để tua nhanh, `faststart`. Từ 9,1 MB còn 1,72 MB; cả `src/assets/journey` khoảng 2 MB, trong ngân sách 3 MB của 12.4.
+
+```
+ffmpeg -i goc.mp4 -vf "crop=406:720:437:0" -an -c:v libx264 -preset slow -crf 23 -profile:v high -pix_fmt yuv420p -g 24 -movflags +faststart src/assets/journey/video/loi-vao.mp4
+```
+
+Bản gốc không commit. Thay video khác thì giữ 5 đoạn 4 giây theo đúng thứ tự trạm, hoặc sửa `VIDEO_SEGMENTS`. Chưa thử trên APK: tự phát trong WebView, độ mượt trên máy tầm thấp.
+
 ## 13. Xem chỉ tay (chốt cách nhập liệu 05/11/2026)
 
 Căn cứ nội dung: `docs/CHI-TAY.md`, `src/content/palm/palm-content.vi.json`. Thứ tự bước: `docs/PROMPT-KIT-CHI-TAY.md`. Mục này là quyết định cho bước 3B.1, các ý còn lại của 3B.1 sẽ bổ sung khi có số đo.

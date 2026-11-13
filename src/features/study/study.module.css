@@ -2,11 +2,19 @@
   margin: calc(-1 * var(--space-4)); display: flex; flex-direction: column;
   min-height: calc(100dvh - var(--topbar-h) - var(--tabbar-h) - var(--safe-top) - var(--safe-bottom));
 }
-/* --u = cỡ 1 đơn vị của room.svg sau khi phủ kín khung, để nhân vật luôn ngồi đúng sau án thư ở mọi cỡ màn hình */
-.room { position: relative; flex: 1 0 400px; overflow: hidden; background: #22140f; container-type: size; --u: max(100cqw / 360, 100cqh / 490); }
-.thay { position: absolute; left: 50%; bottom: calc(var(--u) * 186); width: calc(var(--u) * 180); height: calc(var(--u) * 198); transform: translateX(-50%); pointer-events: none; }
+/* --u = cỡ 1 điểm ảnh của room-photo.webp (572×1024) sau khi phủ kín khung, neo đáy, để Thầy luôn ngồi đúng sau án thư
+   ở mọi cỡ màn hình. Án thư gốc trong ảnh ở y 716–900, rộng khoảng 360 điểm; app vẽ một bản phóng to phía trước (.deskFront). */
+.room { position: relative; flex: 1 0 400px; overflow: hidden; background: #22140f; container-type: size; --u: max(100cqw / 572, 100cqh / 1024); }
+.thay { position: absolute; left: 50%; bottom: calc(8px + var(--u) * 230); width: calc(var(--u) * 250); height: calc(var(--u) * 275); transform: translateX(-50%); pointer-events: none; }
 .dong { position: absolute; left: 50%; bottom: 0; width: 152px; height: 170px; transform: translateX(-50%); pointer-events: none; }
-.incense { position: absolute; left: calc(50% - var(--u) * 140); bottom: calc(var(--u) * 188); }
+.incense { position: absolute; left: calc(50% - var(--u) * 262); bottom: calc(8px + var(--u) * 262); }
+/* Án thư gần người xem (chủ dự án: án thư trong ảnh nhỏ, đồ vật không nằm trên bàn). Cắt chính án thư trong ảnh nền
+   (x 110–474, y 716–900 gồm mặt, diềm và chân bàn) rồi phóng to K = 1,55 lần, chân bàn cách đáy khung 8px: bàn gần thì to
+   hơn nên vẫn hợp phối cảnh, rộng gần hết màn hình và che án thư gốc phía sau. Khung lớp = ảnh nền × K, neo giữa.
+   Theo đơn vị --u: mép sau mặt bàn ở 8px + 285u, mép trước 8px + 189u (184 và 122 điểm × 1,55). */
+.deskFront { position: absolute; left: 50%; bottom: calc(8px - var(--u) * 124 * 1.55); width: calc(var(--u) * 572 * 1.55); height: calc(var(--u) * 1024 * 1.55); transform: translateX(-50%); pointer-events: none;
+  clip-path: polygon(19.2% 69.9%, 82.9% 69.9%, 82.9% 87.9%, 19.2% 87.9%); }
+.deskFront img { width: 100%; height: 100%; display: block; }
 .study[data-intake='true'] .room { flex: 0 0 180px; }
 .art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 100%; pointer-events: none; }
 .study[data-intake='true'] .art { object-position: 50% 30%; }
@@ -18,12 +26,13 @@
 @keyframes flicker { 0%, 100% { opacity: .75; } 40% { opacity: 1; } 70% { opacity: .85; } }
 @media (prefers-reduced-motion: reduce) { .glow { animation: none; } }
 
-.desk { position: absolute; left: var(--space-2); right: var(--space-2); bottom: var(--space-2); display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-1); max-width: 520px; margin: 0 auto; }
+/* Bảy món đứng thành một hàng trên mặt án thư: chân món ở gần mép trước mặt bàn. Mỗi ô rộng ≥ 44px. */
+.desk { position: absolute; left: 50%; bottom: calc(8px + var(--u) * 196); width: min(calc(var(--u) * 340 * 1.55), 100% - var(--space-2) * 2); transform: translateX(-50%); display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 2px; }
 .object {
-  min-height: 84px; min-width: var(--tap); padding: 4px 2px; border: 1px solid transparent; border-radius: 10px; background: transparent;
-  color: #f7ecd2; font-size: 12px; font-weight: 600; line-height: 1.2; text-shadow: 0 1px 3px #000; display: grid; justify-items: center; align-content: end; gap: 2px;
+  min-height: var(--tap); min-width: 0; padding: 2px 0; border: 1px solid transparent; border-radius: 10px; background: transparent;
+  color: #f7ecd2; font-size: 11px; font-weight: 600; line-height: 1.15; text-shadow: 0 1px 3px #000; display: grid; justify-items: center; align-content: end; gap: 2px;
 }
-.object img { width: 72px; height: 54px; pointer-events: none; }
+.object img { width: 100%; max-width: 56px; height: auto; aspect-ratio: 4 / 3; pointer-events: none; }
 .object:active, .object:focus-visible { border-color: #d7b571; background: rgba(215, 181, 113, .16); }
 
 .panel { display: grid; gap: var(--space-2); padding: var(--space-3) var(--space-4); background: var(--surface); border-top: 1px solid var(--line-strong); }

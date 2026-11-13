@@ -7,6 +7,7 @@ import { adaptCount, particleAlpha, spawnParticle, stepParticle } from './partic
 import { entryPlan, lunarEventOf, skipJourney, startJourney, stepJourney } from './plan';
 import { SCENES } from './scenes';
 import { layerTransform } from './SceneEngine';
+import { VIDEO_SEGMENTS, VIDEO_START_MS, segmentAt } from './video';
 import { AppProvider } from '../../app/context';
 import { createStore } from '../../state/store';
 import { emptyState, type PersistedState } from '../../state/schema';
@@ -158,5 +159,75 @@ describe('màn hình hành trình', () => {
     act(() => { vi.advanceTimersByTime(400); });
     act(() => { vi.advanceTimersByTime(400); });
     expect(onDone).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('video nền lối vào (ARCHITECTURE 12.12)', () => {
+  afterEach(cleanup);
+  it('mỗi trạm có một đoạn 4 giây, nối liền nhau, đủ 5 trạm', () => {
+    expect(VIDEO_SEGMENTS).toHaveLength(SCENES.length);
+    expect(VIDEO_SEGMENTS).toEqual([[0, 4], [4, 8], [8, 12], [12, 16], [16, 20]]);
+  });
+  it('giây nào thuộc trạm nào', () => {
+    expect([0, 3.9, 4, 8.5, 12, 19.9, 20, 25].map(segmentAt)).toEqual([0, 0, 1, 2, 3, 4, 4, 4]);
+  });
+  it('chỉ bản đầy đủ có video; rút gọn và giảm chuyển động giữ tranh vẽ', () => {
+    const { unmount } = render(withStore(<Journey plan="full" onDone={() => {}} />));
+    const v = document.querySelector('video');
+    expect(v?.muted).toBe(true);
+    expect(v?.getAttribute('aria-hidden')).toBe('true');
+    expect(document.querySelectorAll('[data-scene] img').length).toBeGreaterThan(0); // chưa phát được: tranh vẽ vẫn hiện
+    unmount();
+    for (const plan of ['short', 'fade'] as const) {
+      const r = render(withStore(<Journey plan={plan} onDone={() => {}} />));
+      expect(document.querySelector('video'), plan).toBeNull();
+      r.unmount();
+    }
+  });
+  it('video phát được thì thôi vẽ lớp tranh; video lỗi thì tranh vẽ quay lại', () => {
+    render(withStore(<Journey plan="full" onDone={() => {}} />));
+    const v = document.querySelector('video')!;
+    act(() => { fireEvent.playing(v); });
+    expect(document.querySelectorAll('[data-scene] img').length).toBe(0);
+    act(() => { fireEvent.error(v); });
+    expect(document.querySelector('video')).toBeNull();
+    expect(document.querySelectorAll('[data-scene] img').length).toBeGreaterThan(0);
+  });
+  it('video dẫn nhịp: chạy tới đâu đổi trạm tới đó, ẩn đạo đồng, hết video thì xong và mờ dần chậm', () => {
+    vi.useFakeTimers();
+    const onDone = vi.fn();
+    render(withStore(<Journey plan="full" onDone={onDone} />));
+    const v = document.querySelector('video')!;
+    act(() => { fireEvent.playing(v); });
+    const at = () => document.querySelector('[data-scene]')?.getAttribute('data-scene');
+    act(() => { vi.advanceTimersByTime(30000); }); // hẹn giờ trạm không chạy khi có video
+    expect(at()).toBe('gate');
+    expect(document.querySelector('.dong, [class*="dong"]')).toBeNull();
+    Object.defineProperty(v, 'currentTime', { configurable: true, get: () => 9.3, set: () => {} });
+    act(() => { fireEvent.timeUpdate(v); });
+    expect(at()).toBe('hall');
+    act(() => { fireEvent.ended(v); });
+    act(() => { vi.advanceTimersByTime(400); });
+    expect(onDone).not.toHaveBeenCalled();
+    act(() => { vi.advanceTimersByTime(800); });
+    expect(onDone).toHaveBeenCalledTimes(1);
+    vi.useRealTimers();
+  });
+  it('chạm để bước tới thì tua video sang đầu đoạn sau', () => {
+    render(withStore(<Journey plan="full" onDone={() => {}} />));
+    const v = document.querySelector('video')!;
+    let t = 1;
+    Object.defineProperty(v, 'currentTime', { configurable: true, get: () => t, set: (x: number) => { t = x; } });
+    act(() => { fireEvent.playing(v); });
+    const d = screen.getByRole('dialog');
+    act(() => { fireEvent.pointerDown(d, { clientY: 300 }); fireEvent.pointerUp(d, { clientY: 300 }); });
+    expect(t).toBe(4);
+  });
+  it('video không lên sau một lúc thì dùng tranh vẽ và hẹn giờ như cũ', () => {
+    vi.useFakeTimers();
+    render(withStore(<Journey plan="full" onDone={() => {}} />));
+    act(() => { vi.advanceTimersByTime(VIDEO_START_MS + 10); });
+    expect(document.querySelector('video')).toBeNull();
+    vi.useRealTimers();
   });
 });

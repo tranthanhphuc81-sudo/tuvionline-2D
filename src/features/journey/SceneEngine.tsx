@@ -10,7 +10,7 @@ export function layerTransform(depth: number, progress: number): string {
 }
 
 /** Vẽ một trạm trong `durationMs`. Ghi thẳng vào style qua requestAnimationFrame, không render lại React mỗi khung hình. */
-export function SceneView({ scene, ambience, durationMs, animate }: { scene: Scene; ambience: Ambience; durationMs: number; animate: boolean }) {
+export function SceneView({ scene, ambience, durationMs, animate, hideLayers = false }: { scene: Scene; ambience: Ambience; durationMs: number; animate: boolean; /** video nền đang phát: thôi vẽ lớp tranh, giữ màu giờ và hạt */ hideLayers?: boolean }) {
   const refs = useRef<(HTMLImageElement | null)[]>([]);
   const layers = useMemo(() => activeLayers(scene, ambience), [scene, ambience]);
   const particles = useMemo(() => activeParticles(scene, ambience), [scene, ambience]);
@@ -28,7 +28,7 @@ export function SceneView({ scene, ambience, durationMs, animate }: { scene: Sce
   }, [layers, durationMs, animate]);
   return (
     <div className={s.scene} data-scene={scene.id}>
-      {layers.map((l, i) => <img key={l.src} ref={(el) => { refs.current[i] = el; }} className={s.layer} src={l.src} alt="" draggable={false} />)}
+      {!hideLayers && layers.map((l, i) => <img key={l.src} ref={(el) => { refs.current[i] = el; }} className={s.layer} src={l.src} alt="" draggable={false} />)}
       <div className={s.tint} data-time={ambience.timeOfDay} />
       {animate && <ParticleLayer specs={particles} />}
     </div>
