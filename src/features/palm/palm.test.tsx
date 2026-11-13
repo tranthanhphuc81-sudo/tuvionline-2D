@@ -17,6 +17,7 @@ import { PalmScreen } from './PalmScreen';
 import { QuestionField } from './QuestionField';
 import { MachineAnswers, answerLabel } from './MachineAnswers';
 import { heldPhoto, holdPhoto } from './photoMemory';
+import { axeViolations } from '../../../tests/axe';
 
 const person: Profile = {
   id: 'a', name: 'An', gender: 'M', calendar: 'solar', day: 15, month: 6, year: 1996, leapMonth: false, hourIdx: 6, lateTy: false, createdAt: 't', updatedAt: 't',
@@ -128,6 +129,11 @@ describe('Màn hình kết quả', () => {
     setup(withState({ palmSessions: [session(), session({ id: 's2', role: 'innate', hand: 'left', answers: { Q01: 'right', Q17: 'SD02', Q02: 'H03' } })] }), <PalmResultScreen />);
     expect(screen.getByRole('heading', { name: 'So sánh hai tay' })).toBeTruthy();
   });
+
+  it('truy cập (axe): kết quả có hai tay, sơ đồ và phần so sánh', async () => {
+    setup(withState({ palmSessions: [session(), session({ id: 's2', role: 'innate', hand: 'left', answers: { Q01: 'right', Q17: 'SD02', Q02: 'H03' } })] }), <main><PalmResultScreen /></main>); // trong app màn nằm trong <main> của khung
+    expect(await axeViolations()).toEqual([]);
+  }, 30000);
 });
 
 describe('Màn hình xem chỉ tay, bước đầu', () => {
