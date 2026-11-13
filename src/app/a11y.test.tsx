@@ -2,7 +2,8 @@
 /* Kiểm truy cập tự động bằng axe-core (CLAUDE.md: nhãn aria cho nút chỉ có biểu tượng; 13/11/2026).
    Chạy offline trong jsdom nên KHÔNG kiểm được độ tương phản (jsdom không tính màu, đã có tests/contrast-tokens.test.ts)
    và vùng chạm 44px (jsdom không dàn trang). Các luật còn lại của WCAG 2.0/2.1 A, AA: nhãn nút và ô nhập, vai trò và
-   thuộc tính ARIA hợp lệ, id không trùng, danh sách đúng cấu trúc, ảnh có chữ thay thế… */
+   thuộc tính ARIA hợp lệ, id không trùng, danh sách đúng cấu trúc, ảnh có chữ thay thế…; thêm nhóm best-practice
+   (thứ tự tiêu đề không nhảy cấp, vai trò ARIA không đè lên nút bấm). */
 import { describe, it, expect, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup, act } from '@testing-library/react';
 import axe from 'axe-core';
@@ -13,9 +14,11 @@ import { emptyState, type PersistedState } from '../state/schema';
 import { addProfile } from '../state/actions';
 import { initialRouter } from './router';
 
-function setup(withProfile = true) {
+type Birth = { day: number; month: number; year: number; hourIdx: number };
+function setup(withProfile: boolean | Birth = true) {
   const store = createStore<PersistedState>(emptyState());
-  if (withProfile) addProfile(store, { name: 'An', gender: 'M', calendar: 'solar', day: 15, month: 6, year: 1996, leapMonth: false, hourIdx: 6, lateTy: false });
+  const b: Birth = typeof withProfile === 'object' ? withProfile : { day: 15, month: 6, year: 1996, hourIdx: 6 };
+  if (withProfile) addProfile(store, { name: 'An', gender: 'M', calendar: 'solar', leapMonth: false, lateTy: false, ...b });
   const nav = createStore(initialRouter());
   render(<AppProvider store={store} nav={nav}><App /></AppProvider>);
 }
@@ -26,7 +29,7 @@ afterEach(cleanup);
 async function violations(): Promise<string[]> {
   document.querySelectorAll('details').forEach((d) => { d.open = true; });
   const r = await axe.run(document.body, {
-    runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'] },
+    runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice'] },
     rules: { 'color-contrast': { enabled: false } },
   });
   return r.violations.flatMap((v) => v.nodes.map((n) => `${v.id}: ${n.target.join(' ')} — ${n.html.slice(0, 120)}`));
@@ -53,8 +56,7 @@ describe('truy cập (axe-core)', { timeout: 30000 }, () => {
     setup();
     await act(async () => { fireEvent.click(screen.getByRole('tab', { name: /Phong thủy/ })); });
     for (const sub of ['La Bàn', 'Nạp Âm']) {
-      const opt = screen.queryAllByRole('radio', { name: new RegExp(sub) })[0];
-      if (opt) await act(async () => { fireEvent.click(opt); });
+      await act(async () => { fireEvent.click(screen.getByRole('radio', { name: sub })); });
       expect(await violations(), sub).toEqual([]);
     }
   });
@@ -76,6 +78,48 @@ describe('truy cập (axe-core)', { timeout: 30000 }, () => {
     setup(false);
     await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Điền cả hồ sơ một lần' })); });
     expect(await violations(), 'Form hồ sơ').toEqual([]);
+  });
+
+  it('Lục Hào: sau khi gieo quẻ, và chế độ nhập tay', async () => {
+    setup();
+    await act(async () => { fireEvent.click(screen.getByRole('tab', { name: /Lục Hào/ })); });
+    await act(async () => { fireEvent.click(screen.getByRole('button', { name: /Gieo quẻ/ })); });
+    expect(await violations(), 'đã gieo').toEqual([]);
+    await act(async () => { fireEvent.click(screen.getByRole('radio', { name: 'Nhập tay' })); });
+    expect(await violations(), 'nhập tay').toEqual([]);
+  });
+
+  it('Tử Vi: chọn cung khác và một Đại hạn', async () => {
+    setup();
+    await act(async () => { fireEvent.click(screen.getByRole('tab', { name: /Tử Vi/ })); });
+    const palaces = screen.getAllByRole('button', { pressed: false });
+    await act(async () => { fireEvent.click(palaces[0]); });
+    const dh = document.querySelector<HTMLButtonElement>('button[role="listitem"]');
+    if (dh) await act(async () => { fireEvent.click(dh); });
+    expect(await violations()).toEqual([]);
+  });
+
+  it('Bát Tự: lá Chân tòng sau khi xem cách luận khác', async () => {
+    setup({ day: 10, month: 3, year: 1958, hourIdx: 3 });
+    await act(async () => { fireEvent.click(screen.getByRole('tab', { name: /Bát Tự/ })); });
+    await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Xem cách luận khác' })); });
+    expect(await violations()).toEqual([]);
+  });
+
+  it('Bát Tự: thẻ kiểm chứng sau một câu trả lời', async () => {
+    setup({ day: 13, month: 3, year: 1986, hourIdx: 3 }); // lá Giả: có thẻ kiểm chứng
+    await act(async () => { fireEvent.click(screen.getByRole('tab', { name: /Bát Tự/ })); });
+    await act(async () => { fireEvent.click(screen.getAllByRole('button', { name: 'Thuận lợi' })[0]); });
+    expect(await violations()).toEqual([]);
+  });
+
+  it('form hồ sơ: âm lịch và đang báo lỗi', async () => {
+    setup(false);
+    await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Điền cả hồ sơ một lần' })); });
+    await act(async () => { fireEvent.click(screen.getByRole('radio', { name: 'Âm lịch' })); });
+    await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Lưu hồ sơ' })); });
+    expect(screen.getAllByRole('alert').length).toBeGreaterThan(0);
+    expect(await violations()).toEqual([]);
   });
 
   it('Xem chỉ tay (màn nạp khi cần)', async () => {

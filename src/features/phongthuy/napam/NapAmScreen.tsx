@@ -161,11 +161,11 @@ export function NapAmScreen() {
 
           <details className={s.fold}>
             <summary><h2 className={ui.sectionTitle}>Giải thích chỉ số</h2><span className={ui.muted}>3 bài học nhỏ</span></summary>
-            <section className={ui.card}><SectionView sections={napAmExplain(x1.res, x2?.res ?? null)} level={4} /></section>
+            <section className={ui.card}><SectionView sections={napAmExplain(x1.res, x2?.res ?? null)} /></section>
           </details>
 
           <h2 className={ui.sectionTitle}>Tổng kết</h2>
-          <section className={ui.card}><SectionView sections={napAmTongKet(x1.res, x2 && compat ? { r2: x2.res, compat } : null)} level={4} /></section>
+          <section className={ui.card}><SectionView sections={napAmTongKet(x1.res, x2 && compat ? { r2: x2.res, compat } : null)} /></section>
 
           <section className={s.notes}><SectionView sections={[napAmNotes()]} /></section>
         </div>
