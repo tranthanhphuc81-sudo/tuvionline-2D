@@ -34,8 +34,8 @@ export function useWho(): Who {
   return useMemo(() => xungHo(profile ?? null, setting, new Date().getFullYear(), persona), [profile, setting, persona]);
 }
 
-/** Vùng thầy đang chỉ tới trong lần đọc `id`, để tô sáng trên lá số. */
+/** Vùng thầy đang chỉ tới trong lần đọc `id` hoặc bài con của nó (`id.…`, ví dụ `tuvi.cung` khi Thầy giảng riêng một cung), để tô sáng trên lá số. */
 export function useCueFocus(id: string): CueFocus | undefined {
   const r = useSyncExternalStore(subscribeReading, readingState);
-  return r?.id === id ? (r.cue as Cue).focus : undefined;
+  return r && (r.id === id || r.id.startsWith(id + '.')) ? (r.cue as Cue).focus : undefined;
 }

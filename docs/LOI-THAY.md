@@ -301,6 +301,22 @@ Câu luận đọc nguyên văn từ `palm-content.vi.json`. Câu đánh dấu k
 - {goi} xem hướng {huong}, sao {sao}, là hướng tốt nhất.
 - Hướng hợp nhất là {huong}, ứng với sao {sao}.
 
+## Thầy giảng một cung, một trụ (16/11/2026, chờ duyệt)
+
+Khi người dùng bấm "Thầy giảng cung này" (Tử Vi) hoặc nút "Giảng" trên thẻ trụ (Bát Tự). Phần giữa là câu chữ đã có (nghĩa cung, nét sao, cung vị của Lục thân), chỉ lời dẫn và câu kết là mới. Câu kết có lời nhắc văn hoá.
+
+- Lời dẫn cung: "{goi} xem cung {cung}, nằm ở {chi}." / "Đây là cung {cung}, ở {chi}. {ta} giảng riêng cung này."
+- Thân cư: "Thân cũng cư ở cung này."
+- Vô chính diệu: "Cung này vô chính diệu, nên xem thêm sao ở cung đối diện là cung {cung}, ở {chi}."
+- Sao: "Sao {sao} đứng chỗ sáng / đứng chỗ tối: {nét sao}."
+- Đại hạn: "Đại hạn đi qua cung này từ {a} đến {b} tuổi."
+- Câu kết cung: "Cung {cung} {ta} giảng tới đây. Số là tham khảo, đức năng thắng số." / "Đó là cung {cung}. {goi} chạm cung khác, {ta} giảng tiếp. Số là tham khảo, đức năng thắng số."
+- Lời dẫn trụ: "{goi} xem {trụ}, chữ {can chi}." / "Đây là {trụ}, gồm can chi {can chi}. {ta} giảng riêng trụ này."
+- Trụ ngày: "Can của trụ này là Nhật Chủ, hành {hành}: đó là chính {goi} trong lá số, các chữ khác đều xét theo quan hệ với chữ này."
+- Trụ khác: "Can hành {hành}, so với Nhật Chủ là {Thập Thần}."
+- Can tàng: "Trong chi có {n} can tàng." rồi "{can}, {bản khí / trung khí / dư khí}, là {Thập Thần}."
+- Câu kết trụ: "{Trụ} {ta} giảng tới đây. Số là tham khảo, đức năng thắng số." / "Đó là {trụ}. {goi} chạm trụ khác, {ta} giảng tiếp. Số là tham khảo, đức năng thắng số."
+
 ## Câu chỉ hiện chữ, không đọc
 
 - (Phần này {goi} xem chữ trên màn hình)

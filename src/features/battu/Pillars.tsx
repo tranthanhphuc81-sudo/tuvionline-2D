@@ -1,11 +1,14 @@
 /* 4 thẻ trụ Bát Tự (2×2 ở màn hẹp, 4 cột khi rộng). `focus` dành cho Phase 6 (thầy đọc tô sáng một trụ; `hidden` tô các tàng can của trụ đó, dùng ở 3C.6). */
 import { BatTuEngine, tangCanOf, type BatTuChart } from '../../core';
+import { SpeakButton } from '../../ui/components/SpeakButton';
+import type { Cue } from '../reader/script';
 import s from './battu.module.css';
 
 const { CAN, CHI, HANH5, CAN_HANH, thapThan } = BatTuEngine;
 export const hanhAmDuong = (canIdx: number) => HANH5[CAN_HANH[canIdx]] + ' ' + (canIdx % 2 === 0 ? 'Dương' : 'Âm');
 
-export function Pillars({ ch, focus }: { ch: BatTuChart; focus?: { pillar?: number; hidden?: number[] } }) {
+/** `talk` (tuỳ chọn): kịch bản Thầy giảng riêng trụ thứ i (ARCHITECTURE 16.1); có thì mỗi thẻ có nút giảng. `Ta`: tên người đọc trên nhãn nút. */
+export function Pillars({ ch, focus, talk, Ta = 'Thầy' }: { ch: BatTuChart; focus?: { pillar?: number; hidden?: number[] }; talk?(i: number): Cue[]; Ta?: string }) {
   return (
     <div className={s.pillars}>
       {ch.pillars.map((pl, i) => {
@@ -24,6 +27,7 @@ export function Pillars({ ch, focus }: { ch: BatTuChart; focus?: { pillar?: numb
                 <span>{CAN[t.can]} <small>({t.level})</small></span><span className={s.tt}>{t.thapThan}</span>
               </div>
             ))}
+            {talk && <div className={s.talk}><SpeakButton id={`battu.tru${i}`} compact label="Giảng" ariaLabel={`${Ta} giảng ${pl.role.toLowerCase()}`} getCues={() => talk(i)} /></div>}
           </article>
         );
       })}

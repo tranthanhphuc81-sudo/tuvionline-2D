@@ -83,6 +83,59 @@ export const lucHaoLead = (hao: number, shown: number): Lead => ({ lines: LEADS.
 export const laBanLead = (huong: Huong): Lead => ({ lines: LEADS.labanHuong, vars: { huong }, focus: { huong } });
 export const batTrachLead = (huong: Huong, sao: string): Lead => ({ lines: LEADS.battrachHuong, vars: { huong, sao }, focus: { huong } });
 
+/** Dữ liệu một cung để Thầy giảng riêng (ARCHITECTURE 16.1): màn hình truyền kết quả đã tính, hàm không gọi engine. */
+export interface PalaceTalk {
+  chi: number; chiName: string; cung: string; plain: string; than: boolean;
+  stars: readonly { name: string; net?: string; bright?: 1 | -1 }[];
+  opposite: { cung: string; chiName: string };
+  daiHan: readonly [number, number];
+}
+/** Kịch bản giảng một cung: lời dẫn chỉ vào cung → nghĩa cung → từng chính tinh → Đại hạn → câu kết. Cả bài tô sáng cung đó. */
+export function palaceCues(who: Who, p: PalaceTalk, seed = new Date().getDate()): Cue[] {
+  const vars = { goi: who.goi, ta: who.ta ?? 'thầy', cung: p.cung, chi: p.chiName };
+  const focus: CueFocus = { palace: p.chi };
+  const say = (text: string, gesture?: CueGesture): SpeechItemDraft[] => chunkSpeech(normalizeForSpeech(text)).map((t) => ({ text: t, caption: text, focus, gesture }));
+  const lines = [
+    `Cung ${p.cung} nói về ${p.plain}.`,
+    ...(p.than ? ['Thân cũng cư ở cung này.'] : []),
+    ...(p.stars.length
+      ? p.stars.map((x) => `Sao ${x.name}${x.bright === 1 ? ' đứng chỗ sáng' : x.bright === -1 ? ' đứng chỗ tối' : ''}${x.net ? ': ' + x.net : ''}.`)
+      : [`Cung này vô chính diệu, nên xem thêm sao ở cung đối diện là cung ${p.opposite.cung}, ở ${p.opposite.chiName}.`]),
+    `Đại hạn đi qua cung này từ ${p.daiHan[0]} đến ${p.daiHan[1]} tuổi.`,
+  ];
+  const draft: SpeechItemDraft[] = [
+    ...say(fill(pick(LEADS.tuviCung, seed), vars), 'point'),
+    ...lines.flatMap((l) => proseCues(l, who.goi, focus)),
+    ...say(fill(pick(LEADS.tuviCungKet, seed), vars), 'nod'),
+  ];
+  return draft.map((c, i) => ({ ...c, id: `tuvi-cung-${p.chi}-${i}` }));
+}
+
+/** Dữ liệu một trụ Bát Tự để Thầy giảng riêng. */
+export interface PillarTalk {
+  index: number; tru: string; canChi: string; hanh: string; viTri: string;
+  /** null = trụ ngày (Nhật Chủ) */
+  thapThan: string | null;
+  hidden: readonly { can: number; name: string; level: string; thapThan: string }[];
+}
+/** Kịch bản giảng một trụ: lời dẫn chỉ vào trụ → trụ này nói về gì (cung vị) → can và Thập Thần → các can tàng → câu kết. */
+export function pillarCues(who: Who, p: PillarTalk, seed = new Date().getDate()): Cue[] {
+  const vars = { goi: who.goi, ta: who.ta ?? 'thầy', tru: p.tru, Tru: p.tru.charAt(0).toUpperCase() + p.tru.slice(1), canChi: p.canChi };
+  const focus: CueFocus = { pillar: p.index };
+  const say = (text: string, gesture?: CueGesture, f: CueFocus = focus): SpeechItemDraft[] => chunkSpeech(normalizeForSpeech(text)).map((t) => ({ text: t, caption: text, focus: f, gesture }));
+  const draft: SpeechItemDraft[] = [
+    ...say(fill(pick(LEADS.battuTru, seed), vars), 'point'),
+    ...proseCues(p.viTri, who.goi, focus),
+    ...proseCues(p.thapThan === null
+      ? `Can của trụ này là Nhật Chủ, hành ${p.hanh}: đó là chính ${who.third ? who.name : who.goi} trong lá số, các chữ khác đều xét theo quan hệ với chữ này.`
+      : `Can hành ${p.hanh}, so với Nhật Chủ là ${p.thapThan}.`, who.goi, focus),
+    ...(p.hidden.length ? say(`Trong chi có ${p.hidden.length === 1 ? 'một can tàng' : p.hidden.length + ' can tàng'}.`) : []),
+    ...p.hidden.flatMap((h) => proseCues(`${h.name}, ${h.level.toLowerCase()}, là ${h.thapThan}.`, who.goi, { pillar: p.index, hidden: [h.can] })),
+    ...say(fill(pick(LEADS.battuTruKet, seed), vars), 'nod'),
+  ];
+  return draft.map((c, i) => ({ ...c, id: `battu-tru-${p.index}-${i}` }));
+}
+
 /** Một câu luận chỉ tay: `speak` false thì chỉ hiện chữ (câu nhạy cảm hoặc dữ liệu đánh dấu không đọc). */
 export interface PalmSpoken { text: string; speak: boolean; /** gò, đường, dấu mà câu này nói tới */ focus?: PalmFocus }
 export interface PalmScriptInput {

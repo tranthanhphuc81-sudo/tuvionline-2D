@@ -167,6 +167,12 @@ Lấy từ ARCHITECTURE mục 7.3 và kết quả lần thử trên S25 Ultra (P
 - [ ] Nút "Nghe phần ngũ hành": Thầy đọc phần ví dụ và hai năm ví dụ, xưng hô (con, anh, chị…) tự nhiên; bài không quá dài.
 - [ ] Chế độ sáng: chữ vàng, chữ xám đọc rõ ngoài trời (màu đã đậm hơn bản cũ).
 
+## Thầy giảng một cung, một trụ (16/11/2026)
+
+- [ ] Tử Vi: chọn vài cung (có sao, vô chính diệu, cung có Thân cư), bấm "Thầy giảng cung này": Thầy đọc đúng cung đang chọn, lá số tô sáng cung đó, bài ngắn (dưới khoảng 40 giây).
+- [ ] Bát Tự: bấm "Giảng" ở từng trụ: thẻ trụ sáng lên, khi đọc tới can tàng nào thì dòng can tàng đó sáng; trụ ngày nói Nhật Chủ là chính mình.
+- [ ] Đang giảng mà bấm "Thầy đọc" cả bài thì bài giảng dừng, không đọc chồng hai giọng.
+
 ## Lục Hào
 
 - [ ] "Gieo quẻ" bằng nút và bằng **lắc máy**: gieo đủ 6 hào, có rung nhẹ; lắc nhẹ khi đi bộ không tự gieo (ngưỡng lắc 22 m/s² là số tạm, ghi lại cảm nhận).

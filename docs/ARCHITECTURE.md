@@ -1399,3 +1399,18 @@ Khi chủ dự án điền đáp án: chạy lại so sánh với đáp án, r�
 - Đo (`npm run compare:thuongly`): lấy hành của can đứng đầu `uu` làm Dụng thần thì khớp 31/56 lá TBCT và 21/65 lá TTT. 50/56 lá TBCT lấy từ chính phụ lục này nên con số TBCT chỉ là kiểm tra nhất quán; TTT là nguồn độc lập và cao hơn cả mục Cách cục lẫn engine ngũ hành (cùng 14/65). Chọn theo thân mạnh/yếu của engine ngũ hành lại kém hơn (28/56, 20/65), nên app không tự chọn nhánh mạnh/yếu mà liệt kê cả hai. App KHÔNG dùng bảng này để đổi Dụng thần của engine nào; muốn làm thì đổi quyết định ở đây trước.
 - Đối chiếu với lá số (13/11/2026): khối có thêm phần "Lá của bạn có các can này chưa?". Với mỗi can sách nêu (xét trước, thân mạnh, thân yếu, không lặp), nói can đó lộ ra ở can trụ nào (không tính can ngày, là chính mình), có gốc trong chi nào, hay chỉ ẩn trong chi nào (bản khí, trung khí, dư khí), hay lá số chưa có. Một câu riêng cho can sách xét trước tiên: đã lộ ra (dùng được ngay), chỉ ẩn (có mà yếu hơn), hay chưa có (chỗ lá số còn thiếu, thường được bù khi gặp năm hay vận có can đó); Thầy đọc thêm câu này. Hàm `presenceOf`, `firstCanVerdict` trong `thuongly.ts`; chỉ đọc tứ trụ và bảng tàng can có sẵn, không đổi Dụng thần.
 - Chủ dự án cần duyệt 120 lời tóm tắt (đối chiếu trang sách ghi kèm). Test: `tests/thuongly.test.ts`.
+
+## 16. Tương tác giả lập (chốt 16/11/2026)
+
+Chủ dự án muốn "tương tác giả lập nhiều hơn" và chọn cả bốn hướng: chạm cung để Thầy giảng, ghé thăm mỗi ngày, hỏi chuyện Thầy, nghi thức có cử chỉ. Làm thành bốn PR theo thứ tự đó.
+
+**Nguyên tắc chung**
+- Chạy offline, KHÔNG dùng AI hội thoại tự do: tốn mạng, tốn tiền, khó giữ danh sách từ cấm (12.8) và giọng "tham khảo văn hoá". Thầy chỉ nói lại kết quả các công cụ đã tính và câu chữ đã có; không tạo lời luận mới về số phận.
+- Câu chữ mới ở `src/content` (hàm thuần), lời dẫn của Thầy ở `src/content/reader/templates.ts`, mỗi loại ≥ 2 biến thể; đọc bằng `buildPlainCues` để câu dính `NO_SPEECH_TERMS` chỉ hiện chữ. Mỗi lượt Thầy nói có lời nhắc văn hoá ở câu kết.
+- Không chặn ai: nghi thức nào cũng bỏ qua được, đúng nguyên tắc 12.1.
+- Chữ mới vào `docs/LOI-THAY.md` để chủ dự án duyệt; mục thử trên máy vào `docs/QA-CHECKLIST.md`.
+
+### 16.1 Chạm cung, chạm trụ để Thầy giảng (PR 1)
+- Tử Vi: thẻ chi tiết cung (`PalaceDetail`) có nút "Thầy giảng cung này". Kịch bản ngắn: lời dẫn chỉ vào cung (focus `palace`, cử chỉ chỉ tay) → nghĩa cung (`CUNG_PLAIN`) → từng chính tinh: nét sao (`STAR[x].net`) và cung sáng / tối → vô chính diệu thì nhắc xem cung đối diện → Đại hạn của cung → câu kết. Đọc chung khung đọc của tab Tử Vi nên lá số tô sáng cung như khi Thầy đọc cả bài.
+- Bát Tự: mỗi trụ trên bảng tứ trụ là một nút "Thầy giảng trụ …". Kịch bản: trụ này nói về gì (năm: gốc gác, tổ tiên; tháng: cha mẹ, anh em, môi trường lớn lên; ngày: bản thân và người bạn đời; giờ: con cái, tuổi về sau, theo cách sách xưa chia cung vị), can, chi, Thập Thần của can, các can tàng (focus `pillar` và `hidden`). Riêng trụ ngày nói Nhật chủ là ai.
+- Hàm `palaceCues`, `pillarCues` ở `src/features/reader/script.ts`, nhận dữ liệu đã tính, không gọi engine.

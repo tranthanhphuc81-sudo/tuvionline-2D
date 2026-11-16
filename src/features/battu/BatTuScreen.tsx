@@ -1,6 +1,6 @@
 /* Màn hình Bát Tự (Phase 3.3): tóm tắt, 4 trụ, Vượng Suy + Dụng Thần, Đại Vận, tra Lưu Niên, giải thích, tổng kết. */
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { BatTuEngine, batTuYearLookup, profileSummary } from '../../core';
+import { BatTuEngine, batTuYearLookup, profileSummary, tangCanOf } from '../../core';
 import { birthErrorText, birthNotesText } from '../../content/common/birth';
 import { CULTURAL_NOTE } from '../../content/common/notes';
 import { parseRich } from '../../content/rich';
@@ -11,8 +11,8 @@ import { useApp, useNav } from '../../app/context';
 import { RichText } from '../../ui/components/RichText';
 import { SectionView } from '../../ui/components/SectionView';
 import { SpeakButton } from '../../ui/components/SpeakButton';
-import { buildScript, batTuLead } from '../reader/script';
-import { useCueFocus, useWho } from '../reader/hooks';
+import { buildScript, batTuLead, pillarCues } from '../reader/script';
+import { useCueFocus, useReader, useWho } from '../reader/hooks';
 import { cellsSpeech, sectionsSpeech, speechOf } from '../../content/speech';
 import { ShareButton } from '../share/ShareButton';
 import { cardReading, cardWho } from '../share/card';
@@ -24,7 +24,7 @@ import { analyze, toNguHanhChart } from '../../core/nguhanh';
 import { cachCucSection, cachCucSpeech } from '../../content/cachcuc/text';
 import { quanHeSection } from '../../content/cachcuc/quanhe';
 import { dongKhiSection, tinhTinhSection } from '../../content/cachcuc/dongkhi';
-import { lucThanSection } from '../../content/cachcuc/lucthan';
+import { CUNG_VI, lucThanSection } from '../../content/cachcuc/lucthan';
 import { thuongLySection, thuongLySpeech } from '../../content/cachcuc/thuongly';
 import s from './battu.module.css';
 
@@ -35,6 +35,7 @@ export function BatTuScreen() {
   const nav = useNav();
   const profile = useApp(selectActiveProfile);
   const who = useWho();
+  const { Ta } = useReader();
   const bt = useCueFocus('battu'), ng = useCueFocus('nguhanh');
   const cueFocus = ng ?? bt;
   const res = useMemo(() => (profile ? profileSummary(profile) : null), [profile]);
@@ -84,7 +85,15 @@ export function BatTuScreen() {
       {lx && <p className={ui.info} role="note"><RichText nodes={parseRich(lx)} /></p>}
 
       <h2 className={ui.sectionTitle}>Tứ Trụ hoàn chỉnh</h2>
-      <Pillars ch={ch} focus={cueFocus} />
+      <Pillars ch={ch} focus={cueFocus} Ta={Ta} talk={(i) => {
+        const pl = ch.pillars[i];
+        const tang = tangCanOf(ch, pl.chi);
+        return pillarCues(who, {
+          index: i, tru: pl.role.toLowerCase(), canChi: CAN[pl.can] + ' ' + CHI[pl.chi], hanh: hanhAmDuong(pl.can), viTri: CUNG_VI[i],
+          thapThan: pl.isNhatChu ? null : BatTuEngine.thapThan(ch.nhatChu, pl.can),
+          hidden: tang.map((t) => ({ can: t.can, name: CAN[t.can], level: t.level, thapThan: t.thapThan })),
+        });
+      }} />
 
       <details className={s.fold}>
         <summary><h2 className={ui.sectionTitle}>Hình, xung, hội, hợp</h2><span className={ui.muted}>các chữ kéo đẩy nhau</span></summary>
