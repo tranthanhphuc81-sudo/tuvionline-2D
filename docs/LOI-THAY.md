@@ -317,6 +317,13 @@ Khi người dùng bấm "Thầy giảng cung này" (Tử Vi) hoặc nút "Giả
 - Can tàng: "Trong chi có {n} can tàng." rồi "{can}, {bản khí / trung khí / dư khí}, là {Thập Thần}."
 - Câu kết trụ: "{Trụ} {ta} giảng tới đây. Số là tham khảo, đức năng thắng số." / "Đó là {trụ}. {goi} chạm trụ khác, {ta} giảng tiếp. Số là tham khảo, đức năng thắng số."
 
+## Ghé thăm mỗi ngày (16/11/2026, chờ duyệt)
+
+- Tết: "Đầu năm mới, {ta} chúc {goi} một năm bình an, làm gì cũng vừa sức." / "Mấy ngày Tết {goi} ghé thăm là quý rồi. {Ta} chúc {goi} năm mới an lành."
+- Rằm: "Hôm nay ngày rằm, trăng tròn. {goi} ngồi tĩnh một chút cho lòng yên rồi hẵng xem." / "Ngày rằm đây. {Ta} chúc {goi} nửa tháng tới nhẹ nhàng."
+- Mùng một: "Hôm nay mùng một. {Ta} chúc {goi} tháng mới thuận lòng." / "Mùng một đầu tháng, mình sắp lại việc cho gọn là đủ."
+- Lời hôm nay: "Hôm nay ngày {can chi}: {can … thuộc … (vai trò với lá số), chi … }." rồi một trong ba câu: "Ngày hợp để {việc nên làm theo Dụng thần}." / "Khí ngày không nghiêng hẳn về bên nào, cứ làm đều việc đang dở là tốt." / "Hôm nay nên giữ nhịp, việc lớn để dịp khác cũng được." Cuối cùng: "Đây là gợi ý sắp xếp nhịp trong ngày, không phải lời báo trước." Thầy đọc thêm "Số là tham khảo, đức năng thắng số."
+
 ## Câu chỉ hiện chữ, không đọc
 
 - (Phần này {goi} xem chữ trên màn hình)

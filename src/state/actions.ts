@@ -3,7 +3,7 @@ import { resolveBirth, type BirthError } from '../core';
 import type { Store } from './store';
 import type { Huong } from '../core';
 import { newId } from './ids';
-import { PALM_SESSION_VERSION, birthKeyOf, type NguHanhAnswer, type NguHanhOutcome, type NguHanhTarget, type PalmSession, type PersistedState, type Profile, type Settings } from './schema';
+import { PALM_SESSION_VERSION, VISITS_MAX, birthKeyOf, type NguHanhAnswer, type NguHanhOutcome, type NguHanhTarget, type PalmSession, type PersistedState, type Profile, type Settings } from './schema';
 
 export type AppStore = Store<PersistedState>;
 export type ProfileInput = Omit<Profile, 'id' | 'createdAt' | 'updatedAt'>;
@@ -94,7 +94,21 @@ export function setLucHaoCast(
 
 /** Ghi lúc thắp hương. Chỉ dùng để vẽ nén hương, không ảnh hưởng kết quả nào. */
 export function setIncenseLit(store: AppStore, now = nowIso()): void {
-  store.setState((s) => ({ ...s, tools: { ...s.tools, incenseLitAt: now } }));
+  store.setState((s) => ({ ...s, tools: { ...s.tools, incenseLitAt: now, incenseDays: addDay(s.tools.incenseDays, dayKey(new Date(now))) } }));
+}
+
+/** YYYY-MM-DD theo giờ máy. */
+export const dayKey = (d: Date): string => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+/** Thêm một ngày vào sổ: không trùng, tăng dần, giữ VISITS_MAX ngày mới nhất. */
+export function addDay(list: readonly string[] | undefined, day: string): string[] {
+  const all = list ?? [];
+  if (all.includes(day)) return [...all];
+  return [...all, day].sort().slice(-VISITS_MAX);
+}
+/** Ghi nhận hôm nay đã ghé (ARCHITECTURE 16.2). Không đổi state nếu đã ghi. */
+export function recordVisit(store: AppStore, now = new Date()): void {
+  const day = dayKey(now);
+  store.setState((s) => (s.tools.visits?.includes(day) ? s : { ...s, tools: { ...s.tools, visits: addDay(s.tools.visits, day) } }));
 }
 
 /** Đổi ngày xem của quẻ đang giữ (không gieo lại). */

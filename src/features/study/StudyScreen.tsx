@@ -1,5 +1,5 @@
 import { useMemo, useState, useSyncExternalStore } from 'react';
-import { profileSummary, tongHopOf } from '../../core';
+import { lunarOfSolar, profileSummary, tongHopOf } from '../../core';
 import { SPEECH_NO_VOICE, speechFailedText } from '../../content/speech';
 import { isNative } from '../../platform/native';
 import { STUDY_INVALID, STUDY_OBJECTS, STUDY_READING_ID, studyGreeting, type StudyObjectId } from '../../content/study';
@@ -21,6 +21,9 @@ import { IncenseStick, useIncense } from '../journey/incense';
 import { requestStarReveal } from '../tuvi/reveal';
 import { Intake } from './Intake';
 import { NguHanhButton, NguHanhQA } from './NguHanhTalk';
+import { TodayCard } from './TodayCard';
+import { dayGreeting } from '../../content/today';
+import { lunarEventOf } from '../journey/plan';
 import s from './study.module.css';
 
 const art = import.meta.glob('../../assets/journey/art/obj-*.svg', { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
@@ -76,6 +79,10 @@ export function StudyScreen() {
   const toggleSlow = () => { const v = !slow; setSlow(v); setReadingOptions(STUDY_READING_ID, thayVoice(rate, pitch, v)); };
 
   const invalid = !!profile && !!res && !res.ok;
+  const now = new Date();
+  const lunarDay = lunarOfSolar(now.getDate(), now.getMonth() + 1, now.getFullYear());
+  // Tết, rằm, mùng một: thêm một câu chào trước lời chào thường (ARCHITECTURE 16.2)
+  const greeting = [dayGreeting(lunarEventOf(lunarDay), { goi: who.goi, ta: who.ta }, now.getDate()), studyGreeting(who.goi, who.name, who.third, now.getDate(), who.ta)].filter(Boolean).join(' ');
   return (
     <div className={s.study} data-intake={!profile}>
       <div className={s.room}>
@@ -102,7 +109,7 @@ export function StudyScreen() {
         <NguHanhQA ch={res.summary.battu.chart} profileId={profile.id} who={who} onClose={() => { stopReading(); setQa(false); }} />
       ) : profile ? (
         <div className={s.panel}>
-          <p className={s.subtitle} data-speaking={!!mine}>{note ?? mine?.text ?? (invalid ? STUDY_INVALID : studyGreeting(who.goi, who.name, who.third, new Date().getDate(), who.ta))}</p>
+          <p className={s.subtitle} data-speaking={!!mine}>{note ?? mine?.text ?? (invalid ? STUDY_INVALID : greeting)}</p>
           <div className={s.controls} role="group" aria-label={`Điều khiển ${Ta} đọc`}>
             <button type="button" className={s.ctl} aria-label="Nghe lại đoạn trước" disabled={!mine} onClick={() => void skipReading(-1)}>⏮</button>
             <button type="button" className={s.main} disabled={invalid} onClick={() => void main()}>
@@ -112,6 +119,7 @@ export function StudyScreen() {
             <button type="button" className={s.ctl} aria-label="Nói chậm" aria-pressed={slow} onClick={toggleSlow}>🐢</button>
           </div>
           {res?.ok && <NguHanhButton ch={res.summary.battu.chart} profileId={profile.id} who={who} slow={slow} disabled={invalid} onAsk={() => setQa(true)} />}
+          {res?.ok && <TodayCard ch={res.summary.battu.chart} profileId={profile.id} who={who} slow={slow} />}
           <p className={`${ui.muted} ${s.note}`}>{CULTURAL_NOTE}</p>
         </div>
       ) : <Intake />}

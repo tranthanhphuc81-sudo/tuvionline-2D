@@ -173,6 +173,13 @@ Lấy từ ARCHITECTURE mục 7.3 và kết quả lần thử trên S25 Ultra (P
 - [ ] Bát Tự: bấm "Giảng" ở từng trụ: thẻ trụ sáng lên, khi đọc tới can tàng nào thì dòng can tàng đó sáng; trụ ngày nói Nhật Chủ là chính mình.
 - [ ] Đang giảng mà bấm "Thầy đọc" cả bài thì bài giảng dừng, không đọc chồng hai giọng.
 
+## Ghé thăm mỗi ngày (16/11/2026)
+
+- [ ] Tĩnh thất có thẻ "Hôm nay, {ngày âm}": lời hôm nay đổi theo ngày, xưng hô đúng (con, anh, chị…; hồ sơ người thân nói tên). Bấm "Nghe lời hôm nay": Thầy đọc, phụ đề chạy.
+- [ ] Mở app vài ngày liền: dải 7 ngày đánh dấu đúng các ngày đã mở; ngày thắp hương có chấm.
+- [ ] Sao lưu rồi khôi phục: sổ ghé thăm còn nguyên. "Xoá toàn bộ dữ liệu" thì sổ trống.
+- [ ] Đổi ngày máy sang rằm, mùng một, mùng 2 Tết: lời chào có câu riêng.
+
 ## Lục Hào
 
 - [ ] "Gieo quẻ" bằng nút và bằng **lắc máy**: gieo đủ 6 hào, có rung nhẹ; lắc nhẹ khi đi bộ không tự gieo (ngưỡng lắc 22 m/s² là số tạm, ghi lại cảm nhận).

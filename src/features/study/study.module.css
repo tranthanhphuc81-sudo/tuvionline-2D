@@ -47,6 +47,14 @@
 .main:active { filter: brightness(.92); }
 .main:disabled { opacity: .45; }
 .note { font-size: 12px; }
+/* Thẻ "Hôm nay" (TodayCard, ARCHITECTURE 16.2) */
+.today { display: grid; gap: var(--space-2); padding: var(--space-3); border: 1px solid var(--line); border-radius: 12px; background: var(--surface2); }
+.todayTitle { font-size: var(--fs-md); color: var(--gold-text); }
+.todayText { line-height: 1.4; color: var(--ink); }
+.days { display: flex; gap: 6px; justify-content: space-between; }
+.day { position: relative; flex: 1 1 0; max-width: 40px; aspect-ratio: 1; border-radius: 50%; border: 1px solid var(--line-strong); display: grid; place-items: center; font-size: 11px; color: var(--muted); }
+.day[data-visit='true'] { background: var(--surface3); color: var(--ink); border-color: var(--gold); }
+.day[data-incense='true']::after { content: ''; position: absolute; top: -3px; right: -1px; width: 8px; height: 8px; border-radius: 50%; background: var(--vermillion-badge); box-shadow: 0 0 6px rgba(255, 160, 80, .8); }
 
 .intake { display: grid; gap: var(--space-3); padding: var(--space-4); background: var(--surface); border-top: 1px solid var(--line-strong); }
 .line { color: var(--ink-dim); }

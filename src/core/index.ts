@@ -42,6 +42,8 @@ export { TuViEngine, BatTuEngine, LucHaoEngine, PhongThuyEngine, NapAmEngine, re
 export type { Gender, HourIdx, CanIdx, ChiIdx, Quai } from './types';
 export type { Hanh } from './canchi/hanh';
 export type { CanChi } from './canchi';
+/** Can chi của một ngày dương (lời "hôm nay" ở Tĩnh thất, ARCHITECTURE 16.2). */
+export { dayCanChiIndex } from './canchi';
 export type { BirthProfile, BirthCalcInput, BirthError, BirthNote, ResolvedBirth, SolarDate, LunarDate } from './birth';
 export type { TuViChart, TuViInput, DaiHan, TuHoa, CungName } from './tuvi/types';
 export {

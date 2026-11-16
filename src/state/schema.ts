@@ -72,7 +72,13 @@ export interface Tools {
   incenseLitAt?: string;
   /** đã xem hướng dẫn chạm đường chỉ tay (tự mở lần đầu) */
   palmGuideSeen?: boolean;
+  /** sổ ghé thăm (ARCHITECTURE 16.2): những ngày đã mở app và những ngày đã thắp hương, YYYY-MM-DD, tăng dần, tối đa VISITS_MAX.
+      Trường tuỳ chọn: dữ liệu cũ không có vẫn hợp lệ, không cần lên lược đồ. */
+  visits?: string[];
+  incenseDays?: string[];
 }
+
+export const VISITS_MAX = 60;
 
 /** Một lần xem chỉ tay (ARCHITECTURE mục 13.1). KHÔNG lưu ảnh: chỉ các nét đã chuẩn hoá và 21 điểm khớp bàn tay. */
 export type PalmLineKey = 'sinh' | 'tri' | 'tam' | 'dinh';
@@ -226,6 +232,10 @@ export function parsePersisted(raw: unknown): ParseResult {
   }
   if (t.incenseLitAt !== undefined && !isStr(t.incenseLitAt)) return { ok: false, error: 'tools.incenseLitAt không hợp lệ' };
   if (t.palmGuideSeen !== undefined && typeof t.palmGuideSeen !== 'boolean') return { ok: false, error: 'tools.palmGuideSeen không hợp lệ' };
+  for (const k of ['visits', 'incenseDays'] as const) {
+    const v = t[k];
+    if (v !== undefined && !(Array.isArray(v) && v.length <= VISITS_MAX && v.every((x) => isStr(x) && /^\d{4}-\d{2}-\d{2}$/.test(x)))) return { ok: false, error: `tools.${k} không hợp lệ` };
+  }
   if (t.laBanCalib !== undefined && !isInt(t.laBanCalib, -45, 45)) return { ok: false, error: 'tools.laBanCalib không hợp lệ' };
   if (!Array.isArray(raw.palmSessions)) return { ok: false, error: 'palmSessions không phải mảng' };
   for (let i = 0; i < raw.palmSessions.length; i++) {
