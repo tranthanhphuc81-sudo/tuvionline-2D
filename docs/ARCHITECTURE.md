@@ -1420,3 +1420,16 @@ Chủ dự án muốn "tương tác giả lập nhiều hơn" và chọn cả b�
 - **Không tự đọc khi mở Tĩnh thất** (khác bản kế hoạch): tiếng bật lên bất ngờ dễ làm phiền và trình duyệt chặn phát khi chưa chạm; có nút "Nghe lời hôm nay", đọc bằng khung đọc của Tĩnh thất nên Thầy cử động và phụ đề hiện như khi đọc bài.
 - **Câu chào theo ngày âm**: Tết (mùng 1–3 tháng Giêng), rằm, mùng một có thêm một câu trước lời chào thường (`DAY_LINES`, `lunarEventOf` của lối vào). Câu của Thầy không nhắc thắp hương (quy ước sẵn có: lời về hương không hứa hẹn gì).
 - **Sổ ghé thăm**: `tools.visits` (ngày mở app) và `tools.incenseDays` (ngày thắp hương), YYYY-MM-DD, tăng dần, không trùng, tối đa 60 ngày (`VISITS_MAX`). Trường tuỳ chọn nên dữ liệu cũ vẫn hợp lệ, không lên lược đồ; `parsePersisted` kiểm dạng ngày. Có trong file sao lưu, mất cùng "Xoá toàn bộ dữ liệu". Ghi lượt ghé trong `App` (chỉ app thật), ghi ngày thắp hương trong `setIncenseLit`. Thẻ hiện dải 7 ngày gần nhất: ngày đã ghé viền vàng, ngày thắp hương có chấm; trình đọc màn hình nghe "Bảy ngày gần đây: đã ghé N ngày, thắp hương M ngày."
+
+### 16.3 Hỏi chuyện Thầy (PR 3)
+- Nút "Hỏi chuyện Thầy" ở Tĩnh thất mở khung `AskTalk` (theo mẫu hỏi đáp của `NguHanhQA`): Thầy mời hỏi, người dùng chọn một trong bảy câu có sẵn, Thầy đọc câu trả lời rồi hỏi "còn gì nữa không"; "Thôi, cảm ơn Thầy" thì Thầy chào và đóng khung.
+- Câu trả lời (`src/content/ask.ts`, `askAnswer`) chỉ ghép lại kết quả đã có, không tạo lời luận mới:
+  - Năm nay thế nào → trụ năm chấm bằng `evaluatePeriod` với Dụng thần, câu can chi dùng `describePillar`, kèm "không phải lời báo trước".
+  - Năm nào thuận nhất sắp tới → khối năm của "Nói dễ hiểu" (`plainBlocks`).
+  - Hôm nay thế nào → lời hôm nay (16.2).
+  - Tính cách ra sao → "Tóm lại về bạn" của Tổng hợp: tính cách Tử Vi, bản chất Bát Tự, cách cục.
+  - Hợp màu gì, hướng nào → mục "Điểm chính" của Tổng hợp (màu theo hành nên bổ sung, hướng Bát Trạch, hướng "vàng") kèm `COLOR_SOURCE_NOTE` (ba cách tính khác nhau, không cần sắm sửa).
+  - Hợp nghề gì → dòng nghề nghiệp trong lời khuyên của Tổng hợp.
+  - Mệnh là gì → Nạp Âm, Cục Tử Vi, Nhật Chủ, Mệnh Quái, kèm câu "bốn hệ dùng bốn mốc tính khác nhau".
+- Bỏ câu "Hợp tuổi nào" của kế hoạch: app chưa có câu chữ cho phần này, thêm vào là tạo luận mới.
+- Câu cuối mỗi câu trả lời là lời nhắc văn hoá. Câu dính từ cấm đọc chỉ hiện chữ (`buildPlainCues`). Đọc bằng khung đọc của Tĩnh thất nên Thầy cử động, phụ đề chạy.

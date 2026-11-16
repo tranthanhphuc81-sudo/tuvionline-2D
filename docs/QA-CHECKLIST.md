@@ -180,6 +180,13 @@ Lấy từ ARCHITECTURE mục 7.3 và kết quả lần thử trên S25 Ultra (P
 - [ ] Sao lưu rồi khôi phục: sổ ghé thăm còn nguyên. "Xoá toàn bộ dữ liệu" thì sổ trống.
 - [ ] Đổi ngày máy sang rằm, mùng một, mùng 2 Tết: lời chào có câu riêng.
 
+## Hỏi chuyện Thầy (16/11/2026)
+
+- [ ] Tĩnh thất → "Hỏi chuyện Thầy": Thầy mời hỏi; chọn từng câu trong bảy câu, Thầy đọc câu trả lời rồi hỏi tiếp; câu trả lời hiện chữ, cuộn được khi dài.
+- [ ] Hồ sơ người thân: câu trả lời nói đúng ngôi (không gọi "con" với hồ sơ người khác).
+- [ ] "Thôi, cảm ơn Thầy": Thầy chào, khung đóng, về lại Tĩnh thất.
+- [ ] 360dp, cỡ chữ lớn nhất: nút câu hỏi không bị cắt chữ.
+
 ## Lục Hào
 
 - [ ] "Gieo quẻ" bằng nút và bằng **lắc máy**: gieo đủ 6 hào, có rung nhẹ; lắc nhẹ khi đi bộ không tự gieo (ngưỡng lắc 22 m/s² là số tạm, ghi lại cảm nhận).

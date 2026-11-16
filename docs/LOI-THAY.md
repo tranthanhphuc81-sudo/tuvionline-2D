@@ -324,6 +324,14 @@ Khi người dùng bấm "Thầy giảng cung này" (Tử Vi) hoặc nút "Giả
 - Mùng một: "Hôm nay mùng một. {Ta} chúc {goi} tháng mới thuận lòng." / "Mùng một đầu tháng, mình sắp lại việc cho gọn là đủ."
 - Lời hôm nay: "Hôm nay ngày {can chi}: {can … thuộc … (vai trò với lá số), chi … }." rồi một trong ba câu: "Ngày hợp để {việc nên làm theo Dụng thần}." / "Khí ngày không nghiêng hẳn về bên nào, cứ làm đều việc đang dở là tốt." / "Hôm nay nên giữ nhịp, việc lớn để dịp khác cũng được." Cuối cùng: "Đây là gợi ý sắp xếp nhịp trong ngày, không phải lời báo trước." Thầy đọc thêm "Số là tham khảo, đức năng thắng số."
 
+## Hỏi chuyện Thầy (16/11/2026, chờ duyệt)
+
+- Mời hỏi: "{goi} muốn hỏi {ta} điều gì? Chọn một câu bên dưới." / "Ngồi đây, {goi} cứ hỏi. {Ta} trả lời theo lá số đã lập."
+- Hỏi thêm: "{goi} muốn hỏi gì nữa không?" / "Còn điều gì {goi} muốn hỏi thêm?"
+- Chào: "Ừ, {goi} về nghỉ nhé. Có gì lại ghé {ta}." / "{Ta} nói đến đây thôi. Chúc {goi} một ngày nhẹ nhàng."
+- Bảy câu hỏi: Năm nay thế nào? · Năm nào thuận nhất sắp tới? · Hôm nay thế nào? · Tính cách ra sao? · Hợp màu gì, hướng nào? · Hợp nghề gì? · Mệnh là gì?
+- Câu mới trong câu trả lời: "Năm {năm} {can chi}: {…}." rồi "Năm nay nghiêng về thuận, hợp để đẩy những việc đã chuẩn bị." / "Năm nay không nghiêng hẳn về bên nào, làm đều tay là được." / "Năm nay nên giữ nhịp an toàn, chưa vội mở rộng hay nhận thêm cam kết lớn."; "Theo Nạp Âm năm sinh, bạn mạng {…}, hành {…}." … "Bốn hệ dùng bốn mốc tính khác nhau nên hành có thể không trùng nhau, đó là chuyện bình thường, không phải mâu thuẫn." Phần còn lại là câu chữ đã có của Tổng hợp và ngũ hành.
+
 ## Câu chỉ hiện chữ, không đọc
 
 - (Phần này {goi} xem chữ trên màn hình)

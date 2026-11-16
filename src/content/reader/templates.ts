@@ -211,6 +211,13 @@ export const DAY_LINES = {
   mung1: ['Hôm nay mùng một. {Ta} chúc {goi} tháng mới thuận lòng.', 'Mùng một đầu tháng, mình sắp lại việc cho gọn là đủ.'],
 } as const;
 
+/** Hỏi chuyện Thầy (ARCHITECTURE 16.3): mời hỏi, hỏi thêm sau mỗi câu trả lời, chào khi người dùng thôi hỏi. */
+export const ASK_LINES = {
+  open: ['{goi} muốn hỏi {ta} điều gì? Chọn một câu bên dưới.', 'Ngồi đây, {goi} cứ hỏi. {Ta} trả lời theo lá số đã lập.'],
+  more: ['{goi} muốn hỏi gì nữa không?', 'Còn điều gì {goi} muốn hỏi thêm?'],
+  bye: ['Ừ, {goi} về nghỉ nhé. Có gì lại ghé {ta}.', '{Ta} nói đến đây thôi. Chúc {goi} một ngày nhẹ nhàng.'],
+} as const;
+
 export const pick = <T,>(list: readonly T[], seed: number): T => list[Math.abs(seed) % list.length];
 
 /** Thay biến. Viết hoa chữ đầu câu vì {goi} có thể đứng đầu câu ("Con xem…"). */
@@ -222,5 +229,5 @@ export function fill(t: string, vars: Record<string, string | number>): string {
 
 /** Mọi mẫu câu, để test quét. */
 export function allLines(): string[] {
-  return [...Object.values(TOOL_LINES).flatMap((t) => [...t.open, ...t.close, ...t.cells, ...t.sections]), ...Object.values(LEADS).flat(), NO_SPEECH_LINE, ...Object.values(DONG_LINES).flat(), ...Object.values(STUDY_LINES).flat(), ...Object.values(DAY_LINES).flat()];
+  return [...Object.values(TOOL_LINES).flatMap((t) => [...t.open, ...t.close, ...t.cells, ...t.sections]), ...Object.values(LEADS).flat(), NO_SPEECH_LINE, ...Object.values(DONG_LINES).flat(), ...Object.values(STUDY_LINES).flat(), ...Object.values(DAY_LINES).flat(), ...Object.values(ASK_LINES).flat()];
 }

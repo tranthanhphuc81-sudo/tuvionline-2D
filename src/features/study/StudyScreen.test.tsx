@@ -188,3 +188,19 @@ describe('Ngũ hành ở Tĩnh thất (3C.6)', () => {
     expect(group()).toBeNull();
   });
 });
+
+describe('Hỏi chuyện Thầy (ARCHITECTURE 16.3)', () => {
+  it('mở khung, chọn câu hỏi thì hiện câu trả lời và Thầy đọc; "Thôi, cảm ơn" thì Thầy chào và đóng khung', async () => {
+    setup(withProfile());
+    fireEvent.click(screen.getByRole('button', { name: /Hỏi chuyện Thầy/ }));
+    const group = screen.getByRole('group', { name: 'Hỏi chuyện Thầy' });
+    expect(group.textContent).toMatch(/muốn hỏi|cứ hỏi/);
+    fireEvent.click(screen.getByRole('button', { name: 'Hợp nghề gì?' }));
+    expect(screen.getByRole('button', { name: 'Hợp nghề gì?' }).getAttribute('aria-pressed')).toBe('true');
+    expect(group.textContent).toContain('Nghề nghiệp');
+    await waitFor(() => expect(readingState()?.id).toBe('thay'));
+    fireEvent.click(screen.getByRole('button', { name: 'Thôi, cảm ơn Thầy' }));
+    expect(screen.queryByRole('group', { name: 'Hỏi chuyện Thầy' })).toBeNull();
+    expect(screen.getByRole('button', { name: /Hỏi chuyện Thầy/ })).toBeTruthy();
+  });
+});

@@ -22,6 +22,7 @@ import { requestStarReveal } from '../tuvi/reveal';
 import { Intake } from './Intake';
 import { NguHanhButton, NguHanhQA } from './NguHanhTalk';
 import { TodayCard } from './TodayCard';
+import { AskTalk } from './AskTalk';
 import { dayGreeting } from '../../content/today';
 import { lunarEventOf } from '../journey/plan';
 import s from './study.module.css';
@@ -54,6 +55,7 @@ export function StudyScreen() {
   const [slow, setSlow] = useState(false);
   const [note, setNote] = useState<string | null>(null);
   const [qa, setQa] = useState(false);
+  const [ask, setAsk] = useState(false);
   const who = useWho();
   const { Ta } = useReader();
 
@@ -105,7 +107,9 @@ export function StudyScreen() {
       </div>
 
       <BootNoticeBanner />
-      {profile && res?.ok && qa ? (
+      {profile && res?.ok && ask ? (
+        <AskTalk ch={res.summary.battu.chart} tongHop={tongHopOf(res.birth)} profileId={profile.id} who={who} onClose={() => setAsk(false)} />
+      ) : profile && res?.ok && qa ? (
         <NguHanhQA ch={res.summary.battu.chart} profileId={profile.id} who={who} onClose={() => { stopReading(); setQa(false); }} />
       ) : profile ? (
         <div className={s.panel}>
@@ -119,6 +123,7 @@ export function StudyScreen() {
             <button type="button" className={s.ctl} aria-label="Nói chậm" aria-pressed={slow} onClick={toggleSlow}>🐢</button>
           </div>
           {res?.ok && <NguHanhButton ch={res.summary.battu.chart} profileId={profile.id} who={who} slow={slow} disabled={invalid} onAsk={() => setQa(true)} />}
+          {res?.ok && <button type="button" className={`${ui.btn} ${ui.block}`} onClick={() => { stopReading(); setAsk(true); }}>💬 Hỏi chuyện {Ta}</button>}
           {res?.ok && <TodayCard ch={res.summary.battu.chart} profileId={profile.id} who={who} slow={slow} />}
           <p className={`${ui.muted} ${s.note}`}>{CULTURAL_NOTE}</p>
         </div>

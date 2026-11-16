@@ -116,6 +116,13 @@ describe('truy cập (axe-core)', { timeout: 30000 }, () => {
     expect(await violations()).toEqual([]);
   });
 
+  it('Tĩnh thất: khung Hỏi chuyện Thầy sau một câu trả lời', async () => {
+    setup();
+    await act(async () => { fireEvent.click(screen.getByRole('button', { name: /Hỏi chuyện Thầy/ })); });
+    await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Năm nay thế nào?' })); });
+    expect(await violations()).toEqual([]);
+  });
+
   it('lối vào: từng cảnh của hành trình đầy đủ', async () => {
     render(<AppProvider store={createStore<PersistedState>(emptyState())}><Journey plan="full" onDone={() => {}} /></AppProvider>);
     const seen: string[] = [];
