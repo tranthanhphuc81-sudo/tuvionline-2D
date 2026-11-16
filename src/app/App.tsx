@@ -3,7 +3,7 @@ import { Suspense, lazy, useEffect, useLayoutEffect, useRef, useState, type Reac
 import { useAppCtx, useApp, useNav } from './context';
 import { TABS, type Route, type TabId } from './routes';
 import { useStore } from '../state/store';
-import { selectActiveProfile } from '../state/actions';
+import { recordVisit, selectActiveProfile } from '../state/actions';
 import { HomeScreen } from '../features/home/HomeScreen';
 import { StudyScreen } from '../features/study/StudyScreen';
 import { studyTitle } from '../content/study';
@@ -161,6 +161,8 @@ export function App({ journey = false }: { journey?: boolean }) {
   const journeySound = useApp((x) => x.settings.journeySound);
   const [entry, setEntry] = useState<TodayEntry>(() => (journey ? todayEntry(store) : { plan: 'none', today: '' }));
   useEffect(() => recordEntry(store, entry), [store, entry]);
+  // sổ ghé thăm ở Tĩnh thất (ARCHITECTURE 16.2); chỉ app thật, test khung app không ghi
+  useEffect(() => { if (journey) recordVisit(store); }, [store, journey]);
   const activeId = useApp((x) => x.activeProfileId);
   // Đọc thành lời tự dừng khi rời màn hình, đổi người đang xem hoặc app vào nền
   const routeKey = nav.tab + JSON.stringify(nav.route);

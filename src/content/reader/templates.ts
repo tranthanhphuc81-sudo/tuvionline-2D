@@ -204,6 +204,13 @@ export const STUDY_LINES = {
   ],
 } as const;
 
+/** Câu chào thêm vào những ngày âm đặc biệt (ARCHITECTURE 16.2); ngày thường không có. */
+export const DAY_LINES = {
+  tet: ['Đầu năm mới, {ta} chúc {goi} một năm bình an, làm gì cũng vừa sức.', 'Mấy ngày Tết {goi} ghé thăm là quý rồi. {Ta} chúc {goi} năm mới an lành.'],
+  ram: ['Hôm nay ngày rằm, trăng tròn. {goi} ngồi tĩnh một chút cho lòng yên rồi hẵng xem.', 'Ngày rằm đây. {Ta} chúc {goi} nửa tháng tới nhẹ nhàng.'],
+  mung1: ['Hôm nay mùng một. {Ta} chúc {goi} tháng mới thuận lòng.', 'Mùng một đầu tháng, mình sắp lại việc cho gọn là đủ.'],
+} as const;
+
 export const pick = <T,>(list: readonly T[], seed: number): T => list[Math.abs(seed) % list.length];
 
 /** Thay biến. Viết hoa chữ đầu câu vì {goi} có thể đứng đầu câu ("Con xem…"). */
@@ -215,5 +222,5 @@ export function fill(t: string, vars: Record<string, string | number>): string {
 
 /** Mọi mẫu câu, để test quét. */
 export function allLines(): string[] {
-  return [...Object.values(TOOL_LINES).flatMap((t) => [...t.open, ...t.close, ...t.cells, ...t.sections]), ...Object.values(LEADS).flat(), NO_SPEECH_LINE, ...Object.values(DONG_LINES).flat(), ...Object.values(STUDY_LINES).flat()];
+  return [...Object.values(TOOL_LINES).flatMap((t) => [...t.open, ...t.close, ...t.cells, ...t.sections]), ...Object.values(LEADS).flat(), NO_SPEECH_LINE, ...Object.values(DONG_LINES).flat(), ...Object.values(STUDY_LINES).flat(), ...Object.values(DAY_LINES).flat()];
 }

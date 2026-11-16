@@ -23,6 +23,18 @@ const lowerFirst = (s: string) => s.charAt(0).toLowerCase() + s.slice(1);
 const branchElement = (b: number) => stemElement(hiddenStems(b as never)[0]);
 const canChi = (pl: Pillar) => `${CAN[pl.stem]} ${CHI[pl.branch]}`;
 
+/** Can, chi của một trụ (năm, ngày…) thuộc hành nào và hành đó là gì với lá số; dùng chung cho năm ví dụ và lời "hôm nay" ở Tĩnh thất. */
+export function describePillar(pl: Pillar, ug: Reading['usefulGod']): string {
+  const follow = ug.method === 'tong-cach';
+  const rel = (e: Element) => e === ug.dung ? (follow ? 'đúng hành nên thuận theo' : 'đúng hành bạn cần')
+    : e === ug.hy ? 'hành hỗ trợ'
+    : e === ug.ky ? (follow ? 'hành nên tránh' : 'hành nên tiết chế')
+    : e === ug.cuu ? (follow ? 'hành tiếp sức cho hành nên tránh' : 'hành tiếp sức cho hành nên tiết chế')
+    : 'hành trung tính với lá số này';
+  const se = stemElement(pl.stem), be = branchElement(pl.branch);
+  return se === be ? `cả can ${CAN[pl.stem]} lẫn chi ${CHI[pl.branch]} đều thuộc ${se}, ${rel(se)}` : `can ${CAN[pl.stem]} thuộc ${se} (${rel(se)}), chi ${CHI[pl.branch]} thuộc ${be} (${rel(be)})`;
+}
+
 /** Các khoá nhánh có thể xảy ra (trừ 'method.thong-quan': engine chưa chọn Thông quan làm Dụng thần chính). */
 export const PLAIN_KEYS: readonly string[] = [
   'self.follow-weak', 'self.follow-strong', 'self.weak', 'self.balanced', 'self.strong',
@@ -136,15 +148,7 @@ export function plainBlocks(a: NguHanhAnalysis, reading: Reading, nowYear: numbe
     `${follow ? 'Hành nên tránh, vì đi ngược thế của lá số,' : 'Hành nên tiết chế'} là <b>${ug.ky}</b> (${TEN_GOD_VI[kyRole]} của bạn), ứng với ${TEN_GOD_PRACTICAL[kyRole].meaning}. Khi phần này lấn lên, dễ gặp những chuyện như: ${TEN_GOD_PRACTICAL[kyRole].harmExample}.`));
 
   // 5. Hai năm ví dụ trong 12 năm tới, có lý do
-  const rel = (e: Element) => e === ug.dung ? (follow ? 'đúng hành nên thuận theo' : 'đúng hành bạn cần')
-    : e === ug.hy ? 'hành hỗ trợ'
-    : e === ug.ky ? (follow ? 'hành nên tránh' : 'hành nên tiết chế')
-    : e === ug.cuu ? (follow ? 'hành tiếp sức cho hành nên tránh' : 'hành tiếp sức cho hành nên tiết chế')
-    : 'hành trung tính với lá số này';
-  const describe = (pl: Pillar) => {
-    const se = stemElement(pl.stem), be = branchElement(pl.branch);
-    return se === be ? `cả can ${CAN[pl.stem]} lẫn chi ${CHI[pl.branch]} đều thuộc ${se}, ${rel(se)}` : `can ${CAN[pl.stem]} thuộc ${se} (${rel(se)}), chi ${CHI[pl.branch]} thuộc ${be} (${rel(be)})`;
-  };
+  const describe = (pl: Pillar) => describePillar(pl, ug);
   const yrs: YearRow[] = Array.from({ length: 12 }, (_, i) => { const y = nowYear + i, pl = pillarOfYear(y); return { y, pl, ev: evaluatePeriod(pl, ug) }; });
   const { good, bad } = pick(yrs);
   const yl: string[] = [];
