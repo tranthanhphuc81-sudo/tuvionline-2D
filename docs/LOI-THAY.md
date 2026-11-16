@@ -332,6 +332,13 @@ Khi người dùng bấm "Thầy giảng cung này" (Tử Vi) hoặc nút "Giả
 - Bảy câu hỏi: Năm nay thế nào? · Năm nào thuận nhất sắp tới? · Hôm nay thế nào? · Tính cách ra sao? · Hợp màu gì, hướng nào? · Hợp nghề gì? · Mệnh là gì?
 - Câu mới trong câu trả lời: "Năm {năm} {can chi}: {…}." rồi "Năm nay nghiêng về thuận, hợp để đẩy những việc đã chuẩn bị." / "Năm nay không nghiêng hẳn về bên nào, làm đều tay là được." / "Năm nay nên giữ nhịp an toàn, chưa vội mở rộng hay nhận thêm cam kết lớn."; "Theo Nạp Âm năm sinh, bạn mạng {…}, hành {…}." … "Bốn hệ dùng bốn mốc tính khác nhau nên hành có thể không trùng nhau, đó là chuyện bình thường, không phải mâu thuẫn." Phần còn lại là câu chữ đã có của Tổng hợp và ngũ hành.
 
+## Xin keo (16/11/2026, chờ duyệt)
+
+- Mở: "Trước khi gieo, {goi} tĩnh tâm nghĩ về việc muốn hỏi, rồi xin keo: chạm nút hoặc lắc máy." / "{goi} nghĩ kỹ điều muốn hỏi, rồi chạm nút hoặc lắc máy để xin keo."
+- Thuận: "Một sấp một ngửa, keo thuận rồi. {goi} gieo quẻ đi." / "Keo thuận. Giờ {goi} gieo từng hào nhé."
+- Xin lại: "Hai mặt giống nhau, {goi} xin lại nhé." / "Keo chưa thuận, {goi} tĩnh tâm rồi xin thêm lần nữa."
+- Đủ ba lần: "Ba lần rồi, mình cứ gieo, lòng thành là đủ." / "Đủ ba lần. {goi} gieo quẻ đi, không sao cả."
+
 ## Câu chỉ hiện chữ, không đọc
 
 - (Phần này {goi} xem chữ trên màn hình)

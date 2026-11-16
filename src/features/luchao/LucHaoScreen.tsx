@@ -9,6 +9,7 @@ import { lucHaoTongKet } from '../../content/luchao/tongket';
 import { setLucHaoCast, setLucHaoDate } from '../../state/actions';
 import { tapLight } from '../../platform/haptics';
 import { CoinToss } from './CoinToss';
+import { KeoStep } from './KeoStep';
 import { useApp, useAppCtx, useNav } from '../../app/context';
 import { RichText } from '../../ui/components/RichText';
 import { Segmented } from '../../ui/components/Segmented';
@@ -65,10 +66,15 @@ export function LucHaoScreen() {
     const d = next.map((x) => parseInt(x, 10)) as [number, number, number];
     if (cast && LySoUtil.validSolar(...d)) setLucHaoDate(store, d);
   };
+  const xinKeo = useApp((x) => x.settings.xinKeo !== false);
+  // Xin keo một lần cho mỗi quẻ: gieo xong thì quẻ sau xin lại (ARCHITECTURE 16.4)
+  const [keoDone, setKeoDone] = useState(false);
   const doCast = (tosses: number[], m: 'random' | 'manual') => {
     setLucHaoCast(store, tosses, undefined, { method: m, date: dateOk ? date : today() });
     void tapLight();
+    setKeoDone(false);
   };
+  const needKeo = method === 'random' && xinKeo && !keoDone;
 
   return (
     <div className={ui.stack}>
@@ -104,10 +110,11 @@ export function LucHaoScreen() {
           </div>
         )}
         <p className={ui.muted}>Đồng xu: mặt chữ=2đ(Âm), mặt hình=3đ(Dương). Tổng 6=Lão Âm động, 7=Thiếu Dương, 8=Thiếu Âm, 9=Lão Dương động.</p>
-        {method === 'random'
+        {needKeo && <KeoStep key={cast?.tosses.join('') ?? 'moi'} active={nav.tab === 'luchao'} goi={who.goi} onDone={() => setKeoDone(true)} />}
+        {needKeo ? null : method === 'random'
           ? <button type="button" className={`${ui.btn} ${ui.primary} ${ui.block}`} onClick={() => doCast(randomTosses(), 'random')}>{cast ? '🎲 Gieo quẻ mới' : '🎲 Gieo quẻ'}</button>
           : <button type="button" className={`${ui.btn} ${ui.primary} ${ui.block}`} onClick={() => doCast(manual, 'manual')}>Lập quẻ từ 6 số đã nhập</button>}
-        {method === 'random' && <CoinToss active={nav.tab === 'luchao'} onDone={(t) => doCast(t, 'random')} />}
+        {method === 'random' && !needKeo && <CoinToss active={nav.tab === 'luchao'} onDone={(t) => doCast(t, 'random')} />}
       </section>
 
       {!cast && <p className={ui.muted}>Chọn việc muốn hỏi rồi bấm gieo. Quẻ vừa gieo được giữ lại — đổi việc hỏi hay ngày xem không làm gieo lại.</p>}

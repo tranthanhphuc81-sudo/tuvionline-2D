@@ -23,6 +23,7 @@ import { Intake } from './Intake';
 import { NguHanhButton, NguHanhQA } from './NguHanhTalk';
 import { TodayCard } from './TodayCard';
 import { AskTalk } from './AskTalk';
+import { BellButton } from '../journey/BellButton';
 import { dayGreeting } from '../../content/today';
 import { lunarEventOf } from '../journey/plan';
 import s from './study.module.css';
@@ -94,6 +95,7 @@ export function StudyScreen() {
         {/* Án thư cắt từ chính ảnh nền, đặt đè lên Thầy để Thầy ngồi SAU bàn, không ngồi trên bàn. */}
         {profile && <div className={s.deskFront} aria-hidden="true"><img src={roomPhoto} alt="" draggable={false} /></div>}
         {incense.kind !== 'none' && <div className={s.incense}><IncenseStick state={incense} /></div>}
+        {profile && <BellButton className={s.bell} />}
         {profile && (
           <nav className={s.desk} aria-label="Đồ vật trên án thư">
             {OBJECTS.map((o) => (

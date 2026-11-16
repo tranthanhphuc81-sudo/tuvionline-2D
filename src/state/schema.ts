@@ -40,6 +40,8 @@ export interface Settings {
   theme: Theme; ttsRate: number; ttsPitch: number; /** giọng người dùng chọn, tuỳ chọn; không có = tự chọn */ ttsVoice?: string; entryMode: EntryMode; journeySound: boolean; xungHo: XungHoSetting;
   /** người đọc ở Tĩnh thất (content/reader/personas.ts) hoặc 'custom'; mã lạ thì dùng Thầy */
   reader?: string;
+  /** xin keo trước khi gieo quẻ Lục Hào (ARCHITECTURE 16.4); không có = bật */
+  xinKeo?: boolean;
   /** màu áo người đọc; không có = màu mặc định của nhân vật */
   readerRobe?: string;
   readerCustom?: CustomReader;
@@ -127,6 +129,7 @@ export interface PersistedState {
   nguHanhAnswers: NguHanhAnswer[];
 }
 
+/* xinKeo (16/11/2026, ARCHITECTURE 16.4): tuỳ chọn, không có = bật; dữ liệu cũ vẫn hợp lệ. */
 export const DEFAULT_SETTINGS: Settings = { theme: 'system', ttsRate: 1, ttsPitch: 1, entryMode: 'auto', journeySound: true, xungHo: 'tu-dong' };
 
 export function emptyState(): PersistedState {
@@ -203,6 +206,7 @@ export function parsePersisted(raw: unknown): ParseResult {
   if (typeof s.ttsRate !== 'number' || typeof s.ttsPitch !== 'number') return { ok: false, error: 'settings.ttsRate/ttsPitch không phải số' };
   if (!['auto', 'full', 'short', 'none'].includes(s.entryMode as string)) return { ok: false, error: 'settings.entryMode không hợp lệ' };
   if (typeof s.journeySound !== 'boolean') return { ok: false, error: 'settings.journeySound không phải boolean' };
+  if (s.xinKeo !== undefined && typeof s.xinKeo !== 'boolean') return { ok: false, error: 'settings.xinKeo không phải boolean' };
   if (!['tu-dong', 'con', 'anh', 'chi', 'co', 'chu', 'ban'].includes(s.xungHo as string)) return { ok: false, error: 'settings.xungHo không hợp lệ' };
   if ((s.reader !== undefined && !isStr(s.reader)) || (s.readerRobe !== undefined && !isStr(s.readerRobe))) return { ok: false, error: 'settings.reader không hợp lệ' };
   if (s.readerCustom !== undefined) {

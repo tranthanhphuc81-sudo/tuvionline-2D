@@ -31,6 +31,24 @@ function tone(ctx: AudioContext, dest: AudioNode, hz: number, sweep: number, dur
   o.stop(t + dur);
 }
 
+/** Một tiếng chuông khi người dùng chạm (ARCHITECTURE 16.4), không bật tiếng nền. Tạo AudioContext NGAY trong sự kiện chạm
+    (trình duyệt chỉ cho phát sau thao tác), rồi mới hỏi `allowed` (chế độ chuông của máy): không được thì đóng, không phát.
+    Trả false nếu máy không có Web Audio. */
+export function ringBell(allowed: Promise<boolean>, Ctx: typeof AudioContext | undefined = window.AudioContext): boolean {
+  if (!Ctx) return false;
+  const ctx = new Ctx();
+  void ctx.resume();
+  void allowed.then((ok) => {
+    if (!ok) { void ctx.close(); return; }
+    const g = ctx.createGain();
+    g.connect(ctx.destination);
+    tone(ctx, g, 523, 0, 3, 0.35);
+    tone(ctx, g, 1046, 0, 1.6, 0.08);
+    setTimeout(() => { void ctx.close(); }, 3300);
+  });
+  return true;
+}
+
 /** Trả null nếu máy không có Web Audio; hành trình vẫn chạy, chỉ không có tiếng. */
 export function createAmbientPlayer(Ctx: typeof AudioContext | undefined = window.AudioContext): AmbientPlayer | null {
   if (!Ctx) return null;

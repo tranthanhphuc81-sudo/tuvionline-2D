@@ -187,6 +187,14 @@ Lấy từ ARCHITECTURE mục 7.3 và kết quả lần thử trên S25 Ultra (P
 - [ ] "Thôi, cảm ơn Thầy": Thầy chào, khung đóng, về lại Tĩnh thất.
 - [ ] 360dp, cỡ chữ lớn nhất: nút câu hỏi không bị cắt chữ.
 
+## Nghi thức có cử chỉ (16/11/2026)
+
+- [ ] Tĩnh thất: chạm 🔔 thì máy rung và chuông ngân; để máy im lặng thì chỉ rung, không kêu.
+- [ ] Lối vào bản đầy đủ, chính điện: có nút 🔔; tắt "Âm thanh lối vào" thì chỉ rung.
+- [ ] Thắp hương: khi nhang bắt lửa máy rung rõ hơn trước.
+- [ ] Lục Hào, gieo ngẫu nhiên: có bước xin keo; lắc máy xin được; ba lần chưa thuận vẫn chuyển sang gieo; "Bỏ qua, gieo luôn" chạy; gieo xong, quẻ sau xin keo lại.
+- [ ] Cài đặt → Nghi thức → tắt xin keo: Lục Hào không còn bước keo.
+
 ## Lục Hào
 
 - [ ] "Gieo quẻ" bằng nút và bằng **lắc máy**: gieo đủ 6 hào, có rung nhẹ; lắc nhẹ khi đi bộ không tự gieo (ngưỡng lắc 22 m/s² là số tạm, ghi lại cảm nhận).

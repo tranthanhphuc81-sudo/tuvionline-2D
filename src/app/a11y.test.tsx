@@ -77,6 +77,8 @@ describe('truy cập (axe-core)', { timeout: 30000 }, () => {
   it('Lục Hào: sau khi gieo quẻ, và chế độ nhập tay', async () => {
     setup();
     await act(async () => { fireEvent.click(screen.getByRole('tab', { name: /Lục Hào/ })); });
+    expect(await violations(), 'bước xin keo').toEqual([]);
+    await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Bỏ qua, gieo luôn' })); });
     await act(async () => { fireEvent.click(screen.getByRole('button', { name: /Gieo quẻ/ })); });
     expect(await violations(), 'đã gieo').toEqual([]);
     await act(async () => { fireEvent.click(screen.getByRole('radio', { name: 'Nhập tay' })); });
