@@ -9,6 +9,7 @@ import { skipJourney, startJourney, stepJourney, type EntryPlan } from './plan';
 import { SceneView } from './SceneEngine';
 import { SCENES, preloadScene } from './scenes';
 import { IncenseControl } from './incense';
+import { BellButton } from './BellButton';
 import { JourneyVideo } from './video';
 import { Character } from '../reader/Character';
 import { DONG_LINES, fill, pick } from '../../content/reader/templates';
@@ -88,6 +89,7 @@ export function Journey({ plan, sound = false, onDone }: { plan: Exclude<EntryPl
       {plan === 'full' && !videoOn && (scene.id === 'gate' || scene.id === 'corridor') && <Character name="daodong" state={scene.id === 'gate' ? 'nod' : 'point'} className={s.dong} />}
       {plan === 'full' && !videoOn && (scene.id === 'gate' || scene.id === 'corridor') && <p className={s.speech}>{fill(pick(DONG_LINES[scene.id], new Date().getDate()), { ta: persona.ta })}</p>}
       <div className={s.foot} onPointerUp={(e) => e.stopPropagation()}>
+        {scene.interaction === 'incense' && plan === 'full' && <BellButton className={s.bell} onRing={() => { audio.current?.bell(); return true; /* tắt âm thanh lối vào hay máy im lặng thì chỉ rung */ }} />}
         {scene.interaction === 'incense' && plan === 'full' && <IncenseControl />}
         {scene.interaction === 'incense' && <button type="button" className={s.action} onClick={step}>Đi tiếp</button>}
         {scene.interaction === 'invite' && <button type="button" className={s.action} onClick={step}>Vào tĩnh thất</button>}

@@ -21,6 +21,7 @@ export function SettingsScreen() {
   const theme = useApp((x) => x.settings.theme);
   const entryMode = useApp((x) => x.settings.entryMode);
   const journeySound = useApp((x) => x.settings.journeySound);
+  const xinKeo = useApp((x) => x.settings.xinKeo !== false);
   const rate = useApp((x) => x.settings.ttsRate);
   const pitch = useApp((x) => x.settings.ttsPitch);
   const xungHo = useApp((x) => x.settings.xungHo);
@@ -53,6 +54,16 @@ export function SettingsScreen() {
           options={[{ value: 'on', label: 'Bật' }, { value: 'off', label: 'Tắt' }]}
         />
         <p className={ui.muted}>Khi máy đang để im lặng hoặc rung, lối vào không phát âm thanh.</p>
+      </section>
+      <section className={ui.card}>
+        <h2>Nghi thức</h2>
+        <Segmented
+          label="Xin keo trước khi gieo quẻ"
+          value={xinKeo ? 'on' : 'off'}
+          onChange={(v) => setSetting(store, 'xinKeo', v === 'on')}
+          options={[{ value: 'on', label: 'Bật' }, { value: 'off', label: 'Tắt' }]}
+        />
+        <p className={ui.muted}>Trước khi gieo quẻ Lục Hào, chạm hoặc lắc máy để xin keo; ba lần chưa thuận vẫn được gieo. Keo chỉ là nghi thức, không làm đổi quẻ.</p>
       </section>
       <ReaderSection voices={voices} />
       <section className={ui.card}>

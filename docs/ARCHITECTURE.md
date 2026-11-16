@@ -1433,3 +1433,8 @@ Chủ dự án muốn "tương tác giả lập nhiều hơn" và chọn cả b�
   - Mệnh là gì → Nạp Âm, Cục Tử Vi, Nhật Chủ, Mệnh Quái, kèm câu "bốn hệ dùng bốn mốc tính khác nhau".
 - Bỏ câu "Hợp tuổi nào" của kế hoạch: app chưa có câu chữ cho phần này, thêm vào là tạo luận mới.
 - Câu cuối mỗi câu trả lời là lời nhắc văn hoá. Câu dính từ cấm đọc chỉ hiện chữ (`buildPlainCues`). Đọc bằng khung đọc của Tĩnh thất nên Thầy cử động, phụ đề chạy.
+
+### 16.4 Nghi thức có cử chỉ (PR 4)
+- **Gõ chuông** (`BellButton`): nút 🔔 ở góc trên trái phòng Tĩnh thất và ở chính điện của lối vào bản đầy đủ. Chạm thì rung nhẹ (`tapLight`) và chuông ngân một tiếng. Ở Tĩnh thất dùng `ringBell` (`src/platform/ambientAudio.ts`): tạo AudioContext ngay trong sự kiện chạm, rồi mới hỏi `soundAllowed`; máy để im lặng hoặc rung thì đóng ngay, không phát; tự đóng sau 3,3 giây, không bật tiếng nền. Ở lối vào dùng chuông của bộ tiếng đang phát; tắt "Âm thanh lối vào" hoặc máy im lặng thì chỉ rung.
+- **Thắp hương**: nhang bắt lửa thì rung vừa (`tapMedium`, `ImpactStyle.Medium`) thay rung nhẹ.
+- **Xin keo trước khi gieo quẻ** (`KeoStep`, `keo.ts`): chỉ ở cách gieo ngẫu nhiên. Chạm nút hoặc lắc máy (`onShake`), hai miếng keo rơi, rung vừa. Một sấp một ngửa là thuận thì sau 1,4 giây chuyển sang gieo xu; hai mặt giống nhau thì xin lại; đủ ba lần (`KEO_MAX`) vẫn cho gieo. Luôn có "Bỏ qua, gieo luôn". Mỗi quẻ xin một lần, gieo xong quẻ sau xin lại. Keo chỉ là nghi thức, không ảnh hưởng quẻ (quẻ vẫn gieo bằng xu như cũ); câu keo không hứa hẹn gì (`KEO_LINES`). Cài đặt → "Nghi thức" → tắt được (`settings.xinKeo`, trường tuỳ chọn, không có = bật, không lên lược đồ). Hoạt cảnh keo tắt khi giảm chuyển động.

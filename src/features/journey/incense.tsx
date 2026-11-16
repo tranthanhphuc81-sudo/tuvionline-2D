@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type MouseEvent } from 'react';
 import { useApp, useAppCtx } from '../../app/context';
 import { INCENSE_TEXT } from '../../content/study';
-import { tapLight } from '../../platform/haptics';
+import { tapMedium } from '../../platform/haptics';
 import { setIncenseLit } from '../../state/actions';
 import s from './incense.module.css';
 
@@ -51,7 +51,7 @@ export function IncenseControl() {
   const [holding, setHolding] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const cancel = () => { if (timer.current) clearTimeout(timer.current); timer.current = null; setHolding(false); };
-  const light = () => { cancel(); setIncenseLit(store); void tapLight(); };
+  const light = () => { cancel(); setIncenseLit(store); void tapMedium(); };
   useEffect(() => cancel, []);
   const burning = state.kind === 'burning';
   return (

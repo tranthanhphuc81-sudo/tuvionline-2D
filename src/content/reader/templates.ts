@@ -218,6 +218,14 @@ export const ASK_LINES = {
   bye: ['Ừ, {goi} về nghỉ nhé. Có gì lại ghé {ta}.', '{Ta} nói đến đây thôi. Chúc {goi} một ngày nhẹ nhàng.'],
 } as const;
 
+/** Xin keo trước khi gieo quẻ (ARCHITECTURE 16.4). Không hứa hẹn gì: keo chỉ là nghi thức, không đổi quẻ. */
+export const KEO_LINES = {
+  start: ['Trước khi gieo, {goi} tĩnh tâm nghĩ về việc muốn hỏi, rồi xin keo: chạm nút hoặc lắc máy.', '{goi} nghĩ kỹ điều muốn hỏi, rồi chạm nút hoặc lắc máy để xin keo.'],
+  thuan: ['Một sấp một ngửa, keo thuận rồi. {goi} gieo quẻ đi.', 'Keo thuận. Giờ {goi} gieo từng hào nhé.'],
+  lai: ['Hai mặt giống nhau, {goi} xin lại nhé.', 'Keo chưa thuận, {goi} tĩnh tâm rồi xin thêm lần nữa.'],
+  du: ['Ba lần rồi, mình cứ gieo, lòng thành là đủ.', 'Đủ ba lần. {goi} gieo quẻ đi, không sao cả.'],
+} as const;
+
 export const pick = <T,>(list: readonly T[], seed: number): T => list[Math.abs(seed) % list.length];
 
 /** Thay biến. Viết hoa chữ đầu câu vì {goi} có thể đứng đầu câu ("Con xem…"). */
@@ -229,5 +237,5 @@ export function fill(t: string, vars: Record<string, string | number>): string {
 
 /** Mọi mẫu câu, để test quét. */
 export function allLines(): string[] {
-  return [...Object.values(TOOL_LINES).flatMap((t) => [...t.open, ...t.close, ...t.cells, ...t.sections]), ...Object.values(LEADS).flat(), NO_SPEECH_LINE, ...Object.values(DONG_LINES).flat(), ...Object.values(STUDY_LINES).flat(), ...Object.values(DAY_LINES).flat(), ...Object.values(ASK_LINES).flat()];
+  return [...Object.values(TOOL_LINES).flatMap((t) => [...t.open, ...t.close, ...t.cells, ...t.sections]), ...Object.values(LEADS).flat(), NO_SPEECH_LINE, ...Object.values(DONG_LINES).flat(), ...Object.values(STUDY_LINES).flat(), ...Object.values(DAY_LINES).flat(), ...Object.values(ASK_LINES).flat(), ...Object.values(KEO_LINES).flat()];
 }
