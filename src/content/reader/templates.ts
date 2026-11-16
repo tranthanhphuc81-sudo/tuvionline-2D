@@ -140,6 +140,11 @@ export const TOOL_LINES: Record<ReaderTool, { open: readonly string[]; close: re
 /** Lời dẫn tô sáng trên lá số. */
 export const LEADS = {
   tuviMenh: ['{goi} xem ở đây, cung Mệnh ở {cung}{sao}.', 'Đây là cung Mệnh, nằm ở {cung}{sao}.'],
+  /* Thầy giảng riêng một cung, một trụ khi người dùng chạm (ARCHITECTURE 16.1). */
+  tuviCung: ['{goi} xem cung {cung}, nằm ở {chi}.', 'Đây là cung {cung}, ở {chi}. {ta} giảng riêng cung này.'],
+  tuviCungKet: [`Cung {cung} {ta} giảng tới đây. ${C}`, `Đó là cung {cung}. {goi} chạm cung khác, {ta} giảng tiếp. ${C}`],
+  battuTru: ['{goi} xem {tru}, chữ {canChi}.', 'Đây là {tru}, gồm can chi {canChi}. {ta} giảng riêng trụ này.'],
+  battuTruKet: [`{Tru} {ta} giảng tới đây. ${C}`, `Đó là {tru}. {goi} chạm trụ khác, {ta} giảng tiếp. ${C}`],
   battuNhatChu: ['{goi} xem trụ ngày, Nhật Chủ là {nhatChu}.', 'Chữ chính là Nhật Chủ {nhatChu}, nằm ở trụ ngày.'],
   luchaoThe: ['{goi} xem hào {hao}, đó là hào Thế.', 'Hào Thế nằm ở hào {hao}.'],
   battrachHuong: ['{goi} xem hướng {huong}, sao {sao}, là hướng tốt nhất.', 'Hướng hợp nhất là {huong}, ứng với sao {sao}.'],

@@ -8,7 +8,7 @@ import { useApp } from '../../app/context';
 import ui from './ui.module.css';
 
 /** Nút Đọc/Dừng. `getText`, `getCues` chỉ chạy khi bấm nên màn hình không tốn công dựng chữ khi chưa cần. Có `getCues` thì thầy đọc theo kịch bản. */
-export function SpeakButton({ id, getText, getCues, label }: { id: string; getText?(): string; getCues?(): Cue[]; /** chữ trên nút khi chưa đọc (mặc định "Thầy đọc") */ label?: string }) {
+export function SpeakButton({ id, getText, getCues, label, ariaLabel, compact = false }: { id: string; getText?(): string; getCues?(): Cue[]; /** chữ trên nút khi chưa đọc (mặc định "Thầy đọc") */ label?: string; /** nhãn đọc cho trình đọc màn hình khi chữ trên nút ngắn */ ariaLabel?: string; /** nút nhỏ, không kéo hết bề ngang (nút giảng trên thẻ trụ) */ compact?: boolean }) {
   const rate = useApp((x) => x.settings.ttsRate);
   const pitch = useApp((x) => x.settings.ttsPitch);
   const speaking = useSyncExternalStore(subscribeReading, readingOwner) === id;
@@ -25,7 +25,7 @@ export function SpeakButton({ id, getText, getCues, label }: { id: string; getTe
 
   return (
     <div className={ui.stack}>
-      <button type="button" className={`${ui.btn} ${ui.block}`} aria-pressed={speaking} onClick={() => void toggle()}>
+      <button type="button" className={compact ? ui.btn : `${ui.btn} ${ui.block}`} aria-pressed={speaking} aria-label={ariaLabel && !speaking ? ariaLabel : undefined} onClick={() => void toggle()}>
         {speaking ? '⏹ Dừng đọc' : label ? `🔊 ${label}` : getCues ? `🔊 ${Ta} đọc` : '🔊 Đọc kết quả'}
       </button>
       {note && (
