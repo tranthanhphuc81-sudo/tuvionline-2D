@@ -7,7 +7,8 @@ import { adaptCount, particleAlpha, spawnParticle, stepParticle } from './partic
 import { entryPlan, lunarEventOf, skipJourney, startJourney, stepJourney } from './plan';
 import { SCENES } from './scenes';
 import { layerTransform } from './SceneEngine';
-import { VIDEO_SEGMENTS, VIDEO_START_MS, segmentAt } from './video';
+import { STOP_WAIT_MS, VIDEO_SEGMENTS, VIDEO_START_MS, VIDEO_STOPS, segmentAt } from './video';
+import { DONG_LINES, ENTRY_STOP_LINES, fill, pick } from '../../content/reader/templates';
 import { AppProvider } from '../../app/context';
 import { createStore } from '../../state/store';
 import { emptyState, type PersistedState } from '../../state/schema';
@@ -164,12 +165,20 @@ describe('màn hình hành trình', () => {
 
 describe('video nền lối vào (ARCHITECTURE 12.12)', () => {
   afterEach(cleanup);
-  it('mỗi trạm có một đoạn 4 giây, nối liền nhau, đủ 5 trạm', () => {
+  it('mỗi trạm có một đoạn, nối liền nhau từ 0 tới hết video 30 giây, đủ 5 trạm', () => {
     expect(VIDEO_SEGMENTS).toHaveLength(SCENES.length);
-    expect(VIDEO_SEGMENTS).toEqual([[0, 4], [4, 8], [8, 12], [12, 16], [16, 20]]);
+    expect(VIDEO_SEGMENTS[0][0]).toBe(0);
+    expect(VIDEO_SEGMENTS[VIDEO_SEGMENTS.length - 1][1]).toBe(30);
+    for (let i = 1; i < VIDEO_SEGMENTS.length; i++) expect(VIDEO_SEGMENTS[i][0]).toBe(VIDEO_SEGMENTS[i - 1][1]);
+    for (const [a, b] of VIDEO_SEGMENTS) expect(b).toBeGreaterThan(a);
   });
   it('giây nào thuộc trạm nào', () => {
-    expect([0, 3.9, 4, 8.5, 12, 19.9, 20, 25].map(segmentAt)).toEqual([0, 0, 1, 2, 3, 4, 4, 4]);
+    expect([0, 3.7, 3.75, 11, 11.1, 15, 19.5, 29.9, 30, 35].map(segmentAt)).toEqual([0, 0, 1, 1, 2, 3, 4, 4, 4, 4]);
+  });
+  it('ba chỗ dừng theo thứ tự cổng, cửa chính điện, án thư, nằm trong video, đúng trạm', () => {
+    expect(VIDEO_STOPS.map((x) => x.kind)).toEqual(['gate', 'door', 'table']);
+    for (let i = 1; i < VIDEO_STOPS.length; i++) expect(VIDEO_STOPS[i].at).toBeGreaterThan(VIDEO_STOPS[i - 1].at);
+    expect(VIDEO_STOPS.map((x) => SCENES[segmentAt(x.at)].id)).toEqual(['gate', 'garden', 'study']);
   });
   it('chỉ bản đầy đủ có video; rút gọn và giảm chuyển động giữ tranh vẽ', () => {
     const { unmount } = render(withStore(<Journey plan="full" onDone={() => {}} />));
@@ -193,35 +202,107 @@ describe('video nền lối vào (ARCHITECTURE 12.12)', () => {
     expect(document.querySelector('video')).toBeNull();
     expect(document.querySelectorAll('[data-scene] img').length).toBeGreaterThan(0);
   });
-  it('video dẫn nhịp: chạy tới đâu đổi trạm tới đó, ẩn đạo đồng, hết video thì xong và mờ dần chậm', () => {
-    vi.useFakeTimers();
+  /** Video giả: tự điều khiển giây đang phát, paused, và từng khung hình (requestAnimationFrame). */
+  function fakeVideo() {
+    const frames: FrameRequestCallback[] = [];
+    vi.stubGlobal('requestAnimationFrame', (cb: FrameRequestCallback) => frames.push(cb));
+    vi.stubGlobal('cancelAnimationFrame', () => {});
     const onDone = vi.fn();
     render(withStore(<Journey plan="full" onDone={onDone} />));
     const v = document.querySelector('video')!;
+    const st = { t: 0, paused: false };
+    Object.defineProperty(v, 'currentTime', { configurable: true, get: () => st.t, set: (x: number) => { st.t = x; } });
+    Object.defineProperty(v, 'paused', { configurable: true, get: () => st.paused });
+    v.pause = () => { st.paused = true; };
+    v.play = () => { st.paused = false; return Promise.resolve(); };
     act(() => { fireEvent.playing(v); });
+    /** Chạy một khung hình ở giây `t`. */
+    const frame = (t: number) => { st.t = t; act(() => { frames.splice(0).forEach((cb) => cb(0)); }); };
     const at = () => document.querySelector('[data-scene]')?.getAttribute('data-scene');
-    act(() => { vi.advanceTimersByTime(30000); }); // hẹn giờ trạm không chạy khi có video
+    const tap = () => { const d = screen.getByRole('dialog'); act(() => { fireEvent.pointerDown(d, { clientY: 300 }); fireEvent.pointerUp(d, { clientY: 300 }); }); };
+    return { v, st, frame, at, tap, onDone };
+  }
+  const line = (list: readonly string[]) => fill(pick(list, new Date().getDate()), { ta: 'thầy' });
+
+  it('video dẫn nhịp: chạy tới đâu đổi trạm tới đó, dừng ở cổng, cửa chính điện, án thư; hết video thì xong và mờ dần chậm', () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'Date'] });
+    const { st, frame, at, v, onDone } = fakeVideo();
+    act(() => { vi.advanceTimersByTime(10000); }); // hẹn giờ trạm không chạy khi có video
     expect(at()).toBe('gate');
     expect(document.querySelector('.dong, [class*="dong"]')).toBeNull();
-    Object.defineProperty(v, 'currentTime', { configurable: true, get: () => 9.3, set: () => {} });
-    act(() => { fireEvent.timeUpdate(v); });
+    // Cổng: đạo đồng mời vào
+    frame(0.1);
+    expect(st.paused).toBe(true);
+    expect(screen.getByText(line(DONG_LINES.gate))).toBeTruthy();
+    act(() => { fireEvent.click(screen.getByRole('button', { name: 'Bước vào cổng' })); });
+    expect(st.paused).toBe(false);
+    expect(screen.queryByRole('button', { name: 'Bước vào cổng' })).toBeNull();
+    frame(9.3);
+    expect(at()).toBe('garden');
+    expect(st.paused).toBe(false);
+    // Cửa chính điện: gõ chuông, một lúc sau cửa mở (video chạy tiếp)
+    frame(11.05);
+    expect(st.paused).toBe(true);
+    expect(screen.getByText(line(ENTRY_STOP_LINES.door))).toBeTruthy();
+    act(() => { fireEvent.click(screen.getByRole('button', { name: 'Gõ chuông' })); });
+    expect(st.paused).toBe(true);
+    act(() => { vi.advanceTimersByTime(1200); });
+    expect(st.paused).toBe(false);
+    frame(12);
     expect(at()).toBe('hall');
+    frame(16);
+    expect(at()).toBe('corridor');
+    // Án thư: ngồi xuống
+    frame(23.3);
+    expect(at()).toBe('study');
+    expect(st.paused).toBe(true);
+    expect(screen.getByText(line(ENTRY_STOP_LINES.table))).toBeTruthy();
+    act(() => { fireEvent.click(screen.getByRole('button', { name: 'Ngồi xuống' })); });
+    expect(st.paused).toBe(false);
+    frame(29);
+    expect(st.paused).toBe(false); // hết chỗ dừng
     act(() => { fireEvent.ended(v); });
     act(() => { vi.advanceTimersByTime(400); });
     expect(onDone).not.toHaveBeenCalled();
     act(() => { vi.advanceTimersByTime(800); });
     expect(onDone).toHaveBeenCalledTimes(1);
     vi.useRealTimers();
+    vi.unstubAllGlobals();
   });
-  it('chạm để bước tới thì tua video sang đầu đoạn sau', () => {
-    render(withStore(<Journey plan="full" onDone={() => {}} />));
-    const v = document.querySelector('video')!;
-    let t = 1;
-    Object.defineProperty(v, 'currentTime', { configurable: true, get: () => t, set: (x: number) => { t = x; } });
-    act(() => { fireEvent.playing(v); });
-    const d = screen.getByRole('dialog');
-    act(() => { fireEvent.pointerDown(d, { clientY: 300 }); fireEvent.pointerUp(d, { clientY: 300 }); });
-    expect(t).toBe(4);
+  it('dừng mà không ai làm gì thì sau STOP_WAIT_MS tự đi tiếp', () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'Date'] });
+    const { st, frame } = fakeVideo();
+    frame(0.1);
+    expect(st.paused).toBe(true);
+    act(() => { vi.advanceTimersByTime(STOP_WAIT_MS - 10); });
+    expect(st.paused).toBe(true);
+    act(() => { vi.advanceTimersByTime(20); });
+    expect(st.paused).toBe(false);
+    expect(screen.queryByRole('button', { name: 'Bước vào cổng' })).toBeNull();
+    vi.useRealTimers();
+    vi.unstubAllGlobals();
+  });
+  it('chạm: đang dừng thì đi tiếp, đang chạy thì tua tới ngay trước chỗ dừng kế tiếp, hết chỗ dừng thì xong', () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'Date'] });
+    const { st, frame, tap, onDone } = fakeVideo();
+    frame(0.1);
+    expect(st.paused).toBe(true);
+    tap();
+    expect(st.paused).toBe(false);
+    tap();
+    expect(st.t).toBeCloseTo(VIDEO_STOPS[1].at - 0.05);
+    frame(VIDEO_STOPS[1].at);
+    expect(st.paused).toBe(true);
+    tap();
+    tap();
+    expect(st.t).toBeCloseTo(VIDEO_STOPS[2].at - 0.05);
+    frame(VIDEO_STOPS[2].at);
+    tap();
+    tap(); // hết chỗ dừng: hành trình xong
+    act(() => { vi.advanceTimersByTime(1500); });
+    expect(onDone).toHaveBeenCalledTimes(1);
+    vi.useRealTimers();
+    vi.unstubAllGlobals();
   });
   it('video không lên sau một lúc thì dùng tranh vẽ và hẹn giờ như cũ', () => {
     vi.useFakeTimers();

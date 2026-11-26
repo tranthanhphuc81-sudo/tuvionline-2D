@@ -45,13 +45,14 @@ export function IncenseStick({ state }: { state: Exclude<IncenseState, { kind: '
 }
 
 /** Nút chạm giữ để thắp. Trình đọc màn hình và bàn phím bấm một lần là thắp, vì không giữ được. */
-export function IncenseControl() {
+/** `onLit`: báo khi nhang vừa bắt lửa (lối vào dùng để đi tiếp, ARCHITECTURE 12.12). */
+export function IncenseControl({ onLit }: { onLit?(): void } = {}) {
   const { store } = useAppCtx();
   const state = useIncense();
   const [holding, setHolding] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const cancel = () => { if (timer.current) clearTimeout(timer.current); timer.current = null; setHolding(false); };
-  const light = () => { cancel(); setIncenseLit(store); void tapMedium(); };
+  const light = () => { cancel(); setIncenseLit(store); void tapMedium(); onLit?.(); };
   useEffect(() => cancel, []);
   const burning = state.kind === 'burning';
   return (

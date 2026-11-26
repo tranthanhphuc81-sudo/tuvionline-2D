@@ -10,9 +10,9 @@ import { SceneView } from './SceneEngine';
 import { SCENES, preloadScene } from './scenes';
 import { IncenseControl } from './incense';
 import { BellButton } from './BellButton';
-import { JourneyVideo } from './video';
+import { JourneyVideo, STOP_WAIT_MS, type JourneyVideoHandle, type StopKind } from './video';
 import { Character } from '../reader/Character';
-import { DONG_LINES, fill, pick } from '../../content/reader/templates';
+import { DONG_LINES, ENTRY_STOP_LINES, fill, pick } from '../../content/reader/templates';
 import { useReader } from '../reader/hooks';
 import s from './journey.module.css';
 
@@ -36,6 +36,17 @@ export function Journey({ plan, sound = false, onDone }: { plan: Exclude<EntryPl
   /** loading: đang chờ video phát (chưa hẹn giờ trạm); on: video dẫn hành trình; off: tranh vẽ và hẹn giờ như cũ. */
   const [video, setVideo] = useState<'loading' | 'on' | 'off'>(plan === 'full' ? 'loading' : 'off');
   const videoOn = video === 'on';
+  /** Chỗ dừng của video đang chờ người dùng (cổng, cửa chính điện, án thư), null = video đang chạy. */
+  const [stop, setStop] = useState<StopKind | null>(null);
+  const vref = useRef<JourneyVideoHandle>(null);
+  const resume = () => { setStop(null); vref.current?.resume(); };
+  const later = (ms: number) => { setTimeout(resume, ms); };
+  // Dừng mà không ai làm gì thì sau một lúc tự đi tiếp (không chặn ai, 12.1)
+  useEffect(() => {
+    if (!stop) return;
+    const t = setTimeout(resume, STOP_WAIT_MS);
+    return () => clearTimeout(t);
+  }, [stop]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => backStack.register(() => { setSt((x) => skipJourney(x, COUNT)); return true; }), []);
   useEffect(() => { preloadScene(SCENES[st.index + 1]); }, [st.index]);
@@ -72,13 +83,17 @@ export function Journey({ plan, sound = false, onDone }: { plan: Exclude<EntryPl
   const onUp = (e: PointerEvent) => {
     const dy = startY.current === null ? 0 : e.clientY - startY.current;
     startY.current = null;
-    if (Math.abs(dy) < SWIPE_PX || dy < 0) step();
+    if (!(Math.abs(dy) < SWIPE_PX || dy < 0)) return;
+    // Có video: đang dừng thì chạm là đi tiếp; đang chạy thì tua tới chỗ dừng kế tiếp
+    if (videoOn) { if (stop) resume(); else vref.current?.skipAhead(); return; }
+    step();
   };
 
   return (
     <div className={s.journey} data-done={st.done} data-video={videoOn} role="dialog" aria-label="Lối vào đạo quán" onPointerDown={(e) => { startY.current = e.clientY; audio.current?.unlock(); }} onPointerUp={onUp}>
       {video !== 'off' && (
         <JourneyVideo
+          ref={vref} onStop={setStop}
           index={st.index} onIndex={(i) => setSt((x) => (x.done ? x : { index: i, done: false }))}
           onReady={() => setVideo('on')} onFail={() => setVideo('off')} onEnded={() => setSt((x) => skipJourney(x, COUNT))}
         />
@@ -89,11 +104,25 @@ export function Journey({ plan, sound = false, onDone }: { plan: Exclude<EntryPl
       {plan === 'full' && !videoOn && (scene.id === 'gate' || scene.id === 'corridor') && <Character name="daodong" state={scene.id === 'gate' ? 'nod' : 'point'} className={s.dong} />}
       {plan === 'full' && !videoOn && (scene.id === 'gate' || scene.id === 'corridor') && <p className={s.speech}>{fill(pick(DONG_LINES[scene.id], new Date().getDate()), { ta: persona.ta })}</p>}
       <div className={s.foot} onPointerUp={(e) => e.stopPropagation()}>
-        {scene.interaction === 'incense' && plan === 'full' && <BellButton className={s.bell} onRing={() => { audio.current?.bell(); return true; /* tắt âm thanh lối vào hay máy im lặng thì chỉ rung */ }} />}
-        {scene.interaction === 'incense' && plan === 'full' && <IncenseControl />}
-        {scene.interaction === 'incense' && <button type="button" className={s.action} onClick={step}>Đi tiếp</button>}
-        {scene.interaction === 'invite' && <button type="button" className={s.action} onClick={step}>Vào tĩnh thất</button>}
-        {st.index === 0 && plan === 'full' && <p className={s.hint}>Vuốt lên hoặc chạm để bước tới</p>}
+        {videoOn && stop === 'gate' && (<>
+          <p className={s.caption}>{fill(pick(DONG_LINES.gate, new Date().getDate()), { ta: persona.ta })}</p>
+          <button type="button" className={s.action} onClick={resume}>Bước vào cổng</button>
+        </>)}
+        {videoOn && stop === 'door' && (<>
+          <p className={s.caption}>{fill(pick(ENTRY_STOP_LINES.door, new Date().getDate()), { ta: persona.ta })}</p>
+          <BellButton className={s.bellBig} onRing={() => { audio.current?.bell(); later(1200); return true; /* tắt âm thanh lối vào hay máy im lặng thì chỉ rung */ }} />
+          <button type="button" className={s.action} onClick={resume}>Vào</button>
+        </>)}
+        {videoOn && stop === 'table' && (<>
+          <p className={s.caption}>{fill(pick(ENTRY_STOP_LINES.table, new Date().getDate()), { ta: persona.ta })}</p>
+          <IncenseControl onLit={() => later(1500)} />
+          <button type="button" className={s.action} onClick={resume}>Ngồi xuống</button>
+        </>)}
+        {!videoOn && scene.interaction === 'incense' && plan === 'full' && <BellButton className={s.bell} onRing={() => { audio.current?.bell(); return true; /* tắt âm thanh lối vào hay máy im lặng thì chỉ rung */ }} />}
+        {!videoOn && scene.interaction === 'incense' && plan === 'full' && <IncenseControl />}
+        {!videoOn && scene.interaction === 'incense' && <button type="button" className={s.action} onClick={step}>Đi tiếp</button>}
+        {!videoOn && scene.interaction === 'invite' && <button type="button" className={s.action} onClick={step}>Vào tĩnh thất</button>}
+        {!videoOn && st.index === 0 && plan === 'full' && <p className={s.hint}>Vuốt lên hoặc chạm để bước tới</p>}
       </div>
     </div>
   );
