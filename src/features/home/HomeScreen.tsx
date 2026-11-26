@@ -24,6 +24,7 @@ const SHORTCUTS: readonly { icon: string; label: string; tab: TabId; route?: Rou
   { icon: '🧭', label: 'La Bàn', tab: 'phongthuy', route: { name: 'phongthuy', sub: 'laban' } },
   { icon: '🌙', label: 'Nạp Âm & hợp hôn', tab: 'phongthuy', route: { name: 'phongthuy', sub: 'napam' } },
   { icon: '✋', label: 'Chỉ tay', tab: 'home', route: { name: 'palm' } },
+  { icon: '📅', label: 'Xem ngày', tab: 'home', route: { name: 'xemngay' } },
 ];
 
 export function BootNoticeBanner() {
