@@ -1,5 +1,5 @@
-/* "Hỏi chuyện Thầy" ở Tĩnh thất (ARCHITECTURE 16.3): bảy câu hỏi có sẵn, câu trả lời CHỈ ghép lại kết quả và câu chữ các công cụ
-   đã có (Tổng hợp, ngũ hành, lời hôm nay), không tạo lời luận mới. Viết với "bạn"; màn hình đổi theo cách Thầy gọi (xungHoPlain).
+/* "Hỏi chuyện Thầy" ở Tĩnh thất (ARCHITECTURE 16.3): các câu hỏi có sẵn, câu trả lời CHỈ ghép lại kết quả và câu chữ các công cụ
+   đã có (Tổng hợp, ngũ hành, lời hôm nay), không tạo lời luận mới. Nhóm "Việc hôm nay" (hôm nay làm việc X được không) ở askDay.ts. Viết với "bạn"; màn hình đổi theo cách Thầy gọi (xungHoPlain).
    Câu dính từ cấm đọc vẫn hiện chữ nhưng Thầy không đọc (buildPlainCues). Không có câu "hợp tuổi": app chưa có câu chữ cho phần này. */
 import { pillarOfYear, evaluatePeriod, type NguHanhAnalysis } from '../core/nguhanh';
 import { BatTuEngine, type TongHopReading } from '../core';
@@ -9,19 +9,28 @@ import { describePillar, plainBlocks } from './nguhanh/plain';
 import { COLOR_SOURCE_NOTE } from './nguhanh/vocab';
 import { CULTURE_LINE } from './reader/templates';
 import { TODAY_NOTE, todayReading } from './today';
+import { DAY_TASKS, taskAnswer, type DayTaskId } from './askDay';
 
 const { CAN, CHI } = BatTuEngine;
 
-export const ASK_QUESTIONS = [
-  { id: 'nam-nay', label: 'Năm nay thế nào?' },
-  { id: 'nam-thuan', label: 'Năm nào thuận nhất sắp tới?' },
-  { id: 'hom-nay', label: 'Hôm nay thế nào?' },
-  { id: 'tinh', label: 'Tính cách ra sao?' },
-  { id: 'mau-huong', label: 'Hợp màu gì, hướng nào?' },
-  { id: 'nghe', label: 'Hợp nghề gì?' },
-  { id: 'menh', label: 'Mệnh là gì?' },
+/** Hai nhóm câu hỏi, hiện thành hai khối trong khung hỏi đáp. */
+export const ASK_GROUPS = [
+  { id: 'la-so', label: 'Về lá số' },
+  { id: 'viec', label: 'Việc hôm nay' },
 ] as const;
+
+export const ASK_QUESTIONS = [
+  { id: 'nam-nay', label: 'Năm nay thế nào?', group: 'la-so' },
+  { id: 'nam-thuan', label: 'Năm nào thuận nhất sắp tới?', group: 'la-so' },
+  { id: 'tinh', label: 'Tính cách ra sao?', group: 'la-so' },
+  { id: 'mau-huong', label: 'Hợp màu gì, hướng nào?', group: 'la-so' },
+  { id: 'nghe', label: 'Hợp nghề gì?', group: 'la-so' },
+  { id: 'menh', label: 'Mệnh là gì?', group: 'la-so' },
+  { id: 'hom-nay', label: 'Hôm nay thế nào?', group: 'viec' },
+  ...DAY_TASKS.map((t) => ({ id: t.id, label: t.label, group: 'viec' as const })),
+] as const satisfies readonly { id: string; label: string; group: (typeof ASK_GROUPS)[number]['id'] }[];
 export type AskId = (typeof ASK_QUESTIONS)[number]['id'];
+const isTask = (id: AskId): id is DayTaskId => DAY_TASKS.some((t) => t.id === id);
 
 export interface AskContext { tongHop: TongHopReading; nguHanh: NguHanhAnalysis; now: Date }
 
@@ -35,6 +44,7 @@ function blockTexts(sections: readonly Section[], id: string): string[] {
 
 /** Câu trả lời của một câu hỏi: vài câu, câu cuối là lời nhắc văn hoá. */
 export function askAnswer(id: AskId, { tongHop: r, nguHanh: a, now }: AskContext): string[] {
+  if (isTask(id)) return [...taskAnswer(id, a, now), CULTURE_LINE];
   const tom = tongHopTomLai(r);
   const ug = a.readings[0].usefulGod;
   let out: string[];

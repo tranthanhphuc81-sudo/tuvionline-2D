@@ -1434,6 +1434,15 @@ Chủ dự án muốn "tương tác giả lập nhiều hơn" và chọn cả b�
 - Bỏ câu "Hợp tuổi nào" của kế hoạch: app chưa có câu chữ cho phần này, thêm vào là tạo luận mới.
 - Câu cuối mỗi câu trả lời là lời nhắc văn hoá. Câu dính từ cấm đọc chỉ hiện chữ (`buildPlainCues`). Đọc bằng khung đọc của Tĩnh thất nên Thầy cử động, phụ đề chạy.
 
+### 16.3.1 Hỏi chuyện Thầy: nhóm "Việc hôm nay" (26/11/2026)
+- Chủ dự án muốn hỏi thêm kiểu "hôm nay sắm tài sản được không, đi làm giấy tờ được không". Khung chia hai khối: "Về lá số" (sáu câu cũ) và "Việc hôm nay" ("Hôm nay thế nào?" cùng sáu việc). Mỗi khối là một `group` có nhãn.
+- Không thêm công thức: mỗi việc ứng với một nhóm Thập Thần theo nghĩa đã dùng ở `TEN_GOD_PRACTICAL` (tài sản → Tài; giấy tờ, thi cử → Ấn; xin việc, gặp cấp trên → Quan Sát; bàn hợp tác → Tỷ Kiếp; ra mắt, trình bày → Thực Thương), hành lấy bằng `elementOfTenGod`.
+- Chấm ngày (`taskVerdict`, `src/content/askDay.ts`): mức của lời hôm nay (`evaluatePeriod` trụ ngày với Dụng thần: thuận +1, bình 0, giữ −1), cộng 1 nếu can hoặc bản khí chi của ngày mang đúng hành của việc mà hành ấy là Dụng/Hỷ, trừ 1 nếu là Kỵ/Cừu. ≥ 1 thuận, ≤ −1 giữ nhịp, còn lại bình.
+- Ngày chưa thuận thì gợi ý ngày thuận gần nhất trong 14 ngày tới (thứ, ngày dương, can chi, ngày âm); không có thì nói thẳng là chưa có ngày nổi trội.
+- Mỗi việc có một lời dặn thực tế không phụ thuộc lá số (chuẩn bị giấy tờ, so giá…), kèm "không phải lời báo trước" và lời nhắc văn hoá. Không nêu giờ, hướng, vật phẩm.
+- Không dùng Hoàng Đạo, Thập Nhị Trực, Tam Nương, Nguyệt Kỵ: app chưa có các bảng này, thêm vào là công thức mới cần đối chiếu nguồn.
+- Chữ "mua" nằm trong `BANNED_TERMS` nên nhãn nói "sắm tài sản lớn".
+
 ### 16.4 Nghi thức có cử chỉ (PR 4)
 - **Gõ chuông** (`BellButton`): nút 🔔 ở góc trên trái phòng Tĩnh thất và ở chính điện của lối vào bản đầy đủ. Chạm thì rung nhẹ (`tapLight`) và chuông ngân một tiếng. Ở Tĩnh thất dùng `ringBell` (`src/platform/ambientAudio.ts`): tạo AudioContext ngay trong sự kiện chạm, rồi mới hỏi `soundAllowed`; máy để im lặng hoặc rung thì đóng ngay, không phát; tự đóng sau 3,3 giây, không bật tiếng nền. Ở lối vào dùng chuông của bộ tiếng đang phát; tắt "Âm thanh lối vào" hoặc máy im lặng thì chỉ rung.
 - **Thắp hương**: nhang bắt lửa thì rung vừa (`tapMedium`, `ImpactStyle.Medium`) thay rung nhẹ.

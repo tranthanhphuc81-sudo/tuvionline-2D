@@ -2,7 +2,7 @@
    có sẵn, Thầy trả lời bằng giọng nói rồi hỏi "còn gì nữa không"; bấm "Thôi, cảm ơn" thì Thầy chào và đóng khung. */
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { BatTuChart, TongHopReading } from '../../core';
-import { ASK_QUESTIONS, askAnswer, type AskId } from '../../content/ask';
+import { ASK_GROUPS, ASK_QUESTIONS, askAnswer, type AskId } from '../../content/ask';
 import { STUDY_READING_ID } from '../../content/study';
 import { ASK_LINES, fill, pick } from '../../content/reader/templates';
 import { useApp } from '../../app/context';
@@ -41,11 +41,16 @@ export function AskTalk({ ch, tongHop, profileId, who, onClose }: { ch: BatTuCha
     <div className={s.intake} role="group" aria-label={`Hỏi chuyện ${Ta}`}>
       {asked ? <p className={s.ask}>{ASK_QUESTIONS.find((q) => q.id === asked)!.label}</p> : <p className={s.line}>{fill(pick(ASK_LINES.open, seed), vars)}</p>}
       {asked && <div className={s.answer} aria-live="polite">{answer.map((t, i) => <p key={i}>{t}</p>)}</div>}
-      <div className={s.askList}>
-        {ASK_QUESTIONS.map((q) => (
-          <button key={q.id} type="button" className={ui.btn} aria-pressed={asked === q.id} onClick={() => choose(q.id)}>{q.label}</button>
-        ))}
-      </div>
+      {ASK_GROUPS.map((g) => (
+        <div key={g.id} role="group" aria-labelledby={`ask-${g.id}`} className={s.askGroup}>
+          <p id={`ask-${g.id}`} className={s.askGroupTitle}>{g.label}</p>
+          <div className={s.askList}>
+            {ASK_QUESTIONS.filter((q) => q.group === g.id).map((q) => (
+              <button key={q.id} type="button" className={ui.btn} aria-pressed={asked === q.id} onClick={() => choose(q.id)}>{q.label}</button>
+            ))}
+          </div>
+        </div>
+      ))}
       <button type="button" className={`${ui.btn} ${ui.ghost} ${ui.block}`} onClick={bye}>Thôi, cảm ơn {Ta}</button>
     </div>
   );

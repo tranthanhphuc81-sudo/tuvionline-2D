@@ -24,13 +24,18 @@ const branchElement = (b: number) => stemElement(hiddenStems(b as never)[0]);
 const canChi = (pl: Pillar) => `${CAN[pl.stem]} ${CHI[pl.branch]}`;
 
 /** Can, chi của một trụ (năm, ngày…) thuộc hành nào và hành đó là gì với lá số; dùng chung cho năm ví dụ và lời "hôm nay" ở Tĩnh thất. */
-export function describePillar(pl: Pillar, ug: Reading['usefulGod']): string {
+/** Vai trò của một hành với lá số, nói thường ("đúng hành bạn cần", "hành hỗ trợ"…). */
+export function elementRole(e: Element, ug: Reading['usefulGod']): string {
   const follow = ug.method === 'tong-cach';
-  const rel = (e: Element) => e === ug.dung ? (follow ? 'đúng hành nên thuận theo' : 'đúng hành bạn cần')
+  return e === ug.dung ? (follow ? 'đúng hành nên thuận theo' : 'đúng hành bạn cần')
     : e === ug.hy ? 'hành hỗ trợ'
     : e === ug.ky ? (follow ? 'hành nên tránh' : 'hành nên tiết chế')
     : e === ug.cuu ? (follow ? 'hành tiếp sức cho hành nên tránh' : 'hành tiếp sức cho hành nên tiết chế')
     : 'hành trung tính với lá số này';
+}
+
+export function describePillar(pl: Pillar, ug: Reading['usefulGod']): string {
+  const rel = (e: Element) => elementRole(e, ug);
   const se = stemElement(pl.stem), be = branchElement(pl.branch);
   return se === be ? `cả can ${CAN[pl.stem]} lẫn chi ${CHI[pl.branch]} đều thuộc ${se}, ${rel(se)}` : `can ${CAN[pl.stem]} thuộc ${se} (${rel(se)}), chi ${CHI[pl.branch]} thuộc ${be} (${rel(be)})`;
 }
