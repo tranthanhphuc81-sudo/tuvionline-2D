@@ -339,6 +339,13 @@ Khi người dùng bấm "Thầy giảng cung này" (Tử Vi) hoặc nút "Giả
 - Xin lại: "Hai mặt giống nhau, {goi} xin lại nhé." / "Keo chưa thuận, {goi} tĩnh tâm rồi xin thêm lần nữa."
 - Đủ ba lần: "Ba lần rồi, mình cứ gieo, lòng thành là đủ." / "Đủ ba lần. {goi} gieo quẻ đi, không sao cả."
 
+## Hỏi chuyện Thầy: Việc hôm nay (26/11/2026, chờ duyệt)
+
+- Sáu câu hỏi: Hôm nay sắm tài sản lớn được không? · Hôm nay đi làm giấy tờ được không? · Hôm nay thi cử, học việc mới được không? · Hôm nay xin việc, gặp cấp trên được không? · Hôm nay bàn chuyện hợp tác được không? · Hôm nay ra mắt việc mới, trình bày được không?
+- Câu trả lời: "Hôm nay ngày {can chi}: {…}." → "{Chuyện …} ứng với hành {X} trong lá số của bạn, là {vai trò}." (thêm "Khí ngày hôm nay mang hành {X}, nên ảnh hưởng tới việc này rõ hơn ngày thường." khi đúng) → một trong ba câu: "Với việc này, hôm nay khá thuận; đã chuẩn bị kỹ thì cứ làm." / "… không nghiêng hẳn về bên nào; làm được, miễn chuẩn bị chu đáo." / "… nên giữ nhịp; không gấp thì dời sang ngày thuận hơn, buộc phải làm thì xem kỹ từng bước, đừng quyết vội."
+- Ngày gợi ý: "Nếu muốn chọn ngày, ngày thuận hơn gần nhất trong hai tuần tới là {thứ} {d/m} (ngày {can chi}, {ngày} tháng {tháng} âm lịch)." / "Hai tuần tới chưa có ngày nào nổi trội hơn cho việc này, nên cứ chọn ngày tiện cho mình và chuẩn bị kỹ."
+- Lời dặn mỗi việc: xem `DAY_TASKS` trong `src/content/askDay.ts` (chi tiền lớn theo khả năng tài chính, giấy tờ pháp lý; mang đủ bản gốc, bản sao; ngủ đủ trước khi thi; chuẩn bị điều muốn nói; ghi rõ ai góp gì; tập trước phần trình bày).
+
 ## Câu chỉ hiện chữ, không đọc
 
 - (Phần này {goi} xem chữ trên màn hình)

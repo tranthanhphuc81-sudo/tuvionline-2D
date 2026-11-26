@@ -198,6 +198,9 @@ describe('Hỏi chuyện Thầy (ARCHITECTURE 16.3)', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Hợp nghề gì?' }));
     expect(screen.getByRole('button', { name: 'Hợp nghề gì?' }).getAttribute('aria-pressed')).toBe('true');
     expect(group.textContent).toContain('Nghề nghiệp');
+    fireEvent.click(screen.getByRole('button', { name: 'Hôm nay đi làm giấy tờ được không?' }));
+    expect(group.textContent).toContain('Chuyện giấy tờ, hồ sơ, con dấu ứng với hành');
+    expect(screen.getByRole('group', { name: 'Việc hôm nay' })).toBeTruthy();
     await waitFor(() => expect(readingState()?.id).toBe('thay'));
     fireEvent.click(screen.getByRole('button', { name: 'Thôi, cảm ơn Thầy' }));
     expect(screen.queryByRole('group', { name: 'Hỏi chuyện Thầy' })).toBeNull();
