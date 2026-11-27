@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
-import { describe, it, expect, afterEach } from 'vitest';
+import { describe, it, expect, afterEach, beforeAll } from 'vitest';
 import { render, screen, fireEvent, cleanup, within, act } from '@testing-library/react';
-import { App } from './App';
+import { App, preloadLater } from './App';
 import { AppProvider } from './context';
 import { createStore } from '../state/store';
 import { emptyState, type PersistedState } from '../state/schema';
@@ -20,6 +20,8 @@ function setup(withProfile = false) {
 }
 const visible = () => screen.getAllByRole('tabpanel').find((p) => !p.hidden)!;
 
+/* Màn của tab và màn con nạp khi cần (ARCHITECTURE 4.2): tải sẵn như app làm lúc rảnh, để màn hiện ngay khi bấm. */
+beforeAll(() => preloadLater(), 30000);
 afterEach(cleanup);
 
 /** Màn hình trên cùng của tab đang mở: các màn hình dưới nó vẫn mount, chỉ ẩn. */
@@ -62,6 +64,16 @@ describe('Khung app', () => {
     fireEvent.click(within(panel).getByRole('radio', { name: 'Có (tháng nhuận)' }));
     expect(within(panel).getByRole('alert').textContent).toBe('Năm 2023 không có tháng 3 nhuận — kiểm tra lại ô "Tháng nhuận?".');
     expect(store.getState().profiles).toEqual([]);
+  });
+
+  it('tab chưa chọn lần nào thì chưa dựng; chọn rồi thì giữ (ARCHITECTURE 1.2, 4.2)', () => {
+    setup(true);
+    expect(document.getElementById('panel-tuvi')!.childElementCount).toBe(0);
+    fireEvent.click(screen.getByRole('tab', { name: /Tử Vi/ }));
+    expect(document.getElementById('panel-tuvi')!.childElementCount).toBe(1);
+    fireEvent.click(screen.getByRole('tab', { name: /Tĩnh thất/ }));
+    expect(document.getElementById('panel-tuvi')!.childElementCount).toBe(1);
+    expect(document.getElementById('panel-battu')!.childElementCount).toBe(0);
   });
 
   it('chuyển tab không mất trạng thái của tab khác', () => {

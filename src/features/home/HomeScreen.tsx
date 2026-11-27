@@ -4,7 +4,7 @@ import { birthErrorText, birthNotesText } from '../../content/common/birth';
 import { CULTURAL_NOTE, RELATION_LABEL } from '../../content/common/notes';
 import { tongHopParts } from '../../content/tonghop/explain';
 import { selectActiveProfile } from '../../state/actions';
-import { useApp, useAppCtx, useNav } from '../../app/context';
+import { useApp, useNav } from '../../app/context';
 import type { Route, TabId } from '../../app/routes';
 import { SectionView } from '../../ui/components/SectionView';
 import { SpeakButton } from '../../ui/components/SpeakButton';
@@ -26,20 +26,6 @@ const SHORTCUTS: readonly { icon: string; label: string; tab: TabId; route?: Rou
   { icon: '✋', label: 'Chỉ tay', tab: 'home', route: { name: 'palm' } },
   { icon: '📅', label: 'Xem ngày', tab: 'home', route: { name: 'xemngay' } },
 ];
-
-export function BootNoticeBanner() {
-  const { notice } = useAppCtx();
-  if (!notice) return null;
-  if (notice.kind === 'imported-legacy') {
-    return <p className={ui.info} role="status">Đã chuyển thông tin bạn nhập ở bản trước thành hồ sơ đầu tiên. Bạn có thể đổi tên hồ sơ trong mục Quản lý hồ sơ.</p>;
-  }
-  return (
-    <p className={ui.error} role="alert">
-      Dữ liệu đã lưu trên máy bị hỏng nên không đọc được ({notice.error}). App khởi động với dữ liệu trống; bản sao dữ liệu cũ vẫn được
-      giữ nguyên trên máy để khôi phục sau.
-    </p>
-  );
-}
 
 /** Tổng hợp: tóm tắt 4 hệ thống của người đang xem, lối tắt sang mọi công cụ, rồi phần đọc tổng hợp. */
 export function HomeScreen() {

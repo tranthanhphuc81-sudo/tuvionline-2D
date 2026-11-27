@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
+import { describe, it, expect, vi, afterEach, beforeEach, beforeAll } from 'vitest';
 import { act, render, screen, fireEvent, cleanup, waitFor } from '@testing-library/react';
 import { AppProvider } from '../../app/context';
 import { initialRouter } from '../../app/router';
@@ -10,7 +10,7 @@ import { studyTitle } from '../../content/study';
 vi.mock('../../platform/native', () => ({ isNative: () => true }));
 const plugin = vi.hoisted(() => ({ speak: vi.fn(), stop: vi.fn(async () => {}), getSupportedVoices: vi.fn(), openInstall: vi.fn() }));
 vi.mock('@capacitor-community/text-to-speech', () => ({ TextToSpeech: plugin }));
-import { StudyScreen } from './StudyScreen';
+import { AskTalk, StudyScreen } from './StudyScreen';
 import { readingState, stopReading } from '../../platform/tts';
 
 const person: Profile = {
@@ -32,6 +32,9 @@ beforeEach(() => {
   plugin.getSupportedVoices.mockResolvedValue({ voices: [{ voiceURI: 'vi-vn-x-vic-local', lang: 'vi-VN', localService: true }] });
 });
 afterEach(() => { act(() => stopReading()); cleanup(); });
+
+/* Khung Hỏi chuyện Thầy nạp khi mở (ARCHITECTURE 4.2): tải sẵn để khung hiện ngay khi bấm. */
+beforeAll(() => AskTalk.preload(), 30000);
 
 describe('Đồ vật trên án thư', () => {
   it('đủ 6 đồ vật, mỗi đồ vật có nhãn truy cập', () => {

@@ -9,7 +9,9 @@ import { useApp, useNav } from '../../app/context';
 import type { Route, TabId } from '../../app/routes';
 import { lastSpeechError, pauseReading, readAloud, readingState, resumeReading, setReadingOptions, skipReading, stopReading, subscribeReading, vietnameseVoice } from '../../platform/tts';
 import { selectActiveProfile } from '../../state/actions';
-import { BootNoticeBanner } from '../home/HomeScreen';
+import { BootNoticeBanner } from '../home/BootNotice';
+import { lazyScreen } from '../../app/lazyScreen';
+import { ScreenBoundary } from '../../app/ScreenBoundary';
 import ui from '../../ui/components/ui.module.css';
 import { thayVoice, useWho } from '../reader/hooks';
 import { buildScript } from '../reader/script';
@@ -22,7 +24,6 @@ import { requestStarReveal } from '../tuvi/reveal';
 import { Intake } from './Intake';
 import { NguHanhButton, NguHanhQA } from './NguHanhTalk';
 import { TodayCard } from './TodayCard';
-import { AskTalk } from './AskTalk';
 import { BellButton } from '../journey/BellButton';
 import { dayGreeting } from '../../content/today';
 import { lunarEventOf } from '../journey/plan';
@@ -31,6 +32,9 @@ import s from './study.module.css';
 const art = import.meta.glob('../../assets/journey/art/obj-*.svg', { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
 /* Nền phòng: ảnh chủ dự án tạo cùng phong cách video lối vào (ARCHITECTURE 12.12), thay room.svg vẽ bằng code. */
 import roomPhoto from '../../assets/journey/art/room-photo.webp';
+
+/** Hỏi chuyện Thầy nạp khi mở khung: câu trả lời kéo theo câu chữ Xem ngày, Lục thân, các mảng cuộc sống (ARCHITECTURE 4.2). */
+export const AskTalk = lazyScreen(() => import('./AskTalk'), (m) => m.AskTalk);
 const file = (name: string) => art[`../../assets/journey/art/${name}.svg`];
 
 const OBJECTS: readonly { id: StudyObjectId; tab?: TabId; route?: Route }[] = [
@@ -110,7 +114,7 @@ export function StudyScreen() {
 
       <BootNoticeBanner />
       {profile && res?.ok && ask ? (
-        <AskTalk ch={res.summary.battu.chart} tongHop={tongHopOf(res.birth)} life={{ tuvi: tuViChart(res.birth.input), battu: res.summary.battu.chart, gender: profile.gender }} birthChi={tuoiChi(res.birth.lunar.year)} profileId={profile.id} who={who} onClose={() => setAsk(false)} />
+        <ScreenBoundary what="khung hỏi chuyện" retry={AskTalk.preload} className={s.line}><AskTalk ch={res.summary.battu.chart} tongHop={tongHopOf(res.birth)} life={{ tuvi: tuViChart(res.birth.input), battu: res.summary.battu.chart, gender: profile.gender }} birthChi={tuoiChi(res.birth.lunar.year)} profileId={profile.id} who={who} onClose={() => setAsk(false)} /></ScreenBoundary>
       ) : profile && res?.ok && qa ? (
         <NguHanhQA ch={res.summary.battu.chart} profileId={profile.id} who={who} onClose={() => { stopReading(); setQa(false); }} />
       ) : profile ? (

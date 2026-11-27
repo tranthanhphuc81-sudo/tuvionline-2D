@@ -4,10 +4,10 @@
    và vùng chạm 44px (jsdom không dàn trang). Các luật còn lại của WCAG 2.0/2.1 A, AA: nhãn nút và ô nhập, vai trò và
    thuộc tính ARIA hợp lệ, id không trùng, danh sách đúng cấu trúc, ảnh có chữ thay thế…; thêm nhóm best-practice
    (thứ tự tiêu đề không nhảy cấp, vai trò ARIA không đè lên nút bấm). */
-import { describe, it, expect, afterEach } from 'vitest';
+import { describe, it, expect, afterEach, beforeAll } from 'vitest';
 import { render, screen, fireEvent, cleanup, act } from '@testing-library/react';
 import { axeViolations } from '../../tests/axe';
-import { App } from './App';
+import { App, preloadLater } from './App';
 import { AppProvider } from './context';
 import { createStore } from '../state/store';
 import { emptyState, type PersistedState } from '../state/schema';
@@ -25,6 +25,8 @@ function setup(withProfile: boolean | Birth = true) {
   render(<AppProvider store={store} nav={nav}><App /></AppProvider>);
 }
 
+/* Màn của tab và màn con nạp khi cần (ARCHITECTURE 4.2): tải sẵn như app làm lúc rảnh, để màn hiện ngay khi bấm. */
+beforeAll(() => preloadLater(), 30000);
 afterEach(cleanup);
 
 const violations = axeViolations;
