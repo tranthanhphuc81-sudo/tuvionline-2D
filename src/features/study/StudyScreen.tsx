@@ -1,5 +1,5 @@
 import { useMemo, useState, useSyncExternalStore } from 'react';
-import { lunarOfSolar, profileSummary, tongHopOf } from '../../core';
+import { lunarOfSolar, profileSummary, tongHopOf, tuoiChi, tuViChart } from '../../core';
 import { SPEECH_NO_VOICE, speechFailedText } from '../../content/speech';
 import { isNative } from '../../platform/native';
 import { STUDY_INVALID, STUDY_OBJECTS, STUDY_READING_ID, studyGreeting, type StudyObjectId } from '../../content/study';
@@ -110,7 +110,7 @@ export function StudyScreen() {
 
       <BootNoticeBanner />
       {profile && res?.ok && ask ? (
-        <AskTalk ch={res.summary.battu.chart} tongHop={tongHopOf(res.birth)} profileId={profile.id} who={who} onClose={() => setAsk(false)} />
+        <AskTalk ch={res.summary.battu.chart} tongHop={tongHopOf(res.birth)} life={{ tuvi: tuViChart(res.birth.input), battu: res.summary.battu.chart, gender: profile.gender }} birthChi={tuoiChi(res.birth.lunar.year)} profileId={profile.id} who={who} onClose={() => setAsk(false)} />
       ) : profile && res?.ok && qa ? (
         <NguHanhQA ch={res.summary.battu.chart} profileId={profile.id} who={who} onClose={() => { stopReading(); setQa(false); }} />
       ) : profile ? (
@@ -126,6 +126,7 @@ export function StudyScreen() {
           </div>
           {res?.ok && <NguHanhButton ch={res.summary.battu.chart} profileId={profile.id} who={who} slow={slow} disabled={invalid} onAsk={() => setQa(true)} />}
           {res?.ok && <button type="button" className={`${ui.btn} ${ui.block}`} onClick={() => { stopReading(); setAsk(true); }}>💬 Hỏi chuyện {Ta}</button>}
+          <button type="button" className={`${ui.btn} ${ui.block}`} onClick={() => { stopReading(); nav.push({ name: 'xemngay' }); }}>📅 Xem ngày tốt xấu</button>
           {res?.ok && <TodayCard ch={res.summary.battu.chart} profileId={profile.id} who={who} slow={slow} />}
           <p className={`${ui.muted} ${s.note}`}>{CULTURAL_NOTE}</p>
         </div>

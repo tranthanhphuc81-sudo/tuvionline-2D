@@ -4,10 +4,11 @@
    Ngày được chấm bằng đúng cách của lời hôm nay (`evaluatePeriod` trụ ngày với Dụng thần), cộng thêm một bậc khi khí ngày
    (can hoặc bản khí của chi) mang đúng hành của việc mà hành ấy có lợi, trừ một bậc khi hành ấy nên tiết chế.
    Câu viết với "bạn"; không dùng từ cấm (vocab.ts) nên nhãn nói "sắm" chứ không nói chữ kia. Không nêu giờ, hướng, vật phẩm. */
-import { BatTuEngine, dayCanChiIndex, lunarOfSolar } from '../core';
+import { BatTuEngine, dayCanChiIndex, dayInfo, lunarOfSolar, viecVerdict, type ChiIdx, type ViecId } from '../core';
 import { elementOfTenGod, evaluatePeriod, hiddenStems, stemElement, type Element, type NguHanhAnalysis, type Pillar, type TenGodGroup } from '../core/nguhanh';
 import { describePillar, elementRole } from './nguhanh/plain';
 import { TODAY_NOTE } from './today';
+import { THAN_VI, TRUC_VI } from './xemngay';
 
 const { CAN, CHI } = BatTuEngine;
 
@@ -79,8 +80,34 @@ function dayLabel(d: Date): string {
   return `${WEEKDAY[d.getDay()]} ${d.getDate()}/${d.getMonth() + 1} (ngày ${CAN[pl.stem]} ${CHI[pl.branch]}, ${ld} tháng ${l.month}${l.leap ? ' nhuận' : ''} âm lịch)`;
 }
 
+/** Việc tương ứng ở màn Xem ngày (`TRUC_VIEC`) và cách gọi trong câu; học thi không có việc tương ứng (ARCHITECTURE 16.3.1). */
+export const TASK_VIEC: Record<DayTaskId, { id: ViecId; phrase: string } | null> = {
+  'tai-san': { id: 'sam-sua', phrase: 'sắm sửa đồ lớn' },
+  'giay-to': { id: 'ky-ket', phrase: 'ký kết, giao dịch' },
+  'hoc-thi': null,
+  'cap-tren': { id: 'nhan-viec', phrase: 'nhận việc, nhậm chức' },
+  'hop-tac': { id: 'ky-ket', phrase: 'ký kết, giao dịch' },
+  'trinh-bay': { id: 'khai-truong', phrase: 'khai trương, mở hàng' },
+};
+
+/** Một câu theo lịch truyền thống (thần trực ngày, trực, xung tuổi). Không đổi mức chấm theo lá số. `birthChi`: chi năm âm của hồ sơ. */
+export function calendarLine(id: DayTaskId, now: Date, birthChi?: ChiIdx): string {
+  const d = dayInfo(now.getDate(), now.getMonth() + 1, now.getFullYear(), birthChi);
+  const head = `Theo lịch truyền thống, hôm nay là ngày ${d.hoangDao ? 'Hoàng đạo' : 'Hắc đạo'} (${THAN_VI[d.than]}), trực ${TRUC_VI[d.truc].name}`;
+  const viec = TASK_VIEC[id];
+  let tail = '.';
+  if (d.person?.xung) tail = `, lại xung tuổi ${CHI[d.person.birthChi]} của bạn, nên lịch xưa khuyên việc lớn chọn ngày khác.`;
+  else if (viec) {
+    const v = viecVerdict(d, viec.id);
+    tail = v === 'hop' ? `; lịch xưa coi ngày này hợp cho việc ${viec.phrase}.`
+      : v === 'ky' ? `; lịch xưa kỵ trực này cho việc ${viec.phrase}.`
+        : '; lịch xưa không nghiêng hẳn về bên nào cho việc này.';
+  }
+  return `${head}${tail} Đó là cách chấm chung cho mọi người, khác cách chấm theo lá số ở trên; muốn xem kỹ thì mở mục Xem ngày tốt xấu ở Tĩnh thất.`;
+}
+
 /** Câu trả lời cho "hôm nay làm việc X được không" (chưa có lời nhắc văn hoá; askAnswer thêm vào cuối). */
-export function taskAnswer(id: DayTaskId, a: NguHanhAnalysis, now: Date): string[] {
+export function taskAnswer(id: DayTaskId, a: NguHanhAnalysis, now: Date, birthChi?: ChiIdx): string[] {
   const t = DAY_TASKS.find((x) => x.id === id)!;
   const ug = a.readings[0].usefulGod;
   const pl = dayPillar(now);
@@ -98,5 +125,5 @@ export function taskAnswer(id: DayTaskId, a: NguHanhAnalysis, now: Date): string
     out.push(next ? `Nếu muốn chọn ngày, ngày thuận hơn gần nhất trong hai tuần tới là ${dayLabel(next)}.`
       : 'Hai tuần tới chưa có ngày nào nổi trội hơn cho việc này, nên cứ chọn ngày tiện cho mình và chuẩn bị kỹ.');
   }
-  return [...out, t.tip, TODAY_NOTE];
+  return [...out, calendarLine(id, now, birthChi), t.tip, TODAY_NOTE];
 }

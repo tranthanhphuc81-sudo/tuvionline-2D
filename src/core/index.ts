@@ -191,3 +191,5 @@ function summarize(solar: SolarDate, input: BirthCalcInput): QuickProfile {
 
 // Xem chỉ tay (ARCHITECTURE mục 13.1): đo từ nét đã xác nhận và luận theo mã đặc điểm
 export * from './palm';
+export { dayInfo, daysFrom, findDays, monthDays, viecVerdict, tuoiChi, HOANG_DAO_THAN, THAN_ORDER, TRUC_ORDER, TRUC_VIEC, TRUC_XAU, VIEC_ORDER, XEMNGAY_YEARS } from './xemngay';
+export type { DayGrade, DayInfo, SolarDay, ThanId, TrucId, ViecId, ViecVerdict } from './xemngay';

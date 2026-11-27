@@ -16,6 +16,8 @@ import { TuViScreen } from '../features/tuvi/TuViScreen';
 import { BatTuScreen } from '../features/battu/BatTuScreen';
 import { LucHaoScreen } from '../features/luchao/LucHaoScreen';
 import { PALM_RESULT_TITLE, PALM_TITLE } from '../content/palm/ui';
+import { XEMNGAY_TITLE } from '../content/xemngay';
+import { XemNgayScreen } from '../features/xemngay/XemNgayScreen';
 import { initials } from '../features/profiles/format';
 import { Journey } from '../features/journey/Journey';
 import { recordEntry, todayEntry, type TodayEntry } from '../features/journey/gate';
@@ -54,6 +56,7 @@ function routeTitle(r: Route): string {
     case 'phongthuy': return 'Phong thủy';
     case 'palm': return PALM_TITLE;
     case 'palm.result': return PALM_RESULT_TITLE;
+    case 'xemngay': return XEMNGAY_TITLE;
     case 'profiles': return 'Quản lý hồ sơ';
     case 'profiles.edit': return r.id ? 'Sửa hồ sơ' : 'Thêm hồ sơ';
     case 'settings': return 'Cài đặt';
@@ -70,6 +73,7 @@ function renderRoute(r: Route): ReactNode {
     case 'phongthuy': return <PhongThuyScreen sub={r.sub} />;
     case 'palm': return <Suspense fallback={opening('Xem chỉ tay')}><PalmScreen /></Suspense>;
     case 'palm.result': return <Suspense fallback={opening('kết quả chỉ tay')}><PalmResultScreen id={r.id} /></Suspense>;
+    case 'xemngay': return <XemNgayScreen />;
     case 'profiles': return <ProfilesScreen />;
     case 'profiles.edit': return <ProfileEditScreen id={r.id} />;
     case 'settings': return <SettingsScreen />;

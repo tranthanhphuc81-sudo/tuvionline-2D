@@ -67,11 +67,12 @@ export interface NguHanhReadInput {
     Hai đoạn có phần trăm ("bạn là ai", "hành mạnh nhất") gắn no-speech, chỉ để xem. */
 const SPOKEN_PLAIN = ['nguhanh.plain.dung', 'nguhanh.plain.hy', 'nguhanh.plain.ky', 'nguhanh.plain.years'];
 
-/** Mục "Nói dễ hiểu" viết "bạn"; Thầy đọc thì đổi theo cách gọi đã chọn (con, anh, chị…), giữ nguyên "bạn bè".
+/** Mục "Nói dễ hiểu" viết "bạn"; Thầy đọc thì đổi theo cách gọi đã chọn (con, anh, chị…), giữ nguyên "bạn bè", "bạn đời",
+    "bạn thân" (từ ghép, không phải lời gọi; "người bạn đời" ở Hỏi chuyện Thầy từng thành "người con đời").
     Đọc cho người khác (hồ sơ người thân) thì giữ "bạn" như phần chữ. */
 export function xungHoPlain(text: string, who: Who): string {
   if (who.third || who.goi === 'bạn') return text;
-  return text.replace(/(?<!\p{L})([Bb])ạn(?!\p{L})(?! bè)/gu, (_m, b: string) => (b === 'B' ? who.goi.charAt(0).toUpperCase() + who.goi.slice(1) : who.goi));
+  return text.replace(/(?<!\p{L})([Bb])ạn(?!\p{L})(?! (?:bè|đời|thân)(?!\p{L}))/gu, (_m, b: string) => (b === 'B' ? who.goi.charAt(0).toUpperCase() + who.goi.slice(1) : who.goi));
 }
 
 /**

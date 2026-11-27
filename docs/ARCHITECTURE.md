@@ -1390,6 +1390,7 @@ Khi chủ dự án điền đáp án: chạy lại so sánh với đáp án, r�
 - Ban đầu chỉ phần giáo dục: KHÔNG có câu đoán sức khoẻ, sinh tử, hôn nhân hay con cái (đổi một phần ngày 13/11/2026, xem dưới). Sao vắng thì nói rõ "không xem là điều xấu". Test quét câu chữ không chứa từ trong `NO_SPEECH_TERMS`.
 - Khối gập "Lục thân trong lá số" trên màn Bát Tự, sau Tính tình. Thầy không đọc; không vào "Tóm lại về bạn", ảnh chia sẻ.
 - **Đổi 13/11/2026 (chủ dự án quyết): thêm lời luận của sách, viết nhẹ.** Engine `lucThanDau` trả mã cho từng người thân: sao rõ (lộ và có gốc) / chỉ ẩn / vắng; bị chế (nhóm khắc sao đó có lực ≥ 2,5 mà sao dưới 1,5; nam: vợ bị Tỷ Kiếp tranh, con bị Thực Thương chế; nữ: chồng bị Thực Thương chế, con bị Ấn chế; cha bị Tỷ Kiếp, mẹ bị Tài, anh em bị Quan Sát); nữ có Chính Quan và Thất Sát cùng lộ; anh em vượng mà Tài yếu; chi ngày hay chi tháng xung với chi kề bên. Câu chữ ở `src/content/cachcuc/lucthan.ts` diễn đạt điều sách thấy kèm việc nên làm, mở đầu bằng "sách xưa xem", KHÔNG dùng: khắc, hình khắc, goá, yểu, mất, chết, ly hôn, ly dị, chia ly, hiếm muộn, tuyệt tự, cô độc, bệnh, tai và các từ trong `NO_SPEECH_TERMS`, `BANNED_TERMS`; không nói sinh tử, bệnh tật. Vẫn không vào Tóm lại, ảnh chia sẻ, Thầy không đọc. **Tắt được bằng một công tắc** `LUC_THAN_LOI_LUAN` trong file câu chữ (false thì mục trở về chỉ có quy ước), phòng khi Google Play hay chủ dự án thấy không hợp. Câu mẫu ở `docs/LOI-THAY.md` mục Lục thân để duyệt.
+- **Sửa 27/11/2026 (chủ dự án chọn "bỏ câu sai"):** sao chỉ lộ trên can mà không có gốc trong chi trước đây bị xếp mã "chỉ ẩn", nên mục Lục thân viết "lộ trên can: …" rồi lại "chỉ ẩn trong chi" (khoảng 30% lá số gặp ở ít nhất một người thân). Trường hợp này nay KHÔNG có mã có mặt nào: mục chỉ nêu vị trí của sao, không thêm câu luận mới (bỏ phương án câu "hư phù"). Các mã bị chế, hỗn tạp, tranh tài vẫn xét như cũ.
 
 ### 15.9 Lời sách cho Can ngày theo tháng sinh (TU-VAN-SACH 3G)
 
@@ -1440,10 +1441,42 @@ Chủ dự án muốn "tương tác giả lập nhiều hơn" và chọn cả b�
 - Chấm ngày (`taskVerdict`, `src/content/askDay.ts`): mức của lời hôm nay (`evaluatePeriod` trụ ngày với Dụng thần: thuận +1, bình 0, giữ −1), cộng 1 nếu can hoặc bản khí chi của ngày mang đúng hành của việc mà hành ấy là Dụng/Hỷ, trừ 1 nếu là Kỵ/Cừu. ≥ 1 thuận, ≤ −1 giữ nhịp, còn lại bình.
 - Ngày chưa thuận thì gợi ý ngày thuận gần nhất trong 14 ngày tới (thứ, ngày dương, can chi, ngày âm); không có thì nói thẳng là chưa có ngày nổi trội.
 - Mỗi việc có một lời dặn thực tế không phụ thuộc lá số (chuẩn bị giấy tờ, so giá…), kèm "không phải lời báo trước" và lời nhắc văn hoá. Không nêu giờ, hướng, vật phẩm.
-- Không dùng Hoàng Đạo, Thập Nhị Trực, Tam Nương, Nguyệt Kỵ: app chưa có các bảng này, thêm vào là công thức mới cần đối chiếu nguồn.
+- Ban đầu (26/11) không dùng Hoàng đạo, thập nhị trực vì app chưa có bảng. Từ 27/11/2026 (sau mục 17): thêm MỘT câu "Theo lịch truyền thống…" (`calendarLine`), đặt sau mức chấm và gợi ý ngày, trước lời dặn: thần trực ngày (Hoàng đạo / Hắc đạo), trực, và việc tương ứng trong `TRUC_VIEC` hợp / kỵ / không nghiêng (tài sản → sắm sửa; giấy tờ, hợp tác → ký kết; cấp trên → nhận việc; trình bày, ra mắt → khai trương; học thi không có việc tương ứng nên chỉ nêu thần và trực). Biết tuổi (chi năm âm của hồ sơ) mà ngày xung tuổi thì nói thay cho câu hợp / kỵ. Câu này KHÔNG đổi mức chấm theo lá số (`taskVerdict`), không đổi ngày gợi ý; câu sau nói rõ đó là cách chấm chung cho mọi người và chỉ sang màn Xem ngày. Vẫn không dùng Tam Nương, Nguyệt Kỵ.
 - Chữ "mua" nằm trong `BANNED_TERMS` nên nhãn nói "sắm tài sản lớn".
+
+### 16.3.2 Hỏi chuyện Thầy: nhóm "Đời sống" (27/11/2026)
+- Chủ dự án hỏi app đã trả lời đủ các mặt của đời sống chưa. Rà lại: màn Tử Vi có "Từng mảng cuộc sống" (tiền bạc, công việc, tình duyên, sức khoẻ, nhà cửa, ra ngoài; `AREA`, `AREA_TIP` của legacy), màn Bát Tự có "Lục thân" (cha mẹ, anh chị em, người bạn đời, con cái; 15.8). Hỏi chuyện Thầy chỉ có nghề nghiệp, nên thêm khối thứ ba "Đời sống", đặt giữa "Về lá số" và "Việc hôm nay".
+- Tám câu, mỗi câu CHỈ ghép câu chữ đã hiện trên màn công cụ, không luận mới (nguyên tắc 16):
+  - Tiền bạc, công việc, tình duyên, sức khoẻ, nhà cửa, đi xa và giao thiệp → đoạn của mảng đó trong "Từng mảng cuộc sống" (`areaText`, xuất từ `src/content/tuvi/tongket.ts`, không đổi chữ), mở bằng một câu nêu cung và nhãn mảng (Thuận lợi / Bình thường / Cần chú ý), kết bằng câu chỉ chỗ xem kỹ.
+  - Tình duyên thêm các câu Lục thân của người bạn đời (sao đại diện, lời sách luận thêm, chi ngày gặp xung chi tháng).
+  - Cha mẹ, anh chị em → câu Lục thân của cha, mẹ, anh chị em, và chi tháng gặp xung; con cái → câu Lục thân của con cái, và chi ngày gặp xung chi giờ (`lucThanLines`, cùng chữ với mục Lục thân ở màn Bát Tự, chia theo giới tính như sách).
+  - Sức khoẻ luôn kèm một câu: đây là lưu ý theo dân gian, không thay cho lời khuyên của bác sĩ.
+- Không thêm: học hành (app chưa có câu chữ riêng cho phần này), bạn bè, đồng nghiệp (cung Nô Bộc không có trong `AREA`), hợp tuổi (16.3). Thêm những câu này là tạo luận mới.
+- Câu chữ của legacy giữ nguyên, kể cả chữ trong `BANNED_TERMS` như ở màn Tử Vi ("vay mượn", "mua bán nhà đất"); câu mới của khối này không có từ cấm (test). Câu dính `NO_SPEECH_TERMS` chỉ hiện chữ như mọi câu trả lời khác.
 
 ### 16.4 Nghi thức có cử chỉ (PR 4)
 - **Gõ chuông** (`BellButton`): nút 🔔 ở góc trên trái phòng Tĩnh thất và ở chính điện của lối vào bản đầy đủ. Chạm thì rung nhẹ (`tapLight`) và chuông ngân một tiếng. Ở Tĩnh thất dùng `ringBell` (`src/platform/ambientAudio.ts`): tạo AudioContext ngay trong sự kiện chạm, rồi mới hỏi `soundAllowed`; máy để im lặng hoặc rung thì đóng ngay, không phát; tự đóng sau 3,3 giây, không bật tiếng nền. Ở lối vào dùng chuông của bộ tiếng đang phát; tắt "Âm thanh lối vào" hoặc máy im lặng thì chỉ rung.
 - **Thắp hương**: nhang bắt lửa thì rung vừa (`tapMedium`, `ImpactStyle.Medium`) thay rung nhẹ.
 - **Xin keo trước khi gieo quẻ** (`KeoStep`, `keo.ts`): chỉ ở cách gieo ngẫu nhiên. Chạm nút hoặc lắc máy (`onShake`), hai miếng keo rơi, rung vừa. Một sấp một ngửa là thuận thì sau 1,4 giây chuyển sang gieo xu; hai mặt giống nhau thì xin lại; đủ ba lần (`KEO_MAX`) vẫn cho gieo. Luôn có "Bỏ qua, gieo luôn". Mỗi quẻ xin một lần, gieo xong quẻ sau xin lại. Keo chỉ là nghi thức, không ảnh hưởng quẻ (quẻ vẫn gieo bằng xu như cũ); câu keo không hứa hẹn gì (`KEO_LINES`). Cài đặt → "Nghi thức" → tắt được (`settings.xinKeo`, trường tuỳ chọn, không có = bật, không lên lược đồ). Hoạt cảnh keo tắt khi giảm chuyển động.
+
+## 17. Xem ngày tốt xấu (chốt 26/11/2026)
+
+Chủ dự án chọn "lịch truyền thống": Hoàng đạo / Hắc đạo, thập nhị trực, giờ hoàng đạo và ngày xung tuổi, như lịch vạn niên. Đây là công thức MỚI, không có trong 5 tài liệu ở `docs/`; không đụng công thức an sao, lập trụ, Mệnh Quái, Nạp Âm. Bổ sung, không thay, nhóm "Việc hôm nay" của Hỏi chuyện Thầy (chấm theo Dụng thần của lá số); câu trả lời ở đó có thêm một câu theo lịch này (16.3.1).
+
+### 17.1 Vị trí
+- Route `xemngay` (màn hình con của tab Tĩnh thất, `src/features/xemngay`). Mở từ nút "📅 Xem ngày tốt xấu" ở Tĩnh thất (dưới "Hỏi chuyện Thầy", không cần đồ vật mới trên án thư) và ô "Xem ngày" ở Tổng hợp (mở chồng lên như Chỉ tay).
+- Màn hình: một ngày (mặc định hôm nay, ‹ › và ô chọn ngày), danh sách 8 việc với Hợp / Làm được / Nên tránh, tìm ngày hợp một việc trong 30 ngày tới, lịch tháng tô theo mức ngày. Không đọc thành lời, không lưu gì vào `lyso.state`.
+
+### 17.2 Công thức (`src/core/xemngay`)
+- **Tháng tiết:** thần ngày và trực an theo chi tháng tiết (`monthChiFromDate`, múi giờ `lunarTzForSolarYear`), không theo tháng âm. Ngày giao tiết tự lặp lại trực hôm trước.
+- **12 thần:** Thanh Long, Minh Đường, Thiên Hình, Chu Tước, Kim Quỹ, Kim Đường (Bảo Quang), Bạch Hổ, Ngọc Đường, Thiên Lao, Huyền Vũ, Tư Mệnh, Câu Trận; Hoàng đạo là Thanh Long, Minh Đường, Kim Quỹ, Kim Đường, Ngọc Đường, Tư Mệnh. Khởi Thanh Long: tháng Dần/Thân ở Tý, Mão/Dậu ở Dần, Thìn/Tuất ở Thìn, Tỵ/Hợi ở Ngọ, Ngọ/Tý ở Thân, Mùi/Sửu ở Tuất. Giờ hoàng đạo dùng cùng bảng với chi ngày thay chi tháng.
+- **Trực:** ngày cùng chi với tháng tiết là Kiến, đếm xuôi Kiến, Trừ, Mãn, Bình, Định, Chấp, Phá, Nguy, Thành, Thu, Khai, Bế.
+- **Xung tuổi:** chi ngày lục xung với chi năm sinh. Năm sinh là năm âm (đổi theo Tết), như cách gọi tuổi thường ngày.
+- **Mức ngày (quy ước của app):** Hoàng đạo và trực không phải Phá, Bế → đẹp; Hắc đạo gặp Phá hoặc Bế → nên tránh việc lớn; còn lại → thường. Xung tuổi hạ một bậc.
+- **Việc theo trực (`TRUC_VIEC`):** bản tóm lược của app từ lời giải trực thường in trong lịch vạn niên. Một việc "hợp" khi trực nên làm việc đó, ngày Hoàng đạo và không xung tuổi; "nên tránh" khi trực kỵ việc đó hoặc xung tuổi.
+- **Đối chiếu (26/11/2026):** trực và giờ hoàng đạo của 26/11/2026, 8/11/2026 (30/9 âm, đã qua Lập Đông, trực Bế), 5/2/2026 khớp xemlicham.com. Trang đó không ghi tên thần trực ngày nên phần Hoàng đạo / Hắc đạo chưa đối chiếu được nguồn ngoài; vài lịch an thần theo tháng âm nên có thể lệch ở mấy ngày gần giao tiết. Màn hình ghi rõ điều này (`XEMNGAY_RULE_NOTE`).
+
+### 17.3 Câu chữ (`src/content/xemngay.ts`)
+- Nội dung mới, viết lại bằng lời của app, không chép nguyên văn sách. Không dùng từ cấm (`BANNED_TERMS`): nói "sắm sửa đồ lớn", không nhắc lễ bái, vật phẩm, không có lời "phải làm thế này mới tránh được". Luôn kèm `XEMNGAY_PRACTICAL` (ngày tháng là phần phụ) và `CULTURAL_NOTE`.
+- Test: `tests/xemngay.test.ts` (đối chiếu lịch, quy tắc, quét từ cấm trên mọi câu của 365 ngày), `src/features/xemngay/XemNgayScreen.test.tsx`.
+

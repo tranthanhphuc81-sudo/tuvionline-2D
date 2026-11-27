@@ -1,0 +1,65 @@
+/* Xem ngày tốt xấu. Mức ngày dùng ba sắc: ngọc (đẹp), mực nhạt (thường), son (nên tránh). */
+.dateBar { display: flex; align-items: flex-end; gap: var(--space-2); }
+.dateField { flex: 1; min-width: 0; display: grid; gap: 4px; }
+.dateField input { width: 100%; min-height: var(--tap); }
+.navBtn {
+  flex: none; min-width: var(--tap); min-height: var(--tap); border: 1px solid var(--line-strong); border-radius: var(--radius);
+  background: var(--surface2); color: var(--ink); font: inherit; font-size: var(--fs-lg); line-height: 1;
+}
+.dayTitle { margin: var(--space-2) 0 0; font-size: var(--fs-lg); }
+.grade {
+  justify-self: start; margin: 0; padding: 2px 12px; border-radius: 99px; border: 1px solid var(--line-strong);
+  font-weight: 700; width: fit-content;
+}
+.grade[data-tone='ok'] { color: var(--jade); border-color: var(--jade); }
+.grade[data-tone='warn'] { color: var(--vermillion-text); border-color: var(--vermillion); }
+.grade[data-tone='mid'] { color: var(--ink-dim); }
+
+.viecList, .foundList { list-style: none; margin: 0; padding: 0; }
+.viecRow { display: flex; gap: var(--space-2); align-items: baseline; padding: var(--space-2) 0; border-bottom: 1px solid var(--line); }
+.viecRow:last-child { border-bottom: 0; }
+.verdict {
+  flex: none; min-width: 5.6em; text-align: center; padding: 0 8px; border-radius: 99px; font-size: var(--fs-sm); font-weight: 600;
+  border: 1px solid var(--line-strong); color: var(--ink-dim);
+}
+.verdict[data-verdict='hop'] { color: var(--jade); border-color: var(--jade); }
+.verdict[data-verdict='ky'] { color: var(--vermillion-text); border-color: var(--vermillion); }
+
+.chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.chip {
+  min-height: var(--tap); padding: 0 var(--space-3); border: 1px solid var(--line-strong); border-radius: 99px; background: var(--surface2);
+  color: var(--ink); font: inherit; font-size: var(--fs-sm); line-height: 1.2;
+}
+.chip[aria-checked='true'] { background: var(--gold); border-color: var(--gold); color: var(--on-gold); font-weight: 700; }
+.foundBtn {
+  display: grid; gap: 2px; width: 100%; min-height: var(--tap); padding: var(--space-2) 0; border: 0; border-bottom: 1px solid var(--line);
+  background: transparent; color: var(--ink); font: inherit; text-align: left;
+}
+.foundBtn[aria-current='date'] .foundDate { color: var(--gold-text); }
+.foundDate { font-weight: 600; }
+
+.monthBar { display: flex; align-items: center; gap: var(--space-2); }
+.monthTitle { flex: 1; margin: 0; text-align: center; font-size: var(--fs-md); }
+/* Bảy cột trong thẻ ở màn 360px chỉ được khoảng 40px mỗi ô. Lưới lấn vào phần đệm của thẻ 8px mỗi bên và
+   vùng nhận chạm của ô phủ cả nửa khe hai bên (::before), nên mỗi ô nhận chạm trong khoảng ≥ 44px
+   (CLAUDE.md: vùng chạm tối thiểu 44px; cùng cách với Segmented). */
+.grid { display: grid; gap: 4px; margin-inline: calc(-1 * var(--space-2)); }
+.week, .cells { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+.wd { text-align: center; font-size: var(--fs-sm); color: var(--muted); }
+.cell {
+  position: relative;
+  min-height: var(--tap); padding: 2px 0; display: grid; place-items: center; gap: 0; border-radius: 8px;
+  border: 1px solid var(--line); background: var(--surface2); color: var(--ink); font: inherit; line-height: 1.1;
+}
+.cell::before { content: ''; position: absolute; inset: -3px; } /* tính từ mép trong viền 1px: lấn 2px, đúng nửa khe */
+.cell[data-tone='ok'] { border-color: var(--jade); box-shadow: inset 0 -3px 0 var(--jade); }
+.cell[data-tone='warn'] { border-color: var(--vermillion); box-shadow: inset 0 -3px 0 var(--vermillion); }
+.cell[aria-current='date'] .cellDay { text-decoration: underline; }
+.cell[aria-pressed='true'] { background: var(--gold); border-color: var(--gold); color: var(--on-gold); }
+.cell[aria-pressed='true'] .cellLunar { color: var(--on-gold); }
+.cellDay { font-weight: 700; font-size: var(--fs-md); }
+.cellLunar { font-size: 11px; color: var(--muted); }
+.legend { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-3); justify-content: center; margin: 0; font-size: var(--fs-sm); color: var(--ink-dim); }
+.legend i { display: inline-block; width: 18px; height: 4px; border-radius: 2px; margin-right: 6px; vertical-align: middle; background: var(--line-strong); }
+.legend i[data-tone='ok'] { background: var(--jade); }
+.legend i[data-tone='warn'] { background: var(--vermillion); }
