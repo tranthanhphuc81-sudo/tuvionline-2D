@@ -7,7 +7,7 @@ import { adaptCount, particleAlpha, spawnParticle, stepParticle } from './partic
 import { entryPlan, lunarEventOf, skipJourney, startJourney, stepJourney } from './plan';
 import { SCENES } from './scenes';
 import { layerTransform } from './SceneEngine';
-import { STOP_WAIT_MS, VIDEO_SEGMENTS, VIDEO_START_MS, VIDEO_STOPS, segmentAt } from './video';
+import { STOP_WAIT_MS, VIDEO_SEGMENTS, VIDEO_SLOW, VIDEO_START_MS, VIDEO_STOPS, segmentAt } from './video';
 import { DONG_LINES, ENTRY_STOP_LINES, fill, pick } from '../../content/reader/templates';
 import { AppProvider } from '../../app/context';
 import { createStore } from '../../state/store';
@@ -165,15 +165,15 @@ describe('màn hình hành trình', () => {
 
 describe('video nền lối vào (ARCHITECTURE 12.12)', () => {
   afterEach(cleanup);
-  it('mỗi trạm có một đoạn, nối liền nhau từ 0 tới hết video 30 giây, đủ 5 trạm', () => {
+  it('mỗi trạm có một đoạn, nối liền nhau từ 0 tới hết file 20 giây, đủ 5 trạm', () => {
     expect(VIDEO_SEGMENTS).toHaveLength(SCENES.length);
     expect(VIDEO_SEGMENTS[0][0]).toBe(0);
-    expect(VIDEO_SEGMENTS[VIDEO_SEGMENTS.length - 1][1]).toBe(30);
+    expect(VIDEO_SEGMENTS[VIDEO_SEGMENTS.length - 1][1]).toBe(20);
     for (let i = 1; i < VIDEO_SEGMENTS.length; i++) expect(VIDEO_SEGMENTS[i][0]).toBe(VIDEO_SEGMENTS[i - 1][1]);
     for (const [a, b] of VIDEO_SEGMENTS) expect(b).toBeGreaterThan(a);
   });
   it('giây nào thuộc trạm nào', () => {
-    expect([0, 3.7, 3.75, 11, 11.1, 15, 19.5, 29.9, 30, 35].map(segmentAt)).toEqual([0, 0, 1, 1, 2, 3, 4, 4, 4, 4]);
+    expect([0, 2.45, 2.5, 7.3, 7.4, 10, 13, 19.9, 20, 25].map(segmentAt)).toEqual([0, 0, 1, 1, 2, 3, 4, 4, 4, 4]);
   });
   it('ba chỗ dừng theo thứ tự cổng, cửa chính điện, án thư, nằm trong video, đúng trạm', () => {
     expect(VIDEO_STOPS.map((x) => x.kind)).toEqual(['gate', 'door', 'table']);
@@ -229,6 +229,9 @@ describe('video nền lối vào (ARCHITECTURE 12.12)', () => {
     const { st, frame, at, v, onDone } = fakeVideo();
     act(() => { vi.advanceTimersByTime(10000); }); // hẹn giờ trạm không chạy khi có video
     expect(at()).toBe('gate');
+    // File 20 giây phát chậm 1,5 lần (ARCHITECTURE 12.12, 27/11/2026); mốc trong test là giây của file
+    expect(v.playbackRate).toBeCloseTo(1 / VIDEO_SLOW);
+    expect(v.defaultPlaybackRate).toBeCloseTo(1 / VIDEO_SLOW);
     expect(document.querySelector('.dong, [class*="dong"]')).toBeNull();
     // Cổng: đạo đồng mời vào
     frame(0.1);
@@ -237,29 +240,29 @@ describe('video nền lối vào (ARCHITECTURE 12.12)', () => {
     act(() => { fireEvent.click(screen.getByRole('button', { name: 'Bước vào cổng' })); });
     expect(st.paused).toBe(false);
     expect(screen.queryByRole('button', { name: 'Bước vào cổng' })).toBeNull();
-    frame(9.3);
+    frame(6.2);
     expect(at()).toBe('garden');
     expect(st.paused).toBe(false);
     // Cửa chính điện: gõ chuông, một lúc sau cửa mở (video chạy tiếp)
-    frame(11.05);
+    frame(7.37);
     expect(st.paused).toBe(true);
     expect(screen.getByText(line(ENTRY_STOP_LINES.door))).toBeTruthy();
     act(() => { fireEvent.click(screen.getByRole('button', { name: 'Gõ chuông' })); });
     expect(st.paused).toBe(true);
     act(() => { vi.advanceTimersByTime(1200); });
     expect(st.paused).toBe(false);
-    frame(12);
+    frame(8);
     expect(at()).toBe('hall');
-    frame(16);
+    frame(10.7);
     expect(at()).toBe('corridor');
     // Án thư: ngồi xuống
-    frame(23.3);
+    frame(15.55);
     expect(at()).toBe('study');
     expect(st.paused).toBe(true);
     expect(screen.getByText(line(ENTRY_STOP_LINES.table))).toBeTruthy();
     act(() => { fireEvent.click(screen.getByRole('button', { name: 'Ngồi xuống' })); });
     expect(st.paused).toBe(false);
-    frame(29);
+    frame(19.3);
     expect(st.paused).toBe(false); // hết chỗ dừng
     act(() => { fireEvent.ended(v); });
     act(() => { vi.advanceTimersByTime(400); });

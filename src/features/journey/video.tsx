@@ -1,7 +1,7 @@
 /* Nền video cho lối vào (ARCHITECTURE 12.12). Video do chủ dự án tạo: một người qua cổng "Lý Số Trọn Bộ", lối vườn, cầu gỗ,
    tới cửa chính điện, cửa mở, đi hành lang vào phòng cửa sổ tròn, đứng trước án thư rồi ngồi xuống.
-   Bản 16/11/2026 (chủ dự án: "khách đi rất nhanh, không có tương tác rõ"): video làm chậm 1,5 lần có nội suy khung hình (30 giây)
-   và DỪNG ở ba chỗ có lý do trong hình (VIDEO_STOPS): trước cổng (đạo đồng mời vào), trước cửa chính điện (gõ chuông xin vào,
+   Bản 16/11/2026 (chủ dự án: "khách đi rất nhanh, không có tương tác rõ"): phát chậm 1,5 lần (VIDEO_SLOW; từ 27/11/2026 app tự
+   phát file 20 giây ở tốc độ 2/3 thay cho file làm chậm, 12.12) và DỪNG ở ba chỗ có lý do trong hình (VIDEO_STOPS): trước cổng (đạo đồng mời vào), trước cửa chính điện (gõ chuông xin vào,
    video chạy tiếp đúng đoạn cửa mở), trước án thư (thắp hương hoặc ngồi xuống). Ngoài ba chỗ đó video chạy liền.
    Chỉ dùng cho bản đầy đủ: rút gọn và giảm chuyển động giữ tranh vẽ. Video lỗi, hoặc quá VIDEO_START_MS chưa phát được, thì
    quay về tranh vẽ và hẹn giờ như cũ. Video luôn tắt tiếng: tiếng nền do ambientAudio. */
@@ -15,13 +15,16 @@ export const VIDEO_START_MS = 2500;
 /** Dừng ở một chỗ mà người dùng không làm gì thì sau bấy nhiêu tự đi tiếp: không chặn ai (12.1). */
 export const STOP_WAIT_MS = 20000;
 
-/** Đoạn [bắt đầu, kết thúc] (giây, theo video đã làm chậm) của từng trạm, đúng thứ tự trạm: cổng, vườn, chính điện, hành lang, tĩnh thất. */
-export const VIDEO_SEGMENTS: readonly (readonly [number, number])[] = [[0, 3.75], [3.75, 11.1], [11.1, 15], [15, 19.5], [19.5, 30]];
+/** Phát chậm bấy nhiêu lần (`playbackRate` = 1 / VIDEO_SLOW). File làm chậm sẵn thì đặt 1 và nhân mọi mốc dưới với 1,5. */
+export const VIDEO_SLOW = 1.5;
+
+/** Đoạn [bắt đầu, kết thúc] (giây của FILE, không phải đồng hồ) của từng trạm, đúng thứ tự trạm: cổng, vườn, chính điện, hành lang, tĩnh thất. */
+export const VIDEO_SEGMENTS: readonly (readonly [number, number])[] = [[0, 2.5], [2.5, 7.4], [7.4, 10], [10, 13], [13, 20]];
 
 export type StopKind = 'gate' | 'door' | 'table';
-/** Ba chỗ dừng (giây, theo video đã làm chậm), chọn theo khung hình: khách đứng trước cổng, sát cửa chính điện (ngay trước lúc
-    hình chuyển sang cánh cửa), trước án thư (ngay trước lúc ngồi). */
-export const VIDEO_STOPS: readonly { at: number; kind: StopKind }[] = [{ at: 0.08, kind: 'gate' }, { at: 11.0, kind: 'door' }, { at: 23.25, kind: 'table' }];
+/** Ba chỗ dừng (giây của file), chọn theo khung hình: khách đứng trước cổng, sát cửa chính điện (ngay trước lúc hình chuyển
+    sang cánh cửa), trước án thư (ngay trước lúc ngồi). */
+export const VIDEO_STOPS: readonly { at: number; kind: StopKind }[] = [{ at: 0.05, kind: 'gate' }, { at: 7.33, kind: 'door' }, { at: 15.5, kind: 'table' }];
 
 /** Trạm ứng với giây `t` của video. */
 export function segmentAt(t: number): number {
@@ -68,6 +71,9 @@ export const JourneyVideo = forwardRef<JourneyVideoHandle, {
   }), []);
 
   useEffect(() => {
+    const v0 = el.current;
+    // defaultPlaybackRate giữ tốc độ khi trình duyệt nạp lại nguồn; playbackRate cho lần phát này
+    if (v0) { v0.defaultPlaybackRate = 1 / VIDEO_SLOW; v0.playbackRate = 1 / VIDEO_SLOW; }
     play();
     const t = setTimeout(() => { if (!started.current) onFail(); }, VIDEO_START_MS);
     let raf = 0;

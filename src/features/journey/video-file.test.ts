@@ -1,5 +1,5 @@
-/* File video thật của lối vào phải khớp mốc trong video.tsx. Test giao diện dùng video giả nên không bắt được
-   trường hợp file là bản cũ (20 giây) trong khi mốc tính theo bản làm chậm 30 giây (ARCHITECTURE 12.12). */
+/* File video thật của lối vào phải khớp mốc trong video.tsx (mốc tính theo giây của file; app tự phát chậm VIDEO_SLOW lần).
+   Test giao diện dùng video giả nên không bắt được trường hợp thay file mà quên đổi mốc (ARCHITECTURE 12.12). */
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
