@@ -4,11 +4,11 @@ Ghi lúc chuyển việc từ máy Windows cũ (`E:\TuViOnline-2D`) sang máy m�
 
 ## 1. Trạng thái trên GitHub
 
-- Cập nhật 27/11/2026: `main` ở `81d365c` (merge nhánh `claude/hoi-thay-xem-ngay`: Việc hôm nay có thêm câu theo lịch truyền thống; trước đó `7faa30b` merge PR #41, Xem ngày tốt xấu). Bản Cloudflare https://lyso-tron-bo.pages.dev và APK thử (`lyso-debug-apk`) đã build từ commit này, cả hai workflow xanh.
+- Cập nhật 27/11/2026: `main` ở `aa8d728` (merge PR #42, video lối vào chậm có chỗ dừng). Trước đó cùng ngày: nhóm "Đời sống" của Hỏi chuyện Thầy (`d7de1f4`), sửa câu "chỉ ẩn" sai ở Lục thân (`a683c84`), quét truy cập Xem ngày (`a1b24ff`), câu lịch truyền thống của Việc hôm nay (`81d365c`), PR #41 Xem ngày tốt xấu (`7faa30b`). Bản Cloudflare https://lyso-tron-bo.pages.dev và APK thử (`lyso-debug-apk`) đã build từ `aa8d728`, cả hai workflow xanh.
 - Mọi nhánh trên máy cũ đều khớp với GitHub: không có commit chưa đẩy, không có stash, không có thay đổi chưa commit.
 - **#41** `claude/xem-ngay` (Xem ngày tốt xấu): ĐÃ MERGE 27/11/2026. Lúc duyệt đã đối chiếu bảng khởi Thanh Long, 12 thần, giờ hoàng đạo, trực theo tháng tiết; sửa thêm lỗi màn hình đổ khi vượt 31/12/2100 (khoảng năm nay là `XEMNGAY_YEARS`, 1900–2100). Câu chữ `src/content/xemngay.ts` là nội dung mới, chủ dự án chưa đọc duyệt. Nhóm "Việc hôm nay" của Hỏi chuyện Thầy nay có thêm một câu theo lịch này (nhánh `claude/hoi-thay-xem-ngay`, ĐÃ MERGE 27/11/2026, ARCHITECTURE 16.3.1).
-- PR còn mở:
-  - **#42** `claude/video-cham-tuong-tac`: video lối vào chậm hơn, dừng ở cổng, cửa chính điện, án thư. 27/11/2026: chủ dự án bỏ ý định tạo video 30 giây mới (video AI không sạch), chọn để app tự phát file 20 giây hiện có ở tốc độ 2/3 (`VIDEO_SLOW`, ARCHITECTURE 12.12); mốc đặt theo giây của file, `video-file.test.ts` xanh. Đã thử trên trình duyệt: dừng đúng ba cảnh. Hơi giật nhẹ (16 khung/giây); muốn mượt thì thay bằng file làm chậm có nội suy và đặt `VIDEO_SLOW = 1`. Chưa thử trên APK.
+- **#42** `claude/video-cham-tuong-tac` (video lối vào chậm hơn, dừng ở cổng, cửa chính điện, án thư): ĐÃ MERGE 27/11/2026. 27/11/2026: chủ dự án bỏ ý định tạo video 30 giây mới (video AI không sạch), chọn để app tự phát file 20 giây hiện có ở tốc độ 2/3 (`VIDEO_SLOW`, ARCHITECTURE 12.12); mốc đặt theo giây của file, `video-file.test.ts` xanh. Đã thử trên trình duyệt: dừng đúng ba cảnh. Hơi giật nhẹ (16 khung/giây); muốn mượt thì thay bằng file làm chậm có nội suy và đặt `VIDEO_SLOW = 1`. Chưa thử trên APK. Tiêu đề PR trên GitHub còn chữ "[chờ video 30 giây]" (máy này không có `gh` để sửa).
+- Không còn PR mở.
 - Kiểm tra "Cloudflare Workers and Pages" (Workers Builds: tuvionline-2d): ĐÃ XỬ LÝ 27/11/2026. Là một Worker Cloudflare riêng tự nối Git với repo, đỏ ở mọi commit từ 12/11 vì repo không có cấu hình wrangler (`wrangler deploy` không tự sửa được `vite.config.ts`, `wrangler preview` thiếu khối `previews`). Worker chỉ có một bản từ 05/11, không ai truy cập. Theo ý chủ dự án đã ngắt kết nối Git (Settings → Builds); Worker vẫn còn, chưa xoá. Không liên quan quy trình đăng `lyso-tron-bo` (chạy bằng GitHub Actions). Nếu kiểm tra này đỏ lại thì có người đã nối lại.
 
 ## 2. Thứ KHÔNG có trong git, phải chép tay nếu cần
@@ -57,3 +57,5 @@ Claude lưu ghi nhớ trong hồ sơ người dùng của máy, không trong rep
 - Duyệt câu chữ mới ở `docs/LOI-THAY.md`: mục "Hỏi chuyện Thầy", "Hỏi chuyện Thầy: Việc hôm nay" và "Hỏi chuyện Thầy: Đời sống" (đánh dấu chờ duyệt).
 - Đọc duyệt câu chữ màn Xem ngày (`src/content/xemngay.ts`): lời giải 12 trực, bảng việc nên và nên tránh theo trực, cách gộp mức ngày.
 - Nghe thử trên APK: giọng Thầy đọc câu trả lời Hỏi chuyện Thầy, rung khi gõ chuông và thắp hương.
+- Thử lối vào bản đầy đủ trên APK (Cài đặt → lối vào "Đầy đủ"): video có tự phát trong WebView không, phát chậm 2/3 có giật quá không, dừng đúng trước cổng, cửa chính điện, án thư.
+- File `src/assets/journey/video/Lối vào Tĩnh thất - 30s.mp4` (chưa commit, ở thư mục gốc) không dùng nữa và làm test ngân sách 3 MB đỏ khi chạy test ở thư mục gốc: dời ra khỏi thư mục dự án.
