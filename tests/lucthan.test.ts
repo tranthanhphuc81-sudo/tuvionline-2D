@@ -47,7 +47,7 @@ describe('lục thân: lời luận của sách, viết nhẹ (ARCHITECTURE 15.8
       const { dau, cungXung } = lucThanDau(ch, g);
       expect(dau.map((d) => d.who)).toEqual(['cha', 'me', 'anhEm', 'phoiNgau', 'con']);
       for (const d of dau) {
-        expect(d.codes.filter((c) => c === 'ro' || c === 'an' || c === 'vang').length, 'đúng một mã có mặt').toBe(1);
+        expect(d.codes.filter((c) => c === 'ro' || c === 'an' || c === 'vang').length, 'nhiều nhất một mã có mặt').toBeLessThanOrEqual(1);
         for (const c of d.codes) seen.add(`${g}.${d.who}.${c}`);
       }
       for (const x of cungXung) seen.add(`xung.${x.cung}.${x.voi}`);
@@ -57,6 +57,25 @@ describe('lục thân: lời luận của sách, viết nhẹ (ARCHITECTURE 15.8
     need.push('F.phoiNgau.honTap', 'M.anhEm.tranhTai', 'F.anhEm.tranhTai', 'xung.ngay.1', 'xung.ngay.3', 'xung.thang.0', 'xung.thang.2');
     const missing = need.filter((k) => !seen.has(k));
     expect(missing, 'nhánh chưa gặp: ' + missing.join(', ')).toEqual([]);
+  });
+  it('mã có mặt khớp vị trí sao: lộ và có gốc → rõ, chỉ tàng → ẩn, không thấy → vắng, chỉ lộ không gốc → không mã nào (27/11/2026)', () => {
+    let loOnly = 0;
+    for (const { g, ch } of charts(3000, 20261127)) {
+      const items = lucThan(ch, g);
+      const { dau } = lucThanDau(ch, g);
+      items.forEach((it, i) => {
+        const lo = it.viTri.some((v) => v.lo), an = it.viTri.some((v) => !v.lo);
+        const want = lo && an ? ['ro'] : an ? ['an'] : lo ? [] : ['vang'];
+        if (lo && !an) loOnly++;
+        expect(dau[i].codes.filter((c) => c === 'ro' || c === 'an' || c === 'vang'), `${it.who} lộ=${lo} tàng=${an}`).toEqual(want);
+      });
+      // câu chữ không còn "chỉ ẩn trong chi" cho sao có lộ trên can
+      const lines = loiLuanLines(dau, [], g);
+      for (const it of items.filter((x) => x.viTri.some((v) => v.lo))) {
+        expect(lines.some((t) => t.includes('chỉ ẩn trong chi') && dau.find((d) => d.who === it.who)!.codes.includes('an')), it.who).toBe(false);
+      }
+    }
+    expect(loOnly, 'có gặp trường hợp chỉ lộ không gốc').toBeGreaterThan(100);
   });
   it('mọi câu: có "sách xưa", không từ nặng, không từ cấm đọc hay cấm hiện, không chữ hỏng', () => {
     const bad = [...LUC_THAN_TU_TRANH, ...NO_SPEECH_TERMS, ...BANNED_TERMS];

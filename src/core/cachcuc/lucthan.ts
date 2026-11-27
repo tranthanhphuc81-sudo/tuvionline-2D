@@ -63,7 +63,9 @@ export function lucThanDau(ch: BatTuChart, gender: Gender): { dau: LucThanDau[];
     const lo = it.viTri.some((v) => v.lo), an = it.viTri.some((v) => !v.lo);
     const own = it.sao.reduce((a, s) => a + (lucThan_[s] ?? 0), 0);
     const nhomChe = NHOM_CHE[gender][it.who];
-    const codes: DauCode[] = [lo && an ? 'ro' : it.viTri.length ? 'an' : 'vang'];
+    // Chỉ lộ trên can mà không gốc trong chi: không mã có mặt nào, mục chỉ nêu vị trí sao (ARCHITECTURE 15.8, sửa 27/11/2026;
+    // trước đây rơi vào 'an' nên câu "chỉ ẩn trong chi" đi cùng dòng "lộ trên can").
+    const codes: DauCode[] = lo && an ? ['ro'] : an ? ['an'] : lo ? [] : ['vang'];
     if (luc[nhomChe] >= DAU_NGUONG.CHE && own < DAU_NGUONG.SAO_YEU) codes.push('biChe');
     if (gender === 'F' && it.who === 'phoiNgau' && it.viTri.length) {
       const loCan = ch.pillars.filter((_, i) => i !== 2).map((p) => thapThan(dm, p.can));
