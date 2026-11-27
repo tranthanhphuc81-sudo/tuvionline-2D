@@ -125,6 +125,27 @@ describe('truy cập (axe-core)', { timeout: 30000 }, () => {
     expect(await violations()).toEqual([]);
   });
 
+  it('Tĩnh thất: Hỏi chuyện Thầy, câu trả lời nhóm "Việc hôm nay"', async () => {
+    setup();
+    await act(async () => { fireEvent.click(screen.getByRole('button', { name: /Hỏi chuyện Thầy/ })); });
+    await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Hôm nay sắm tài sản lớn được không?' })); });
+    expect(screen.getByText(/Theo lịch truyền thống/)).toBeTruthy();
+    expect(await violations()).toEqual([]);
+  });
+
+  it('Xem ngày tốt xấu: một ngày, tìm ngày hợp việc, lịch tháng', async () => {
+    setup();
+    await act(async () => { fireEvent.click(screen.getByRole('button', { name: /Xem ngày tốt xấu/ })); });
+    expect(await violations(), 'mở màn').toEqual([]);
+    await act(async () => { fireEvent.click(screen.getByRole('radio', { name: 'Cưới hỏi' })); });
+    const list = screen.getByRole('heading', { name: 'Ngày hợp trong 30 ngày tới' }).parentElement!;
+    const first = list.querySelector<HTMLButtonElement>('ul button');
+    if (first) await act(async () => { fireEvent.click(first); });
+    expect(await violations(), 'chọn việc và một ngày').toEqual([]);
+    await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Tháng sau' })); });
+    expect(await violations(), 'tháng sau').toEqual([]);
+  });
+
   it('lối vào: từng cảnh của hành trình đầy đủ', async () => {
     render(<AppProvider store={createStore<PersistedState>(emptyState())}><Journey plan="full" onDone={() => {}} /></AppProvider>);
     const seen: string[] = [];
