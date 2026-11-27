@@ -1443,6 +1443,16 @@ Chủ dự án muốn "tương tác giả lập nhiều hơn" và chọn cả b�
 - Ban đầu (26/11) không dùng Hoàng đạo, thập nhị trực vì app chưa có bảng. Từ 27/11/2026 (sau mục 17): thêm MỘT câu "Theo lịch truyền thống…" (`calendarLine`), đặt sau mức chấm và gợi ý ngày, trước lời dặn: thần trực ngày (Hoàng đạo / Hắc đạo), trực, và việc tương ứng trong `TRUC_VIEC` hợp / kỵ / không nghiêng (tài sản → sắm sửa; giấy tờ, hợp tác → ký kết; cấp trên → nhận việc; trình bày, ra mắt → khai trương; học thi không có việc tương ứng nên chỉ nêu thần và trực). Biết tuổi (chi năm âm của hồ sơ) mà ngày xung tuổi thì nói thay cho câu hợp / kỵ. Câu này KHÔNG đổi mức chấm theo lá số (`taskVerdict`), không đổi ngày gợi ý; câu sau nói rõ đó là cách chấm chung cho mọi người và chỉ sang màn Xem ngày. Vẫn không dùng Tam Nương, Nguyệt Kỵ.
 - Chữ "mua" nằm trong `BANNED_TERMS` nên nhãn nói "sắm tài sản lớn".
 
+### 16.3.2 Hỏi chuyện Thầy: nhóm "Đời sống" (27/11/2026)
+- Chủ dự án hỏi app đã trả lời đủ các mặt của đời sống chưa. Rà lại: màn Tử Vi có "Từng mảng cuộc sống" (tiền bạc, công việc, tình duyên, sức khoẻ, nhà cửa, ra ngoài; `AREA`, `AREA_TIP` của legacy), màn Bát Tự có "Lục thân" (cha mẹ, anh chị em, người bạn đời, con cái; 15.8). Hỏi chuyện Thầy chỉ có nghề nghiệp, nên thêm khối thứ ba "Đời sống", đặt giữa "Về lá số" và "Việc hôm nay".
+- Tám câu, mỗi câu CHỈ ghép câu chữ đã hiện trên màn công cụ, không luận mới (nguyên tắc 16):
+  - Tiền bạc, công việc, tình duyên, sức khoẻ, nhà cửa, đi xa và giao thiệp → đoạn của mảng đó trong "Từng mảng cuộc sống" (`areaText`, xuất từ `src/content/tuvi/tongket.ts`, không đổi chữ), mở bằng một câu nêu cung và nhãn mảng (Thuận lợi / Bình thường / Cần chú ý), kết bằng câu chỉ chỗ xem kỹ.
+  - Tình duyên thêm các câu Lục thân của người bạn đời (sao đại diện, lời sách luận thêm, chi ngày gặp xung chi tháng).
+  - Cha mẹ, anh chị em → câu Lục thân của cha, mẹ, anh chị em, và chi tháng gặp xung; con cái → câu Lục thân của con cái, và chi ngày gặp xung chi giờ (`lucThanLines`, cùng chữ với mục Lục thân ở màn Bát Tự, chia theo giới tính như sách).
+  - Sức khoẻ luôn kèm một câu: đây là lưu ý theo dân gian, không thay cho lời khuyên của bác sĩ.
+- Không thêm: học hành (app chưa có câu chữ riêng cho phần này), bạn bè, đồng nghiệp (cung Nô Bộc không có trong `AREA`), hợp tuổi (16.3). Thêm những câu này là tạo luận mới.
+- Câu chữ của legacy giữ nguyên, kể cả chữ trong `BANNED_TERMS` như ở màn Tử Vi ("vay mượn", "mua bán nhà đất"); câu mới của khối này không có từ cấm (test). Câu dính `NO_SPEECH_TERMS` chỉ hiện chữ như mọi câu trả lời khác.
+
 ### 16.4 Nghi thức có cử chỉ (PR 4)
 - **Gõ chuông** (`BellButton`): nút 🔔 ở góc trên trái phòng Tĩnh thất và ở chính điện của lối vào bản đầy đủ. Chạm thì rung nhẹ (`tapLight`) và chuông ngân một tiếng. Ở Tĩnh thất dùng `ringBell` (`src/platform/ambientAudio.ts`): tạo AudioContext ngay trong sự kiện chạm, rồi mới hỏi `soundAllowed`; máy để im lặng hoặc rung thì đóng ngay, không phát; tự đóng sau 3,3 giây, không bật tiếng nền. Ở lối vào dùng chuông của bộ tiếng đang phát; tắt "Âm thanh lối vào" hoặc máy im lặng thì chỉ rung.
 - **Thắp hương**: nhang bắt lửa thì rung vừa (`tapMedium`, `ImpactStyle.Medium`) thay rung nhẹ.

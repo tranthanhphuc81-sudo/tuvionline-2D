@@ -55,6 +55,6 @@ Claude lưu ghi nhớ trong hồ sơ người dùng của máy, không trong rep
 ## 5. Việc đang chờ chủ dự án
 
 - Video lối vào 30 giây bản sạch, không có chữ và nút vẽ sẵn trong hình (PR #42). Bản 27/11 đang nằm chưa commit ở `src/assets/journey/video/Lối vào Tĩnh thất - 30s.mp4` trong thư mục gốc.
-- Duyệt câu chữ mới ở `docs/LOI-THAY.md`: mục "Hỏi chuyện Thầy" và "Hỏi chuyện Thầy: Việc hôm nay" (đánh dấu chờ duyệt).
+- Duyệt câu chữ mới ở `docs/LOI-THAY.md`: mục "Hỏi chuyện Thầy", "Hỏi chuyện Thầy: Việc hôm nay" và "Hỏi chuyện Thầy: Đời sống" (đánh dấu chờ duyệt).
 - Đọc duyệt câu chữ màn Xem ngày (`src/content/xemngay.ts`): lời giải 12 trực, bảng việc nên và nên tránh theo trực, cách gộp mức ngày.
 - Nghe thử trên APK: giọng Thầy đọc câu trả lời Hỏi chuyện Thầy, rung khi gõ chuông và thắp hương.

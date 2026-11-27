@@ -10,7 +10,8 @@ import { HOA_NAME, yearLabel, yearLines } from './year';
 export const VERDICT_HOW = 'Nhãn đánh giá do công cụ tự chấm theo quy tắc dân gian (cộng điểm cho yếu tố tốt, trừ cho yếu tố xấu) — không phải tỷ lệ hay xác suất thực tế.';
 export const DEFAULT_NOTE = 'Đây là cách đọc theo văn hoá dân gian để tham khảo và tự suy ngẫm — không phải dự báo chắc chắn, cũng không thay cho các quyết định dựa trên thông tin thực tế.';
 const HOA_SHORT_NAME: Record<HoaKey, string> = { loc: 'Lộc', quyen: 'Quyền', khoa: 'Khoa', ky: 'Kỵ' };
-const AREA_LABEL = { ok: 'Thuận lợi', warn: 'Cần chú ý', mid: 'Bình thường' } as const;
+/** Nhãn mảng cuộc sống, dùng cả ở Hỏi chuyện Thầy (ARCHITECTURE 16.3.2). */
+export const AREA_LABEL = { ok: 'Thuận lợi', warn: 'Cần chú ý', mid: 'Bình thường' } as const;
 
 /** legacy uniq(): bỏ rỗng và trùng, giữ thứ tự. */
 function uniq(a: readonly string[]): string[] {
@@ -18,7 +19,8 @@ function uniq(a: readonly string[]): string[] {
   return a.filter((x) => { if (!x || seen.has(x)) return false; seen.add(x); return true; });
 }
 
-function areaText(ch: TuViChart, a: AreaReading): string {
+/** Đoạn của một mảng trong "Từng mảng cuộc sống"; Hỏi chuyện Thầy dùng lại nguyên chữ (ARCHITECTURE 16.3.2). */
+export function areaText(ch: TuViChart, a: AreaReading): string {
   const parts: string[] = [];
   const pr = pairOf(a.stars);
   if (pr && !a.borrowed) parts.push('Bộ <b>' + pr[0].replace(' đồng cung', '') + '</b> —');
