@@ -54,4 +54,18 @@ describe('Màn hình Xem ngày tốt xấu', () => {
     fireEvent.click(first);
     expect(screen.getByText(/^Cưới hỏi: hợp\./)).toBeTruthy();
   });
+
+  it('ngày cuối lịch 31/12/2100: nút ngày sau, tháng sau không đi tiếp và màn hình không đổ', () => {
+    setup(emptyState());
+    const input = screen.getByLabelText('Chọn ngày dương lịch') as HTMLInputElement;
+    expect(input.max).toBe('2100-12-31');
+    fireEvent.change(input, { target: { value: '2100-12-31' } });
+    expect(screen.getByRole('heading', { name: /31\/12\/2100$/, level: 2 })).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: 'Ngày sau' }));
+    expect(screen.getByRole('heading', { name: /31\/12\/2100$/, level: 2 })).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: 'Tháng sau' }));
+    expect(screen.getByRole('heading', { name: 'Tháng 12/2100' })).toBeTruthy();
+    fireEvent.change(input, { target: { value: '2101-01-01' } });
+    expect(screen.getByRole('heading', { name: /31\/12\/2100$/, level: 2 })).toBeTruthy();
+  });
 });

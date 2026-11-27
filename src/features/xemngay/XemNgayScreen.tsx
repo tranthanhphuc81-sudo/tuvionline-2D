@@ -1,6 +1,6 @@
 /* Xem ngày tốt xấu (ARCHITECTURE mục 17): một ngày (mặc định hôm nay), lịch tháng tô theo mức ngày, tìm ngày hợp một việc. */
 import { useMemo, useState } from 'react';
-import { LySoUtil, dayInfo, findDays, monthDays, profileSummary, tuoiChi, viecVerdict, TRUC_VIEC, VIEC_ORDER, type DayInfo, type SolarDay, type ViecId } from '../../core';
+import { LySoUtil, dayInfo, findDays, monthDays, profileSummary, tuoiChi, viecVerdict, TRUC_VIEC, VIEC_ORDER, XEMNGAY_YEARS, type DayInfo, type SolarDay, type ViecId } from '../../core';
 import {
   FIND_NONE, GRADE_TONE, GRADE_VI, VERDICT_VI, VIEC_VI, TRUC_VI, WEEKDAY_VI, XEMNGAY_INTRO, XEMNGAY_NO_PROFILE, XEMNGAY_PRACTICAL,
   XEMNGAY_RULE_NOTE, findTitle, hoursLine, lunarLine, solarLine, thanLine, tuoiLine, viecLine,
@@ -17,7 +17,7 @@ const same = (a: SolarDay, b: SolarDay) => a.dd === b.dd && a.mm === b.mm && a.y
 const shift = (d: SolarDay, n: number): SolarDay => { const [dd, mm, yy] = LySoUtil.shiftSolar(d.dd, d.mm, d.yy, n); return { dd, mm, yy }; };
 const iso = (d: SolarDay) => `${d.yy}-${LySoUtil.pad2(d.mm)}-${LySoUtil.pad2(d.dd)}`;
 /** Năm ngoài khoảng lịch âm của app thì không nhận. */
-const MIN_YEAR = 1900, MAX_YEAR = 2199;
+const { min: MIN_YEAR, max: MAX_YEAR } = XEMNGAY_YEARS;
 
 const gradeOf = (d: DayInfo) => d.person?.grade ?? d.grade;
 

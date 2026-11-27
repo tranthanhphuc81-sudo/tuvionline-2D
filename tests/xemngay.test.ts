@@ -1,6 +1,6 @@
 /* Xem ngày (ARCHITECTURE mục 17). Trực và giờ hoàng đạo đối chiếu xemlicham.com (đọc 26/11/2026). */
 import { describe, expect, it } from 'vitest';
-import { dayInfo, daysFrom, findDays, monthDays, tuoiChi, viecVerdict, HOANG_DAO_THAN, THAN_ORDER, TRUC_VIEC, VIEC_ORDER } from '../src/core';
+import { dayInfo, daysFrom, findDays, monthDays, tuoiChi, viecVerdict, HOANG_DAO_THAN, THAN_ORDER, TRUC_VIEC, VIEC_ORDER, XEMNGAY_YEARS } from '../src/core';
 import { thanhLongStart } from '../src/core/xemngay';
 
 const CHI = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
@@ -67,6 +67,15 @@ describe('Quy tắc an thần và trực', () => {
     expect(() => dayInfo(31, 2, 2026)).toThrow(RangeError);
     expect(monthDays(2, 2024)).toHaveLength(29);
     expect(monthDays(2, 2026)).toHaveLength(28);
+  });
+  it('khoảng năm khớp lịch của app (1900–2100); dãy ngày dừng ở 31/12/2100, không ném lỗi', () => {
+    expect(XEMNGAY_YEARS).toEqual({ min: 1900, max: 2100 });
+    expect(dayInfo(1, 1, 1900).lunar.year).toBe(1899);
+    expect(() => dayInfo(1, 1, 2101)).toThrow(RangeError);
+    const tail = daysFrom({ dd: 15, mm: 12, yy: 2100 }, 30);
+    expect(tail).toHaveLength(17);
+    expect(tail[16].date).toEqual({ dd: 31, mm: 12, yy: 2100 });
+    expect(() => findDays({ dd: 15, mm: 12, yy: 2100 }, 30, 'sam-sua')).not.toThrow();
   });
   it('trước 1968 dùng múi giờ UTC+8 vẫn tính được', () => {
     expect(dayInfo(15, 6, 1960).hours).toHaveLength(6);

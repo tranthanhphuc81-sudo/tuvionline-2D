@@ -131,12 +131,18 @@ export function viecVerdict(info: DayInfo, viec: ViecId): ViecVerdict {
   return 'trung';
 }
 
-/** `n` ngày liên tiếp kể từ `from` (tính cả `from`). */
+/** Khoảng năm dương lịch xem được: đúng khoảng của lịch âm trong app (`validSolar`). */
+export const XEMNGAY_YEARS = { min: 1900, max: 2100 } as const;
+
+/** `n` ngày liên tiếp kể từ `from` (tính cả `from`); dừng ở 31/12/2100 nếu dãy chạy quá khoảng lịch. */
 export function daysFrom(from: SolarDay, n: number, birthChi?: ChiIdx): DayInfo[] {
-  return Array.from({ length: n }, (_, i) => {
+  const out: DayInfo[] = [];
+  for (let i = 0; i < n; i++) {
     const [dd, mm, yy] = shiftSolar(from.dd, from.mm, from.yy, i);
-    return dayInfo(dd, mm, yy, birthChi);
-  });
+    if (yy > XEMNGAY_YEARS.max) break;
+    out.push(dayInfo(dd, mm, yy, birthChi));
+  }
+  return out;
 }
 
 /** Những ngày hợp việc `viec` trong `n` ngày kể từ `from`. */
