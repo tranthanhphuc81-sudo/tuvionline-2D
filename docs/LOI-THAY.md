@@ -347,6 +347,17 @@ Khi người dùng bấm "Thầy giảng cung này" (Tử Vi) hoặc nút "Giả
 - Lời dặn mỗi việc: xem `DAY_TASKS` trong `src/content/askDay.ts` (chi tiền lớn theo khả năng tài chính, giấy tờ pháp lý; mang đủ bản gốc, bản sao; ngủ đủ trước khi thi; chuẩn bị điều muốn nói; ghi rõ ai góp gì; tập trước phần trình bày).
 - Câu theo lịch truyền thống (thêm 27/11/2026, chờ duyệt), đặt sau ngày gợi ý, trước lời dặn: "Theo lịch truyền thống, hôm nay là ngày {Hoàng đạo / Hắc đạo} ({tên thần}), trực {tên trực}" rồi một trong: "; lịch xưa coi ngày này hợp cho việc {việc}." / "; lịch xưa kỵ trực này cho việc {việc}." / "; lịch xưa không nghiêng hẳn về bên nào cho việc này." / (ngày xung tuổi của hồ sơ) ", lại xung tuổi {chi} của bạn, nên lịch xưa khuyên việc lớn chọn ngày khác." / (học thi, không có việc tương ứng) "." Câu kế: "Đó là cách chấm chung cho mọi người, khác cách chấm theo lá số ở trên; muốn xem kỹ thì mở mục Xem ngày tốt xấu ở Tĩnh thất." Tên việc: sắm sửa đồ lớn · ký kết, giao dịch (giấy tờ, hợp tác) · nhận việc, nhậm chức · khai trương, mở hàng (ra mắt, trình bày).
 
+## Hỏi chuyện Thầy: Đời sống (27/11/2026, chờ duyệt)
+
+Khối thứ ba, giữa "Về lá số" và "Việc hôm nay" (ARCHITECTURE 16.3.2). Phần thân câu trả lời là chữ đã có trên màn Tử Vi ("Từng mảng cuộc sống") và màn Bát Tự ("Lục thân trong lá số"), không viết mới; chỉ các câu dưới đây là mới (`LIFE_LINES` trong `src/content/ask.ts`).
+
+- Tám câu hỏi: Chuyện tiền bạc ra sao? · Công việc, sự nghiệp thế nào? · Tình duyên, hôn nhân thế nào? · Sức khoẻ cần để ý gì? · Nhà cửa, chỗ ở ra sao? · Đi xa, giao thiệp có thuận không? · Cha mẹ, anh chị em thế nào? · Chuyện con cái ra sao?
+- Câu mở của sáu câu theo mảng: "Theo Tử Vi, chuyện {nghĩa cung} xem ở cung {tên cung}; mảng này của bạn được chấm: {Thuận lợi / Bình thường / Cần chú ý}." Câu kết: "Muốn xem kỹ thì mở tab Tử Vi, phần "Từng mảng cuộc sống"."
+- Sức khoẻ thêm: "Đây là lưu ý theo dân gian, không thay cho lời khuyên của bác sĩ; thấy khó chịu kéo dài thì nên đi khám."
+- Tình duyên thêm phần Lục thân của người bạn đời, mở bằng: "Bát Tự xem người bạn đời qua sao đại diện và chi ngày:"
+- Cha mẹ, anh chị em: "Bát Tự xem cha mẹ, anh chị em qua sao đại diện và trụ tháng, theo quy ước của sách cho lá số {nam / nữ}:" · Con cái: "Bát Tự xem con cái qua sao đại diện và trụ giờ, theo quy ước của sách cho lá số {nam / nữ}:" Câu kết: "Muốn xem kỹ thì mở tab Bát Tự, phần "Lục thân trong lá số"."
+- Ba câu có phần Lục thân đều kèm lời nhắc sẵn có của mục Lục thân ("Đây là quy ước và lời luận truyền thống…").
+
 ## Câu chỉ hiện chữ, không đọc
 
 - (Phần này {goi} xem chữ trên màn hình)

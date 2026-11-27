@@ -72,6 +72,19 @@ export function loiLuanLines(dau: readonly LucThanDau[], cungXung: readonly Cung
   return [...dau.flatMap((d) => d.codes.filter((c) => c !== 'vang').map((c) => dauText(d, c, gender))), ...cungXung.map(xungText)];
 }
 
+export const LUC_THAN_NOTE = 'Đây là quy ước và lời luận truyền thống, chia theo giới tính như sách cổ, chỉ để tham khảo. App không đoán sức khoẻ, sinh tử hay chuyện riêng của ai; mối quan hệ trong đời thật do cách mỗi người sống và vun đắp với nhau.';
+
+/** Các câu Lục thân của một số người thân, cùng chữ với mục Lục thân ở màn Bát Tự (sao đại diện, lời sách luận thêm khi bật
+    công tắc, cung vị gặp xung lọc theo `xung`). Hỏi chuyện Thầy dùng lại (ARCHITECTURE 16.3.2). */
+export function lucThanLines(
+  items: readonly LucThanItem[], gender: 'M' | 'F', signs: { dau: readonly LucThanDau[]; cungXung: readonly CungXung[] },
+  whos: readonly ThanNhan[], xung: (x: CungXung) => boolean,
+): string[] {
+  const set = new Set(whos);
+  const sao = items.filter((it) => set.has(it.who)).map((it) => WHO[it.who] + ' là ' + it.sao.join(' hoặc ') + ': ' + viTriText(it));
+  return [...sao, ...loiLuanLines(signs.dau.filter((d) => set.has(d.who)), signs.cungXung.filter(xung), gender)];
+}
+
 export function lucThanSection(items: readonly LucThanItem[], gender: 'M' | 'F', signs?: { dau: readonly LucThanDau[]; cungXung: readonly CungXung[] }): Section {
   const blocks: Block[] = [
     p('lucthan.cungvi', '<b>Cung vị:</b> mỗi trụ ứng với một lớp người thân.<ul>' + CUNG_VI.map((c) => '<li>' + c + '</li>').join('') + '</ul>'),
@@ -81,7 +94,7 @@ export function lucThanSection(items: readonly LucThanItem[], gender: 'M' | 'F',
       const lines = signs ? loiLuanLines(signs.dau, signs.cungXung, gender) : [];
       return lines.length ? [p('lucthan.loiluan', '<b>Sách xưa luận thêm</b> (viết nhẹ, để tham khảo):'), list('lucthan.loiluan.list', lines)] : [];
     })(),
-    note('lucthan.note', 'Đây là quy ước và lời luận truyền thống, chia theo giới tính như sách cổ, chỉ để tham khảo. App không đoán sức khoẻ, sinh tử hay chuyện riêng của ai; mối quan hệ trong đời thật do cách mỗi người sống và vun đắp với nhau.'),
+    note('lucthan.note', LUC_THAN_NOTE),
   ];
   return { id: 'lucthan', title: '', blocks };
 }
