@@ -126,6 +126,7 @@ export function StudyScreen() {
           </div>
           {res?.ok && <NguHanhButton ch={res.summary.battu.chart} profileId={profile.id} who={who} slow={slow} disabled={invalid} onAsk={() => setQa(true)} />}
           {res?.ok && <button type="button" className={`${ui.btn} ${ui.block}`} onClick={() => { stopReading(); setAsk(true); }}>💬 Hỏi chuyện {Ta}</button>}
+          <button type="button" className={`${ui.btn} ${ui.block}`} onClick={() => { stopReading(); nav.push({ name: 'xemngay' }); }}>📅 Xem ngày tốt xấu</button>
           {res?.ok && <TodayCard ch={res.summary.battu.chart} profileId={profile.id} who={who} slow={slow} />}
           <p className={`${ui.muted} ${s.note}`}>{CULTURAL_NOTE}</p>
         </div>

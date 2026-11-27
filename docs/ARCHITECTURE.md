@@ -1447,3 +1447,25 @@ Chủ dự án muốn "tương tác giả lập nhiều hơn" và chọn cả b�
 - **Gõ chuông** (`BellButton`): nút 🔔 ở góc trên trái phòng Tĩnh thất và ở chính điện của lối vào bản đầy đủ. Chạm thì rung nhẹ (`tapLight`) và chuông ngân một tiếng. Ở Tĩnh thất dùng `ringBell` (`src/platform/ambientAudio.ts`): tạo AudioContext ngay trong sự kiện chạm, rồi mới hỏi `soundAllowed`; máy để im lặng hoặc rung thì đóng ngay, không phát; tự đóng sau 3,3 giây, không bật tiếng nền. Ở lối vào dùng chuông của bộ tiếng đang phát; tắt "Âm thanh lối vào" hoặc máy im lặng thì chỉ rung.
 - **Thắp hương**: nhang bắt lửa thì rung vừa (`tapMedium`, `ImpactStyle.Medium`) thay rung nhẹ.
 - **Xin keo trước khi gieo quẻ** (`KeoStep`, `keo.ts`): chỉ ở cách gieo ngẫu nhiên. Chạm nút hoặc lắc máy (`onShake`), hai miếng keo rơi, rung vừa. Một sấp một ngửa là thuận thì sau 1,4 giây chuyển sang gieo xu; hai mặt giống nhau thì xin lại; đủ ba lần (`KEO_MAX`) vẫn cho gieo. Luôn có "Bỏ qua, gieo luôn". Mỗi quẻ xin một lần, gieo xong quẻ sau xin lại. Keo chỉ là nghi thức, không ảnh hưởng quẻ (quẻ vẫn gieo bằng xu như cũ); câu keo không hứa hẹn gì (`KEO_LINES`). Cài đặt → "Nghi thức" → tắt được (`settings.xinKeo`, trường tuỳ chọn, không có = bật, không lên lược đồ). Hoạt cảnh keo tắt khi giảm chuyển động.
+
+## 17. Xem ngày tốt xấu (chốt 26/11/2026)
+
+Chủ dự án chọn "lịch truyền thống": Hoàng đạo / Hắc đạo, thập nhị trực, giờ hoàng đạo và ngày xung tuổi, như lịch vạn niên. Đây là công thức MỚI, không có trong 5 tài liệu ở `docs/`; không đụng công thức an sao, lập trụ, Mệnh Quái, Nạp Âm. Bổ sung, không thay, nhóm "Việc hôm nay" của Hỏi chuyện Thầy (chấm theo Dụng thần của lá số).
+
+### 17.1 Vị trí
+- Route `xemngay` (màn hình con của tab Tĩnh thất, `src/features/xemngay`). Mở từ nút "📅 Xem ngày tốt xấu" ở Tĩnh thất (dưới "Hỏi chuyện Thầy", không cần đồ vật mới trên án thư) và ô "Xem ngày" ở Tổng hợp (mở chồng lên như Chỉ tay).
+- Màn hình: một ngày (mặc định hôm nay, ‹ › và ô chọn ngày), danh sách 8 việc với Hợp / Làm được / Nên tránh, tìm ngày hợp một việc trong 30 ngày tới, lịch tháng tô theo mức ngày. Không đọc thành lời, không lưu gì vào `lyso.state`.
+
+### 17.2 Công thức (`src/core/xemngay`)
+- **Tháng tiết:** thần ngày và trực an theo chi tháng tiết (`monthChiFromDate`, múi giờ `lunarTzForSolarYear`), không theo tháng âm. Ngày giao tiết tự lặp lại trực hôm trước.
+- **12 thần:** Thanh Long, Minh Đường, Thiên Hình, Chu Tước, Kim Quỹ, Kim Đường (Bảo Quang), Bạch Hổ, Ngọc Đường, Thiên Lao, Huyền Vũ, Tư Mệnh, Câu Trận; Hoàng đạo là Thanh Long, Minh Đường, Kim Quỹ, Kim Đường, Ngọc Đường, Tư Mệnh. Khởi Thanh Long: tháng Dần/Thân ở Tý, Mão/Dậu ở Dần, Thìn/Tuất ở Thìn, Tỵ/Hợi ở Ngọ, Ngọ/Tý ở Thân, Mùi/Sửu ở Tuất. Giờ hoàng đạo dùng cùng bảng với chi ngày thay chi tháng.
+- **Trực:** ngày cùng chi với tháng tiết là Kiến, đếm xuôi Kiến, Trừ, Mãn, Bình, Định, Chấp, Phá, Nguy, Thành, Thu, Khai, Bế.
+- **Xung tuổi:** chi ngày lục xung với chi năm sinh. Năm sinh là năm âm (đổi theo Tết), như cách gọi tuổi thường ngày.
+- **Mức ngày (quy ước của app):** Hoàng đạo và trực không phải Phá, Bế → đẹp; Hắc đạo gặp Phá hoặc Bế → nên tránh việc lớn; còn lại → thường. Xung tuổi hạ một bậc.
+- **Việc theo trực (`TRUC_VIEC`):** bản tóm lược của app từ lời giải trực thường in trong lịch vạn niên. Một việc "hợp" khi trực nên làm việc đó, ngày Hoàng đạo và không xung tuổi; "nên tránh" khi trực kỵ việc đó hoặc xung tuổi.
+- **Đối chiếu (26/11/2026):** trực và giờ hoàng đạo của 26/11/2026, 8/11/2026 (30/9 âm, đã qua Lập Đông, trực Bế), 5/2/2026 khớp xemlicham.com. Trang đó không ghi tên thần trực ngày nên phần Hoàng đạo / Hắc đạo chưa đối chiếu được nguồn ngoài; vài lịch an thần theo tháng âm nên có thể lệch ở mấy ngày gần giao tiết. Màn hình ghi rõ điều này (`XEMNGAY_RULE_NOTE`).
+
+### 17.3 Câu chữ (`src/content/xemngay.ts`)
+- Nội dung mới, viết lại bằng lời của app, không chép nguyên văn sách. Không dùng từ cấm (`BANNED_TERMS`): nói "sắm sửa đồ lớn", không nhắc lễ bái, vật phẩm, không có lời "phải làm thế này mới tránh được". Luôn kèm `XEMNGAY_PRACTICAL` (ngày tháng là phần phụ) và `CULTURAL_NOTE`.
+- Test: `tests/xemngay.test.ts` (đối chiếu lịch, quy tắc, quét từ cấm trên mọi câu của 365 ngày), `src/features/xemngay/XemNgayScreen.test.tsx`.
+

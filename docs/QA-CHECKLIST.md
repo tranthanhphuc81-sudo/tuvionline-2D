@@ -195,6 +195,14 @@ Lấy từ ARCHITECTURE mục 7.3 và kết quả lần thử trên S25 Ultra (P
 - [ ] Lục Hào, gieo ngẫu nhiên: có bước xin keo; lắc máy xin được; ba lần chưa thuận vẫn chuyển sang gieo; "Bỏ qua, gieo luôn" chạy; gieo xong, quẻ sau xin keo lại.
 - [ ] Cài đặt → Nghi thức → tắt xin keo: Lục Hào không còn bước keo.
 
+## Xem ngày tốt xấu (26/11/2026)
+
+- [ ] Tĩnh thất → "📅 Xem ngày tốt xấu" và Tổng hợp → ô "Xem ngày": mở màn hình ở hôm nay; Back về đúng chỗ vừa mở.
+- [ ] So 3 ngày bất kỳ với một cuốn lịch vạn niên giấy hoặc app lịch quen dùng: can chi, ngày âm, trực, giờ hoàng đạo phải khớp. Thần Hoàng đạo / Hắc đạo có thể lệch ở ngày gần giao tiết (app tính theo tháng tiết, ARCHITECTURE 17.2).
+- [ ] Hồ sơ tuổi Tuất, ngày Thìn: mức ngày hạ một bậc, mọi việc "Nên tránh". Đổi sang hồ sơ khác thì cập nhật ngay.
+- [ ] Ô chọn ngày của Android mở được lịch hệ thống; nút ‹ › đổi ngày, ô lịch tháng chạm được, "Về hôm nay" chạy.
+- [ ] 360dp, cỡ chữ lớn nhất: lịch tháng đủ 7 cột, không tràn ngang; chế độ tối đọc rõ ba sắc mức ngày.
+
 ## Lục Hào
 
 - [ ] "Gieo quẻ" bằng nút và bằng **lắc máy**: gieo đủ 6 hào, có rung nhẹ; lắc nhẹ khi đi bộ không tự gieo (ngưỡng lắc 22 m/s² là số tạm, ghi lại cảm nhận).

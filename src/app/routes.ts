@@ -20,6 +20,7 @@ export type Route =
   | { name: 'phongthuy'; sub?: PhongThuySub }
   | { name: 'palm' }
   | { name: 'palm.result'; id?: string }
+  | { name: 'xemngay' }
   | { name: 'profiles' }
   | { name: 'profiles.edit'; id?: string }
   | { name: 'settings' };
