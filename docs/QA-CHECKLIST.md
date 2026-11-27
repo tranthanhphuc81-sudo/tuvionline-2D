@@ -182,7 +182,10 @@ Lấy từ ARCHITECTURE mục 7.3 và kết quả lần thử trên S25 Ultra (P
 
 ## Hỏi chuyện Thầy (16/11/2026)
 
-- [ ] Tĩnh thất → "Hỏi chuyện Thầy": Thầy mời hỏi; chọn từng câu trong bảy câu, Thầy đọc câu trả lời rồi hỏi tiếp; câu trả lời hiện chữ, cuộn được khi dài.
+- [ ] Tĩnh thất → "Hỏi chuyện Thầy": Thầy mời hỏi; có ba khối câu hỏi "Về lá số", "Đời sống", "Việc hôm nay"; chọn một câu, Thầy đọc câu trả lời rồi hỏi tiếp; câu trả lời hiện chữ, cuộn được khi dài.
+- [ ] Việc hôm nay (26–27/11/2026): mỗi câu có một câu "Theo lịch truyền thống, hôm nay là ngày …"; thần, trực khớp màn Xem ngày cùng hôm đó. Hồ sơ có tuổi bị ngày xung thì câu đó nói xung tuổi.
+- [ ] Đời sống (27/11/2026): tám câu (tiền bạc, công việc, tình duyên, sức khoẻ, nhà cửa, đi xa, cha mẹ anh chị em, con cái); chữ khớp phần "Từng mảng cuộc sống" ở tab Tử Vi và "Lục thân trong lá số" ở tab Bát Tự. Câu sức khoẻ có lời nhắc không thay cho lời khuyên của bác sĩ.
+- [ ] Thầy gọi "con", "anh", "chị"…: vẫn đọc và hiện "người bạn đời", "bạn thân", "bạn bè" (không thành "người con đời").
 - [ ] Hồ sơ người thân: câu trả lời nói đúng ngôi (không gọi "con" với hồ sơ người khác).
 - [ ] "Thôi, cảm ơn Thầy": Thầy chào, khung đóng, về lại Tĩnh thất.
 - [ ] 360dp, cỡ chữ lớn nhất: nút câu hỏi không bị cắt chữ.
@@ -242,6 +245,8 @@ Ghi lại số µT hiện trên màn hình ở mỗi phép thử để chốt ng
 
 - [ ] Cài đặt → Khi mở app: thử cả "Tự động", "Đầy đủ", "Rút gọn", "Không có"; mở lại app thấy đúng kiểu. "Tự động": ngày rằm, mùng 1 đi đầy đủ.
 - [ ] Lối vào: chạm "Bỏ qua" và Back đều vào thẳng Tĩnh thất. Máy để im lặng hoặc rung thì không phát tiếng.
+- [ ] Lối vào bản đầy đủ có video (27/11/2026, ARCHITECTURE 12.12): video tự phát, đi chậm (khoảng 30 giây cả đường); dừng trước cổng ("Bước vào cổng"), sát cửa chính điện ("Gõ chuông" thì khoảng 1,2 giây sau cửa mở, hoặc "Vào"), trước án thư ("Chạm giữ để thắp hương" hoặc "Ngồi xuống"). Để yên ở chỗ dừng 20 giây thì tự đi tiếp; chạm khi video đang chạy thì tua tới chỗ dừng kế. Ghi lại nếu hình giật khó chịu (app phát file 20 giây ở tốc độ 2/3, 16 khung mỗi giây).
+- [ ] Video không phát được (máy chặn tự phát, hoặc video lỗi): sau khoảng 2,5 giây chuyển sang tranh vẽ, hành trình vẫn đi hết.
 - [ ] Đo fps lối vào và Tĩnh thất trên **máy tầm thấp** (điều kiện chặn 6.2 và 6.6): mượt, không giật khi chuyển trạm. Không đạt thì ghi lại để đổi sang ảnh động CSS.
 - [ ] Thắp hương: chạm giữ khoảng 0,8 giây thì nén hương cháy; tắt app mở lại trong 20 phút vẫn còn cháy, hết 20 phút thì tàn.
 - [ ] 6 đồ vật trên án thư mở đúng công cụ; Thầy đọc có phụ đề, nút ⏮ ⏯ ⏭ 🐢 chạy.
