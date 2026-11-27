@@ -2,7 +2,7 @@
    đã có (Tổng hợp, ngũ hành, lời hôm nay), không tạo lời luận mới. Nhóm "Việc hôm nay" (hôm nay làm việc X được không) ở askDay.ts. Viết với "bạn"; màn hình đổi theo cách Thầy gọi (xungHoPlain).
    Câu dính từ cấm đọc vẫn hiện chữ nhưng Thầy không đọc (buildPlainCues). Không có câu "hợp tuổi": app chưa có câu chữ cho phần này. */
 import { pillarOfYear, evaluatePeriod, type NguHanhAnalysis } from '../core/nguhanh';
-import { BatTuEngine, type TongHopReading } from '../core';
+import { BatTuEngine, type ChiIdx, type TongHopReading } from '../core';
 import { parseRich, toPlainText, type Section } from './rich';
 import { tongHopTomLai } from './tonghop/tongket';
 import { describePillar, plainBlocks } from './nguhanh/plain';
@@ -32,7 +32,8 @@ export const ASK_QUESTIONS = [
 export type AskId = (typeof ASK_QUESTIONS)[number]['id'];
 const isTask = (id: AskId): id is DayTaskId => DAY_TASKS.some((t) => t.id === id);
 
-export interface AskContext { tongHop: TongHopReading; nguHanh: NguHanhAnalysis; now: Date }
+/** `birthChi`: chi năm âm của hồ sơ (tuổi), để câu theo lịch truyền thống nói được ngày có xung tuổi không. */
+export interface AskContext { tongHop: TongHopReading; nguHanh: NguHanhAnalysis; now: Date; birthChi?: ChiIdx }
 
 const plain = (html: string) => toPlainText(parseRich(html)).replace(/\s+/g, ' ').trim();
 /** Chữ của các khối trong một mục "Tóm lại về bạn" (đoạn văn hoặc danh sách). */
@@ -43,8 +44,8 @@ function blockTexts(sections: readonly Section[], id: string): string[] {
 }
 
 /** Câu trả lời của một câu hỏi: vài câu, câu cuối là lời nhắc văn hoá. */
-export function askAnswer(id: AskId, { tongHop: r, nguHanh: a, now }: AskContext): string[] {
-  if (isTask(id)) return [...taskAnswer(id, a, now), CULTURE_LINE];
+export function askAnswer(id: AskId, { tongHop: r, nguHanh: a, now, birthChi }: AskContext): string[] {
+  if (isTask(id)) return [...taskAnswer(id, a, now, birthChi), CULTURE_LINE];
   const tom = tongHopTomLai(r);
   const ug = a.readings[0].usefulGod;
   let out: string[];

@@ -1,10 +1,11 @@
 /* Hỏi chuyện Thầy (ARCHITECTURE 16.3): bảy câu hỏi, câu trả lời chỉ ghép kết quả đã có. */
 import { describe, it, expect } from 'vitest';
-import { profileSummary, tongHopOf } from '../src/core';
+import { dayInfo, profileSummary, tongHopOf, tuoiChi, viecVerdict } from '../src/core';
 import { analyze, elementOfTenGod, toNguHanhChart } from '../src/core/nguhanh';
 import { ASK_QUESTIONS, askAnswer } from '../src/content/ask';
 import { BANNED_TERMS, COLOR_SOURCE_NOTE, hasBannedTerm } from '../src/content/nguhanh/vocab';
-import { DAY_TASKS, TASK_LOOKAHEAD, TASK_VERDICT_LINES, taskVerdict } from '../src/content/askDay';
+import { DAY_TASKS, TASK_LOOKAHEAD, TASK_VERDICT_LINES, TASK_VIEC, calendarLine, taskVerdict } from '../src/content/askDay';
+import { THAN_VI, TRUC_VI } from '../src/content/xemngay';
 import { ASK_LINES, CULTURE_LINE } from '../src/content/reader/templates';
 import { TODAY_NOTE } from '../src/content/today';
 
@@ -79,5 +80,56 @@ describe('Việc hôm nay (ARCHITECTURE 16.3.1)', () => {
     expect([...seen].sort()).toEqual(['binh', 'giu', 'thuan']);
     const mine = [...Object.values(TASK_VERDICT_LINES), ...DAY_TASKS.flatMap((t) => [t.label, t.topic, t.tip])];
     for (const t of mine) expect(hasBannedTerm(t), t).toBe(false);
+  });
+});
+
+describe('Việc hôm nay: thêm một câu theo lịch truyền thống (ARCHITECTURE 16.3.1, 17)', () => {
+  const days = Array.from({ length: 30 }, (_, k) => new Date(2026, 10, 1 + k));
+  const isCal = (x: string) => x.startsWith('Theo lịch truyền thống');
+  it('mỗi việc có đúng một câu, sau mức chấm, trước lời dặn; nêu đúng thần và trực của ngày', () => {
+    for (const c of ctxs.slice(0, 6)) for (const now of days) for (const t of DAY_TASKS) {
+      const a = askAnswer(t.id, { ...c, now });
+      expect(a.filter(isCal), t.id).toHaveLength(1);
+      const i = a.findIndex(isCal);
+      expect(i).toBeGreaterThan(a.indexOf(TASK_VERDICT_LINES[taskVerdict(c.nguHanh, t.group, now)]));
+      expect(i).toBeLessThan(a.indexOf(t.tip));
+      const d = dayInfo(now.getDate(), now.getMonth() + 1, now.getFullYear());
+      expect(a[i]).toContain(`ngày ${d.hoangDao ? 'Hoàng đạo' : 'Hắc đạo'} (${THAN_VI[d.than]}), trực ${TRUC_VI[d.truc].name}`);
+    }
+  });
+  it('hợp / kỵ / không nghiêng theo TRUC_VIEC đúng như màn Xem ngày; học thi chỉ nêu thần và trực', () => {
+    const seen = new Set<string>();
+    for (const now of days) for (const t of DAY_TASKS) {
+      const line = calendarLine(t.id, now);
+      const viec = TASK_VIEC[t.id];
+      if (!viec) { expect(line).not.toMatch(/lịch xưa (coi|kỵ|không nghiêng)/); continue; }
+      const v = viecVerdict(dayInfo(now.getDate(), now.getMonth() + 1, now.getFullYear()), viec.id);
+      seen.add(v);
+      if (v === 'hop') expect(line).toContain(`lịch xưa coi ngày này hợp cho việc ${viec.phrase}`);
+      if (v === 'ky') expect(line).toContain(`lịch xưa kỵ trực này cho việc ${viec.phrase}`);
+      if (v === 'trung') expect(line).toContain('lịch xưa không nghiêng hẳn về bên nào cho việc này');
+    }
+    expect([...seen].sort()).toEqual(['hop', 'ky', 'trung']);
+  });
+  it('biết tuổi: ngày xung tuổi thì nói xung thay cho hợp / kỵ; không biết tuổi thì không nhắc', () => {
+    const tuat = tuoiChi(1994);
+    const now = new Date(2026, 10, 26); // Giáp Thìn, xung Tuất
+    for (const t of DAY_TASKS) {
+      expect(calendarLine(t.id, now, tuat)).toContain('xung tuổi Tuất của bạn, nên lịch xưa khuyên việc lớn chọn ngày khác');
+      expect(calendarLine(t.id, now, tuat)).not.toMatch(/lịch xưa (coi|kỵ trực|không nghiêng)/);
+      expect(calendarLine(t.id, now)).not.toContain('xung tuổi');
+      expect(calendarLine(t.id, now, tuoiChi(1990))).not.toContain('xung tuổi');
+    }
+    const c = ctxs[0];
+    expect(askAnswer('tai-san', { ...c, now, birthChi: tuat }).find(isCal)).toContain('xung tuổi Tuất');
+  });
+  it('câu mới không có từ cấm, ở mọi ngày của một năm, có và không có tuổi', () => {
+    for (let k = 0; k < 365; k++) {
+      const now = new Date(2026, 0, 1 + k);
+      for (const t of DAY_TASKS) for (const b of [undefined, tuoiChi(1994)]) {
+        const line = calendarLine(t.id, now, b);
+        expect(hasBannedTerm(line), line).toBe(false);
+      }
+    }
   });
 });

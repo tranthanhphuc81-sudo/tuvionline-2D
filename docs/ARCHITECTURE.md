@@ -1440,7 +1440,7 @@ Chủ dự án muốn "tương tác giả lập nhiều hơn" và chọn cả b�
 - Chấm ngày (`taskVerdict`, `src/content/askDay.ts`): mức của lời hôm nay (`evaluatePeriod` trụ ngày với Dụng thần: thuận +1, bình 0, giữ −1), cộng 1 nếu can hoặc bản khí chi của ngày mang đúng hành của việc mà hành ấy là Dụng/Hỷ, trừ 1 nếu là Kỵ/Cừu. ≥ 1 thuận, ≤ −1 giữ nhịp, còn lại bình.
 - Ngày chưa thuận thì gợi ý ngày thuận gần nhất trong 14 ngày tới (thứ, ngày dương, can chi, ngày âm); không có thì nói thẳng là chưa có ngày nổi trội.
 - Mỗi việc có một lời dặn thực tế không phụ thuộc lá số (chuẩn bị giấy tờ, so giá…), kèm "không phải lời báo trước" và lời nhắc văn hoá. Không nêu giờ, hướng, vật phẩm.
-- Không dùng Hoàng Đạo, Thập Nhị Trực, Tam Nương, Nguyệt Kỵ: app chưa có các bảng này, thêm vào là công thức mới cần đối chiếu nguồn.
+- Ban đầu (26/11) không dùng Hoàng đạo, thập nhị trực vì app chưa có bảng. Từ 27/11/2026 (sau mục 17): thêm MỘT câu "Theo lịch truyền thống…" (`calendarLine`), đặt sau mức chấm và gợi ý ngày, trước lời dặn: thần trực ngày (Hoàng đạo / Hắc đạo), trực, và việc tương ứng trong `TRUC_VIEC` hợp / kỵ / không nghiêng (tài sản → sắm sửa; giấy tờ, hợp tác → ký kết; cấp trên → nhận việc; trình bày, ra mắt → khai trương; học thi không có việc tương ứng nên chỉ nêu thần và trực). Biết tuổi (chi năm âm của hồ sơ) mà ngày xung tuổi thì nói thay cho câu hợp / kỵ. Câu này KHÔNG đổi mức chấm theo lá số (`taskVerdict`), không đổi ngày gợi ý; câu sau nói rõ đó là cách chấm chung cho mọi người và chỉ sang màn Xem ngày. Vẫn không dùng Tam Nương, Nguyệt Kỵ.
 - Chữ "mua" nằm trong `BANNED_TERMS` nên nhãn nói "sắm tài sản lớn".
 
 ### 16.4 Nghi thức có cử chỉ (PR 4)
@@ -1450,7 +1450,7 @@ Chủ dự án muốn "tương tác giả lập nhiều hơn" và chọn cả b�
 
 ## 17. Xem ngày tốt xấu (chốt 26/11/2026)
 
-Chủ dự án chọn "lịch truyền thống": Hoàng đạo / Hắc đạo, thập nhị trực, giờ hoàng đạo và ngày xung tuổi, như lịch vạn niên. Đây là công thức MỚI, không có trong 5 tài liệu ở `docs/`; không đụng công thức an sao, lập trụ, Mệnh Quái, Nạp Âm. Bổ sung, không thay, nhóm "Việc hôm nay" của Hỏi chuyện Thầy (chấm theo Dụng thần của lá số).
+Chủ dự án chọn "lịch truyền thống": Hoàng đạo / Hắc đạo, thập nhị trực, giờ hoàng đạo và ngày xung tuổi, như lịch vạn niên. Đây là công thức MỚI, không có trong 5 tài liệu ở `docs/`; không đụng công thức an sao, lập trụ, Mệnh Quái, Nạp Âm. Bổ sung, không thay, nhóm "Việc hôm nay" của Hỏi chuyện Thầy (chấm theo Dụng thần của lá số); câu trả lời ở đó có thêm một câu theo lịch này (16.3.1).
 
 ### 17.1 Vị trí
 - Route `xemngay` (màn hình con của tab Tĩnh thất, `src/features/xemngay`). Mở từ nút "📅 Xem ngày tốt xấu" ở Tĩnh thất (dưới "Hỏi chuyện Thầy", không cần đồ vật mới trên án thư) và ô "Xem ngày" ở Tổng hợp (mở chồng lên như Chỉ tay).
