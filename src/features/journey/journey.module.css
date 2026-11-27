@@ -10,6 +10,9 @@
 .foot { position: absolute; left: var(--space-4); right: var(--space-4); bottom: calc(env(safe-area-inset-bottom, 0px) + var(--space-4)); display: grid; gap: var(--space-2); justify-items: center; }
 .action { min-height: var(--tap); padding: 10px 24px; border: 1px solid #d7b571; border-radius: 99px; background: rgba(11, 15, 26, .6); color: #d7b571; font-weight: 700; }
 .bell { min-width: var(--tap); min-height: var(--tap); border: 1px solid #d7b571; border-radius: 50%; background: rgba(11, 15, 26, .6); font-size: 20px; }
+/* Lời ở chỗ dừng của video (cổng, cửa chính điện, án thư) và chuông lớn ở cửa chính điện */
+.caption { max-width: 32ch; padding: 8px 14px; border-radius: 12px; background: rgba(11, 15, 26, .72); color: inherit; font-size: var(--fs-md); line-height: 1.35; text-align: center; }
+.bellBig { min-width: 64px; min-height: 64px; border: 1px solid #d7b571; border-radius: 50%; background: rgba(11, 15, 26, .6); font-size: 30px; }
 .hint { color: inherit; font-size: var(--fs-sm); opacity: .85; text-shadow: 0 1px 3px #000; }
 @keyframes sceneIn { from { opacity: 0; } to { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .scene { animation: none; } }

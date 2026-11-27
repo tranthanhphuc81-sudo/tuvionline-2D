@@ -847,6 +847,11 @@ ffmpeg -i goc.mp4 -vf "crop=406:720:437:0" -an -c:v libx264 -preset slow -crf 23
 
 Bản gốc không commit. Thay video khác thì giữ 5 đoạn 4 giây theo đúng thứ tự trạm, hoặc sửa `VIDEO_SEGMENTS`. Chưa thử trên APK: tự phát trong WebView, độ mượt trên máy tầm thấp.
 
+**Đi chậm, có chỗ dừng (PR #42; thiết kế 16/11/2026, chốt cách phát 27/11/2026).** Chủ dự án: "khách đi rất nhanh, không có tương tác rõ".
+- **Ba chỗ dừng** (`VIDEO_STOPS`), chọn theo khung hình: trước cổng (đạo đồng mời, nút "Bước vào cổng"), sát cửa chính điện ngay trước lúc hình chuyển sang cánh cửa (chuông lớn, gõ thì 1,2 giây sau cửa mở, hoặc "Vào"), trước án thư ngay trước lúc ngồi (thắp hương hoặc "Ngồi xuống"). Ngoài ba chỗ đó video chạy liền. Kiểm chỗ dừng mỗi khung hình (`requestAnimationFrame`), không chờ `timeupdate` (4 lần/giây, dễ trượt sang cảnh sau). Chạm khi đang dừng thì đi tiếp, khi đang chạy thì tua tới chỗ dừng kế tiếp; dừng `STOP_WAIT_MS` (20 giây) không ai làm gì thì tự đi tiếp (12.1).
+- **Cách làm chậm:** ban đầu định thay file bằng bản làm chậm 1,5 lần có nội suy (30 giây). Video AI mới không dùng được (27/11/2026: cảnh khác, chữ và nút vẽ sẵn trong hình, dấu hình thoi, 10,9 MB), nên chủ dự án chọn để app tự phát file 20 giây hiện có ở tốc độ 1/`VIDEO_SLOW` (2/3; `playbackRate` và `defaultPlaybackRate`). Không tốn thêm byte nào; đổi lại khung hình hiện còn 16 mỗi giây nên chuyển động hơi giật nhẹ. Muốn mượt thì sau này thay file bằng bản làm chậm có nội suy (CapCut "Smooth slow-mo", hay ffmpeg `minterpolate`) và đặt `VIDEO_SLOW = 1`, nhân mọi mốc với 1,5.
+- **Mốc tính theo giây của file** (`VIDEO_SEGMENTS`, `VIDEO_STOPS`, `currentTime`), không theo đồng hồ: cổng 0–2,5, vườn 2,5–7,4, chính điện 7,4–10, hành lang 10–13, tĩnh thất 13–20; dừng ở 0,05, 7,33 và 15,5. Đây là các mốc đã chọn theo bản 30 giây chia cho 1,5. Test `video-file.test.ts` đọc độ dài file thật (hộp `mvhd`), bắt trường hợp đổi file mà quên đổi mốc.
+
 ## 13. Xem chỉ tay (chốt cách nhập liệu 05/11/2026)
 
 Căn cứ nội dung: `docs/CHI-TAY.md`, `src/content/palm/palm-content.vi.json`. Thứ tự bước: `docs/PROMPT-KIT-CHI-TAY.md`. Mục này là quyết định cho bước 3B.1, các ý còn lại của 3B.1 sẽ bổ sung khi có số đo.

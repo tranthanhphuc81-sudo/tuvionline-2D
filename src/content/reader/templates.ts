@@ -226,6 +226,12 @@ export const KEO_LINES = {
   du: ['Ba lần rồi, mình cứ gieo, lòng thành là đủ.', 'Đủ ba lần. {goi} gieo quẻ đi, không sao cả.'],
 } as const;
 
+/** Lời ở hai chỗ dừng của video lối vào (ARCHITECTURE 12.12); chỗ dừng trước cổng dùng lời đạo đồng DONG_LINES.gate. */
+export const ENTRY_STOP_LINES = {
+  door: ['Tới cửa chính điện rồi. Khách gõ chuông xin vào nhé.', 'Đây là cửa chính điện. Khách gõ chuông, cửa sẽ mở.'],
+  table: ['Vào tới tĩnh thất rồi. Mời khách an toạ.', 'Án thư đây, {ta} sắp ra. Mời khách ngồi.'],
+} as const;
+
 export const pick = <T,>(list: readonly T[], seed: number): T => list[Math.abs(seed) % list.length];
 
 /** Thay biến. Viết hoa chữ đầu câu vì {goi} có thể đứng đầu câu ("Con xem…"). */
@@ -237,5 +243,5 @@ export function fill(t: string, vars: Record<string, string | number>): string {
 
 /** Mọi mẫu câu, để test quét. */
 export function allLines(): string[] {
-  return [...Object.values(TOOL_LINES).flatMap((t) => [...t.open, ...t.close, ...t.cells, ...t.sections]), ...Object.values(LEADS).flat(), NO_SPEECH_LINE, ...Object.values(DONG_LINES).flat(), ...Object.values(STUDY_LINES).flat(), ...Object.values(DAY_LINES).flat(), ...Object.values(ASK_LINES).flat(), ...Object.values(KEO_LINES).flat()];
+  return [...Object.values(TOOL_LINES).flatMap((t) => [...t.open, ...t.close, ...t.cells, ...t.sections]), ...Object.values(LEADS).flat(), NO_SPEECH_LINE, ...Object.values(DONG_LINES).flat(), ...Object.values(STUDY_LINES).flat(), ...Object.values(DAY_LINES).flat(), ...Object.values(ASK_LINES).flat(), ...Object.values(KEO_LINES).flat(), ...Object.values(ENTRY_STOP_LINES).flat()];
 }
