@@ -8,7 +8,7 @@ Ghi lúc chuyển việc từ máy Windows cũ (`E:\TuViOnline-2D`) sang máy m�
 - Mọi nhánh trên máy cũ đều khớp với GitHub: không có commit chưa đẩy, không có stash, không có thay đổi chưa commit.
 - **#41** `claude/xem-ngay` (Xem ngày tốt xấu): ĐÃ MERGE 27/11/2026. Lúc duyệt đã đối chiếu bảng khởi Thanh Long, 12 thần, giờ hoàng đạo, trực theo tháng tiết; sửa thêm lỗi màn hình đổ khi vượt 31/12/2100 (khoảng năm nay là `XEMNGAY_YEARS`, 1900–2100). Câu chữ `src/content/xemngay.ts` là nội dung mới, chủ dự án chưa đọc duyệt. Việc còn mở: nhóm "Việc hôm nay" của Hỏi chuyện Thầy chưa dùng các bảng này (ARCHITECTURE 16.3.1).
 - PR còn mở:
-  - **#42** `claude/video-cham-tuong-tac`: video lối vào chậm hơn, dừng ở cổng, cửa chính điện, án thư. **Chưa merge**: mã tính mốc theo video làm chậm 30 giây, còn `src/assets/journey/video/loi-vao.mp4` vẫn là bản 20 giây ngày 13/11. Merge lúc này thì không dừng ở án thư và ranh giới trạm rơi sai cảnh. Khi có video mới: thay file trên nhánh này, thêm một test đọc độ dài file mp4 và so với mốc cuối `VIDEO_SEGMENTS`, bỏ "[chờ video 30 giây]" khỏi tiêu đề rồi mới merge.
+  - **#42** `claude/video-cham-tuong-tac`: video lối vào chậm hơn, dừng ở cổng, cửa chính điện, án thư. **Chưa merge**: mã tính mốc theo video làm chậm 30 giây, còn `src/assets/journey/video/loi-vao.mp4` vẫn là bản 20 giây ngày 13/11. Merge lúc này thì không dừng ở án thư và ranh giới trạm rơi sai cảnh. Nhánh đã có test `src/features/journey/video-file.test.ts` (đọc độ dài mp4, so với mốc cuối `VIDEO_SEGMENTS`), cố ý đỏ cho tới khi có video đúng. Video 30 giây nhận ngày 27/11 KHÔNG dùng: là video khác chứ không phải bản cũ làm chậm (cảnh và nhịp khác, mọi mốc phải đặt lại), có chữ và nút vẽ sẵn trong hình (lời chào giây 1, bàn tay chỉ chuông giây 9, nút "Ngồi xuống" giây 15–17), nặng 10,9 MB. Chủ dự án chờ bản sạch không chữ; bảng cảnh của bản 27/11 ghi trong commit test trên nhánh. Khi có bản sạch: xem từng khung, đặt lại `VIDEO_SEGMENTS`, `VIDEO_STOPS`, cho test xanh, bỏ "[chờ video 30 giây]" khỏi tiêu đề rồi mới merge.
 - Kiểm tra "Cloudflare Workers and Pages" (Workers Builds: tuvionline-2d): ĐÃ XỬ LÝ 27/11/2026. Là một Worker Cloudflare riêng tự nối Git với repo, đỏ ở mọi commit từ 12/11 vì repo không có cấu hình wrangler (`wrangler deploy` không tự sửa được `vite.config.ts`, `wrangler preview` thiếu khối `previews`). Worker chỉ có một bản từ 05/11, không ai truy cập. Theo ý chủ dự án đã ngắt kết nối Git (Settings → Builds); Worker vẫn còn, chưa xoá. Không liên quan quy trình đăng `lyso-tron-bo` (chạy bằng GitHub Actions). Nếu kiểm tra này đỏ lại thì có người đã nối lại.
 
 ## 2. Thứ KHÔNG có trong git, phải chép tay nếu cần
@@ -54,7 +54,7 @@ Claude lưu ghi nhớ trong hồ sơ người dùng của máy, không trong rep
 
 ## 5. Việc đang chờ chủ dự án
 
-- Video lối vào bản làm chậm 30 giây (PR #42).
+- Video lối vào 30 giây bản sạch, không có chữ và nút vẽ sẵn trong hình (PR #42). Bản 27/11 đang nằm chưa commit ở `src/assets/journey/video/Lối vào Tĩnh thất - 30s.mp4` trong thư mục gốc.
 - Duyệt câu chữ mới ở `docs/LOI-THAY.md`: mục "Hỏi chuyện Thầy" và "Hỏi chuyện Thầy: Việc hôm nay" (đánh dấu chờ duyệt).
 - Đọc duyệt câu chữ màn Xem ngày (`src/content/xemngay.ts`): lời giải 12 trực, bảng việc nên và nên tránh theo trực, cách gộp mức ngày.
 - Nghe thử trên APK: giọng Thầy đọc câu trả lời Hỏi chuyện Thầy, rung khi gõ chuông và thắp hương.
