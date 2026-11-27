@@ -4,12 +4,12 @@ Ghi lúc chuyển việc từ máy Windows cũ (`E:\TuViOnline-2D`) sang máy m�
 
 ## 1. Trạng thái trên GitHub
 
-- `main` ở `3cdd424` (merge PR #40, nhóm câu hỏi "Việc hôm nay" của Hỏi chuyện Thầy). Bản Cloudflare https://lyso-tron-bo.pages.dev và APK thử (`lyso-debug-apk`) đã build từ commit này.
+- Cập nhật 27/11/2026: `main` ở `7faa30b` (merge PR #41, Xem ngày tốt xấu). Bản Cloudflare https://lyso-tron-bo.pages.dev và APK thử (`lyso-debug-apk`) đã build từ commit này, cả hai workflow xanh.
 - Mọi nhánh trên máy cũ đều khớp với GitHub: không có commit chưa đẩy, không có stash, không có thay đổi chưa commit.
-- Hai PR đang mở:
-  - **#41** `claude/xem-ngay`: Xem ngày tốt xấu (Hoàng đạo, thập nhị trực, giờ hoàng đạo, xung tuổi). Làm ở một phiên khác, chưa duyệt. Có thể bổ sung cho nhóm "Việc hôm nay", vì nhóm đó chưa dùng các bảng này (ARCHITECTURE 16.3.1).
+- **#41** `claude/xem-ngay` (Xem ngày tốt xấu): ĐÃ MERGE 27/11/2026. Lúc duyệt đã đối chiếu bảng khởi Thanh Long, 12 thần, giờ hoàng đạo, trực theo tháng tiết; sửa thêm lỗi màn hình đổ khi vượt 31/12/2100 (khoảng năm nay là `XEMNGAY_YEARS`, 1900–2100). Câu chữ `src/content/xemngay.ts` là nội dung mới, chủ dự án chưa đọc duyệt. Việc còn mở: nhóm "Việc hôm nay" của Hỏi chuyện Thầy chưa dùng các bảng này (ARCHITECTURE 16.3.1).
+- PR còn mở:
   - **#42** `claude/video-cham-tuong-tac`: video lối vào chậm hơn, dừng ở cổng, cửa chính điện, án thư. **Chưa merge**: mã tính mốc theo video làm chậm 30 giây, còn `src/assets/journey/video/loi-vao.mp4` vẫn là bản 20 giây ngày 13/11. Merge lúc này thì không dừng ở án thư và ranh giới trạm rơi sai cảnh. Khi có video mới: thay file trên nhánh này, thêm một test đọc độ dài file mp4 và so với mốc cuối `VIDEO_SEGMENTS`, bỏ "[chờ video 30 giây]" khỏi tiêu đề rồi mới merge.
-- Kiểm tra "Cloudflare Workers and Pages" (Workers Builds: tuvionline-2d) đỏ ở các PR gần đây (#39, #40). Là kiểm tra tùy chọn, không chặn merge, chưa xem lý do. Không phải quy trình đăng `lyso-tron-bo` (quy trình đó chạy bằng GitHub Actions).
+- Kiểm tra "Cloudflare Workers and Pages" (Workers Builds: tuvionline-2d): ĐÃ XỬ LÝ 27/11/2026. Là một Worker Cloudflare riêng tự nối Git với repo, đỏ ở mọi commit từ 12/11 vì repo không có cấu hình wrangler (`wrangler deploy` không tự sửa được `vite.config.ts`, `wrangler preview` thiếu khối `previews`). Worker chỉ có một bản từ 05/11, không ai truy cập. Theo ý chủ dự án đã ngắt kết nối Git (Settings → Builds); Worker vẫn còn, chưa xoá. Không liên quan quy trình đăng `lyso-tron-bo` (chạy bằng GitHub Actions). Nếu kiểm tra này đỏ lại thì có người đã nối lại.
 
 ## 2. Thứ KHÔNG có trong git, phải chép tay nếu cần
 
@@ -30,7 +30,7 @@ WASM của MediaPipe (`public/palm/vision_wasm_internal.*`) và mọi thứ tron
 git clone https://github.com/tranthanhphuc81-sudo/tuvionline-2D.git
 cd tuvionline-2D
 npm install
-npm test        # kết quả đúng: 904 test xanh
+npm test        # kết quả đúng: 927 test xanh (27/11/2026)
 npm run dev     # cổng 5173
 ```
 
@@ -56,5 +56,5 @@ Claude lưu ghi nhớ trong hồ sơ người dùng của máy, không trong rep
 
 - Video lối vào bản làm chậm 30 giây (PR #42).
 - Duyệt câu chữ mới ở `docs/LOI-THAY.md`: mục "Hỏi chuyện Thầy" và "Hỏi chuyện Thầy: Việc hôm nay" (đánh dấu chờ duyệt).
-- Duyệt PR #41 (Xem ngày tốt xấu).
+- Đọc duyệt câu chữ màn Xem ngày (`src/content/xemngay.ts`): lời giải 12 trực, bảng việc nên và nên tránh theo trực, cách gộp mức ngày.
 - Nghe thử trên APK: giọng Thầy đọc câu trả lời Hỏi chuyện Thầy, rung khi gõ chuông và thắp hương.
