@@ -134,8 +134,8 @@ export function PalmScreen() {
             <PalmGuideSteps />
             <p />
           </details>
-          <input ref={camera} className={s.fileInput} type="file" accept="image/*" capture="environment" onChange={(e) => { void pick(e.target.files?.[0]); e.target.value = ''; }} />
-          <input ref={library} className={s.fileInput} type="file" accept="image/*" onChange={(e) => { void pick(e.target.files?.[0]); e.target.value = ''; }} />
+          <input ref={camera} className={s.fileInput} hidden type="file" accept="image/*" capture="environment" onChange={(e) => { void pick(e.target.files?.[0]); e.target.value = ''; }} />
+          <input ref={library} className={s.fileInput} hidden type="file" accept="image/*" onChange={(e) => { void pick(e.target.files?.[0]); e.target.value = ''; }} />
           <button type="button" className={`${ui.btn} ${ui.primary} ${ui.block}`} disabled={busy} onClick={() => camera.current?.click()}>📷 Chụp ảnh lòng bàn tay</button>
           <button type="button" className={`${ui.btn} ${ui.block}`} disabled={busy} onClick={() => library.current?.click()}>Chọn từ thư viện ảnh</button>
           <p className={s.status} role="status">{busy ? 'Đang xử lý ảnh…' : ''}</p>

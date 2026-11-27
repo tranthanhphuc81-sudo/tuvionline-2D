@@ -1,23 +1,16 @@
 /* Khung app: thanh trên (tiêu đề, chip người đang xem, ⚙) + 5 tab giữ nguyên khi ẩn + thanh tab dưới. */
-import { Suspense, lazy, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { useAppCtx, useApp, useNav } from './context';
 import { TABS, type Route, type TabId } from './routes';
 import { useStore } from '../state/store';
 import { recordVisit, selectActiveProfile } from '../state/actions';
-import { HomeScreen } from '../features/home/HomeScreen';
-import { StudyScreen } from '../features/study/StudyScreen';
+import { StudyScreen, AskTalk } from '../features/study/StudyScreen';
+import { lazyScreen } from './lazyScreen';
+import { ScreenBoundary } from './ScreenBoundary';
 import { studyTitle } from '../content/study';
-import { ProfilesScreen } from '../features/profiles/ProfilesScreen';
-import { ProfileEditScreen } from '../features/profiles/ProfileEditScreen';
 import { ProfileSheet } from '../features/profiles/ProfileSheet';
-import { SettingsScreen } from '../features/settings/SettingsScreen';
-import { PhongThuyScreen } from '../features/phongthuy/PhongThuyScreen';
-import { TuViScreen } from '../features/tuvi/TuViScreen';
-import { BatTuScreen } from '../features/battu/BatTuScreen';
-import { LucHaoScreen } from '../features/luchao/LucHaoScreen';
 import { PALM_RESULT_TITLE, PALM_TITLE } from '../content/palm/ui';
 import { XEMNGAY_TITLE } from '../content/xemngay';
-import { XemNgayScreen } from '../features/xemngay/XemNgayScreen';
 import { initials } from '../features/profiles/format';
 import { Journey } from '../features/journey/Journey';
 import { recordEntry, todayEntry, type TodayEntry } from '../features/journey/gate';
@@ -26,25 +19,38 @@ import { setPreferredVoice, stopReading } from '../platform/tts';
 import { ReadingBar } from '../ui/components/ReadingBar';
 import s from './App.module.css';
 
-/* Xem chỉ tay nạp khi cần: câu luận (palm-content.vi.json), xử lý ảnh và sơ đồ bàn tay chỉ dùng ở hai màn này,
-   tách ra khỏi gói chính để app mở nhanh hơn trên máy yếu (ARCHITECTURE 4, đo 13/11/2026). */
-const loadPalm = () => import('../features/palm/PalmScreen');
-const loadPalmResult = () => import('../features/palm/PalmResultScreen');
-const PalmScreen = lazy(() => loadPalm().then((m) => ({ default: m.PalmScreen })));
-const PalmResultScreen = lazy(() => loadPalmResult().then((m) => ({ default: m.PalmResultScreen })));
-/** Tải sẵn gói chỉ tay khi app rảnh (vài giây sau khi mở) để lần đầu bấm vào không khựng. Lỗi mạng thì bỏ qua:
-    lúc mở màn sẽ tải lại. Chỉ tải mã JS, không tải mô hình MediaPipe. */
+/* Nạp khi cần (ARCHITECTURE 4.2): Xem chỉ tay (đo 13/11/2026), và từ 27/11/2026 bốn tab Tử Vi, Bát Tự, Lục Hào, Phong thủy
+   (dựng ở lần đầu bấm vào tab, rồi giữ mount như cũ) cùng các màn con Tổng hợp, Xem ngày, Cài đặt, Hồ sơ; khung Hỏi chuyện
+   Thầy nạp ở StudyScreen. Gói chính chỉ còn Tĩnh thất,
+   lối vào và phần dùng chung, để app mở nhanh hơn trên máy yếu. */
+const PalmScreen = lazyScreen(() => import('../features/palm/PalmScreen'), (m) => m.PalmScreen);
+const PalmResultScreen = lazyScreen(() => import('../features/palm/PalmResultScreen'), (m) => m.PalmResultScreen);
+const HomeScreen = lazyScreen(() => import('../features/home/HomeScreen'), (m) => m.HomeScreen);
+const TuViScreen = lazyScreen(() => import('../features/tuvi/TuViScreen'), (m) => m.TuViScreen);
+const BatTuScreen = lazyScreen(() => import('../features/battu/BatTuScreen'), (m) => m.BatTuScreen);
+const LucHaoScreen = lazyScreen(() => import('../features/luchao/LucHaoScreen'), (m) => m.LucHaoScreen);
+const PhongThuyScreen = lazyScreen(() => import('../features/phongthuy/PhongThuyScreen'), (m) => m.PhongThuyScreen);
+const XemNgayScreen = lazyScreen(() => import('../features/xemngay/XemNgayScreen'), (m) => m.XemNgayScreen);
+const SettingsScreen = lazyScreen(() => import('../features/settings/SettingsScreen'), (m) => m.SettingsScreen);
+const ProfilesScreen = lazyScreen(() => import('../features/profiles/ProfilesScreen'), (m) => m.ProfilesScreen);
+const ProfileEditScreen = lazyScreen(() => import('../features/profiles/ProfileEditScreen'), (m) => m.ProfileEditScreen);
+/** Gói nạp sau, tải sẵn theo thứ tự hay dùng. */
+const LATER = [HomeScreen, AskTalk, TuViScreen, BatTuScreen, LucHaoScreen, PhongThuyScreen, XemNgayScreen, SettingsScreen, ProfilesScreen, ProfileEditScreen, PalmScreen, PalmResultScreen];
+/** Tải mọi gói nạp sau; test gọi trước khi dựng app để màn hình hiện ngay như khi đã tải sẵn. */
+export const preloadLater = () => Promise.all(LATER.map((x) => x.preload()));
+/** Tải sẵn các gói nạp sau khi app rảnh (vài giây sau khi mở) để lần đầu bấm vào không khựng, và để APK thử (tải giao diện
+    từ Cloudflare) vẫn mở được các tab khi mạng rớt sau đó. Lỗi mạng thì bỏ qua: lúc mở màn sẽ tải lại. Chỉ tải mã JS,
+    không tải mô hình MediaPipe. */
 const PREFETCH_DELAY_MS = 4000;
-function prefetchPalm(): () => void {
+function prefetchLater(): () => void {
   let idle: number | undefined;
-  const run = () => { loadPalm().catch(() => {}); loadPalmResult().catch(() => {}); };
+  const run = () => { for (const x of LATER) x.preload().catch(() => {}); };
   const timer = setTimeout(() => {
     if (typeof window.requestIdleCallback === 'function') idle = window.requestIdleCallback(run, { timeout: 5000 });
     else run();
   }, PREFETCH_DELAY_MS);
   return () => { clearTimeout(timer); if (idle !== undefined) window.cancelIdleCallback?.(idle); };
 }
-const opening = (what: string) => <p className={s.screen} role="status">Đang mở {what}…</p>;
 
 function routeTitle(r: Route): string {
   switch (r.name) {
@@ -66,17 +72,17 @@ function routeTitle(r: Route): string {
 function renderRoute(r: Route): ReactNode {
   switch (r.name) {
     case 'home': return <StudyScreen />;
-    case 'tonghop': return <HomeScreen />;
-    case 'tuvi': return <TuViScreen />;
-    case 'battu': return <BatTuScreen />;
-    case 'luchao': return <LucHaoScreen />;
-    case 'phongthuy': return <PhongThuyScreen sub={r.sub} />;
-    case 'palm': return <Suspense fallback={opening('Xem chỉ tay')}><PalmScreen /></Suspense>;
-    case 'palm.result': return <Suspense fallback={opening('kết quả chỉ tay')}><PalmResultScreen id={r.id} /></Suspense>;
-    case 'xemngay': return <XemNgayScreen />;
-    case 'profiles': return <ProfilesScreen />;
-    case 'profiles.edit': return <ProfileEditScreen id={r.id} />;
-    case 'settings': return <SettingsScreen />;
+    case 'tonghop': return <ScreenBoundary what="Tổng hợp" retry={HomeScreen.preload} className={s.screen}><HomeScreen /></ScreenBoundary>;
+    case 'tuvi': return <ScreenBoundary what="Tử Vi" retry={TuViScreen.preload} className={s.screen}><TuViScreen /></ScreenBoundary>;
+    case 'battu': return <ScreenBoundary what="Bát Tự" retry={BatTuScreen.preload} className={s.screen}><BatTuScreen /></ScreenBoundary>;
+    case 'luchao': return <ScreenBoundary what="Lục Hào" retry={LucHaoScreen.preload} className={s.screen}><LucHaoScreen /></ScreenBoundary>;
+    case 'phongthuy': return <ScreenBoundary what="Phong thủy" retry={PhongThuyScreen.preload} className={s.screen}><PhongThuyScreen sub={r.sub} /></ScreenBoundary>;
+    case 'palm': return <ScreenBoundary what="Xem chỉ tay" retry={PalmScreen.preload} className={s.screen}><PalmScreen /></ScreenBoundary>;
+    case 'palm.result': return <ScreenBoundary what="kết quả chỉ tay" retry={PalmResultScreen.preload} className={s.screen}><PalmResultScreen id={r.id} /></ScreenBoundary>;
+    case 'xemngay': return <ScreenBoundary what="Xem ngày" retry={XemNgayScreen.preload} className={s.screen}><XemNgayScreen /></ScreenBoundary>;
+    case 'profiles': return <ScreenBoundary what="hồ sơ" retry={ProfilesScreen.preload} className={s.screen}><ProfilesScreen /></ScreenBoundary>;
+    case 'profiles.edit': return <ScreenBoundary what="hồ sơ" retry={ProfileEditScreen.preload} className={s.screen}><ProfileEditScreen id={r.id} /></ScreenBoundary>;
+    case 'settings': return <ScreenBoundary what="Cài đặt" retry={SettingsScreen.preload} className={s.screen}><SettingsScreen /></ScreenBoundary>;
   }
 }
 
@@ -106,9 +112,12 @@ function TopBar() {
   );
 }
 
-/** Một tab: luôn mount (ẩn bằng `hidden`), giữ vị trí cuộn riêng; các màn hình dưới đỉnh ngăn xếp cũng giữ mount. */
+/** Một tab: dựng ở lần đầu được chọn rồi luôn mount (ẩn bằng `hidden`), giữ vị trí cuộn riêng; các màn hình dưới đỉnh ngăn
+    xếp cũng giữ mount. Chưa chọn lần nào thì khung trống, để gói của tab chưa phải nạp lúc mở app (ARCHITECTURE 4.2). */
 function TabPanel({ tab, active }: { tab: TabId; active: boolean }) {
   const { nav } = useAppCtx();
+  const seen = useRef(false);
+  if (active) seen.current = true;
   const stack = useStore(nav, (x) => x.stacks[tab]);
   const ref = useRef<HTMLDivElement>(null);
   const scroll = useRef(new Map<number, number>());
@@ -126,7 +135,7 @@ function TabPanel({ tab, active }: { tab: TabId; active: boolean }) {
       aria-labelledby={`tab-${tab}`}
       onScroll={(e) => scroll.current.set(depth, e.currentTarget.scrollTop)}
     >
-      {stack.map((r, i) => (
+      {seen.current && stack.map((r, i) => (
         <div key={i + ':' + r.name} hidden={i !== depth - 1} className={s.screen}>{renderRoute(r)}</div>
       ))}
     </div>
@@ -174,7 +183,7 @@ export function App({ journey = false }: { journey?: boolean }) {
   useEffect(() => onPause(stopReading), []);
   const ttsVoice = useApp((x) => x.settings.ttsVoice);
   useEffect(() => setPreferredVoice(ttsVoice ?? null), [ttsVoice]);
-  useEffect(() => (journey ? prefetchPalm() : undefined), [journey]);
+  useEffect(() => (journey ? prefetchLater() : undefined), [journey]);
   return (
     <div className={s.shell}>
       <TopBar />
